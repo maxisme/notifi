@@ -179,6 +179,7 @@ BOOL streamOpen = false;
     [outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     outputStream = nil;
     
+    
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"81.133.172.114", 38815, &readStream, &writeStream);

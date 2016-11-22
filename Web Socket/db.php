@@ -1,8 +1,8 @@
 <?php
 function getNotifications($credentials){
-	$db_pass = file_get_contents("../db.pass");
-	$db_user = file_get_contents("../db.user");
-	$key = file_get_contents("../encryption.key");
+	$db_pass = file_get_contents(dirname(__DIR__)."/db.pass");
+	$db_user = file_get_contents(dirname(__DIR__)."/db.user");
+	$key = file_get_contents(dirname(__DIR__)."/encryption.key");
 	
 	$con = mysqli_connect("localhost", "notify", "$db_pass", "$db_user");
 	if (!$con) {
@@ -22,9 +22,9 @@ function getNotifications($credentials){
 }
 
 function deleteNotification($id, $credentials){
-	$db_pass = file_get_contents("../db.pass");
-	$db_user = file_get_contents("../db.user");
-	$key = file_get_contents("../encryption.key");
+	$db_pass = file_get_contents(dirname(__DIR__)."/db.pass");
+	$db_user = file_get_contents(dirname(__DIR__)."/db.user");
+	$key = file_get_contents(dirname(__DIR__)."/encryption.key");
 	
 	$con = mysqli_connect("localhost", "notify", "$db_pass", "$db_user");
 	if (!$con) {
