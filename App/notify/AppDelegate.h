@@ -12,6 +12,7 @@
 
 @property (nonatomic) NSMenuItem* showOnStartupItem;
 @property (nonatomic) NSMenuItem* credentialsItem;
+@property (nonatomic) NSMenuItem* errorItem;
 @property (nonatomic) NSStatusItem *statusItem;
 
 @end

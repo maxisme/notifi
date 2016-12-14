@@ -3,10 +3,14 @@ namespace Notify;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
  
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 require "/NAS/notify/db.php";
- 
+
 class Note implements MessageComponentInterface { 
     protected $clients;
+	protected $clientCodes = array();
 
     public function __construct() {
         $this->clients = new \SplObjectStorage;
@@ -14,14 +18,21 @@ class Note implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
+		echo "new client";
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
-		$stack = array(); 
+		if(strlen($msg) != 25){
+			$from->close();
+		}
+		
+		$stack = array();
+		$x = 0;
         foreach ($this->clients as $client) {
             if ($from === $client) { //current client only
+				$this->clientCodes[$x] = $msg;
 				$query = getNotifications($msg);
-				if($query){
+				if($query != ""){
 					while($row = mysqli_fetch_assoc($query)){
 						array_push($stack, $row);
 						deleteNotification($row['id'], $msg);
@@ -29,11 +40,30 @@ class Note implements MessageComponentInterface {
 					$client->send(json_encode($stack));
 				}
             }
+			$x++;
         }
     }
+	
+	public function onCurl($msg) {
+		$stack = array();
+		$query = getNotifications($msg);
+		while($row = mysqli_fetch_assoc($query)){
+			array_push($stack, $row);
+			deleteNotification($row['id'], $msg);
+		}
+		
+		$x = 0;
+		foreach ($this->clients as $client) {
+			if($msg == $this->clientCodes[$x]){
+				$client->send(json_encode($stack));
+			}
+			$x++;
+        }
+	}
 
     public function onClose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
+		echo "closed con";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {

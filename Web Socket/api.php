@@ -51,4 +51,10 @@ $stmt->execute();
 
 $stmt->close();
 $mysqli->close();
+
+// send message to ratchet to send message to user
+$context = new ZMQContext();
+$socket = $context->getSocket(ZMQ::SOCKET_PUSH);
+$socket->connect("tcp://localhost:5555");
+$socket->send($credentials);
 ?>

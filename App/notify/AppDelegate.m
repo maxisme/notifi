@@ -18,8 +18,8 @@
     [self onlyOneInstanceOfApp];
     [self createStatusBarItem];
     [self initNetworkCommunication];
-    [NSTimer scheduledTimerWithTimeInterval:1.0f
-                                     target:self selector:@selector(check) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:2.0f
+                                    target:self selector:@selector(check) userInfo:nil repeats:YES];
     
     //mark menu item
     int shouldOpenOnStartup = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"openOnStartup"];
@@ -64,12 +64,19 @@
 }
 
 #pragma mark - handle icoming notification
+BOOL notified = false;
 -(void)check{
-    //sends request to server with key. The server then replies if there is a new notification.
-    [self sendMessage:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]];
+    if(streamOpen && !notified){
+        notified = true;
+        //sends request to server with key. The server then replies if there is a new notification.
+        [self sendMessage:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]];
+    }else if(!streamOpen){
+        [self initNetworkCommunication];
+    }
 }
 
 -(void)handleIncomingNotification:(NSString*)json{
+    NSLog(@"%@",json);
     NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary* json_dic = [NSJSONSerialization
                           JSONObjectWithData:data
@@ -88,15 +95,15 @@
 }
 
 -(void)storeNotification:(NSDictionary*)dic{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *path = [paths objectAtIndex:0];
-    path = [path stringByAppendingPathComponent:@"notify"];    // The file will go in this directory
-    NSString *stored_notification_path = [path stringByAppendingPathComponent:@"notifications.txt"];
-    NSString *str = [NSString stringWithFormat:@"%@", dic];
-    NSError *error = nil;
-    [str writeToFile:stored_notification_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    
-    NSLog(@"wrote notification to: %@ error:%@",stored_notification_path,error);
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+//    NSString *path = [paths objectAtIndex:0];
+//    path = [path stringByAppendingPathComponent:@"notify"];    // The file will go in this directory
+//    NSString *stored_notification_path = [path stringByAppendingPathComponent:@"notifications.txt"];
+//    NSString *str = [NSString stringWithFormat:@"%@", dic];
+//    NSError *error = nil;
+//    [str writeToFile:stored_notification_path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+//    
+//    NSLog(@"wrote notification to: %@ error:%@",stored_notification_path,error);
 }
 
 #pragma mark - notifications
@@ -104,36 +111,38 @@
 -(void)sendNotification:(NSString*)title message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url sound:(BOOL)soundOn {
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     
-    [notification setTitle:title];
-    
-    if(![mes  isEqual: @" "])
-        [notification setInformativeText:mes];
-    
-    if(![imgURL  isEqual: @" "]){
-        NSImage* image;
-        @try {
-            image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:imgURL]];
-        }
-        @catch (NSException * e) {
-            NSLog(@"ERROR loading image from URL: %@",imgURL);
+    @try {
+        [notification setTitle:title];
+        
+        if(![mes  isEqual: @" "])
+            [notification setInformativeText:mes];
+        
+        if(![imgURL  isEqual: @" "]){
+            NSImage* image;
+            @try {
+                image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:imgURL]];
+            }
+            @catch (NSException * e) {
+                NSLog(@"ERROR loading image from URL: %@",imgURL);
+            }
+            
+            if (image)
+                [notification setContentImage:image];
         }
         
-        if (image)
-            [notification setContentImage:image];
+        if(![url  isEqual: @" "]){
+            [notification setIdentifier:url];
+            [notification setHasActionButton:true];
+        }else{
+            [notification setHasActionButton:false];
+        }
+        
+        [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+        [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
+    }@catch (NSException * e) {
+        NSLog(@"ERROR loading image from URL: %@",imgURL);
     }
     
-    if(![url  isEqual: @" "]){
-        [notification setIdentifier:url];
-        [notification setHasActionButton:true];
-    }else{
-        [notification setHasActionButton:false];
-    }
-    
-    if(soundOn)
-        [notification setSoundName:NSUserNotificationDefaultSoundName];
-    
-    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
-    [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
 }
 
 - (void) userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
@@ -161,9 +170,10 @@ NSInputStream* inputStream;
 NSOutputStream* outputStream;
 BOOL streamOpen = false;
 
-- (void)sendMessage: (NSString*) message{ //called when the user interacts with UISwitches, is supposed to send message to server
+- (void)sendMessage: (NSString*) message{
+    NSLog(@"Sending: %@", message);
     if(streamOpen){
-        NSData *data = [[NSData alloc] initWithData:[message dataUsingEncoding:NSASCIIStringEncoding]]; //is ASCIIStringEncoding what I want?
+        NSData *data = [[NSData alloc] initWithData:[message dataUsingEncoding:NSASCIIStringEncoding]];
         [outputStream write:[data bytes] maxLength:[data length]];
     }
 }
@@ -178,7 +188,6 @@ BOOL streamOpen = false;
     [outputStream close];
     [outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     outputStream = nil;
-    
     
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
@@ -201,6 +210,10 @@ BOOL streamOpen = false;
     switch (streamEvent) {
             
         case NSStreamEventOpenCompleted:
+            if(_statusItem.image != [NSImage imageNamed:@"bellicon.png" ]){
+                _statusItem.image = [NSImage imageNamed:@"bellicon.png" ];
+                [_errorItem setHidden:true];
+            }
             streamOpen = true;
             NSLog(@"Stream opened");
             break;
@@ -228,13 +241,14 @@ BOOL streamOpen = false;
 
             
         case NSStreamEventErrorOccurred:
-            streamOpen = false;
-            NSLog(@"Can not connect to the host!");
-            [NSThread sleepForTimeInterval:1.0f];
-            [self initNetworkCommunication];
-            break;
-            
         case NSStreamEventEndEncountered:
+            streamOpen = false;
+            notified = false;
+            NSLog(@"Terminated connection!");
+            if(_statusItem.image != [NSImage imageNamed:@"error_bellicon.png" ]){
+                _statusItem.image = [NSImage imageNamed:@"error_bellicon.png" ];
+                [_errorItem setHidden:false];
+            }
             break;
     }
     
@@ -252,6 +266,14 @@ BOOL streamOpen = false;
 
 - (NSMenu *)defaultStatusBarMenu {
     NSMenu* mainMenu = [[NSMenu alloc] init];
+    
+    _errorItem = [[NSMenuItem alloc] initWithTitle:@"Network Error!" action:nil keyEquivalent:@""];
+    [_errorItem setTarget:self];
+    [_errorItem setEnabled:false];
+    [_errorItem setHidden:true];
+    [mainMenu addItem:_errorItem];
+    
+    [mainMenu addItem:[NSMenuItem separatorItem]];
     
     NSMenuItem* cred = [[NSMenuItem alloc] initWithTitle:@"Credentials:" action:nil keyEquivalent:@""];
     [cred setTarget:self];
