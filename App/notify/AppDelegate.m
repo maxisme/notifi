@@ -375,7 +375,7 @@ int notification_view_padding = 20;
     float info_height = rect.size.height;
     
     notification_height += info_height + title_height + notification_view_padding;
-    float check_height = image_height + (notification_view_padding*2);
+    float check_height = image_height + (notification_view_padding*2) + 4;
     if(notification_height < check_height){
         notification_height = check_height;
     }
