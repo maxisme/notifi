@@ -11,6 +11,7 @@ function getNotifications($credentials){
 	
 	$query = mysqli_query($con, "SELECT
 	id,
+	DATE_FORMAT(time, '%Y-%m-%d %T') as time,
 	AES_DECRYPT(credentials, '$key') as credentials,
 	AES_DECRYPT(title, '$key') as title, 
 	AES_DECRYPT(message, '$key')as message,
@@ -19,7 +20,7 @@ function getNotifications($credentials){
 	FROM `notifications`
 	WHERE credentials = AES_ENCRYPT('$credentials', '$key')");
 	
-	if(mysqli_num_rows($query) === 0){
+	if(mysqli_num_rows($query) == 0){
 		return "";
 	}
 	

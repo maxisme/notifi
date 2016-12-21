@@ -8,10 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "AppDelegate.h"
+#import "MyApplication.h"
 
 int main(int argc, const char * argv[]) {
     NSArray *tl;
-    NSApplication *application = [NSApplication sharedApplication];
+    MyApplication *application = [MyApplication sharedApplication];
     [[NSBundle mainBundle] loadNibNamed:@"mainWindow" owner:application topLevelObjects:&tl];
     
     AppDelegate *applicationDelegate = [[AppDelegate alloc] init];      // Instantiate App  delegate

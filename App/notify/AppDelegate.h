@@ -13,7 +13,20 @@
 @property (nonatomic) NSMenuItem* showOnStartupItem;
 @property (nonatomic) NSMenuItem* credentialsItem;
 @property (nonatomic) NSMenuItem* errorItem;
+@property (nonatomic) NSMenuItem* window_item;
 @property (nonatomic) NSStatusItem *statusItem;
+
+//window
+@property (nonatomic) NSWindow* window;
+@property (nonatomic) NSTabView* view;
+
+@property (nonatomic) int notification_id;
+
+-(bool)notificationRead:(int)index;
+-(void)markAsRead:(bool)read index:(int)index;
+-(void)deleteNotification:(int)index;
+-(BOOL)validateUrl:(NSString *)url;
+
 
 @end
 

@@ -8,6 +8,7 @@ ini_set("display_errors", 1);
 
 require "/NAS/notify/db.php";
 
+
 class Note implements MessageComponentInterface { 
     protected $clients;
 	protected $clientCodes = array();
@@ -18,7 +19,7 @@ class Note implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
-		echo "new client";
+		echo "\nnew client";
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
@@ -26,18 +27,21 @@ class Note implements MessageComponentInterface {
 			$from->close();
 		}
 		
-		$stack = array();
 		$x = 0;
         foreach ($this->clients as $client) {
             if ($from === $client) { //current client only
 				$this->clientCodes[$x] = $msg;
+				echo "\nmsg:$msg";
 				$query = getNotifications($msg);
 				if($query != ""){
+					$stack = array();
 					while($row = mysqli_fetch_assoc($query)){
 						array_push($stack, $row);
 						deleteNotification($row['id'], $msg);
 					}
 					$client->send(json_encode($stack));
+				}else{
+					$client->send("1");
 				}
             }
 			$x++;
@@ -45,16 +49,15 @@ class Note implements MessageComponentInterface {
     }
 	
 	public function onCurl($msg) {
-		$stack = array();
-		$query = getNotifications($msg);
-		while($row = mysqli_fetch_assoc($query)){
-			array_push($stack, $row);
-			deleteNotification($row['id'], $msg);
-		}
-		
 		$x = 0;
 		foreach ($this->clients as $client) {
 			if($msg == $this->clientCodes[$x]){
+				$stack = array();
+				$query = getNotifications($msg);
+				while($row = mysqli_fetch_assoc($query)){
+					array_push($stack, $row);
+					deleteNotification($row['id'], $msg);
+				}
 				$client->send(json_encode($stack));
 			}
 			$x++;
@@ -63,7 +66,6 @@ class Note implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
-		echo "closed con";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {

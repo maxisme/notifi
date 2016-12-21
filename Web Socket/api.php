@@ -10,8 +10,8 @@ $message = $_POST['message'];
 $imageURL = $_POST['img'];
 $link = $_POST['link'];
 
-if(empty($credentials)){
-	die("No credentials");
+if(empty($credentials) || strlen($credentials) != 25){
+	die("invalid credentials");
 }
 
 if(empty($title)){
@@ -28,6 +28,8 @@ if(empty($imageURL)){
 
 if(empty($link)){
 	$link = " "; 
+}else if (filter_var($link, FILTER_VALIDATE_URL) === FALSE) {
+    die('Not a valid URL');
 }
 
 $mysqli = new mysqli("localhost", "notify", "$db_pass", "$db_user");

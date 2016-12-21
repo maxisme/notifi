@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -29,14 +28,8 @@ i{
 </head>
 
 <body>
-<?php
-	$arr = array();
-	$arr[12] = "34";
-	$arr[56] = "78";
-	print_r($arr[56]);
-?>
 <h1>notify</h1>
-Is a minimal app to that sits in your MAC OSX menu bar. When opening you are given a key that you can use to send <i>curl</i> <br /><br /><br />
-<a href="download">download</a>
+A minimal app that sits in your MAC OSX menu bar. When opening you are given a key that uniquely identifys you. With this key you can send curl requests to receive alerts.<br /><br />
+<a href="download">download now</a>
 </body>
 </html>
