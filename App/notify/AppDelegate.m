@@ -8,6 +8,7 @@
 
 
 #import "AppDelegate.h"
+#import "AsyncImageDownloader.h"
 
 // ----- notification view interface -----
 @interface MyNotificationView: NSView
@@ -66,7 +67,7 @@
 
 - (void)mouseUp:(NSEvent *)event
 {
-    if(_link && [[[AppDelegate alloc] init] validateUrl:_link]){
+    if(_link){
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_link]];
     }else{
         [self.superview mouseUp:event];
@@ -108,6 +109,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self onlyOneInstanceOfApp];
+    //iniate code if does not exist
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
+    if([credentials length] != 25){
+        [self newCredentials];
+        
+    }
     [self createStatusBarItem];
     [self initNetworkCommunication];
     [NSTimer scheduledTimerWithTimeInterval:2.0f
@@ -125,14 +132,16 @@
 }
 
 #pragma mark - window
-
+int max_window_height;
+int min_window_height;
 -(void)createWindow{
     NSRect frame = [[_statusItem valueForKey:@"window"] frame];
     
     int window_width = 350;
-    int window_height = [[NSScreen mainScreen] frame].size.height * 0.8;
+    max_window_height = [[NSScreen mainScreen] frame].size.height * 0.8;
+    min_window_height = [[NSScreen mainScreen] frame].size.height * 0.5;
     
-    NSRect contentSize = NSMakeRect(frame.origin.x - window_width/2 + frame.size.width/2, frame.origin.y - window_height, window_width, window_height);
+    NSRect contentSize = NSMakeRect(frame.origin.x - window_width/2 + frame.size.width/2, frame.origin.y - min_window_height, window_width, min_window_height);
     
     NSUInteger windowStyleMask = 0;
     
@@ -203,7 +212,8 @@ NSView *content_view;
     offwhite = [NSColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:0.7];
     
     //----------------- top stuff -----------------
-    NSImage *icon = [NSImage imageNamed:@"bell.png"];
+    NSImage *icon = [self resizeImage:[NSImage imageNamed:@"bell.png"] size:NSMakeSize(50, 50)];
+    
     NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(80/2), window_height-90, 80, 80)];
     [iconView setImage:icon];
     [_view addSubview:iconView];
@@ -241,7 +251,7 @@ NSView *content_view;
     //sort height when notifications do not fill the view
     if(prevheight < scroll_height){
         for(NSView* view in content_view.subviews){
-            [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y + (scroll_height - prevheight) - notification_view_padding + 10, view.frame.size.width, view.frame.size.height)];
+            [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y + (scroll_height - prevheight) - notification_view_padding, view.frame.size.width, view.frame.size.height)];
         }
     }
     
@@ -256,16 +266,23 @@ NSView *content_view;
     
     //----------------- bottom stuff -----------------
     //mark all as read button
-    NSButton *markAllAsRead = [[NSButton alloc] initWithFrame:CGRectMake(0, 10, window_width / 2, 20)];
+    NSButton* markAllAsReadBtn = [[NSButton alloc] initWithFrame:CGRectMake(0, 10, window_width / 2, 20)];
     //markAllAsRead.backgroundColor = [NSColor clearColor];
-    [markAllAsRead setAlignment:NSTextAlignmentCenter];
-    [markAllAsRead setFont:[NSFont fontWithName:@"Raleway-SemiBold" size:14]];
+    [markAllAsReadBtn setAlignment:NSTextAlignmentCenter];
+    [markAllAsReadBtn setFont:[NSFont fontWithName:@"Raleway-SemiBold" size:14]];
     //[markAllAsRead setTextColor:black];
     //markAllAsRead.editable = false;
-    markAllAsRead.bordered =false;
-    [markAllAsRead setTitle:@"Mark all as read"];
-    [markAllAsRead setAction:@selector(markAllAsRead)];
-    [_view addSubview:markAllAsRead];
+    markAllAsReadBtn.bordered =false;
+    [markAllAsReadBtn setTitle:@"Mark all as read"];
+    [markAllAsReadBtn setAction:@selector(markAllAsRead)];
+    if(unread_notifications == 0){
+        NSLog(@"not enabled");
+        [markAllAsReadBtn setEnabled:false];
+    }else{
+        NSLog(@"enabled");
+        [markAllAsReadBtn setEnabled:true];
+    }
+    [_view addSubview:markAllAsReadBtn];
     
     //delete all button
     NSButton *deleteNotifications = [[NSButton alloc] initWithFrame:CGRectMake(window_width / 2, 10, window_width /2, 20)];
@@ -319,19 +336,9 @@ int notification_view_padding = 20;
     MyNotificationView *view = [[MyNotificationView alloc] init];
     
     //check if image variable
-    NSImage* image = NULL;
     int padding_right = 5;
     if(![imgURL isEqual: @" "]){
-        @try {
-            padding_right = 80;
-            NSLog(@"b");
-            image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:imgURL]];
-            NSLog(@"a");
-        }
-        @catch (NSException * e) {
-            padding_right = 5;
-            NSLog(@"ERROR: %@ loading image from URL: %@", e, imgURL);
-        }
+        padding_right = 80;
     }
     
     float width = notification_width * 0.9 - padding_right;
@@ -347,13 +354,13 @@ int notification_view_padding = 20;
                            nil];
     
     NSMutableAttributedString *attributedString_title = [[NSMutableAttributedString alloc] initWithString:title_string attributes:attrs_title];
-    if([self validateUrl:url]){
+    if(![url  isEqual: @" "]){
         NSRange range = NSMakeRange(0, attributedString_title.length);
         [attributedString_title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
         if(read){
-            [attributedString_title addAttribute:NSForegroundColorAttributeName
-                                           value:red
-                                           range:range];
+//            [attributedString_title addAttribute:NSForegroundColorAttributeName
+//                                           value:red
+//                                           range:range];
         }
     }
     CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
@@ -372,7 +379,7 @@ int notification_view_padding = 20;
     [[NSMutableAttributedString alloc] initWithString:mes
                                            attributes:attrs];
     CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-    float info_height = rect.size.height;
+    float info_height = rect.size.height + 10;
     
     notification_height += info_height + title_height + notification_view_padding;
     float check_height = image_height + (notification_view_padding*2) + 4;
@@ -382,7 +389,7 @@ int notification_view_padding = 20;
     int notification_y = prevheight;
     
     //set view frame
-    [view setFrame:CGRectMake(window_width*0.05, notification_y + notification_view_padding - 10 , notification_width, notification_height - 30)];
+    [view setFrame:CGRectMake(window_width*0.05, notification_y + notification_view_padding, notification_width, notification_height - 45)];
     
     view.theid = notification_count;
     view.thisapp = self;
@@ -409,17 +416,19 @@ int notification_view_padding = 20;
     float text_width = view.frame.size.width - padding_right;
     
     //--      add image
-    if(image != NULL){
-        NSRect imageRect = NSMakeRect(7,view.frame.size.height - image_height - 7,image_width,image_height);
-        NSSize size = NSMakeSize(image_width, image_height);
-        
-        NSImage *newImg = [self resizeImage:image size:size];
-        
-        NSImageView *image_view = [[NSImageView alloc] initWithFrame:imageRect];
-        image_view.bounds = imageRect;
-        image_view.image  = newImg;
-        
-        [view addSubview:image_view];
+    if(![imgURL isEqual: @" "]){
+        [[[AsyncImageDownloader alloc] initWithMediaURL:imgURL successBlock:^(NSImage *image){
+            NSRect imageRect = NSMakeRect(7,view.frame.size.height - image_height - 7,image_width,image_height);
+            NSSize size = NSMakeSize(image_width, image_height);
+            NSImage *newImg = [self resizeImage:image size:size];
+            
+            NSImageView *image_view = [[NSImageView alloc] initWithFrame:imageRect];
+            image_view.bounds = imageRect;
+            image_view.image  = newImg;
+            [view addSubview:image_view];
+        } failBlock:^(NSError *error) {
+            NSLog(@"Failed to download image due to %@!", error);
+        }] startDownload];
     }
     
     //--    add title
@@ -433,7 +442,7 @@ int notification_view_padding = 20;
                                     )
                                  ];
     [title_field setSelectable:YES];
-    if([self validateUrl:url]){
+    if(![url  isEqual: @" "]){
         title_field.link = url;
         [title_field setSelectable:NO];
     }
@@ -526,15 +535,15 @@ int notification_view_padding = 20;
 - (void)setNotificationMenuBar{
     if(unread_notifications > 0){
         if(unread_notifications == 1){
-            _window_item.title = @"1 Unread Notification";
+            _window_item.title = @"Open 1 Unread Notification";
         }else if(unread_notifications < 1000){
-            _window_item.title = [NSString stringWithFormat:@"%d Unread Notifications", unread_notifications];
+            _window_item.title = [NSString stringWithFormat:@"Open %d Unread Notifications", unread_notifications];
         }else{
-            _window_item.title = @"999+ Unread Notifications";
+            _window_item.title = @"Open 999+ Unread Notifications";
         }
         _statusItem.image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
     }else{
-        _window_item.title = @"Notifications";
+        _window_item.title = @"Open Notifications";
         _statusItem.image = [NSImage imageNamed:@"menu_bellicon.png"];
     }
 }
@@ -672,7 +681,6 @@ bool serverReplied = false;
 -(void)sendLocalNotification:(NSString*)title message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url{
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     
-    NSLog(@"note: %d",notification_count);
     notification.userInfo = @{
         @"id" :  [NSNumber numberWithInt:notification_count],
         @"url" : url
@@ -696,7 +704,7 @@ bool serverReplied = false;
             [notification setContentImage:image];
     }
     
-    [notification setActionButtonTitle:@"Link"];
+    [notification setActionButtonTitle:@"Open Link"];
     if(![url  isEqual: @" "]){
         [notification setHasActionButton:true];
     }else{
@@ -722,9 +730,9 @@ bool serverReplied = false;
         }
     }
     
-    if(url){
+    if(url)
         [[NSWorkspace sharedWorkspace] openURL:url];
-    }
+    
     [self markAsRead:true index:theid];
     [center removeDeliveredNotification: notification];
 }
@@ -1039,13 +1047,6 @@ BOOL streamOpen = false;
     [targetImage unlockFocus];
     
     return targetImage;
-}
-
--(BOOL)validateUrl:(NSString *)url {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-    return [urlTest evaluateWithObject:url];
 }
 
 #pragma mark - quit

@@ -1,14 +1,25 @@
 <?php
-function getNotifications($credentials){
+function clean($string) {
+   $string = str_replace(' ', '', $string); // removes all spaces
+   return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+}
+
+function connect(){
 	$db_pass = file_get_contents(dirname(__DIR__)."/db.pass");
 	$db_user = file_get_contents(dirname(__DIR__)."/db.user");
-	$key = file_get_contents(dirname(__DIR__)."/encryption.key");
 	
 	$con = mysqli_connect("localhost", "notify", "$db_pass", "$db_user");
 	if (!$con) {
 		die("error connecting to database");
 	} 
+	return $con;
+}
+
+function getNotifications($credentials){
+	$credentials = clean($credentials);
+	$key = file_get_contents(dirname(__DIR__)."/encryption.key");
 	
+	$con = connect();
 	$query = mysqli_query($con, "SELECT
 	id,
 	DATE_FORMAT(time, '%Y-%m-%d %T') as time,
@@ -18,7 +29,9 @@ function getNotifications($credentials){
 	AES_DECRYPT(image, '$key') as image,
 	AES_DECRYPT(link, '$key') as link
 	FROM `notifications`
-	WHERE credentials = AES_ENCRYPT('$credentials', '$key')");
+	WHERE credentials = AES_ENCRYPT('$credentials', '$key')
+	AND title != ''
+	");
 	
 	if(mysqli_num_rows($query) == 0){
 		return "";
@@ -28,45 +41,14 @@ function getNotifications($credentials){
 }
 
 function deleteNotification($id, $credentials){
-	$db_pass = file_get_contents(dirname(__DIR__)."/db.pass");
-	$db_user = file_get_contents(dirname(__DIR__)."/db.user");
+	$credentials = clean($credentials);
 	$key = file_get_contents(dirname(__DIR__)."/encryption.key");
 	
-	$con = mysqli_connect("localhost", "notify", "$db_pass", "$db_user");
-	if (!$con) {
-		die("error connecting to database");
-	}
-	
+	$con = connect();
 	$id = mysqli_real_escape_string($con, $id);
-	
-	mysqli_query($con, "DELETE FROM `notifications`
+	mysqli_query($con, "UPDATE `notifications`
+	SET title='',message='',image='',link='' 
 	WHERE `id`=$id 
 	AND `credentials`=AES_ENCRYPT('$credentials', '$key')");
-}
-
-function storeClient($client_obj, $credentials){
-	$db_pass = file_get_contents(dirname(__DIR__)."/db.pass");
-	$db_user = file_get_contents(dirname(__DIR__)."/db.user");
-	$key = file_get_contents(dirname(__DIR__)."/encryption.key");
-	
-	$mysqli = new mysqli("localhost", "notify", "$db_pass", "$db_user");
-
-	if ($mysqli->connect_error) {
-		die('Connect Error (' . $mysqli->connect_errno . ') '
-				. $mysqli->connect_error);
-	}
-	
-	$stmt = $mysqli->prepare("INSERT INTO `clients` (client_obj, credentials) VALUES (
-	?,?
-	)");
-	
-	$stmt->bind_param('ss', $client_obj, $credentials);
-	
-	$stmt->execute();
-	
-	$stmt->close();
-	$mysqli->close();
-	
-	return $stmt->error;
 }
 ?>

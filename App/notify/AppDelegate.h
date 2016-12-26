@@ -18,14 +18,13 @@
 
 //window
 @property (nonatomic) NSWindow* window;
-@property (nonatomic) NSTabView* view;
+@property (nonatomic) NSView* view;
 
 @property (nonatomic) int notification_id;
 
 -(bool)notificationRead:(int)index;
 -(void)markAsRead:(bool)read index:(int)index;
 -(void)deleteNotification:(int)index;
--(BOOL)validateUrl:(NSString *)url;
 
 
 @end

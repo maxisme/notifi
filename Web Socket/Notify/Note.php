@@ -31,7 +31,7 @@ class Note implements MessageComponentInterface {
         foreach ($this->clients as $client) {
             if ($from === $client) { //current client only
 				$this->clientCodes[$x] = $msg;
-				echo "\nmsg:$msg";
+				echo "\nmsg:$msg from: ".$client->remoteAddress;
 				$query = getNotifications($msg);
 				if($query != ""){
 					$stack = array();
