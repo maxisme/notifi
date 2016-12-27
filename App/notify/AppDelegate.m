@@ -821,6 +821,15 @@ BOOL streamOpen = false;
 
             
         case NSStreamEventErrorOccurred:
+            serverReplied = false;
+            streamOpen = false;
+            NSLog(@"Terminated connection!");
+            if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
+                _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
+                [_errorItem setHidden:false];
+            }
+            break;
+            
         case NSStreamEventEndEncountered:
             serverReplied = false;
             streamOpen = false;
