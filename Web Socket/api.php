@@ -10,10 +10,10 @@ function clean($string) {
 
 //post data
 $credentials = trim(clean($_POST['credentials']));
-$title = trim($_POST['title']);
-$message = trim($_POST['message']);
-$imageURL = trim($_POST['img']);
-$link = trim($_POST['link']);
+$title = trim(clean($_POST['title']));
+$message = trim(clean($_POST['message']));
+$imageURL = trim(clean($_POST['img']));
+$link = trim(clean($_POST['link']));
 
 //other variables
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -88,7 +88,7 @@ $mysqli = new mysqli("localhost", "notify", "$db_pass", "$db_user");
 
 if ($mysqli->connect_error) {
     die('Connect Error (' . $mysqli->connect_errno . ') '
-            . $mysqli->connect_error);
+           . $mysqli->connect_error);
 }
 
 $stmt = $mysqli->prepare("INSERT INTO notifications (credentials, title, message, image, link, ip) VALUES (
