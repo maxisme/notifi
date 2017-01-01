@@ -11,9 +11,9 @@ function clean($string) {
 //post data
 $credentials = trim(clean($_POST['credentials']));
 $title = trim(clean($_POST['title']));
-$message = trim(clean($_POST['message']));
-$imageURL = trim(clean($_POST['img']));
-$link = trim(clean($_POST['link']));
+$message = trim($_POST['message']);
+$imageURL = trim($_POST['img']);
+$link = trim($_POST['link']);
 
 //other variables
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
