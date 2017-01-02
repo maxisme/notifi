@@ -18,7 +18,7 @@
 
 //window
 @property (nonatomic) NSWindow* window;
-@property (nonatomic) NSView* view;
+@property (retain, nonatomic) NSView* view;
 
 @property (nonatomic) int notification_id;
 

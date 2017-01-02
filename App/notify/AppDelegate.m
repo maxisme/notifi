@@ -196,6 +196,7 @@ float window_width;
 float window_height;
 NSView *content_view;
 
+
 -(void)createBodyWindow{
     
     //----------------- initial variables -----------------
@@ -226,7 +227,7 @@ NSView *content_view;
     //----------------- body -----------------
     
     //scroll view
-    float scroll_height = (window_height -90) - 40;
+    float scroll_height = (window_height - 90) - 40;
     NSScrollView *scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 40, window_width, scroll_height)];
     [scroll_view setBorderType:NSNoBorder];
     [scroll_view setHasVerticalScroller:YES];
@@ -259,10 +260,6 @@ NSView *content_view;
     
     [_view addSubview:scroll_view];
     
-    //scroll to top
-    NSPoint pt = NSMakePoint(0.0, [[scroll_view documentView] bounds].size.height);
-    [[scroll_view documentView] scrollPoint:pt];
-    
     
     //----------------- bottom stuff -----------------
     //mark all as read button
@@ -276,10 +273,8 @@ NSView *content_view;
     [markAllAsReadBtn setTitle:@"Mark all as read"];
     [markAllAsReadBtn setAction:@selector(markAllAsRead)];
     if(unread_notifications == 0){
-        NSLog(@"not enabled");
         [markAllAsReadBtn setEnabled:false];
     }else{
-        NSLog(@"enabled");
         [markAllAsReadBtn setEnabled:true];
     }
     [_view addSubview:markAllAsReadBtn];
@@ -319,6 +314,10 @@ NSView *content_view;
     [_view addSubview:ver_bor];
     
     [self setNotificationMenuBar];
+    
+    //scroll to top
+    NSPoint pt = NSMakePoint(0.0, [[scroll_view documentView] bounds].size.height);
+    [[scroll_view documentView] scrollPoint:pt];
 }
 
 int unread_notifications;
@@ -357,11 +356,6 @@ int notification_view_padding = 20;
     if(![url  isEqual: @" "]){
         NSRange range = NSMakeRange(0, attributedString_title.length);
         [attributedString_title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
-        if(read){
-//            [attributedString_title addAttribute:NSForegroundColorAttributeName
-//                                           value:red
-//                                           range:range];
-        }
     }
     CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
     float title_height = rect_title.size.height;
@@ -535,15 +529,15 @@ int notification_view_padding = 20;
 - (void)setNotificationMenuBar{
     if(unread_notifications > 0){
         if(unread_notifications == 1){
-            _window_item.title = @"Open 1 Unread Notification";
+            _window_item.title = @"View 1 Unread Notification";
         }else if(unread_notifications < 1000){
             _window_item.title = [NSString stringWithFormat:@"Open %d Unread Notifications", unread_notifications];
         }else{
-            _window_item.title = @"Open 999+ Unread Notifications";
+            _window_item.title = @"View 999+ Unread Notifications";
         }
         _statusItem.image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
     }else{
-        _window_item.title = @"Open Notifications";
+        _window_item.title = @"View Notifications";
         _statusItem.image = [NSImage imageNamed:@"menu_bellicon.png"];
     }
 }
@@ -864,11 +858,13 @@ BOOL streamOpen = false;
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
-    _window_item = [[NSMenuItem alloc] initWithTitle:@"Notifications" action:@selector(showWindow) keyEquivalent:@""];
+    _window_item = [[NSMenuItem alloc] initWithTitle:@"View Notifications" action:@selector(showWindow) keyEquivalent:@""];
     [_window_item setTarget:self];
     [mainMenu addItem:_window_item];
     
-    NSMenuItem* cred = [[NSMenuItem alloc] initWithTitle:@"Credentials:" action:nil keyEquivalent:@""];
+    [mainMenu addItem:[NSMenuItem separatorItem]];
+    
+    NSMenuItem* cred = [[NSMenuItem alloc] initWithTitle:@"Your Credentials" action:nil keyEquivalent:@""];
     [cred setTarget:self];
     [cred setEnabled:false];
     [mainMenu addItem:cred];

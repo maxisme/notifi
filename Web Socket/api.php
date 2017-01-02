@@ -58,7 +58,7 @@ AND time >= date_sub(now(), interval 1 minute)
 "); 
 	
 if(mysqli_num_rows($limit_ip_query) >= 10){
-	die("You have hit Limit 1. Please wait 1 minute.");
+	die("\nYou have hit Limit 1. Please wait 1 minute.\n");
 }
 
 //limit ammount of requests per credential
@@ -69,7 +69,7 @@ AND time >= date_sub(now(), interval 1 minute)
 ");
 	
 if(mysqli_num_rows($limit_spec_query) >= 10){
-	die("You have hit Limit 2. Please wait 1 minute.");
+	die("\nYou have hit Limit 2. Please wait 1 minute.\n");
 }
 
 //limit ammount of requests per ip to credential 
@@ -81,7 +81,7 @@ AND time >= date_sub(now(), interval 1 minute)
 ");
 	
 if(mysqli_num_rows($limit_spec_query) >= 6){
-	die("You have hit Limit 3. Please wait 1 minute.");
+	die("\nYou have hit Limit 3. Please wait 1 minute.\n");
 }
 
 $mysqli = new mysqli("localhost", "notify", "$db_pass", "$db_user");
@@ -102,14 +102,17 @@ AES_ENCRYPT(?,'$key')
 
 $stmt->bind_param('ssssss', $credentials, $title, $message, $imageURL, $link, $ip);
 
-$stmt->execute();
+if($stmt->execute()){
+	// send message to ratchet to send message to user
+	$context = new ZMQContext();
+	$socket = $context->getSocket(ZMQ::SOCKET_PUSH);
+	$socket->connect("tcp://localhost:5555");
+	$socket->send($credentials);
+	$socket->close();
+}else{
+	echo "Error inserting notification into database";
+}
 
 $stmt->close();
 $mysqli->close();
-
-// send message to ratchet to send message to user
-$context = new ZMQContext();
-$socket = $context->getSocket(ZMQ::SOCKET_PUSH);
-$socket->connect("tcp://localhost:5555");
-$socket->send($credentials);
 ?>

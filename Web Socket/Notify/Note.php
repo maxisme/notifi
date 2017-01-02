@@ -54,11 +54,14 @@ class Note implements MessageComponentInterface {
 			if($msg == $this->clientCodes[$x]){
 				$stack = array();
 				$query = getNotifications($msg);
-				while($row = mysqli_fetch_assoc($query)){
-					array_push($stack, $row);
-					deleteNotification($row['id'], $msg);
+				echo "\nmsg:$msg from: ".$client->remoteAddress;
+				if($query != ""){
+					while($row = mysqli_fetch_assoc($query)){
+						array_push($stack, $row);
+						deleteNotification($row['id'], $msg);
+					}
+					$client->send(json_encode($stack));
 				}
-				$client->send(json_encode($stack));
 			}
 			$x++;
         }
