@@ -28,7 +28,7 @@ i{
 </head>
 
 <body>
-<h1>notify</h1>
+<h1>notifi</h1>
 A minimal app that sits in your MAC OSX menu bar. When opening you are given a key that uniquely identifys you. With this key you can send curl requests to receive alerts.<br /><br />
 <a href="download">download now</a>
 </body>
