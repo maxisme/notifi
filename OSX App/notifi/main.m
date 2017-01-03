@@ -1,6 +1,6 @@
 //
 //  main.m
-//  notify
+//  notifi
 //
 //  Created by Max Mitchell on 20/10/2016.
 //  Copyright © 2016 max mitchell. All rights reserved.

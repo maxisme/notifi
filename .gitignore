@@ -20,10 +20,10 @@ xcuserdata/
 db.pass
 db.user
 encryption.key
-notify-socket/vendor
+notifi.it/vendor
 *.psd
 composer.lock
-Web Socket/vendor
-App/alert.aiff
-App/alert.mp3
-Web Socket/_compareTemp
+notifi.it/vendor
+OSX App/alert.aiff
+OSX App/alert.mp3
+notifi.it/_compareTemp

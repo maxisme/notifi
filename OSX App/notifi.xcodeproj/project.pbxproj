@@ -15,7 +15,6 @@
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
-		48AD3F9D1DB9438600B47CA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48AD3F9C1DB9438600B47CA5 /* Assets.xcassets */; };
 		48AD3FA91DBA500100B47CA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48AD3FA81DBA500100B47CA5 /* Security.framework */; };
 		48AE54B61E04480800E8777F /* up_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54B51E04480800E8777F /* up_arrow.png */; };
 		48AE54B81E0451EA00E8777F /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54B71E0451EA00E8777F /* bell.png */; };
@@ -24,6 +23,7 @@
 		48AE54BE1E04542400E8777F /* Raleway-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54BB1E04542400E8777F /* Raleway-SemiBold.ttf */; };
 		48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */; };
 		48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B028301DBBAC51007D2462 /* menu_bellicon.png */; };
+		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,11 +35,10 @@
 		482C8A9C1E0B0D0700E5C173 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		482C8A9E1E0B0D4000E5C173 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
-		48AD3F901DB9438600B47CA5 /* notify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		48AD3F901DB9438600B47CA5 /* notifi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notifi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AD3F931DB9438600B47CA5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		48AD3F941DB9438600B47CA5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		48AD3F971DB9438600B47CA5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		48AD3F9C1DB9438600B47CA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48AD3FA11DB9438600B47CA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48AD3FA81DBA500100B47CA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		48AE54B51E04480800E8777F /* up_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up_arrow.png; sourceTree = "<group>"; };
@@ -49,6 +48,7 @@
 		48AE54BB1E04542400E8777F /* Raleway-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-SemiBold.ttf"; sourceTree = "<group>"; };
 		48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_menu_bellicon.png; sourceTree = "<group>"; };
 		48B028301DBBAC51007D2462 /* menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_bellicon.png; sourceTree = "<group>"; };
+		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +78,7 @@
 		48AD3F871DB9438600B47CA5 = {
 			isa = PBXGroup;
 			children = (
-				48AD3F921DB9438600B47CA5 /* notify */,
+				48AD3F921DB9438600B47CA5 /* notifi */,
 				48AD3F911DB9438600B47CA5 /* Products */,
 				48AD3FA71DBA500100B47CA5 /* Frameworks */,
 			);
@@ -87,12 +87,12 @@
 		48AD3F911DB9438600B47CA5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				48AD3F901DB9438600B47CA5 /* notify.app */,
+				48AD3F901DB9438600B47CA5 /* notifi.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		48AD3F921DB9438600B47CA5 /* notify */ = {
+		48AD3F921DB9438600B47CA5 /* notifi */ = {
 			isa = PBXGroup;
 			children = (
 				48AD3F931DB9438600B47CA5 /* AppDelegate.h */,
@@ -103,7 +103,7 @@
 				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
 				48AE54B71E0451EA00E8777F /* bell.png */,
 				482C8A971E0B02D700E5C173 /* placeholder.png */,
-				48AD3F9C1DB9438600B47CA5 /* Assets.xcassets */,
+				48DD0F051E1BC57D00773859 /* Assets.xcassets */,
 				48AD3FA11DB9438600B47CA5 /* Info.plist */,
 				4866513F1E0C1347001B145B /* fonts */,
 				48AD3F961DB9438600B47CA5 /* Supporting Files */,
@@ -112,7 +112,7 @@
 				482C8A991E0B0B1B00E5C173 /* AsyncImageDownloader.h */,
 				482C8A9A1E0B0B1B00E5C173 /* AsyncImageDownloader.m */,
 			);
-			path = notify;
+			path = notifi;
 			sourceTree = "<group>";
 		};
 		48AD3F961DB9438600B47CA5 /* Supporting Files */ = {
@@ -136,9 +136,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		48AD3F8F1DB9438600B47CA5 /* notify */ = {
+		48AD3F8F1DB9438600B47CA5 /* notifi */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 48AD3FA41DB9438600B47CA5 /* Build configuration list for PBXNativeTarget "notify" */;
+			buildConfigurationList = 48AD3FA41DB9438600B47CA5 /* Build configuration list for PBXNativeTarget "notifi" */;
 			buildPhases = (
 				48AD3F8C1DB9438600B47CA5 /* Sources */,
 				48AD3F8D1DB9438600B47CA5 /* Frameworks */,
@@ -148,9 +148,9 @@
 			);
 			dependencies = (
 			);
-			name = notify;
+			name = notifi;
 			productName = notify;
-			productReference = 48AD3F901DB9438600B47CA5 /* notify.app */;
+			productReference = 48AD3F901DB9438600B47CA5 /* notifi.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -169,7 +169,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 48AD3F8B1DB9438600B47CA5 /* Build configuration list for PBXProject "notify" */;
+			buildConfigurationList = 48AD3F8B1DB9438600B47CA5 /* Build configuration list for PBXProject "notifi" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -182,7 +182,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				48AD3F8F1DB9438600B47CA5 /* notify */,
+				48AD3F8F1DB9438600B47CA5 /* notifi */,
 			);
 		};
 /* End PBXProject section */
@@ -196,9 +196,9 @@
 				48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */,
 				48AE54BE1E04542400E8777F /* Raleway-SemiBold.ttf in Resources */,
 				48AE54BC1E04542400E8777F /* Raleway-ExtraBold.ttf in Resources */,
+				48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */,
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
-				48AD3F9D1DB9438600B47CA5 /* Assets.xcassets in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				482C8A981E0B02D700E5C173 /* placeholder.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
@@ -318,10 +318,10 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3H49MXS325;
-				INFOPLIST_FILE = notify/Info.plist;
+				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notify;
+				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notifi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -333,10 +333,10 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3H49MXS325;
-				INFOPLIST_FILE = notify/Info.plist;
+				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notify;
+				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notifi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -344,7 +344,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		48AD3F8B1DB9438600B47CA5 /* Build configuration list for PBXProject "notify" */ = {
+		48AD3F8B1DB9438600B47CA5 /* Build configuration list for PBXProject "notifi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48AD3FA21DB9438600B47CA5 /* Debug */,
@@ -353,7 +353,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		48AD3FA41DB9438600B47CA5 /* Build configuration list for PBXNativeTarget "notify" */ = {
+		48AD3FA41DB9438600B47CA5 /* Build configuration list for PBXNativeTarget "notifi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48AD3FA51DB9438600B47CA5 /* Debug */,

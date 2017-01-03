@@ -4,12 +4,6 @@
 <dict>
 	<key>ATSApplicationFontsPath</key>
 	<string>fonts/</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Raleway-SemiBold.ttf</string>
-		<string>Raleway-Medium.ttf</string>
-		<string>Raleway-ExtraBold.ttf</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -45,5 +39,11 @@
 	<string>NSApplication</string>
 	<key>NSUserNotificationAlertStyle</key>
 	<string>alert</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Raleway-SemiBold.ttf</string>
+		<string>Raleway-Medium.ttf</string>
+		<string>Raleway-ExtraBold.ttf</string>
+	</array>
 </dict>
 </plist>

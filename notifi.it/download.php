@@ -1,5 +1,5 @@
 <?php
-$file = "notify.zip";
+$file = "notifi.zip";
 header('Content-type:  application/zip');
 header('Content-Length: ' . filesize($file));
 header('Content-Disposition: attachment; filename="'.$file.'"');

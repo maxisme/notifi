@@ -1,4 +1,4 @@
-# Notify
+# Notifi
 ### A PHP-based push notification API
 
 ## Usage

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  notify
+//  notifi
 //
 //  Created by Max Mitchell on 20/10/2016.
 //  Copyright © 2016 max mitchell. All rights reserved.
@@ -833,6 +833,9 @@ BOOL streamOpen = false;
                 [_errorItem setHidden:false];
             }
             break;
+            
+        default: ;
+            
     }
     
 }
@@ -881,11 +884,11 @@ BOOL streamOpen = false;
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
-    _showOnStartupItem = [[NSMenuItem alloc] initWithTitle:@"Open Notify at login" action:@selector(openOnStartup) keyEquivalent:@""];
+    _showOnStartupItem = [[NSMenuItem alloc] initWithTitle:@"Open Notifi at login" action:@selector(openOnStartup) keyEquivalent:@""];
     [_showOnStartupItem setTarget:self];
     [mainMenu addItem:_showOnStartupItem];
     
-    NSMenuItem* quit = [[NSMenuItem alloc] initWithTitle:@"Quit Notify" action:@selector(quit) keyEquivalent:@""];
+    NSMenuItem* quit = [[NSMenuItem alloc] initWithTitle:@"Quit Notifi" action:@selector(quit) keyEquivalent:@""];
     [quit setTarget:self];
     [mainMenu addItem:quit];
     

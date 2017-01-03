@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:notify.xcodeproj">
+      location = "self:/Users/maxmitch/Documents/notifi/OSX App/notifi.xcodeproj">
    </FileRef>
 </Workspace>
