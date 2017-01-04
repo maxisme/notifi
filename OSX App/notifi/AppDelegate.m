@@ -133,18 +133,35 @@
 #pragma mark - window
 int max_window_height;
 int min_window_height;
--(void)createWindow{
-    NSRect frame = [[_statusItem valueForKey:@"window"] frame];
-    
+
+-(NSRect)positionWindow{
     int window_width = 350;
+    NSRect frame = [[_statusItem valueForKey:@"window"] frame];
+    float screen_width = [[NSScreen mainScreen] frame].size.width;
+    
+    float x = frame.origin.x - window_width/2 + frame.size.width/2;
+    float y = frame.origin.y - min_window_height;
+    NSLog(@"1:%f",window_width + x );
+    NSLog(@"2:%f",screen_width);
+    if(window_width + x > screen_width){
+        int padding = 10;
+        x = screen_width - window_width - padding;
+        [window_up_arrow_view setFrame:NSMakeRect(frame.origin.x + frame.size.width/2 - x - padding,
+                                                 window_up_arrow_view.frame.origin.y,
+                                                 window_up_arrow_view.frame.size.width,
+                                                  window_up_arrow_view.frame.size.height)];
+    }
+    return NSMakeRect(x, y, window_width, min_window_height);
+}
+
+NSImageView *window_up_arrow_view;
+-(void)createWindow{
     max_window_height = [[NSScreen mainScreen] frame].size.height * 0.8;
     min_window_height = [[NSScreen mainScreen] frame].size.height * 0.5;
     
-    NSRect contentSize = NSMakeRect(frame.origin.x - window_width/2 + frame.size.width/2, frame.origin.y - min_window_height, window_width, min_window_height);
-    
     NSUInteger windowStyleMask = 0;
     
-    _window = [[MyWindow alloc] initWithContentRect:contentSize styleMask:windowStyleMask backing:NSBackingStoreBuffered defer:YES];
+    _window = [[MyWindow alloc] initWithContentRect:[self positionWindow] styleMask:windowStyleMask backing:NSBackingStoreBuffered defer:YES];
     [_window setIdentifier:@"default"];
     [_window setOpaque:NO];
     [_window setBackgroundColor: [NSColor clearColor]];
@@ -178,10 +195,12 @@ int min_window_height;
     bg.layer.cornerRadius = 10.0f;
     [_view addSubview:bg];
     
-    NSImage *up = [NSImage imageNamed:@"up_arrow.png"];
-    NSImageView *upView = [[NSImageView alloc] initWithFrame:NSMakeRect(width/2 - 10, height-20, 20, 20)];
-    [upView setImage:up];
-    [_view addSubview:upView];
+    NSImage* window_up_arrow = [NSImage imageNamed:@"up_arrow.png"];
+    window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(width/2 - 10, height-20, 20, 20)];
+    [window_up_arrow_view setImage:window_up_arrow];
+    [_view addSubview:window_up_arrow_view];
+    
+    [self positionWindow]; //horrible but had to be done ;)
     
     [self createBodyWindow];
 }
@@ -537,6 +556,7 @@ int notification_view_padding = 20;
     [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
     [NSApp activateIgnoringOtherApps:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self positionWindow]; //does not work
         [_window makeKeyAndOrderFront:_view];
     });
 }
