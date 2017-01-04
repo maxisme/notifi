@@ -42,7 +42,7 @@ if(isBruteForce($db_user, $db_pass, $key, $credentials)){
 
 //check if user exists
 if(!userExists($credentials)){
-	die("");
+	die();
 }
 
 $mysqli = new mysqli("localhost", "$db_user", "$db_pass", 'notifi');

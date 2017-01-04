@@ -23,8 +23,8 @@ if(strlen($credentials) != 25){
 	die();
 }
 
-if(isBruteForce($db_user, $db_pass, $encryption_key, $credentials, 1)){
-	die("\nToo many requests!");
+if(isBruteForce($db_user, $db_pass, $encryption_key, $credentials, 2)){
+	die("\nToo many requests from IP address try again in 1 minute!");
 }
 
 // check if user is already in database
