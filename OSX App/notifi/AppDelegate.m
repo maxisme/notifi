@@ -487,7 +487,7 @@ int notification_view_padding = 20;
     [time_field setStringValue:timestr];
     [view addSubview:time_field];
     
-    //keep time up to date
+    //keep time label up to date
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         while (1==1) {
             [NSThread sleepForTimeInterval:60.0];
