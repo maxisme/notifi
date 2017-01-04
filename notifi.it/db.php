@@ -46,8 +46,8 @@ function deleteNotification($id, $credentials){
 	
 	$con = connect();
 	$id = mysqli_real_escape_string($con, $id);
-	mysqli_query($con, "UPDATE `notifications`
-	SET title='',message='',image='',link='' 
+	mysqli_query($con, "DELETE 
+	FROM `notifications`
 	WHERE `id`=$id 
 	AND `credentials`=AES_ENCRYPT('$credentials', '$key')");
 }
