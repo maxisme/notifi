@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 require "/var/www/notifi.it/socket/db.php";
 
 $db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
@@ -27,7 +27,20 @@ if(isBruteForce($db_user, $db_pass, $encryption_key, $credentials, 1)){
 	die("\nToo many requests!");
 }
 
-// Upload to user database
+// check if user is already in database
+$con = connect();
+
+//limit ammount of requests per ip
+$result_user = mysqli_query($con, "SELECT id
+FROM `users`
+WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
+"); 
+
+if(mysqli_num_rows($result_user) > 0){
+	die("0");
+}
+
+// add to user database
 $mysqli = new mysqli("localhost", "$db_user", "$db_pass", 'notifi');
 if ($mysqli->connect_error) {
     die('Connect Error (' . $mysqli->connect_errno . ') '. $mysqli->connect_error);

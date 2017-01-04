@@ -1,14 +1,11 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 $db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
 $db_user = trim(file_get_contents(dirname(__DIR__)."/db.user"));
 $key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 
 require "/var/www/notifi.it/socket/db.php";
-
-function clean($string) {
-   $string = str_replace(' ', '', $string); // removes all spaces
-   return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
-}
 
 //post data
 $credentials = trim(clean($_POST['credentials']));
@@ -58,7 +55,7 @@ AES_ENCRYPT(?,'$key'),
 AES_ENCRYPT(?,'$key')
 )");
 
-$stmt->bind_param('ssssss', $credentials, $title, $message, $imageURL, $link);
+$stmt->bind_param('sssss', $credentials, $title, $message, $imageURL, $link);
 
 if($stmt->execute()){
 	// send message to ratchet to send message to user
@@ -66,7 +63,6 @@ if($stmt->execute()){
 	$socket = $context->getSocket(ZMQ::SOCKET_PUSH);
 	$socket->connect("tcp://localhost:5555");
 	$socket->send($credentials);
-	$socket->close();
 	echo "sent";
 }else{
 	echo "Error inserting notification into database!\nPlease send this to max@m4x.co:\n\n";

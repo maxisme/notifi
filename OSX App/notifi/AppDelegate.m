@@ -582,19 +582,19 @@ int notification_view_padding = 20;
     
     if([content length] != 100){
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error Fetching key!"];
+        [alert setMessageText:@"Error Fetching credentials!"];
         [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
         [alert addButtonWithTitle:@"Ok"];
         [alert runModal];
-    }else if([content  isEqual: @""]){
+    }else if([content  isEqual: @"0"]){
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error!"];
+        [alert setMessageText:@"Error credentials already registered!"];
         [alert setInformativeText:@"Please try again."];
         [alert addButtonWithTitle:@"Ok"];
         [alert runModal];
     }else if(error){
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error Fetching key!"];
+        [alert setMessageText:@"Error Fetching credentials!"];
         [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
         [alert addButtonWithTitle:@"Ok"];
         [alert runModal];
