@@ -466,16 +466,40 @@ int notification_view_padding = 20;
     [time_field setSelectable:YES];
     time_field.editable = false;
     time_field.bordered =false;
-    NSDateFormatter *formatterObj = [[NSDateFormatter alloc]init];
-    [formatterObj setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate *convertedDate = [formatterObj dateFromString:time_string];
-    [formatterObj setDateFormat:@"MMM d, yyyy HH:mm"];
-    NSString *stringDate = [formatterObj stringFromDate:convertedDate];
+    
+    //get nsdate
+    NSDateFormatter *serverFormat = [[NSDateFormatter alloc]init];
+    [serverFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [serverFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"EST"]]; //server time zone `date +%Z`
+    NSDate *date = [serverFormat dateFromString:time_string];
+    
+    //change to local time zone
+    NSTimeZone *tz = [NSTimeZone defaultTimeZone];
+    NSInteger seconds = [tz secondsFromGMTForDate: date];
+    NSDate* convertedDate = [NSDate dateWithTimeInterval: seconds sinceDate:date];
+    
+    //convert to desired format
+    NSDateFormatter *myFormat = [[NSDateFormatter alloc]init];
+    [myFormat setDateFormat:@"MMM d, yyyy HH:mm"];
+    NSString *stringDate = [myFormat stringFromDate:convertedDate];
+    
     NSString* timestr = [NSString stringWithFormat:@"%@ %@",stringDate, [self dateDiff:convertedDate]];
     [time_field setStringValue:timestr];
     [view addSubview:time_field];
     
-    //add info
+    //keep time up to date
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while (1==1) {
+            [NSThread sleepForTimeInterval:60.0];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString* timestr = [NSString stringWithFormat:@"%@ %@",stringDate, [self dateDiff:convertedDate]];
+                [time_field setStringValue:timestr];
+            });
+        }
+    });
+    
+    
+    //-- add info
     if(![mes  isEqual: @" "]){
         MyLabel* info = [[MyLabel alloc] initWithFrame:
                              CGRectMake(
@@ -710,7 +734,6 @@ bool serverReplied = false;
 }
 
 #pragma mark - notifications
-
 -(void)sendLocalNotification:(NSString*)title message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url{
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     
