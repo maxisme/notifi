@@ -1,5 +1,5 @@
 <p align="center"><img height="150px" src="https://github.com/maxisme/notifi/blob/master/bell.png"></p>
-# Notifi
+# [Notifi](https://notifi.it/)
 
 ## Usage
 1. Install the Notifi [OSX client application](https://notifi.it/download)
