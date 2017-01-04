@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "AsyncImageDownloader.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 

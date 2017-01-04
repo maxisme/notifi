@@ -8,7 +8,6 @@
 
 
 #import "AppDelegate.h"
-#import "AsyncImageDownloader.h"
 
 // ----- notification view interface -----
 @interface MyNotificationView: NSView
@@ -567,8 +566,43 @@ int notification_view_padding = 20;
         [credential_key appendFormat:@"%C", c];
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
-    [_credentialsItem setTitle:credential_key];
+    NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
+    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
+                                                cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                            timeoutInterval:30];
+    NSData *urlData;
+    NSURLResponse *response;
+    NSError *error;
+    urlData = [NSURLConnection sendSynchronousRequest:urlRequest
+                                    returningResponse:&response
+                                                error:&error];
+    NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+    
+    if([content length] != 100){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Error Fetching key!"];
+        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
+        [alert addButtonWithTitle:@"Ok"];
+        [alert runModal];
+    }else if([content  isEqual: @""]){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Error!"];
+        [alert setInformativeText:@"Please try again."];
+        [alert addButtonWithTitle:@"Ok"];
+        [alert runModal];
+    }else if(error){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Error Fetching key!"];
+        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
+        [alert addButtonWithTitle:@"Ok"];
+        [alert runModal];
+    }else{
+        [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
+        [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
+        [_credentialsItem setTitle:credential_key];
+    }
 }
 
 #pragma mark - handle icoming notification
@@ -744,7 +778,9 @@ NSOutputStream* outputStream;
 BOOL streamOpen = false;
 
 - (void)sendCode{
-    NSString* message = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
+    NSString* key = [[NSUserDefaults standardUserDefaults] objectForKey:@"key"];
+    NSString* message = [NSString stringWithFormat:@"%@|%@", credentials, key];
     if(streamOpen){
         NSData *data = [[NSData alloc] initWithData:[message dataUsingEncoding:NSASCIIStringEncoding]];
         [outputStream write:[data bytes] maxLength:[data length]];
@@ -764,7 +800,7 @@ BOOL streamOpen = false;
     
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"81.133.172.114", 38815, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"185.117.22.245", 38815, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *)readStream;
     outputStream = (__bridge NSOutputStream *)writeStream;
     

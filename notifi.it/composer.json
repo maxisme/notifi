@@ -1,10 +1,11 @@
 {
     "autoload": {
         "psr-0": {
-            "Notify": "/NAS/notify"
+            "Notify": "/var/www/notifi.it/socket"
         }
     },
     "require": {
-        "cboden/ratchet": "0.3.*"
+        "cboden/ratchet": "0.3.*",
+        "react/zmq": "^0.3.0"
     }
 }

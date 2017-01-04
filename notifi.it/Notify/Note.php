@@ -6,8 +6,7 @@ use Ratchet\ConnectionInterface;
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-require "/NAS/notify/db.php";
-
+require "/var/www/notifi.it/socket/db.php";
 
 class Note implements MessageComponentInterface { 
     protected $clients;
@@ -23,21 +22,31 @@ class Note implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
-		if(strlen($msg) != 25){
+		$arr = explode("|", $msg);
+		$credentials = $arr[0];
+		$key = $arr[1];
+		
+		if(strlen($credentials) != 25){
+			$from->close();
+		}
+		
+		//check if user is valid
+		if(!isUser($credentials, $key)){
+			echo "ilegal login";
 			$from->close();
 		}
 		
 		$x = 0;
         foreach ($this->clients as $client) {
             if ($from === $client) { //current client only
-				$this->clientCodes[$x] = $msg;
-				echo "\nmsg:$msg from: ".$client->remoteAddress;
-				$query = getNotifications($msg);
+				$this->clientCodes[$x] = $credentials;
+				echo "\nmsg:$credentials from: ".$client->remoteAddress;
+				$query = getNotifications($credentials);
 				if($query != ""){
 					$stack = array();
 					while($row = mysqli_fetch_assoc($query)){
 						array_push($stack, $row);
-						deleteNotification($row['id'], $msg);
+						deleteNotification($row['id'], $credentials);
 					}
 					$client->send(json_encode($stack));
 				}else{

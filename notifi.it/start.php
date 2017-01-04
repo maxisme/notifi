@@ -1,6 +1,6 @@
 <?php
-require '/NAS/notify/vendor/autoload.php';
- 
+require '/var/www/notifi.it/socket/vendor/autoload.php';
+
 use Ratchet\Server\IoServer;
 use Notify\Note;
 
