@@ -1,8 +1,9 @@
-# Notify
+<p align="center"><img height="150px" src="https://github.com/maxisme/notifi/blob/master/bell.png"></p>
+# Notifi
 ### A PHP-based push notification API
 
 ## Usage
-1. Install the [OSX client application](https://notifi.it/download)
+1. Install the Notifi [OSX client application](https://notifi.it/download)
 2. Create an HTTP request using your chosen method, with the following params:
 - `credentials` (your credentials given to you by the client-side app)
 - `title` (notification title) - **Required**
