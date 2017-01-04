@@ -1,6 +1,5 @@
 <p align="center"><img height="150px" src="https://github.com/maxisme/notifi/blob/master/bell.png"></p>
 # Notifi
-### A PHP-based push notification API
 
 ## Usage
 1. Install the Notifi [OSX client application](https://notifi.it/download)
