@@ -1,3 +1,4 @@
+<img height="150px" src="https://github.com/maxisme/notifi/blob/master/bell.png">
 # Notifi
 ### A PHP-based push notification API
 
