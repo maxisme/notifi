@@ -31,7 +31,7 @@ class Note implements MessageComponentInterface {
 		}
 		
 		//check if user is valid
-		if(!isUser($credentials, $key)){
+		if(!isValidUser($credentials, $key)){
 			echo "ilegal login";
 			$from->close();
 		}

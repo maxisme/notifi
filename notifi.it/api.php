@@ -15,11 +15,11 @@ $imageURL = trim($_POST['img']);
 $link = trim($_POST['link']);
 
 if(empty($credentials) || strlen($credentials) != 25){
-	die("invalid credentials");
+	die("invalid credentials\n");
 }
 
 if(empty($title)){
-	die("No title"); 
+	die("No title\n"); 
 }
 
 if(empty($message)){
@@ -33,11 +33,16 @@ if(empty($imageURL)){
 if(empty($link)){ 
 	$link = " "; 
 }else if (filter_var($link, FILTER_VALIDATE_URL) === FALSE) {
-    die('Not a valid URL');
+    die('Not a valid URL\n');
 }
 
 if(isBruteForce($db_user, $db_pass, $key, $credentials)){
-	die("\nToo many requests!");
+	die("Too many requests!\n");
+}
+
+//check if user exists
+if(!userExists($credentials)){
+	die("");
 }
 
 $mysqli = new mysqli("localhost", "$db_user", "$db_pass", 'notifi');
@@ -63,7 +68,6 @@ if($stmt->execute()){
 	$socket = $context->getSocket(ZMQ::SOCKET_PUSH);
 	$socket->connect("tcp://localhost:5555");
 	$socket->send($credentials);
-	echo "sent";
 }else{
 	echo "Error inserting notification into database!\nPlease send this to max@m4x.co:\n\n";
 	print_r($stmt);

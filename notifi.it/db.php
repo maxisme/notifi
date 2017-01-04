@@ -127,7 +127,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 	return false;
 }
 
-function isUser($credentials, $key){
+function isValidUser($credentials, $key){
 	$encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 	
 	$con = connect();
@@ -138,7 +138,7 @@ function isUser($credentials, $key){
 	AND `key` = AES_ENCRYPT('$key', '$encryption_key')
 	"); 
 
-	if(mysqli_num_rows($users) != 0){
+	if(mysqli_num_rows($users) > 0){
 		//update login time
 		$time = date('r');
 		mysqli_query($con, "UPDATE `users`
@@ -150,6 +150,21 @@ function isUser($credentials, $key){
 		return true;
 	}
 	
+	return false;
+}
+
+function userExists($credentials){
+	$encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$con = connect();
+
+	$users = mysqli_query($con, "SELECT id
+	FROM `users`
+	WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
+	"); 
+
+	if(mysqli_num_rows($users) > 0){
+		return true;
+	}
 	return false;
 }
 

@@ -690,6 +690,11 @@ bool serverReplied = false;
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     
     if([arrayofdics count] > 0){
+        //close window
+        if(_window && [_window isVisible]){
+            [_window orderOut:self];
+        }
+        //ask if sure
         NSAlert *alert = [[NSAlert alloc] init];
         [alert addButtonWithTitle:@"OK"];
         [alert addButtonWithTitle:@"Cancel"];
