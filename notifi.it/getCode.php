@@ -7,18 +7,8 @@ $db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
 $db_user = trim(file_get_contents(dirname(__DIR__)."/db.user"));
 $encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 
-function generateKey($length) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
-
 $credentials = trim($_GET['credentials']);
-$key = generateKey(100);
+$key = randomString(100);
 if(strlen($credentials) != 25){
 	die();
 }

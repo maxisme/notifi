@@ -280,6 +280,56 @@ NSScrollView *scroll_view;
         notification_count++;
     }
     
+    if(notification_count == 0){
+        NSLog(@"no notifications");
+        //add go to github view
+        NSView *view = [[NSView alloc] init];
+        [view setFrame:CGRectMake(0, -scroll_height + 40, window_width, scroll_height)];
+        view.wantsLayer = TRUE;
+        
+        //add label
+        NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [centredStyle setAlignment:NSTextAlignmentCenter];
+        NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
+                               NSParagraphStyleAttributeName,
+                               [NSFont fontWithName:@"Raleway-SemiBold" size:15],
+                               NSFontAttributeName,
+                               grey,
+                               NSForegroundColorAttributeName,
+                               nil];
+        NSMutableAttributedString *attributedString =
+        [[NSMutableAttributedString alloc] initWithString:@"You have no notifications!\nSend curl requests to receive them."
+                                               attributes:attrs];
+        
+        NSRange range = NSMakeRange(32, 4);
+        [attributedString beginEditing];
+        [attributedString addAttribute: NSLinkAttributeName value: @"https://github.com/maxisme/notifi#curl-examples" range:range];
+        [attributedString endEditing];
+         
+        //nstextfield
+        MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
+                                     CGRectMake(
+                                                0,
+                                                scroll_height/2 - 100/2,
+                                                window_width,
+                                                100
+                                                )
+                                     ];
+        title_field.editable = false;
+        title_field.bordered = false;
+        title_field.backgroundColor = [NSColor clearColor];
+        [title_field setAlignment:NSTextAlignmentCenter];
+        title_field.attributedStringValue = attributedString;
+        [title_field setWantsLayer:true];
+        [title_field setAllowsEditingTextAttributes:YES];
+        [title_field setSelectable:YES];
+        
+        [view addSubview:title_field];
+        
+        //add to content view
+        [content_view addSubview:view];
+    }
+    
     //sort height when notifications do not fill the view
     if(prevheight < scroll_height){
         for(NSView* view in content_view.subviews){
@@ -696,15 +746,24 @@ bool serverReplied = false;
                           options:kNilOptions
                           error:nil];
     for (NSDictionary* notification in json_dic) {
-        [self sendLocalNotification:[notification objectForKey:@"title"]
-                       message:[notification objectForKey:@"message"]
-                      imageURL:[notification objectForKey:@"image"]
-                          link:[notification objectForKey:@"link"]
-         ];
-        
-        [self storeNotification:notification];
-        [self createBodyWindow];
-        theid++;
+        NSString* firstval = [NSString stringWithFormat:@"%@", notification];;
+        if([[firstval substringToIndex:3]  isEqual: @"id:"]){
+            //received request and reply
+            if(streamOpen){
+                NSData *data = [[NSData alloc] initWithData:[firstval dataUsingEncoding:NSASCIIStringEncoding]];
+                [outputStream write:[data bytes] maxLength:[data length]];
+            }
+        }else{
+            [self sendLocalNotification:[notification objectForKey:@"title"]
+                           message:[notification objectForKey:@"message"]
+                          imageURL:[notification objectForKey:@"image"]
+                              link:[notification objectForKey:@"link"]
+             ];
+            
+            [self storeNotification:notification];
+            [self createBodyWindow];
+            theid++;
+        }
     }
 }
 
@@ -936,7 +995,7 @@ BOOL streamOpen = false;
                         NSString *output = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
                         if (nil != output && ![output  isEqual: @"1"]) {
                             [self handleIncomingNotification:output];
-                        }else{
+                        }else if([output  isEqual: @"1"]){
                             NSLog(@"Connected to server");
                             serverReplied = true;
                         }
