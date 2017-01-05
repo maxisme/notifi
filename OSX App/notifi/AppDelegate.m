@@ -68,7 +68,7 @@
 
 - (void)mouseUp:(NSEvent *)event
 {
-    if(_link){
+    if(![_link  isEqual: @" "]){
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_link]];
     }else{
         [self.superview mouseUp:event];
@@ -86,8 +86,10 @@
 }
 - (void)resetCursorRects
 {
-    [super resetCursorRects];
-    [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
+    if(![super.link  isEqual: @" "]){
+        [super resetCursorRects];
+        [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
+    }
 }
 @end
 
@@ -687,7 +689,6 @@ bool serverReplied = false;
 }
 
 -(void)handleIncomingNotification:(NSString*)json{
-    NSLog(@"json:%@",json);
     int theid = 0;
     NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary* json_dic = [NSJSONSerialization
