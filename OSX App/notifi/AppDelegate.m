@@ -281,7 +281,6 @@ NSScrollView *scroll_view;
     }
     
     if(notification_count == 0){
-        NSLog(@"no notifications");
         //add go to github view
         NSView *view = [[NSView alloc] init];
         [view setFrame:CGRectMake(0, -scroll_height + 40, window_width, scroll_height)];
@@ -304,6 +303,13 @@ NSScrollView *scroll_view;
         NSRange range = NSMakeRange(32, 4);
         [attributedString beginEditing];
         [attributedString addAttribute: NSLinkAttributeName value: @"https://github.com/maxisme/notifi#curl-examples" range:range];
+        
+        [attributedString addAttribute:NSForegroundColorAttributeName
+                       value:[NSColor blueColor]
+                       range:range];
+        [attributedString addAttribute:NSUnderlineStyleAttributeName
+                       value:[NSNumber numberWithInt:NSSingleUnderlineStyle]
+                       range:range];
         [attributedString endEditing];
          
         //nstextfield
@@ -397,7 +403,7 @@ NSScrollView *scroll_view;
     [self setNotificationMenuBar];
     
     //scroll to top
-    NSPoint pt = NSMakePoint(0.0, [[scroll_view documentView] bounds].size.height);
+    NSPoint pt = NSMakePoint(0.0, [[scroll_view documentView] bounds].size.height); //top
     if (!CGPointEqualToPoint(currentScrollPosition, CGPointZero)){
         pt = currentScrollPosition;
         currentScrollPosition = CGPointZero;
@@ -411,10 +417,11 @@ int prevheight;
 int notification_view_padding = 20;
 NSMutableArray *time_fields;
 NSMutableArray *notification_views;
+
 -(NSView*)createNotificationView:(NSString*)title_string message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url time:(NSString*)time_string read:(bool)read
 {
     
-    int notification_width = window_width*0.9;
+    int notification_width = window_width * 0.9;
     int notification_height = 40;
     int image_width = 70;
     int image_height = 70;
@@ -492,13 +499,13 @@ NSMutableArray *notification_views;
         unread_notifications++;
         [self setNotificationMenuBar];
         
-        NSShadow *dropShadow = [[NSShadow alloc] init];
-        [dropShadow setShadowColor:black];
-        [dropShadow setShadowOffset:NSMakeSize(0, 0)];
-        [dropShadow setShadowBlurRadius:3.0];
-        [view setShadow:dropShadow];
-        
     }
+    
+    NSShadow *dropShadow = [[NSShadow alloc] init];
+    [dropShadow setShadowColor:black];
+    [dropShadow setShadowOffset:NSMakeSize(0, 0)];
+    [dropShadow setShadowBlurRadius:3.0];
+    [view setShadow:dropShadow];
     view.wantsLayer = YES;
     view.layer.cornerRadius = 10.0f;
     
@@ -739,6 +746,7 @@ bool serverReplied = false;
 }
 
 -(void)handleIncomingNotification:(NSString*)json{
+    NSLog(@"json %@", json);
     int theid = 0;
     NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary* json_dic = [NSJSONSerialization
@@ -809,11 +817,6 @@ bool serverReplied = false;
         unread_notifications--;
     }else{
         unread_notifications++;
-        NSShadow *dropShadow = [[NSShadow alloc] init];
-        [dropShadow setShadowColor:black];
-        [dropShadow setShadowOffset:NSMakeSize(0, 0)];
-        [dropShadow setShadowBlurRadius:3.0];
-        [view setShadow:dropShadow];
     }
     [self setNotificationMenuBar];
 }
@@ -984,22 +987,24 @@ BOOL streamOpen = false;
         case NSStreamEventHasBytesAvailable:
             
             if (theStream == inputStream) {
-                
                 uint8_t buffer[1024];
                 int len;
-                
+                NSString* incoming_message = @"";
                 while ([inputStream hasBytesAvailable]) {
                     len = (int)[inputStream read:buffer maxLength:sizeof(buffer)];
                     if (len > 0) {
-                        
-                        NSString *output = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
-                        if (nil != output && ![output  isEqual: @"1"]) {
-                            [self handleIncomingNotification:output];
-                        }else if([output  isEqual: @"1"]){
-                            NSLog(@"Connected to server");
-                            serverReplied = true;
+                        NSString *mess = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
+                        if(mess != nil){
+                            incoming_message = [NSString stringWithFormat:@"%@%@",incoming_message,mess];
                         }
                     }
+                }
+                // handle icoming message
+                if (![@""  isEqual: incoming_message] && ![incoming_message  isEqual: @"1"]) {
+                    [self handleIncomingNotification:incoming_message];
+                }else if([incoming_message  isEqual: @"1"]){
+                    NSLog(@"Connected to server");
+                    serverReplied = true;
                 }
             }
             break;

@@ -30,7 +30,7 @@ if(empty($imageURL)){
 	$imageURL = " "; 
 }else{
 	if (!@getimagesize($imageURL)) {
-		echo "not a valid image\n";
+		echo "Not a valid image. Sent without!\n";
 		$imageURL = " "; 
 	}
 }

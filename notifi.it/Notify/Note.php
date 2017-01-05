@@ -3,8 +3,8 @@ namespace Notify;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
  
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 
 require "/var/www/notifi.it/socket/db.php";
 
@@ -29,7 +29,7 @@ class Note implements MessageComponentInterface {
 			$arr = explode("|", $decrypted_string);
 			$id = $arr[0];
 			$credentials = $arr[1];
-			echo "received and deleting";
+			
 			deleteNotification($id, $credentials);
 		}else{
 			$arr = explode("|", $msg);

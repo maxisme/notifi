@@ -176,7 +176,7 @@ function randomString($length) {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
-}
+} 
 
 function encrypt($string){
 	$key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
