@@ -28,6 +28,11 @@ if(empty($message)){
 
 if(empty($imageURL)){
 	$imageURL = " "; 
+}else{
+	if (!@getimagesize($imageURL)) {
+		echo "not a valid image\n";
+		$imageURL = " "; 
+	}
 }
 
 if(empty($link)){ 
