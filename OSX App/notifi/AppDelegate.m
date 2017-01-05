@@ -137,7 +137,6 @@
     }
     
     [self createWindow];
-    [self showWindow];
 }
 
 #pragma mark - window
