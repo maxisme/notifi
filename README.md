@@ -11,7 +11,9 @@
 - `link` (url to send with the notification) - _Optional_
 3. Requests are sent to `https://notifi.it/api`
 
-### CURL Example
+## CURL Examples
+
+### Curl
 ```
 curl -d "credentials=<credentials>" \
 -d "title=New download" \
@@ -21,7 +23,7 @@ curl -d "credentials=<credentials>" \
 https://notifi.it/api
 ```
 
-### Python requests example
+### Python
 ```python
 import requests
 
