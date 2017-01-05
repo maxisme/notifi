@@ -41,9 +41,9 @@
 	<string>alert</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Raleway-SemiBold.ttf</string>
-		<string>Raleway-Medium.ttf</string>
-		<string>Raleway-ExtraBold.ttf</string>
+		<string>fonts/Raleway-SemiBold.ttf</string>
+		<string>fonts/Raleway-Medium.ttf</string>
+		<string>fonts/Raleway-ExtraBold.ttf</string>
 	</array>
 </dict>
 </plist>

@@ -57,17 +57,17 @@ class Note implements MessageComponentInterface {
         }
     }
 	
-	public function onCurl($msg) {
+	public function onCurl($credentials) {
 		$x = 0;
 		foreach ($this->clients as $client) {
-			if($msg == $this->clientCodes[$x]){
+			if($credentials == $this->clientCodes[$x]){
 				$stack = array();
-				$query = getNotifications($msg);
-				//echo "\ncurl msg:$msg from: ".$client->remoteAddress;
+				$query = getNotifications($credentials);
+				echo "\ncurl msg:$credentials from: ".$client->remoteAddress;
 				if($query != ""){
 					while($row = mysqli_fetch_assoc($query)){
 						array_push($stack, $row);
-						deleteNotification($row['id'], $msg);
+						deleteNotification($row['id'], $credentials);
 					}
 					$client->send(json_encode($stack));
 				}

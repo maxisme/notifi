@@ -56,6 +56,8 @@
 // ----- label interface -----
 @interface MyLabel: NSTextField
 @property (nonatomic) NSString* link;
+@property (nonatomic) NSDate* time;
+@property (nonatomic) NSString* str_time;
 @end
 
 @implementation MyLabel
@@ -117,7 +119,9 @@
     [self createStatusBarItem];
     [self initNetworkCommunication];
     [NSTimer scheduledTimerWithTimeInterval:2.0f
-                                    target:self selector:@selector(check) userInfo:nil repeats:YES];
+                                     target:self selector:@selector(check) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:60.0f
+                                     target:self selector:@selector(updateTimes) userInfo:nil repeats:YES];
     
     //mark menu item
     int shouldOpenOnStartup = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"openOnStartup"];
@@ -128,6 +132,7 @@
     }
     
     [self createWindow];
+    [self showWindow];
 }
 
 #pragma mark - window
@@ -141,8 +146,6 @@ int min_window_height;
     
     float x = frame.origin.x - window_width/2 + frame.size.width/2;
     float y = frame.origin.y - min_window_height;
-    NSLog(@"1:%f",window_width + x );
-    NSLog(@"2:%f",screen_width);
     if(window_width + x > screen_width){
         int padding = 10;
         x = screen_width - window_width - padding;
@@ -157,7 +160,9 @@ int min_window_height;
 NSImageView *window_up_arrow_view;
 -(void)createWindow{
     max_window_height = [[NSScreen mainScreen] frame].size.height * 0.8;
-    min_window_height = [[NSScreen mainScreen] frame].size.height * 0.5;
+    min_window_height = [[NSScreen mainScreen] frame].size.height * 0.7;
+    
+    currentScrollPosition = CGPointZero;
     
     NSUInteger windowStyleMask = 0;
     
@@ -213,7 +218,7 @@ NSColor* offwhite;
 float window_width;
 float window_height;
 NSView *content_view;
-
+NSScrollView *scroll_view;
 
 -(void)createBodyWindow{
     
@@ -246,13 +251,16 @@ NSView *content_view;
     
     //scroll view
     float scroll_height = (window_height - 90) - 40;
-    NSScrollView *scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 40, window_width, scroll_height)];
+    scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 40, window_width, scroll_height)];
     [scroll_view setBorderType:NSNoBorder];
     [scroll_view setHasVerticalScroller:YES];
     
     content_view = [[NSView alloc] initWithFrame:NSMakeRect(0, 40, window_width, scroll_height)];
     
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
+    
+    time_fields = [[NSMutableArray alloc] init];
+    notification_views = [[NSMutableArray alloc] init];
     
     for (NSMutableDictionary *dic in arrayofdics){
         if([dic objectForKey:@"title"]){
@@ -335,6 +343,10 @@ NSView *content_view;
     
     //scroll to top
     NSPoint pt = NSMakePoint(0.0, [[scroll_view documentView] bounds].size.height);
+    if (!CGPointEqualToPoint(currentScrollPosition, CGPointZero)){
+        pt = currentScrollPosition;
+        currentScrollPosition = CGPointZero;
+    }
     [[scroll_view documentView] scrollPoint:pt];
 }
 
@@ -342,6 +354,8 @@ int unread_notifications;
 int notification_count;
 int prevheight;
 int notification_view_padding = 20;
+NSMutableArray *time_fields;
+NSMutableArray *notification_views;
 -(NSView*)createNotificationView:(NSString*)title_string message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url time:(NSString*)time_string read:(bool)read
 {
     
@@ -349,6 +363,7 @@ int notification_view_padding = 20;
     int notification_height = 40;
     int image_width = 70;
     int image_height = 70;
+    int really_random_int_to_add_to_width_of_string_to_get_right_height = 50;
     
     MyNotificationView *view = [[MyNotificationView alloc] init];
     
@@ -358,7 +373,7 @@ int notification_view_padding = 20;
         padding_right = 80;
     }
     
-    float width = notification_width * 0.9 - padding_right;
+    float width = (notification_width * 0.9) - padding_right;
     
     //calculate height of view by height of title text area
     NSMutableParagraphStyle *centredStyle_title = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -375,8 +390,9 @@ int notification_view_padding = 20;
         NSRange range = NSMakeRange(0, attributedString_title.length);
         [attributedString_title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
     }
-    CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-    float title_height = rect_title.size.height;
+    CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(width +really_random_int_to_add_to_width_of_string_to_get_right_height, 1000000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+    
+    float title_height = rect_title.size.height; //calculated height of dynamic title
     
     //calculate height of view by height of info text area
     NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -390,14 +406,22 @@ int notification_view_padding = 20;
     NSMutableAttributedString *attributedString =
     [[NSMutableAttributedString alloc] initWithString:mes
                                            attributes:attrs];
-    CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-    float info_height = rect.size.height + 10;
+    CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(width+ really_random_int_to_add_to_width_of_string_to_get_right_height, 1000000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
     
-    notification_height += info_height + title_height + notification_view_padding;
-    float check_height = image_height + (notification_view_padding*2) + 4;
-    if(notification_height < check_height){
-        notification_height = check_height;
+    float info_height = rect.size.height;  //calculated height of dynamic info
+    
+    notification_height += info_height + title_height + notification_view_padding*2;
+    
+    
+    if(![imgURL isEqual: @" "]){ // handle extra height if image
+        float min_height = image_height + (notification_view_padding*3);
+        if(notification_height < min_height){
+            notification_height = min_height + 8;
+        }
     }
+    //account for extra bit at bottom
+    notification_height -= 10;
+    
     int notification_y = prevheight;
     
     //set view frame
@@ -503,20 +527,11 @@ int notification_view_padding = 20;
     NSString *stringDate = [myFormat stringFromDate:convertedDate];
     
     NSString* timestr = [NSString stringWithFormat:@"%@ %@",stringDate, [self dateDiff:convertedDate]];
+    time_field.time = convertedDate;
+    time_field.str_time = stringDate;
     [time_field setStringValue:timestr];
+    [time_fields addObject:time_field];
     [view addSubview:time_field];
-    
-    //keep time label up to date
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        while (1==1) {
-            [NSThread sleepForTimeInterval:60.0];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSString* timestr = [NSString stringWithFormat:@"%@ %@",stringDate, [self dateDiff:convertedDate]];
-                [time_field setStringValue:timestr];
-            });
-        }
-    });
-    
     
     //-- add info
     if(![mes  isEqual: @" "]){
@@ -549,7 +564,16 @@ int notification_view_padding = 20;
     
     prevheight += view.frame.size.height + notification_view_padding;
     
+    [notification_views addObject:view];
+    
     return view;
+}
+
+-(void)updateTimes{
+    for(MyLabel* label in time_fields){
+        NSString* timestr = [NSString stringWithFormat:@"%@ %@",label.str_time, [self dateDiff:label.time]];
+        [label setStringValue:timestr];
+    }
 }
 
 -(void)showWindow{
@@ -698,7 +722,6 @@ bool serverReplied = false;
     
     //store arrayofdics
     [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
-    [self createBodyWindow];
 }
 
 -(bool)notificationRead:(int)index{
@@ -708,12 +731,28 @@ bool serverReplied = false;
 }
 
 -(void)markAsRead:(bool)read index:(int)index{
+    //update storage
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     NSMutableDictionary *dic = [[arrayofdics objectAtIndex:index] mutableCopy];
     [dic setObject:[NSNumber numberWithBool:read] forKey:@"read"];
     [arrayofdics replaceObjectAtIndex:index withObject:dic];
     [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
-    [self createBodyWindow];
+    
+    //update view
+    NSView* view = [notification_views objectAtIndex:index];
+    [view.layer setBackgroundColor:[red CGColor]];
+    if(read){
+        [view.layer setBackgroundColor:[grey CGColor]];
+        unread_notifications--;
+    }else{
+        unread_notifications++;
+        NSShadow *dropShadow = [[NSShadow alloc] init];
+        [dropShadow setShadowColor:black];
+        [dropShadow setShadowOffset:NSMakeSize(0, 0)];
+        [dropShadow setShadowBlurRadius:3.0];
+        [view setShadow:dropShadow];
+    }
+    [self setNotificationMenuBar];
 }
 
 -(void)markAllAsRead{
@@ -723,10 +762,15 @@ bool serverReplied = false;
     }
 }
 
+NSPoint currentScrollPosition;
 -(void)deleteNotification:(int)index{
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     [arrayofdics removeObjectAtIndex:index];
     [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
+    
+    //store scroll position
+    currentScrollPosition = [[scroll_view contentView] documentVisibleRect].origin;
+    
     [self createBodyWindow];
 }
 
@@ -917,8 +961,6 @@ BOOL streamOpen = false;
                 [_errorItem setHidden:false];
             }
             break;
-            
-        default: ;
             
     }
     
