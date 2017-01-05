@@ -81,6 +81,9 @@
 @end
 
 @implementation MyTitleLabel
+-(void)viewDidAppear {
+    [self setSelectable:NO];
+}
 - (void)resetCursorRects
 {
     [super resetCursorRects];
@@ -468,7 +471,6 @@ NSMutableArray *notification_views;
     }
     
     //--    add title
-    
     MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
                          CGRectMake(
                                     padding_right,
@@ -490,6 +492,7 @@ NSMutableArray *notification_views;
     title_field.editable = false;
     title_field.bordered = false;
     title_field.attributedStringValue = attributedString_title;
+    [title_field setWantsLayer:true];
     
     [view addSubview:title_field];
     
