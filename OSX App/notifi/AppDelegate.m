@@ -69,6 +69,7 @@
 - (void)mouseUp:(NSEvent *)event
 {
     if(![_link  isEqual: @" "]){
+        [_superview markRead];
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_link]];
     }else{
         [self.superview mouseUp:event];
@@ -115,16 +116,16 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self onlyOneInstanceOfApp];
-    //iniate code if does not exist
     NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
     if([credentials length] != 25){
         [self newCredentials];
-        
     }
     [self createStatusBarItem];
     [self initNetworkCommunication];
     [NSTimer scheduledTimerWithTimeInterval:2.0f
                                      target:self selector:@selector(check) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:30.0f
+                                     target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
     [NSTimer scheduledTimerWithTimeInterval:60.0f
                                      target:self selector:@selector(updateTimes) userInfo:nil repeats:YES];
     
@@ -945,6 +946,9 @@ BOOL streamOpen = false;
 }
 
 - (void)initNetworkCommunication { //called in viewDidLoad of the view controller
+    serverReplied = false;
+    streamOpen = false;
+    
     //clear input and output stream
     [inputStream setDelegate:nil];
     [inputStream close];
@@ -998,10 +1002,13 @@ BOOL streamOpen = false;
                         }
                     }
                 }
+                
                 // handle icoming message
-                if (![@""  isEqual: incoming_message] && ![incoming_message  isEqual: @"1"]) {
+                if([incoming_message isEqual: @"pong"]){
+                    hasPong = true;
+                }else if (![incoming_message isEqual: @""] && ![incoming_message isEqual: @"1"]) {
                     [self handleIncomingNotification:incoming_message];
-                }else if([incoming_message  isEqual: @"1"]){
+                }else if([incoming_message isEqual: @"1"]){
                     NSLog(@"Connected to server");
                     serverReplied = true;
                 }
@@ -1010,27 +1017,51 @@ BOOL streamOpen = false;
 
             
         case NSStreamEventErrorOccurred:
-            serverReplied = false;
-            streamOpen = false;
-            NSLog(@"Terminated connection!");
-            if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
-                _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
-                [_errorItem setHidden:false];
-            }
+            [self closeSocket];
             break;
             
         case NSStreamEventEndEncountered:
-            serverReplied = false;
-            streamOpen = false;
-            NSLog(@"Terminated connection!");
-            if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
-                _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
-                [_errorItem setHidden:false];
-            }
+            [self closeSocket];
+            break;
+        
+        case NSStreamEventHasSpaceAvailable:
+            //NSLog(@"Space Availible.");
             break;
             
+        default:
+            NSLog(@"Unknown event- %lu", (unsigned long)streamEvent);
     }
     
+}
+
+-(void)closeSocket{
+    serverReplied = false;
+    streamOpen = false;
+    NSLog(@"Terminated connection!");
+    if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
+        _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
+        [_errorItem setHidden:false];
+    }
+}
+
+bool hasPong;
+-(void)sendPing{
+    if(streamOpen){
+        hasPong = false;
+        NSData *data = [[NSData alloc] initWithData:[@"ping" dataUsingEncoding:NSASCIIStringEncoding]];
+        [outputStream write:[data bytes] maxLength:[data length]];
+        
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
+            [NSThread sleepForTimeInterval:1.0f];
+            [self hasReceivedPong];
+        });
+    }
+}
+
+-(void)hasReceivedPong{
+    if(!hasPong){
+        [self closeSocket];
+    }
 }
 
 #pragma mark - menu bar

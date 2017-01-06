@@ -30,7 +30,7 @@ if(empty($imageURL)){
 	$imageURL = " "; 
 }else{
 	if (!@getimagesize($imageURL)) {
-		echo "Not a valid image. Sent without!\n";
+		echo "$imageURL is not a valid image. Sent without!\n";
 		$imageURL = " "; 
 	}
 }
@@ -38,7 +38,8 @@ if(empty($imageURL)){
 if(empty($link)){ 
 	$link = " "; 
 }else if (filter_var($link, FILTER_VALIDATE_URL) === FALSE) {
-    die('Not a valid URL\n');
+    echo "$link is not a valid link. Sent without\n";
+	$link = " "; 
 }
 
 if(isBruteForce($db_user, $db_pass, $key, $credentials)){

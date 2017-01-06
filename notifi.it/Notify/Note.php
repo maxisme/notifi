@@ -22,7 +22,9 @@ class Note implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
-		if(substr($msg,0,3) == "id:"){
+		if($msg == "ping"){
+			$from->send("pong");
+		}else if(substr($msg,0,3) == "id:"){
 			//reply from user to say they have received notification
 			$decrypted_string = decrypt(substr($msg,3,strlen($msg)));
 			
@@ -50,7 +52,9 @@ class Note implements MessageComponentInterface {
 			foreach ($this->clients as $client) {
 				if ($from === $client) { //current client only
 					$this->clientCodes[$x] = $credentials;
+					
 					echo "\nmsg:$credentials from: ".$client->remoteAddress;
+					
 					$query = getNotifications($credentials);
 					if($query != ""){
 						$stack = array();
@@ -65,7 +69,7 @@ class Note implements MessageComponentInterface {
 				}
 				$x++;
 			}
-		}
+		} 
     }
 	
 	public function onCurl($credentials) {
@@ -88,10 +92,12 @@ class Note implements MessageComponentInterface {
 	}
 
     public function onClose(ConnectionInterface $conn) {
+		echo "connection closed\n";
         $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
+		echo "connection error\n";
         $conn->close();
     }
 }
