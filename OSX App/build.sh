@@ -20,6 +20,4 @@ rm -rf "$output"
 
 #commit
 git commit /Users/maxmitch/Documents/notifi/notifi.it/notifi.zip -m "Update OSX App - via build script"
-git status
 git push origin master
-
