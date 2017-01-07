@@ -359,11 +359,6 @@ NSScrollView *scroll_view;
     markAllAsReadBtn.bordered =false;
     [markAllAsReadBtn setTitle:@"Mark all as read"];
     [markAllAsReadBtn setAction:@selector(markAllAsRead)];
-    if(unread_notifications == 0){
-        [markAllAsReadBtn setEnabled:false];
-    }else{
-        [markAllAsReadBtn setEnabled:true];
-    }
     [_view addSubview:markAllAsReadBtn];
     
     //delete all button
