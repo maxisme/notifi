@@ -28,7 +28,7 @@ https://notifi.it/api
 import requests
 
 data = {
-  'credentials': <credentials>,
+  'credentials': '<credentials>',
   'title': 'New download',
   'message': 'Lorem Ipsum',
   'link': 'https://google.com',
@@ -36,6 +36,25 @@ data = {
 }
 
 r = requests.post(('https://notifi.it/api', data=data))
+```
+
+### PHP
+```
+curl_setopt_array(
+  $chpush = curl_init(),
+  array(
+    CURLOPT_URL => "https://notifi.it/api",
+    CURLOPT_POSTFIELDS => array(
+      "credentials" => '<credentials>',
+      "title" => 'New download',
+      "message" => 'Lorem Ipsum',
+      "link" => 'https://google.com',
+      "img" => 'https://imgur.com/someimage.png',
+    )
+  )
+);
+curl_exec($chpush);
+curl_close($chpush);
 ```
 
 -
