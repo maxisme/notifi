@@ -1,4 +1,8 @@
 <?php
-$file = "https://github.com/maxisme/notifi/raw/master/notifi.it/notifi.zip";
-header("Location: $file");
+$file = "notifi.zip";
+header('Content-type:  application/zip');
+header('Content-Length: ' . filesize($file));
+header('Content-Disposition: attachment; filename="'.$file.'"');
+readfile($file);
+header("Location: /");
 ?> 

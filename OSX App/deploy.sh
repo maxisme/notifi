@@ -19,5 +19,16 @@ rm -rf "notifi.app"
 rm -rf "$output"
 
 #commit
-git commit /Users/maxmitch/Documents/notifi/notifi.it/notifi.zip -m "Update OSX App - via build script"
+git commit $zip_output -m "Update OSX App - via build script"
 git push origin master
+
+#upload to website
+scp $zip_output root@185.117.22.245:/var/www/notifi.it/public_html/
+
+#analyze results
+secs=$((20))
+while [ $secs -gt 0 ]; do
+   echo -ne "Will close in $secs\033[0K\r"
+   sleep 1
+   : $((secs--))
+done

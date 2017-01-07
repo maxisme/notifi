@@ -304,7 +304,7 @@
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notifi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -319,7 +319,7 @@
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notifi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

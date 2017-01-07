@@ -151,6 +151,7 @@ int min_window_height;
     
     float x = frame.origin.x - window_width/2 + frame.size.width/2;
     float y = frame.origin.y - min_window_height;
+    NSLog(@"position y: %f y2: %f",y, frame.origin.y);
     if(window_width + x > screen_width){
         int padding = 10;
         x = screen_width - window_width - padding;
@@ -637,7 +638,7 @@ NSMutableArray *notification_views;
     [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
     [NSApp activateIgnoringOtherApps:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self positionWindow]; //does not work
+        [_window setFrame:[self positionWindow] display:true];
         [_window makeKeyAndOrderFront:_view];
     });
 }
