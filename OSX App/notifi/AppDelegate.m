@@ -674,53 +674,58 @@ NSMutableArray *notification_views;
 }
 
 -(void)newCredentials{
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSString *alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
-        NSMutableString *credential_key = [NSMutableString stringWithCapacity:25];
-        for (NSUInteger i = 0U; i < 25; i++) {
-            u_int32_t r = arc4random() % [alphabet length];
-            unichar c = [alphabet characterAtIndex:r];
-            [credential_key appendFormat:@"%C", c];
-        }
-        
-        NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
-        urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSURL *url = [NSURL URLWithString:urlString];
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
-                                                    cachePolicy:NSURLRequestReturnCacheDataElseLoad
-                                                timeoutInterval:30];
-        NSData *urlData;
-        NSURLResponse *response;
-        NSError *error;
-        urlData = [NSURLConnection sendSynchronousRequest:urlRequest
-                                        returningResponse:&response
-                                                    error:&error];
-        NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
-        
-        if([content length] != 100){
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"Error Fetching credentials!"];
-            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
-            [alert addButtonWithTitle:@"Ok"];
-            [alert runModal];
-        }else if([content  isEqual: @"0"]){
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"Error credentials already registered!"];
-            [alert setInformativeText:@"Please try again."];
-            [alert addButtonWithTitle:@"Ok"];
-            [alert runModal];
-        }else if(error){
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"Error Fetching credentials!"];
-            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
-            [alert addButtonWithTitle:@"Ok"];
-            [alert runModal];
-        }else{
-            [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
-            [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
-            [_credentialsItem setTitle:credential_key];
-        }
-    });
+    if(![_credentialsItem.title isEqual: @"Fetching credentials..."]){
+        [_credentialsItem setTitle:@"Fetching credentials..."];
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
+            NSString *alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
+            NSMutableString *credential_key = [NSMutableString stringWithCapacity:25];
+            for (NSUInteger i = 0U; i < 25; i++) {
+                u_int32_t r = arc4random() % [alphabet length];
+                unichar c = [alphabet characterAtIndex:r];
+                [credential_key appendFormat:@"%C", c];
+            }
+            
+            NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
+            urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            NSURL *url = [NSURL URLWithString:urlString];
+            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
+                                                        cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                                    timeoutInterval:30];
+            NSData *urlData;
+            NSURLResponse *response;
+            NSError *error;
+            urlData = [NSURLConnection sendSynchronousRequest:urlRequest
+                                            returningResponse:&response
+                                                        error:&error];
+            NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+            
+            if([content length] != 100){
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:@"Error Fetching credentials!"];
+                [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
+                [alert addButtonWithTitle:@"Ok"];
+                [alert runModal];
+            }else if([content  isEqual: @"0"]){
+                [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:@"Error credentials already registered!"];
+                [alert setInformativeText:@"Please try again."];
+                [alert addButtonWithTitle:@"Ok"];
+                [alert runModal];
+            }else if(error){
+                [_credentialsItem setTitle:@"Error Fetching credentials!"];
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:@"Error Fetching credentials!"];
+                [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
+                [alert addButtonWithTitle:@"Ok"];
+                [alert runModal];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
+                [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
+                [_credentialsItem setTitle:credential_key];
+            }
+        });
+    }
 }
 
 #pragma mark - handle icoming notification
