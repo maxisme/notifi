@@ -7,6 +7,7 @@ $key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 
 require "/var/www/notifi.it/socket/db.php";
 
+$word_limit = 20000;
 //post data
 $credentials = trim(clean($_POST['credentials']));
 $title = trim($_POST['title']);
@@ -16,14 +17,18 @@ $link = trim($_POST['link']);
 
 if(empty($credentials) || strlen($credentials) != 25){
 	die("invalid credentials\n");
-}
+} 
 
 if(empty($title)){
 	die("No title\n"); 
+}else if(strlen($title) > $word_limit){
+	die("Title too long! Must be less than $word_limit charachters\n"); 
 }
 
 if(empty($message)){
 	$message = " "; 
+}else if(strlen($message) > $word_limit){
+	die("Message too long! Must be less than $word_limit charachters\n"); 
 }
 
 if(empty($imageURL)){
