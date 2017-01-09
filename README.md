@@ -59,6 +59,6 @@ curl_close($chpush);
 
 #### TODO
 
-[ ] When clicking on notification popup does not always open notifi OSX app
+- [ ] When clicking on notification popup does not always open notifi OSX app
 
 -
