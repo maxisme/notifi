@@ -141,17 +141,15 @@
 }
 
 #pragma mark - window
-int max_window_height;
-int min_window_height;
+float window_height;
+float window_width;
 
 -(NSRect)positionWindow{
-    int window_width = 350;
     NSRect frame = [[_statusItem valueForKey:@"window"] frame];
     float screen_width = [[NSScreen mainScreen] frame].size.width;
     
     float x = frame.origin.x - window_width/2 + frame.size.width/2;
-    float y = frame.origin.y - min_window_height;
-    NSLog(@"position y: %f y2: %f",y, frame.origin.y);
+    float y = frame.origin.y - window_height;
     if(window_width + x > screen_width){
         int padding = 10;
         x = screen_width - window_width - padding;
@@ -159,14 +157,17 @@ int min_window_height;
                                                  window_up_arrow_view.frame.origin.y,
                                                  window_up_arrow_view.frame.size.width,
                                                   window_up_arrow_view.frame.size.height)];
+    }else{
+        //centre arrow
+        [window_up_arrow_view setFrame:NSMakeRect(window_width/2 - 10, window_height-20, 20, 20)];
     }
-    return NSMakeRect(x, y, window_width, min_window_height);
+    return NSMakeRect(x, y, window_width, window_height);
 }
 
 NSImageView *window_up_arrow_view;
 -(void)createWindow{
-    max_window_height = [[NSScreen mainScreen] frame].size.height * 0.8;
-    min_window_height = [[NSScreen mainScreen] frame].size.height * 0.7;
+    window_height = [[NSScreen mainScreen] frame].size.height * 0.7;
+    window_width = 350;
     
     currentScrollPosition = CGPointZero;
     
@@ -194,11 +195,8 @@ NSImageView *window_up_arrow_view;
     _view.layer.backgroundColor = [NSColor clearColor].CGColor;
     _view.layer.cornerRadius = 2;
     
-    float width = NSWidth([_window frame]);
-    float height = NSHeight([_window frame]);
-    
     //fill background
-    NSTextField* bg = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, width, height-15)];
+    NSTextField* bg = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, window_width, window_height-15)];
     bg.backgroundColor = [NSColor colorWithRed:1.00 green:1.00 blue:1.00 alpha:1.0];
     bg.editable = false;
     bg.bordered = false;
@@ -207,7 +205,7 @@ NSImageView *window_up_arrow_view;
     [_view addSubview:bg];
     
     NSImage* window_up_arrow = [NSImage imageNamed:@"up_arrow.png"];
-    window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(width/2 - 10, height-20, 20, 20)];
+    window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 - 10, window_height-20, 20, 20)];
     [window_up_arrow_view setImage:window_up_arrow];
     [_view addSubview:window_up_arrow_view];
     
@@ -221,16 +219,12 @@ NSColor* white;
 NSColor* red;
 NSColor* grey;
 NSColor* offwhite;
-float window_width;
-float window_height;
 NSView *content_view;
 NSScrollView *scroll_view;
 
 -(void)createBodyWindow{
     
     //----------------- initial variables -----------------
-    window_width = NSWidth([_window frame]);
-    window_height = NSHeight([_window frame]);
     unread_notifications = 0;
     notification_count = 0;
     prevheight = notification_view_padding;
@@ -242,26 +236,30 @@ NSScrollView *scroll_view;
     offwhite = [NSColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:0.7];
     
     //----------------- top stuff -----------------
+    int top_bar_height = 90;
+    
     NSImage *icon = [self resizeImage:[NSImage imageNamed:@"bell.png"] size:NSMakeSize(50, 50)];
     
-    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(80/2), window_height-90, 80, 80)];
+    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(80/2), window_height-top_bar_height, 80, 80)];
     [iconView setImage:icon];
     [_view addSubview:iconView];
     
-    NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - 90, window_width, 1)];
+    NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - top_bar_height, window_width, 1)];
     hor_bor_top.wantsLayer = TRUE;
     [hor_bor_top.layer setBackgroundColor:[black CGColor]];
     [_view addSubview:hor_bor_top];
     
+    int bottom_buttons_height = 40;
     //----------------- body -----------------
     
     //scroll view
-    float scroll_height = (window_height - 90) - 40;
-    scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 40, window_width, scroll_height)];
+    float scroll_height = (window_height - top_bar_height) - bottom_buttons_height;
+    
+    scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, bottom_buttons_height, window_width, scroll_height)];
     [scroll_view setBorderType:NSNoBorder];
     [scroll_view setHasVerticalScroller:YES];
     
-    content_view = [[NSView alloc] initWithFrame:NSMakeRect(0, 40, window_width, scroll_height)];
+    content_view = [[NSView alloc] initWithFrame:NSMakeRect(0, bottom_buttons_height, window_width, scroll_height)];
     
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     
@@ -304,13 +302,6 @@ NSScrollView *scroll_view;
         NSRange range = NSMakeRange(32, 4);
         [attributedString beginEditing];
         [attributedString addAttribute: NSLinkAttributeName value: @"https://github.com/maxisme/notifi#curl-examples" range:range];
-        
-        [attributedString addAttribute:NSForegroundColorAttributeName
-                       value:[NSColor blueColor]
-                       range:range];
-        [attributedString addAttribute:NSUnderlineStyleAttributeName
-                       value:[NSNumber numberWithInt:NSSingleUnderlineStyle]
-                       range:range];
         [attributedString endEditing];
          
         //nstextfield
@@ -385,13 +376,13 @@ NSScrollView *scroll_view;
     [_view addSubview:deleteNotifications];
     
     //horizontal border bottom
-    NSView *hor_bor_bot = [[NSView alloc] initWithFrame:CGRectMake(0, 40, window_width, 1)];
+    NSView *hor_bor_bot = [[NSView alloc] initWithFrame:CGRectMake(0, bottom_buttons_height, window_width, 1)];
     hor_bor_bot.wantsLayer = TRUE;
     [hor_bor_bot.layer setBackgroundColor:[black CGColor]];
     [_view addSubview:hor_bor_bot];
     
     //vertical border
-    NSView *ver_bor = [[NSView alloc] initWithFrame:CGRectMake(window_width/2, 0, 1, 40)];
+    NSView *ver_bor = [[NSView alloc] initWithFrame:CGRectMake(window_width/2, 0, 1, bottom_buttons_height)];
     ver_bor.wantsLayer = TRUE;
     [ver_bor.layer setBackgroundColor:[black CGColor]];
     [_view addSubview:ver_bor];
@@ -409,7 +400,7 @@ NSScrollView *scroll_view;
 
 int unread_notifications;
 int notification_count;
-int prevheight;
+float prevheight;
 int notification_view_padding = 20;
 NSMutableArray *time_fields;
 NSMutableArray *notification_views;
@@ -418,10 +409,11 @@ NSMutableArray *notification_views;
 {
     
     int notification_width = window_width * 0.9;
+    float x = window_width * 0.05;
+    
     int notification_height = 40;
     int image_width = 70;
     int image_height = 70;
-    int really_random_int_to_add_to_width_of_string_to_get_right_height = 50;
     
     MyNotificationView *view = [[MyNotificationView alloc] init];
     
@@ -431,7 +423,7 @@ NSMutableArray *notification_views;
         padding_right = 80;
     }
     
-    float width = (notification_width * 0.9) - padding_right;
+    float text_width = notification_width*0.98;
     
     //calculate height of view by height of title text area
     NSMutableParagraphStyle *centredStyle_title = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -448,7 +440,7 @@ NSMutableArray *notification_views;
         NSRange range = NSMakeRange(0, attributedString_title.length);
         [attributedString_title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
     }
-    CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(width +really_random_int_to_add_to_width_of_string_to_get_right_height, 1000000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+    CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
     
     float title_height = rect_title.size.height; //calculated height of dynamic title
     
@@ -464,12 +456,11 @@ NSMutableArray *notification_views;
     NSMutableAttributedString *attributedString =
     [[NSMutableAttributedString alloc] initWithString:mes
                                            attributes:attrs];
-    CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(width+ really_random_int_to_add_to_width_of_string_to_get_right_height, 1000000) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+    CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
     
     float info_height = rect.size.height;  //calculated height of dynamic info
     
     notification_height += info_height + title_height + notification_view_padding*2;
-    
     
     if(![imgURL isEqual: @" "]){ // handle extra height if image
         float min_height = image_height + (notification_view_padding*3);
@@ -480,10 +471,8 @@ NSMutableArray *notification_views;
     //account for extra bit at bottom
     notification_height -= 10;
     
-    int notification_y = prevheight;
-    
     //set view frame
-    [view setFrame:CGRectMake(window_width*0.05, notification_y + notification_view_padding, notification_width, notification_height - 45)];
+    [view setFrame:CGRectMake(x, prevheight + notification_view_padding, notification_width, notification_height - 45)];
     
     view.theid = notification_count;
     view.thisapp = self;
@@ -507,7 +496,6 @@ NSMutableArray *notification_views;
     
     
     //body of notification
-    float text_width = view.frame.size.width - padding_right;
     
     //--      add image
     if(![imgURL isEqual: @" "]){
@@ -596,7 +584,7 @@ NSMutableArray *notification_views;
         MyLabel* info = [[MyLabel alloc] initWithFrame:
                              CGRectMake(
                                         padding_right,
-                                        time_field.frame.origin.y - info_height +5,
+                                        time_field.frame.origin.y - info_height + 5,
                                         text_width,
                                         info_height
                                         )
@@ -615,10 +603,12 @@ NSMutableArray *notification_views;
     }
     
     //update scroll view height
-    float content_view_height = notification_y + notification_height;
+    float content_view_height = prevheight + notification_height;
     if(content_view_height > content_view.frame.size.height){
         [content_view setFrame:CGRectMake(0, 0, content_view.frame.size.width, content_view_height)];
     }
+    
+    NSLog(@"position of notification %d: %@", notification_count, NSStringFromRect(view.frame));
     
     prevheight += view.frame.size.height + notification_view_padding;
     
@@ -684,51 +674,53 @@ NSMutableArray *notification_views;
 }
 
 -(void)newCredentials{
-    NSString *alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
-    NSMutableString *credential_key = [NSMutableString stringWithCapacity:25];
-    for (NSUInteger i = 0U; i < 25; i++) {
-        u_int32_t r = arc4random() % [alphabet length];
-        unichar c = [alphabet characterAtIndex:r];
-        [credential_key appendFormat:@"%C", c];
-    }
-    
-    NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
-    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
-                                                cachePolicy:NSURLRequestReturnCacheDataElseLoad
-                                            timeoutInterval:30];
-    NSData *urlData;
-    NSURLResponse *response;
-    NSError *error;
-    urlData = [NSURLConnection sendSynchronousRequest:urlRequest
-                                    returningResponse:&response
-                                                error:&error];
-    NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
-    
-    if([content length] != 100){
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error Fetching credentials!"];
-        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
-        [alert addButtonWithTitle:@"Ok"];
-        [alert runModal];
-    }else if([content  isEqual: @"0"]){
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error credentials already registered!"];
-        [alert setInformativeText:@"Please try again."];
-        [alert addButtonWithTitle:@"Ok"];
-        [alert runModal];
-    }else if(error){
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error Fetching credentials!"];
-        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
-        [alert addButtonWithTitle:@"Ok"];
-        [alert runModal];
-    }else{
-        [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
-        [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
-        [_credentialsItem setTitle:credential_key];
-    }
+    dispatch_async(dispatch_get_global_queue(0,0), ^{
+        NSString *alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
+        NSMutableString *credential_key = [NSMutableString stringWithCapacity:25];
+        for (NSUInteger i = 0U; i < 25; i++) {
+            u_int32_t r = arc4random() % [alphabet length];
+            unichar c = [alphabet characterAtIndex:r];
+            [credential_key appendFormat:@"%C", c];
+        }
+        
+        NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
+        urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
+                                                    cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                                timeoutInterval:30];
+        NSData *urlData;
+        NSURLResponse *response;
+        NSError *error;
+        urlData = [NSURLConnection sendSynchronousRequest:urlRequest
+                                        returningResponse:&response
+                                                    error:&error];
+        NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+        
+        if([content length] != 100){
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"Error Fetching credentials!"];
+            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
+            [alert addButtonWithTitle:@"Ok"];
+            [alert runModal];
+        }else if([content  isEqual: @"0"]){
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"Error credentials already registered!"];
+            [alert setInformativeText:@"Please try again."];
+            [alert addButtonWithTitle:@"Ok"];
+            [alert runModal];
+        }else if(error){
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"Error Fetching credentials!"];
+            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
+            [alert addButtonWithTitle:@"Ok"];
+            [alert runModal];
+        }else{
+            [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
+            [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
+            [_credentialsItem setTitle:credential_key];
+        }
+    });
 }
 
 #pragma mark - handle icoming notification
@@ -742,7 +734,6 @@ bool serverReplied = false;
 }
 
 -(void)handleIncomingNotification:(NSString*)json{
-    NSLog(@"json %@", json);
     int theid = 0;
     NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary* json_dic = [NSJSONSerialization
@@ -984,31 +975,21 @@ BOOL streamOpen = false;
             break;
             
         case NSStreamEventHasBytesAvailable:
-            
             if (theStream == inputStream) {
-                uint8_t buffer[1024];
                 int len;
+                uint8_t buffer[1024];
                 NSString* incoming_message = @"";
                 while ([inputStream hasBytesAvailable]) {
                     len = (int)[inputStream read:buffer maxLength:sizeof(buffer)];
                     if (len > 0) {
                         NSString *mess = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
-                        if(mess != nil){
                             incoming_message = [NSString stringWithFormat:@"%@%@",incoming_message,mess];
-                        }
                     }
                 }
                 
-                // handle icoming message
-                if([incoming_message isEqual: @"pong"]){
-                    hasPong = true;
-                }else if (![incoming_message isEqual: @""] && ![incoming_message isEqual: @"1"]) {
-                    [self handleIncomingNotification:incoming_message];
-                }else if([incoming_message isEqual: @"1"]){
-                    NSLog(@"Connected to server");
-                    serverReplied = true;
-                }
+                [self handleStreamMessage:incoming_message];
             }
+            
             break;
 
             
@@ -1030,6 +1011,33 @@ BOOL streamOpen = false;
     
 }
 
+NSString*split_message;
+-(void)handleStreamMessage:(NSString*)message{
+    if([message isEqual: @"pong"]){
+        hasPong = true;
+    }else if([message isEqual: @"1"]){
+        NSLog(@"Connected to server");
+        serverReplied = true;
+    }else{
+        if(split_message == NULL){
+            split_message = @"";
+        }else if([split_message length] > 0){
+            message = [NSString stringWithFormat:@"%@%@",split_message,message];
+        }
+        
+        NSError *error;
+        NSData* data = [message dataUsingEncoding:NSUTF8StringEncoding];
+        if ([NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] == nil)
+        {
+            // not finished the stream as not given proper json data
+            split_message = message;
+        }else{
+            [self handleIncomingNotification:message];
+            split_message = @"";
+        }
+    }
+}
+
 -(void)closeSocket{
     serverReplied = false;
     streamOpen = false;
@@ -1048,7 +1056,7 @@ bool hasPong;
         [outputStream write:[data bytes] maxLength:[data length]];
         
         dispatch_async(dispatch_get_global_queue(0,0), ^{
-            [NSThread sleepForTimeInterval:1.0f];
+            [NSThread sleepForTimeInterval:2.0f];
             [self hasReceivedPong];
         });
     }
@@ -1087,18 +1095,19 @@ bool hasPong;
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem* cred = [[NSMenuItem alloc] initWithTitle:@"Your Credentials" action:nil keyEquivalent:@""];
-    [cred setTarget:self];
-    [cred setEnabled:false];
-    [mainMenu addItem:cred];
-    
-    _credentialsItem = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] action:@selector(copyCredentials) keyEquivalent:@"c"];
+    _credentialsItem = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] action:nil keyEquivalent:@""];
     [_credentialsItem setTarget:self];
+    [_credentialsItem setEnabled:false];
     [mainMenu addItem:_credentialsItem];
+    
+    NSMenuItem* copy = [[NSMenuItem alloc] initWithTitle:@"Copy Credentials" action:@selector(copyCredentials) keyEquivalent:@"c"];
+    [copy setTarget:self];
+    [copy setEnabled:true];
+    [mainMenu addItem:copy];
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"New Credentials" action:@selector(createNewCredentials) keyEquivalent:@"n"];
+    NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"Create New Credentials" action:@selector(createNewCredentials) keyEquivalent:@"n"];
     [newCredentials setTarget:self];
     [mainMenu addItem:newCredentials];
     
