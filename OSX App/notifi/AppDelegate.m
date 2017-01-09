@@ -682,7 +682,7 @@ NSMutableArray *notification_views;
             for (NSUInteger i = 0U; i < 25; i++) {
                 u_int32_t r = arc4random() % [alphabet length];
                 unichar c = [alphabet characterAtIndex:r];
-                [credential_key appendFormat:@"%C", c];
+                [credential_key appendFormat:@"%C", c]; 
             }
             
             NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
