@@ -57,7 +57,10 @@ curl_exec($chpush);
 curl_close($chpush);
 ```
 
+____
+
 #### TODO
+
 
 - [ ] When clicking on notification popup does not always open notifi OSX app
 
