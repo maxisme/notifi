@@ -63,5 +63,6 @@ ____
 
 
 - [ ] When clicking on notification popup does not always open notifi OSX app
+- [ ] Better way of making the title links clickable. Sometimes not working.
 
 -
