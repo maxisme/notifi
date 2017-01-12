@@ -68,9 +68,10 @@
 
 - (void)mouseUp:(NSEvent *)event
 {
+    NSLog(@"mu");
     if(![_link  isEqual: @" "]){
-        [_superview markRead];
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_link]];
+        [_superview markRead];
     }else{
         [self.superview mouseUp:event];
     }
@@ -642,6 +643,7 @@ NSMutableArray *notification_views;
 }
 
 - (void)setNotificationMenuBar{
+    [_errorItem setHidden:true];
     if(unread_notifications > 0){
         if(unread_notifications == 1){
             _window_item.title = @"View 1 Unread Notification";
@@ -651,15 +653,23 @@ NSMutableArray *notification_views;
             _window_item.title = @"View 999+ Unread Notifications";
         }
         _statusItem.image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
+        if(!streamOpen){
+            [_errorItem setHidden:false];
+        }
     }else{
         _window_item.title = @"View Notifications";
         _statusItem.image = [NSImage imageNamed:@"menu_bellicon.png"];
+        if(!streamOpen){
+            if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
+                _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
+                [_errorItem setHidden:false];
+            }
+        }
     }
 }
 
 
 #pragma mark - set key
-
 -(void)createNewCredentials{
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setMessageText:@"Are you sure?"];
@@ -682,7 +692,7 @@ NSMutableArray *notification_views;
             for (NSUInteger i = 0U; i < 25; i++) {
                 u_int32_t r = arc4random() % [alphabet length];
                 unichar c = [alphabet characterAtIndex:r];
-                [credential_key appendFormat:@"%C", c]; 
+                [credential_key appendFormat:@"%C", c];
             }
             
             NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
