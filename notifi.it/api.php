@@ -37,8 +37,8 @@ if(empty($imageURL)){
 	if (!@getimagesize($imageURL)) {
 		echo "$imageURL is not a valid image. Sent without!\n";
 		$imageURL = " "; 
-	}
-}
+	} 
+} 
 
 if(empty($link)){ 
 	$link = " "; 

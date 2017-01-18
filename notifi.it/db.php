@@ -13,7 +13,7 @@ function connect(){
 		die("error connecting to database");
 	} 
 	return $con;
-}
+} 
 
 function getNotifications($credentials){
 	$credentials = clean($credentials);

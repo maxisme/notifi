@@ -324,6 +324,7 @@ NSImageView *window_up_arrow_view;
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
         [_notification_table setDelegate:(id)self];
         [_notification_table setDataSource:(id)self];
+        [self reloadData];
         
         _scroll_view.documentView = _notification_table;
     }
