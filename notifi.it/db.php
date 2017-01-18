@@ -54,9 +54,9 @@ function deleteNotification($id, $credentials){
 
 function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0){
 	$ip = $_SERVER['REMOTE_ADDR'];
-	$ip_limit = 10;
-	$cred_limit = 10;
-	$ip_to_cred_limit = 6;
+	$ip_limit = 60;
+	$cred_limit = 60;
+	$ip_to_cred_limit = 10;
 	
 	//STORE BRUTE FORCE IP
 	$mysqli = new mysqli("localhost", "$db_user", "$db_pass", 'notifi');
@@ -75,7 +75,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 	$mysqli->close();
 	
 	
-	//CHECK IF BRUTE FORCE - SELECT - NEEDS TO BE CHANGED TO OBJECT
+	//CHECK IF BRUTE FORCE - TODO:SELECT NEEDS TO BE CHANGED TO OBJECT
 	$con = connect();
 	
 	//delete all requests that are over a minute old
@@ -101,7 +101,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 	}
 
 	if($credentials != " "){
-		//limit ammount of requests per credential
+		//limit ammount of requests to user credential
 		$limit_cred_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
 		WHERE credentials = AES_ENCRYPT('$credentials', '$key')
@@ -112,7 +112,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 			return true;
 		}
 
-		//limit ammount of requests per ip to credential 
+		//limit ammount of requests per ip to user credential 
 		$limit_spec_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
 		WHERE credentials = AES_ENCRYPT('$credentials', '$key')
@@ -151,6 +151,12 @@ function isValidUser($credentials, $key){
 	}
 	
 	return false;
+}
+
+function filter_str($string){
+	$string = str_replace("--begin", "__begin", $string);
+	$string = str_replace("--end", "__end", $string);
+	return $string;
 }
 
 function userExists($credentials){

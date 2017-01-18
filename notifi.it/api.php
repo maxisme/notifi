@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 $db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
 $db_user = trim(file_get_contents(dirname(__DIR__)."/db.user"));
 $key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
@@ -9,11 +9,11 @@ require "/var/www/notifi.it/socket/db.php";
 
 $word_limit = 20000;
 //post data
-$credentials = trim(clean($_POST['credentials']));
-$title = trim($_POST['title']);
-$message = trim($_POST['message']);
-$imageURL = trim($_POST['img']);
-$link = trim($_POST['link']);
+$credentials = filter_str(trim(clean($_POST['credentials'])));
+$title = filter_str(trim($_POST['title']));
+$message = filter_str(trim($_POST['message']));
+$imageURL = filter_str(trim($_POST['img']));
+$link = filter_str(trim($_POST['link']));
 
 if(empty($credentials) || strlen($credentials) != 25){
 	die("invalid credentials\n");

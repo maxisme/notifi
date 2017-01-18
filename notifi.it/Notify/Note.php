@@ -25,7 +25,7 @@ class Note implements MessageComponentInterface {
 		if($msg == "ping"){
 			$from->send("pong");
 		}else if(substr($msg,0,3) == "id:"){
-			//reply from user to say they have received notification
+			//handle reply from user to say they have received notification
 			$decrypted_string = decrypt(substr($msg,3,strlen($msg)));
 			
 			$arr = explode("|", $decrypted_string);
@@ -44,50 +44,51 @@ class Note implements MessageComponentInterface {
 
 			//check if user is valid
 			if(!isValidUser($credentials, $key)){
-				echo "ilegal login";
+				echo "\nilegal login from: $credentials with key:\n$key\n";
+				$from->send("Invalid Credentials");
 				$from->close();
 			}
 
-			$x = 0;
 			foreach ($this->clients as $client) {
 				if ($from === $client) { //current client only
-					$this->clientCodes[$x] = $credentials;
+					$client->clientCode = $credentials;
 					
-					echo "\nmsg:$credentials from: ".$client->remoteAddress;
+					echo "\n".date("r")." - msg:$credentials from: ".$client->remoteAddress;
 					
 					$query = getNotifications($credentials);
 					if($query != ""){
 						$stack = array();
 						while($row = mysqli_fetch_assoc($query)){
 							array_push($stack, $row);
-							array_push($stack,"id:".encrypt($row['id']."|".$credentials));
+							$id = $row['id'];
+							array_push($stack,"id:".encrypt($id."|".$credentials));
 						}
-						$client->send(json_encode($stack));
+						$client->send("--begin--".json_encode($stack)."--end--");
+						echo "\n".date("r")." - startup msg:\n".json_encode($stack)." to:$client->clientCode with ip: ".$client->remoteAddress;
 					}else{
 						$client->send("1");
 					}
 				}
-				$x++;
 			}
 		} 
     }
 	
 	public function onCurl($credentials) {
-		$x = 0;
 		foreach ($this->clients as $client) {
-			if($credentials == $this->clientCodes[$x]){
-				$stack = array();
+			if($credentials == $client->clientCode){
 				$query = getNotifications($credentials);
-				echo "\ncurl msg:$credentials from: ".$client->remoteAddress;
 				if($query != ""){
+					$stack = array();
 					while($row = mysqli_fetch_assoc($query)){
 						array_push($stack, $row);
-						array_push($stack,"id:".encrypt($row['id']."|".$credentials));
+						$id = $row['id'];
+						array_push($stack,"id:".encrypt($id."|".$credentials));
 					}
-					$client->send(json_encode($stack));
+					$client->send("--begin--".json_encode($stack)."--end--");
+					
+					echo "\n".date("r")." - curled msg:\n".json_encode($stack)." to:$client->clientCode with ip: ".$client->remoteAddress;
 				}
 			}
-			$x++;
         }
 	}
 
