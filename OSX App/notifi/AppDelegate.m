@@ -290,7 +290,7 @@ NSImageView *window_up_arrow_view;
         
         NSRange range = NSMakeRange(32, 4);
         [attributedString beginEditing];
-        [attributedString addAttribute: NSLinkAttributeName value: @"https://github.com/maxisme/notifi#curl-examples" range:range];
+        [attributedString addAttribute: NSLinkAttributeName value: @"https://github.com/maxisme/notifi#http-request-examples" range:range];
         [attributedString endEditing];
          
         //nstextfield
