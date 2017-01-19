@@ -2,16 +2,16 @@
 # [Notifi](https://notifi.it/)
 
 ## Usage
-1. Install the Notifi [OSX client application](https://notifi.it/download)
-2. Create an HTTP request using your chosen method, with the following params:
-- `credentials` (your credentials given to you by the client-side app)
-- `title` (notification title) - **Required**
-- `message` (notification body) - _Optional_
-- `image` (image to send with the notification) - _Optional_
-- `link` (url to send with the notification) - _Optional_
-3. Requests are sent to `https://notifi.it/api`
+- Install the Notifi [OSX client application](https://notifi.it/download)
+- Create a HTTP request using your chosen method, with the following params:
+  - `credentials` (your credentials given to you by the client-side app)
+  - `title` (notification title) - **Required**
+  - `message` (notification body) - _Optional_
+  - `image` (image to send with the notification) - _Optional_
+  - `link` (url to send with the notification) - _Optional_
+- Requests are sent to `https://notifi.it/api`
 
-## CURL Examples
+## HTTP Request Examples
 
 ### Curl
 ```
