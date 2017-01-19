@@ -23,7 +23,11 @@ class Note implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
 		if($msg == "ping"){
-			$from->send("pong");
+			foreach ($this->clients as $client) {
+				if ($from === $client) { //current client only
+					$this->sendNotifications($client);
+				}
+			}
 		}else if(substr($msg,0,3) == "id:"){
 			//handle reply from user to say they have received notification
 			$decrypted_string = decrypt(substr($msg,3,strlen($msg)));
@@ -52,22 +56,7 @@ class Note implements MessageComponentInterface {
 			foreach ($this->clients as $client) {
 				if ($from === $client) { //current client only
 					$client->clientCode = $credentials;
-					
-					echo "\n".date("r")." - msg:$credentials from: ".$client->remoteAddress;
-					
-					$query = getNotifications($credentials);
-					if($query != ""){
-						$stack = array();
-						while($row = mysqli_fetch_assoc($query)){
-							array_push($stack, $row);
-							$id = $row['id'];
-							array_push($stack,"id:".encrypt($id."|".$credentials));
-						}
-						$client->send("--begin--".json_encode($stack)."--end--");
-						echo "\n".date("r")." - startup msg:\n".json_encode($stack)." to:$client->clientCode with ip: ".$client->remoteAddress;
-					}else{
-						$client->send("1");
-					}
+					$this->sendNotifications($client);
 				}
 			}
 		} 
@@ -76,20 +65,29 @@ class Note implements MessageComponentInterface {
 	public function onCurl($credentials) {
 		foreach ($this->clients as $client) {
 			if($credentials == $client->clientCode){
-				$query = getNotifications($credentials);
-				if($query != ""){
-					$stack = array();
-					while($row = mysqli_fetch_assoc($query)){
-						array_push($stack, $row);
-						$id = $row['id'];
-						array_push($stack,"id:".encrypt($id."|".$credentials));
-					}
-					$client->send("--begin--".json_encode($stack)."--end--");
-					
-					echo "\n".date("r")." - curled msg:\n".json_encode($stack)." to:$client->clientCode with ip: ".$client->remoteAddress;
-				}
+				$this->sendNotifications($client);
 			}
         }
+	}
+	
+	public function sendNotifications($client){
+		$credentials = $client->clientCode;
+		if(!empty($credentials)){
+			$query = getNotifications($credentials);
+			if($query != ""){
+				$stack = array();
+				while($row = mysqli_fetch_assoc($query)){
+					array_push($stack, $row);
+					$id = $row['id'];
+					array_push($stack,"id:".encrypt($id."|".$credentials));
+				}
+				$client->send("--begin--".json_encode($stack)."--end--");
+
+				echo "\n".date("r")." - sent msg:\n".json_encode($stack)." to:$client->clientCode with ip: ".$client->remoteAddress;
+			}else{
+				$client->send("1");
+			}
+		}
 	}
 
     public function onClose(ConnectionInterface $conn) {

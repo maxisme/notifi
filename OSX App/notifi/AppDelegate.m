@@ -1041,7 +1041,7 @@ BOOL streamOpen = false;
                             incoming_message = [NSString stringWithFormat:@"%@%@",incoming_message,mess];
                     }
                 }
-                
+                NSLog(@"incoming_message: %@",incoming_message);
                 [self handleStreamMessage:incoming_message];
             }
             

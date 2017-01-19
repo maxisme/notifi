@@ -54,8 +54,8 @@ function deleteNotification($id, $credentials){
 
 function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0){
 	$ip = $_SERVER['REMOTE_ADDR'];
-	$ip_limit = 60;
-	$cred_limit = 60;
+	$ip_limit = 20;
+	$cred_limit = 20;
 	$ip_to_cred_limit = 10;
 	
 	//STORE BRUTE FORCE IP
@@ -92,7 +92,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 	AND `time` >= date_sub(now(), interval 1 minute)
 	"); 
 
-	if(mysqli_num_rows($limit_ip_query) >= $ip_limit){
+	if(mysqli_num_rows($limit_ip_query) > $ip_limit){
 		return true;
 	}
 	
@@ -108,9 +108,9 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 		AND `time` >= date_sub(now(), interval 1 minute)
 		");
 
-		if(mysqli_num_rows($limit_cred_query) >= $cred_limit){
+		if(mysqli_num_rows($limit_cred_query) > $cred_limit){
 			return true;
-		}
+		} 
 
 		//limit ammount of requests per ip to user credential 
 		$limit_spec_query = mysqli_query($con, "SELECT id
@@ -120,7 +120,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 		AND `time` >= date_sub(now(), interval 1 minute)
 		");
 
-		if(mysqli_num_rows($limit_spec_query) >= $ip_to_cred_limit){
+		if(mysqli_num_rows($limit_spec_query) > $ip_to_cred_limit){
 			return true;
 		}
 	}
@@ -195,7 +195,7 @@ function encrypt($string){
 	return base64_encode(
 		$iv .
 		mcrypt_encrypt(
-			MCRYPT_RIJNDAEL_128,
+			MCRYPT_RIJNDAEL_256,
 			hash('sha256', $key, true),
 			$string,
 			MCRYPT_MODE_CBC,
@@ -212,7 +212,7 @@ function decrypt($string){
 
 	return rtrim(
 		mcrypt_decrypt(
-			MCRYPT_RIJNDAEL_128,
+			MCRYPT_RIJNDAEL_256,
 			hash('sha256', $key, true),
 			substr($data, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC)),
 			MCRYPT_MODE_CBC,
