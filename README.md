@@ -61,7 +61,7 @@ ____
 
 #### TODO
 
-- [ ] More efficient way to sort notification views in window.
+- [x] More efficient way to sort notification views in window.
 - [ ] When clicking on notification popup does not always open notifi OSX app.
 - [ ] Better way of making the title links clickable. Sometimes not working. - believe it is something to do with `view.wantsLayer`
 - [ ] Fix icon to show error even when has notifications.
