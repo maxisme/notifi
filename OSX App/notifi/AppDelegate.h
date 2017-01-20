@@ -33,6 +33,7 @@
 @property (strong) NSString* split_message;
 
 @property (nonatomic) int notification_id;
+@property (nonatomic) NSMutableArray *alreadyStoredIDs;
 
 -(bool)notificationRead:(int)index;
 -(void)markAsRead:(bool)read index:(int)index;

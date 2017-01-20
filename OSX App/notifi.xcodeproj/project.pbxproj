@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		482C8A931E09742400E5C173 /* MyApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 482C8A921E09742400E5C173 /* MyApplication.m */; };
-		482C8A981E0B02D700E5C173 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 482C8A971E0B02D700E5C173 /* placeholder.png */; };
 		482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9C1E0B0D0700E5C173 /* CoreData.framework */; };
 		482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9E1E0B0D4000E5C173 /* AppKit.framework */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
@@ -27,7 +26,6 @@
 /* Begin PBXFileReference section */
 		482C8A921E09742400E5C173 /* MyApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyApplication.m; sourceTree = "<group>"; };
 		482C8A941E09743100E5C173 /* MyApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyApplication.h; sourceTree = "<group>"; };
-		482C8A971E0B02D700E5C173 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		482C8A9C1E0B0D0700E5C173 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		482C8A9E1E0B0D4000E5C173 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
@@ -88,7 +86,6 @@
 				48B028301DBBAC51007D2462 /* menu_bellicon.png */,
 				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
 				48AE54B71E0451EA00E8777F /* bell.png */,
-				482C8A971E0B02D700E5C173 /* placeholder.png */,
 				48DD0F051E1BC57D00773859 /* Assets.xcassets */,
 				48AD3FA11DB9438600B47CA5 /* Info.plist */,
 				48E49A8F1E1D9DFF00DE3DBE /* fonts */,
@@ -183,7 +180,6 @@
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
-				482C8A981E0B02D700E5C173 /* placeholder.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
 			);

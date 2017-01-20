@@ -13,12 +13,12 @@ class Note implements MessageComponentInterface {
 	protected $clientCodes = array();
 
     public function __construct() {
-        $this->clients = new \SplObjectStorage;
+        $this->clients = new \SplObjectStorage; 
     }
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
-		echo "\nnew client";
+		echo "\nNew client. Connected from $conn->remoteAddress";
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {

@@ -324,6 +324,7 @@ NSImageView *window_up_arrow_view;
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
         [_notification_table setDelegate:(id)self];
         [_notification_table setDataSource:(id)self];
+        NSLog(@"initial ->");
         [self reloadData];
         
         _scroll_view.documentView = _notification_table;
@@ -424,6 +425,8 @@ NSImageView *window_up_arrow_view;
 
 int reload_count = 0;
 -(void)reloadData{
+    
+    //TODO: order notifications by date-time
     
     _time_fields = [[NSMutableArray alloc] init];
     _notification_views = [[NSMutableArray alloc] init];
@@ -772,17 +775,22 @@ bool serverReplied = false;
     }
 }
 
+
 -(void)handleIncomingNotification:(NSString*)json{
-    NSLog(@"\rnotification:\r%@",json);
+    NSLog(@"\rFULL notification:\r\r%@", json);
     NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary* json_dic = [NSJSONSerialization
                           JSONObjectWithData:data
                           options:kNilOptions
                           error:nil];
+    
+    NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
+    BOOL refresh = false;
+    
     for (NSDictionary* notification in json_dic) {
         NSString* firstval = [NSString stringWithFormat:@"%@", notification];;
         if([[firstval substringToIndex:3]  isEqual: @"id:"]){
-            //received request and reply
+            //TELL SERVER TO DELETE THIS MESSAGE
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(streamOpen){
                     NSData *data = [[NSData alloc] initWithData:[firstval dataUsingEncoding:NSASCIIStringEncoding]];
@@ -790,23 +798,28 @@ bool serverReplied = false;
                 }
             });
         }else{
-            [self sendLocalNotification:[notification objectForKey:@"title"]
-                           message:[notification objectForKey:@"message"]
-                          imageURL:[notification objectForKey:@"image"]
-                              link:[notification objectForKey:@"link"]
-             ];
-            
-            NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
-            [self storeNotification:notification];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if([arrayofdics count] == 0){
-                    [self createBodyWindow];
-                }else{
-                    [self reloadData];
-                }
-            });
+            NSString* _id = [notification objectForKey:@"id"];
+            if(![_alreadyStoredIDs containsObject:_id]){
+                [_alreadyStoredIDs addObject:_id];
+                [self storeNotification:notification];
+                [self sendLocalNotification:[notification objectForKey:@"title"]
+                               message:[notification objectForKey:@"message"]
+                              imageURL:[notification objectForKey:@"image"]
+                                  link:[notification objectForKey:@"link"]
+                ];
+                refresh = true;
+            }
         }
+    }
+    
+    if(refresh){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if([arrayofdics count] == 0){
+                [self createBodyWindow];
+            }else{
+                [self reloadData];
+            }
+        });
     }
 }
 
@@ -875,7 +888,7 @@ bool serverReplied = false;
     [arrayofdics removeObjectAtIndex:index];
     [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
     
-    [_notification_views removeObjectAtIndex:(int)[arrayofdics count] - index - 1];
+    [_notification_views removeObjectAtIndex:(int)[arrayofdics count] - index];
     [self reloadData];
 }
 
@@ -910,7 +923,7 @@ bool serverReplied = false;
     //pass variables through notification
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     notification.userInfo = @{
-        @"id" : [NSString stringWithFormat:@"%d",(int)[arrayofdics count] -1],
+        @"id" : [NSString stringWithFormat:@"%d",(int)[arrayofdics count]],
         @"url" : url
     };
     
@@ -961,7 +974,7 @@ bool serverReplied = false;
     if(url)
         [[NSWorkspace sharedWorkspace] openURL:url];
     
-    [self markAsRead:true index:theid];
+    [self markAsRead:true index:theid - 1];
     [center removeDeliveredNotification: notification];
 }
 
@@ -1041,7 +1054,6 @@ BOOL streamOpen = false;
                             incoming_message = [NSString stringWithFormat:@"%@%@",incoming_message,mess];
                     }
                 }
-                NSLog(@"incoming_message: %@",incoming_message);
                 [self handleStreamMessage:incoming_message];
             }
             
@@ -1084,7 +1096,6 @@ BOOL streamOpen = false;
             }
             
             message = [NSString stringWithFormat:@"%@%@", _split_message, message];
-            NSLog(@"\r\r\r\r\rmessage:%@",message);
             
             if([[message substringToIndex:9] isEqual: beg_label] &&
                [[message substringFromIndex:[message length]-7] isEqual: end_label]){
@@ -1122,17 +1133,12 @@ BOOL streamOpen = false;
         _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
         [_errorItem setHidden:false];
     }
-    
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        [NSThread sleepForTimeInterval:2.0f];
-        [self sendPing];
-    });
 }
 
 bool hasPong;
 -(void)sendPing{
-    NSLog(@"sent ping");
     if(streamOpen){
+        NSLog(@"sent ping");
         hasPong = false;
         NSData *data = [[NSData alloc] initWithData:[@"ping" dataUsingEncoding:NSASCIIStringEncoding]];
         [outputStream write:[data bytes] maxLength:[data length]];

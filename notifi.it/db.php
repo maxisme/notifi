@@ -31,6 +31,7 @@ function getNotifications($credentials){
 	FROM `notifications`
 	WHERE credentials = AES_ENCRYPT('$credentials', '$key')
 	AND title != ''
+	ORDER BY time DESC
 	");
 	
 	if(mysqli_num_rows($query) == 0){

@@ -11,9 +11,12 @@ $word_limit = 20000;
 //post data
 $credentials = filter_str(trim(clean($_POST['credentials'])));
 $title = filter_str(trim($_POST['title']));
-$message = filter_str(trim($_POST['message']));
-$imageURL = filter_str(trim($_POST['img']));
-$link = filter_str(trim($_POST['link']));
+if (isset($_POST["message"]))
+	$message = filter_str(trim($_POST['message']));
+if (isset($_POST["img"]))
+	$imageURL = filter_str(trim($_POST['img']));
+if (isset($_POST["link"]))
+	$link = filter_str(trim($_POST['link']));
 
 if(empty($credentials) || strlen($credentials) != 25){
 	die("invalid credentials\n");
@@ -48,7 +51,7 @@ if(empty($link)){
 }
 
 if(isBruteForce($db_user, $db_pass, $key, $credentials)){
-	die("Too many requests!\n");
+	//die("Too many requests!\n");
 }
 
 //check if user exists
