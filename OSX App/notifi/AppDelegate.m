@@ -408,7 +408,7 @@ bool reloaded_in_last_2 = false;
     }else{
         //attempt to reload in two seconds
         //TODO kill previous thread
-        dispatch_async(dispatch_get_global_queue(4,0), ^{
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
             [NSThread sleepForTimeInterval:2.0f];
             [self postReload];
         });
@@ -444,7 +444,7 @@ int notification_view_padding = 20;
     int notification_width = window_width * 0.9;
     float x = window_width * 0.05;
     
-    int notification_height = 40;
+    int notification_height = 0;
     int image_width = 70;
     int image_height = 70;
     
@@ -457,7 +457,7 @@ int notification_view_padding = 20;
         padding_right = 80;
     }
     
-    float text_width = notification_width*0.98;
+    float text_width = notification_width*0.98 - padding_right;
     
     //calculate height of view by height of title text area
     NSMutableParagraphStyle *centredStyle_title = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -478,28 +478,31 @@ int notification_view_padding = 20;
     
     float title_height = rect_title.size.height; //calculated height of dynamic title
     
-    //calculate height of view by height of info text area
-    NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
-                           NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Raleway-SemiBold" size:12],
-                           NSFontAttributeName,
-                           _red,
-                           NSForegroundColorAttributeName,
-                           nil];
-    NSMutableAttributedString *attributedString =
-    [[NSMutableAttributedString alloc] initWithString:mes
-                                           attributes:attrs];
-    CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+    float info_height = 0.0;
+    if(![mes  isEqual: @" "]){
+        //calculate height of view by height of info text area
+        NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
+                               NSParagraphStyleAttributeName,
+                               [NSFont fontWithName:@"Raleway-SemiBold" size:12],
+                               NSFontAttributeName,
+                               _red,
+                               NSForegroundColorAttributeName,
+                               nil];
+        NSMutableAttributedString *attributedString =
+        [[NSMutableAttributedString alloc] initWithString:mes
+                                               attributes:attrs];
+        CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+        
+        info_height = rect.size.height;  //calculated height of dynamic info
+    }
     
-    float info_height = rect.size.height;  //calculated height of dynamic info
-    
-    notification_height += info_height + title_height + notification_view_padding*2;
+    notification_height += info_height + title_height + notification_view_padding*2 + title_height + 5;
     
     if(![imgURL isEqual: @" "]){ // handle extra height if image
-        float min_height = image_height + (notification_view_padding*3);
+        int min_height = image_height + notification_view_padding*2 + title_height + 5;
         if(notification_height < min_height){
-            notification_height = min_height + 8;
+            notification_height = min_height;
         }
     }
     
@@ -801,6 +804,7 @@ bool serverReplied = false;
                                     message:[notification objectForKey:@"message"]
                                    imageURL:[notification objectForKey:@"image"]
                                        link:[notification objectForKey:@"link"]
+                                        _id:[arrayofdics count] + [notifications count]
                 ];
             }
         }else{
@@ -922,13 +926,12 @@ bool serverReplied = false;
 }
 
 #pragma mark - notifications
--(void)sendLocalNotification:(NSString*)title message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url{
+-(void)sendLocalNotification:(NSString*)title message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url _id:(int)_id{
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     
     //pass variables through notification
-    NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     notification.userInfo = @{
-        @"id" : [NSString stringWithFormat:@"%d",(int)[arrayofdics count]],
+        @"id" : [NSString stringWithFormat:@"%d",_id],
         @"url" : url
     };
     
