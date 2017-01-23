@@ -51,7 +51,7 @@ cd "$project_path" || exit
 zip -r -y "$zip_project_output" "$project_name.app"
 
 #commit
-git commit "$zip_project_output" -m "Update OSX App - via build script"
+git commit "$zip_project_output" -m "Update Mac App - via build script"
 git push origin master
 
 #upload to website
