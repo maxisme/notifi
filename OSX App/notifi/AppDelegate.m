@@ -92,7 +92,6 @@
 {
     if(![super.link  isEqual: @" "] && super.link != nil){
         [(MyNotificationView*)self.superview openLink];
-        //[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:super.link]];
     }
 }
 @end
@@ -788,7 +787,7 @@ bool serverReplied = false;
         if([[firstval substringToIndex:3]  isEqual: @"id:"]){
             //TELL SERVER TO DELETE THIS MESSAGE
             if(streamOpen){
-                [webSocket send:firstval];
+                [_webSocket send:firstval];
             }
         }else{
             [self storeNotification:notification];
@@ -994,19 +993,19 @@ bool serverReplied = false;
 
 
 #pragma mark - socketRocket
-SRWebSocket *webSocket;
+
 - (void)openSocket
 {
     serverReplied = false;
     streamOpen = false;
     
-    webSocket.delegate = nil;
-    [webSocket close];
+    _webSocket.delegate = nil;
+    [_webSocket close];
     
-    webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:@"wss://s.notifi.it"]];
-    webSocket.delegate = (id)self;
+    _webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:@"wss://s.notifi.it"]];
+    _webSocket.delegate = (id)self;
     
-    [webSocket open];
+    [_webSocket open];
 }
 
 bool receivedPong = false;
@@ -1014,7 +1013,7 @@ bool receivedPong = false;
 {
     if(streamOpen){
         receivedPong = false;
-        [webSocket sendPing:nil];
+        [_webSocket sendPing:nil];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             [NSThread sleepForTimeInterval:2.0f];
             [self hasReceivedPong];
@@ -1069,7 +1068,7 @@ BOOL streamOpen = false;
     NSString* key = [[NSUserDefaults standardUserDefaults] objectForKey:@"key"];
     NSString* message = [NSString stringWithFormat:@"%@|%@", credentials, key];
     if(streamOpen){
-        [webSocket send:message];
+        [_webSocket send:message];
     }
 }
 

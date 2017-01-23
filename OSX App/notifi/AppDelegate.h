@@ -37,7 +37,8 @@
 @property (nonatomic) NSMutableArray *alreadyStoredIDs;
 
 //SR
-@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
+//@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
+@property (nonatomic, strong) SRWebSocket *webSocket;
 
 -(bool)notificationRead:(int)index;
 -(void)markAsRead:(bool)read index:(int)index;
