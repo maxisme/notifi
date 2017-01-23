@@ -9,16 +9,16 @@ zip_project_output="/Users/maxmitch/Documents/notifi/notifi.it/notifi.zip"
 
 #NOT IMPORTANT INITIAL VARIABLES
 xcode_project=$project_path$project_name$project_type
-plist=$project_path"buildOptions.plist" 
+plist=$project_path"buildOptions.plist"
 xcarchive=$project_path"tmp.xcarchive"
 
-#countdown function 
+#countdown function
 function countDown {
 	secs=$((20))
 	while [ $secs -gt 0 ]; do
 	   echo -ne "Will exit in $secs\033[0K\r"
 	   sleep 1
-	   : $((secs--)) 
+	   : $((secs--))
 	done
 	exit
 }
@@ -42,12 +42,9 @@ fi
 xcodebuild -exportArchive -archivePath "$xcarchive" -exportOptionsPlist "$plist" -exportPath "$project_path"
 
 #check if last command succeeded
-if [ $? -ne 0 ]; then 
+if [ $? -ne 0 ]; then
 	countDown
 fi
-
-#remove temp files used in build
-rm -rf "$project_name.app" "$xcarchive" "$plist"
 
 #zip signed project
 cd "$project_path" || exit
@@ -59,5 +56,9 @@ git push origin master
 
 #upload to website
 scp "$zip_project_output" root@185.117.22.245:/var/www/notifi.it/public_html/
+
+#remove temp files used in build
+echo "cleaning up..."
+rm -rf "$project_path$project_name.app" "$xcarchive" "$plist"
 
 countDown
