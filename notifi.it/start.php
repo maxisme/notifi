@@ -2,16 +2,21 @@
 require '/var/www/notifi.it/socket/vendor/autoload.php';
 
 use Ratchet\Server\IoServer;
+use Ratchet\WebSocket\WsServer;
+use Ratchet\Http\HttpServer;
+
 use Notify\Note;
 
-$loop = React\EventLoop\Factory::create();
-
 $note = new Note();
+$ws = new WsServer($note);
+$ws->disableVersion(0); // old, bad, protocol version
+
 $server = IoServer::factory(
-	$note,
-	38815
+	new HttpServer($ws),
+	1203
 ); 
 
+//local socket for on curl requests to Ratchet socket
 $context = new React\ZMQ\Context($server->loop);
 $pull = $context->getSocket(ZMQ::SOCKET_PULL);
 $pull->bind('tcp://127.0.0.1:5555');

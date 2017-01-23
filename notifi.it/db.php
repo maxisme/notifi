@@ -1,4 +1,5 @@
 <?php
+
 function clean($string) {
    $string = str_replace(' ', '', $string); // removes all spaces
    return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
@@ -31,7 +32,7 @@ function getNotifications($credentials){
 	FROM `notifications`
 	WHERE credentials = AES_ENCRYPT('$credentials', '$key')
 	AND title != ''
-	ORDER BY time DESC
+	ORDER BY time ASC
 	");
 	
 	if(mysqli_num_rows($query) == 0){
@@ -175,6 +176,19 @@ function userExists($credentials){
 	return false;
 }
 
+function userConnected($credentials, $isConnected){
+	$encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$con = connect();
+	
+	$isConnected = (int)$isConnected;
+	
+	mysqli_query($con, "UPDATE `users`
+	SET isConnected = $isConnected
+	WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
+	"); 
+}
+
+//--------- extra functions
 function randomString($length) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);

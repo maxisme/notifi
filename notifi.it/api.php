@@ -51,7 +51,7 @@ if(empty($link)){
 }
 
 if(isBruteForce($db_user, $db_pass, $key, $credentials)){
-	//die("Too many requests!\n");
+	die("Too many requests! Please wait a minute.\n");
 }
 
 //check if user exists

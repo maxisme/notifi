@@ -11,7 +11,6 @@
 		482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9C1E0B0D0700E5C173 /* CoreData.framework */; };
 		482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9E1E0B0D4000E5C173 /* AppKit.framework */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
-		4880FC1D1E1C654D00A15EA3 /* AsyncImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4880FC1C1E1C654D00A15EA3 /* AsyncImageDownloader.m */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
 		48AD3FA91DBA500100B47CA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48AD3FA81DBA500100B47CA5 /* Security.framework */; };
@@ -21,16 +20,16 @@
 		48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B028301DBBAC51007D2462 /* menu_bellicon.png */; };
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
 		48E49A901E1D9DFF00DE3DBE /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 48E49A8F1E1D9DFF00DE3DBE /* fonts */; };
+		87CCA708195A043BEEDF55EE /* libPods-notifi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E2270C83D67144F2EE4FB51 /* libPods-notifi.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E2270C83D67144F2EE4FB51 /* libPods-notifi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-notifi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		482C8A921E09742400E5C173 /* MyApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyApplication.m; sourceTree = "<group>"; };
 		482C8A941E09743100E5C173 /* MyApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyApplication.h; sourceTree = "<group>"; };
 		482C8A9C1E0B0D0700E5C173 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		482C8A9E1E0B0D4000E5C173 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
-		4880FC1B1E1C654D00A15EA3 /* AsyncImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageDownloader.h; sourceTree = "<group>"; };
-		4880FC1C1E1C654D00A15EA3 /* AsyncImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageDownloader.m; sourceTree = "<group>"; };
 		48AD3F901DB9438600B47CA5 /* notifi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notifi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AD3F931DB9438600B47CA5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		48AD3F941DB9438600B47CA5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -43,6 +42,8 @@
 		48B028301DBBAC51007D2462 /* menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_bellicon.png; sourceTree = "<group>"; };
 		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48E49A8F1E1D9DFF00DE3DBE /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"; sourceTree = "<group>"; };
+		C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,18 +54,29 @@
 				482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */,
 				482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */,
 				48AD3FA91DBA500100B47CA5 /* Security.framework in Frameworks */,
+				87CCA708195A043BEEDF55EE /* libPods-notifi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A355C312C783A79B37DE92A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */,
+				AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		48AD3F871DB9438600B47CA5 = {
 			isa = PBXGroup;
 			children = (
 				48AD3F921DB9438600B47CA5 /* notifi */,
 				48AD3F911DB9438600B47CA5 /* Products */,
 				48AD3FA71DBA500100B47CA5 /* Frameworks */,
+				0A355C312C783A79B37DE92A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,8 +104,6 @@
 				48AD3F961DB9438600B47CA5 /* Supporting Files */,
 				482C8A921E09742400E5C173 /* MyApplication.m */,
 				482C8A941E09743100E5C173 /* MyApplication.h */,
-				4880FC1B1E1C654D00A15EA3 /* AsyncImageDownloader.h */,
-				4880FC1C1E1C654D00A15EA3 /* AsyncImageDownloader.m */,
 			);
 			path = notifi;
 			sourceTree = "<group>";
@@ -112,6 +122,7 @@
 				482C8A9E1E0B0D4000E5C173 /* AppKit.framework */,
 				482C8A9C1E0B0D0700E5C173 /* CoreData.framework */,
 				48AD3FA81DBA500100B47CA5 /* Security.framework */,
+				1E2270C83D67144F2EE4FB51 /* libPods-notifi.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -123,9 +134,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 48AD3FA41DB9438600B47CA5 /* Build configuration list for PBXNativeTarget "notifi" */;
 			buildPhases = (
+				432519AB3F04C11B2A09AD03 /* [CP] Check Pods Manifest.lock */,
 				48AD3F8C1DB9438600B47CA5 /* Sources */,
 				48AD3F8D1DB9438600B47CA5 /* Frameworks */,
 				48AD3F8E1DB9438600B47CA5 /* Resources */,
+				6B6781832190895796A18A4B /* [CP] Embed Pods Frameworks */,
+				A79750A7DB3D6D666F5FF9E7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -187,13 +201,60 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		432519AB3F04C11B2A09AD03 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6B6781832190895796A18A4B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-notifi/Pods-notifi-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A79750A7DB3D6D666F5FF9E7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-notifi/Pods-notifi-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		48AD3F8C1DB9438600B47CA5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				48AD3F981DB9438600B47CA5 /* main.m in Sources */,
-				4880FC1D1E1C654D00A15EA3 /* AsyncImageDownloader.m in Sources */,
 				482C8A931E09742400E5C173 /* MyApplication.m in Sources */,
 				48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */,
 			);
@@ -293,6 +354,7 @@
 		};
 		48AD3FA51DB9438600B47CA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -308,6 +370,7 @@
 		};
 		48AD3FA61DB9438600B47CA5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
