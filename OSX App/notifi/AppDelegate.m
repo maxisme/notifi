@@ -13,7 +13,6 @@
 @interface MyNotificationView: NSView
 @property (nonatomic) int theid;
 @property (atomic, weak) AppDelegate* thisapp;
-@property (nonatomic) NSString* url;
 @end
 
 @implementation MyNotificationView
@@ -27,25 +26,17 @@
     
     [theMenu insertItemWithTitle:@"Delete notification" action:@selector(deleteNoti) keyEquivalent:@"" atIndex:1];
     
-    _url = [_thisapp notificationLink:_theid];
-    if(![_url  isEqual: @" "] && _url != nil){
+    NSString* url = [_thisapp notificationLink:_theid];
+    if(![url  isEqual: @" "] && url != nil){
         [theMenu addItem:[NSMenuItem separatorItem]];
         [theMenu insertItemWithTitle:@"Open Link" action:@selector(openLink) keyEquivalent:@"" atIndex:1];
     }
     
     [NSMenu popUpContextMenu:theMenu withEvent:event forView:(id)self];
 }
-- (void)mouseUp:(NSEvent *)event
+- (void)mouseDown:(NSEvent *)event
 {
-    NSLog(@"mouse up");
-    NSInteger clickCount = [event clickCount];
-    if (2 == clickCount){
-        if([_thisapp notificationRead:_theid]){
-            [self markUnread];
-        }else{
-            [self markRead];
-        }
-    }
+    //needs to be here for some reason to pass on the mouseup event to the label
 }
 
 - (void)markRead {
@@ -61,7 +52,8 @@
 }
 
 - (void)openLink{
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_url]];
+    [self markRead];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_thisapp notificationLink:_theid]]];
 }
 @end
 
@@ -79,14 +71,6 @@
     [self.superview rightMouseDown:event];
 }
 
-- (void)mouseUp:(NSEvent *)event
-{
-    if(![_link  isEqual: @" "] && _link != nil){
-        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_link]];
-    }else{
-        [self.superview mouseUp:event];
-    }
-}
 @end
 
 // ----- notification view interface -----
@@ -106,9 +90,9 @@
 }
 - (void)mouseUp:(NSEvent *)event
 {
-    NSLog(@"clicked");
     if(![super.link  isEqual: @" "] && super.link != nil){
-        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:super.link]];
+        [(MyNotificationView*)self.superview openLink];
+        //[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:super.link]];
     }
 }
 @end
@@ -139,14 +123,12 @@
     if([credentials length] != 25){
         [self newCredentials];
     }
+    [self openSocket];
     [self createStatusBarItem];
-    [self initNetworkCommunication];
-    [NSTimer scheduledTimerWithTimeInterval:2.0f
-                                     target:self selector:@selector(check) userInfo:nil repeats:YES];
-    [NSTimer scheduledTimerWithTimeInterval:30.0f
-                                     target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
-    [NSTimer scheduledTimerWithTimeInterval:60.0f
-                                     target:self selector:@selector(updateTimes) userInfo:nil repeats:YES];
+    
+    [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(check) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:30.0f target:self selector:@selector(sendPing:) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateTimes) userInfo:nil repeats:YES];
     
     //mark menu item
     int shouldOpenOnStartup = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"openOnStartup"];
@@ -268,52 +250,9 @@ NSImageView *window_up_arrow_view;
     [_scroll_view setBorderType:NSNoBorder];
     [_scroll_view setHasVerticalScroller:YES];
     
-    //GO TO GITHUB MESSAGE IF NO NOTIFICATIONS
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     if((int)[arrayofdics count] == 0){
-        NSView *view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, window_width, scroll_height)];
-        view.wantsLayer = TRUE;
-        
-        //attributed text
-        NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        [centredStyle setAlignment:NSTextAlignmentCenter];
-        NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
-                               NSParagraphStyleAttributeName,
-                               [NSFont fontWithName:@"Raleway-SemiBold" size:15],
-                               NSFontAttributeName,
-                               _grey,
-                               NSForegroundColorAttributeName,
-                               nil];
-        NSMutableAttributedString *attributedString =
-        [[NSMutableAttributedString alloc] initWithString:@"You have no notifications!\nSend curl requests to receive them."
-                                               attributes:attrs];
-        
-        NSRange range = NSMakeRange(32, 4);
-        [attributedString beginEditing];
-        [attributedString addAttribute: NSLinkAttributeName value: @"https://github.com/maxisme/notifi#http-request-examples" range:range];
-        [attributedString endEditing];
-         
-        //nstextfield
-        int title_height = 100;
-        MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
-                                     CGRectMake(
-                                                0,
-                                                _scroll_view.frame.size.height/2 - title_height/2,
-                                                window_width,
-                                                title_height
-                                                )
-                                     ];
-        title_field.editable = false;
-        title_field.bordered = false;
-        title_field.backgroundColor = [NSColor clearColor];
-        [title_field setAlignment:NSTextAlignmentCenter];
-        title_field.attributedStringValue = attributedString;
-        [title_field setWantsLayer:true];
-        [title_field setAllowsEditingTextAttributes:YES];
-        [title_field setSelectable:YES];
-        [view addSubview:title_field];
-        
-        _scroll_view.documentView = view;
+        _scroll_view.documentView = [self noNotificationsView];
     }else{
         //INITIATE NSTABLE
         _notification_table = [[NSTableView alloc] initWithFrame:_scroll_view.frame];
@@ -324,17 +263,10 @@ NSImageView *window_up_arrow_view;
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
         [_notification_table setDelegate:(id)self];
         [_notification_table setDataSource:(id)self];
-        NSLog(@"initial ->");
         [self reloadData];
         
         _scroll_view.documentView = _notification_table;
     }
-    
-    //hack - TODO: find out where width is greater than scroll_view width
-    [_scroll_view.documentView setFrame:CGRectMake(_scroll_view.documentView.frame.origin.x,
-                                            _scroll_view.documentView.frame.origin.y,
-                                            _scroll_view.frame.size.width,
-                                            _scroll_view.documentView.frame.size.height)];
     [_view addSubview:_scroll_view];
     
     
@@ -385,6 +317,52 @@ NSImageView *window_up_arrow_view;
     [self setNotificationMenuBar];
 }
 
+-(NSView*)noNotificationsView{
+    NSView *view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, window_width, _scroll_view.frame.size.height)];
+    view.wantsLayer = TRUE;
+    
+    //attributed text
+    NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [centredStyle setAlignment:NSTextAlignmentCenter];
+    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
+                           NSParagraphStyleAttributeName,
+                           [NSFont fontWithName:@"Raleway-SemiBold" size:15],
+                           NSFontAttributeName,
+                           _grey,
+                           NSForegroundColorAttributeName,
+                           nil];
+    NSMutableAttributedString *attributedString =
+    [[NSMutableAttributedString alloc] initWithString:@"You have no notifications!\nSend curl requests to receive them."
+                                           attributes:attrs];
+    
+    NSRange range = NSMakeRange(32, 4);
+    [attributedString beginEditing];
+    [attributedString addAttribute:NSLinkAttributeName value: @"https://github.com/maxisme/notifi#http-request-examples" range:range];
+    [attributedString endEditing];
+    
+    //nstextfield
+    int title_height = 100;
+    MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
+                                 CGRectMake(
+                                            0,
+                                            _scroll_view.frame.size.height/2 - title_height/2,
+                                            window_width,
+                                            title_height
+                                            )
+                                 ];
+    title_field.editable = false;
+    title_field.bordered = false;
+    title_field.backgroundColor = [NSColor clearColor];
+    [title_field setAlignment:NSTextAlignmentCenter];
+    title_field.attributedStringValue = attributedString;
+    [title_field setWantsLayer:true];
+    [title_field setAllowsEditingTextAttributes:YES];
+    [title_field setSelectable:YES];
+    [view addSubview:title_field];
+    
+    return view;
+}
+
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
@@ -423,23 +401,37 @@ NSImageView *window_up_arrow_view;
     [arrayofdics replaceObjectAtIndex:([arrayofdics count] - 1) - rowIndex withObject:anObject];
 }
 
-int reload_count = 0;
+bool reloaded_in_last_2 = false;
 -(void)reloadData{
-    
-    //TODO: order notifications by date-time
-    
-    _time_fields = [[NSMutableArray alloc] init];
-    _notification_views = [[NSMutableArray alloc] init];
-    
-    //NSPoint currentScrollPosition = [[_scroll_view contentView] documentVisibleRect].origin;
-    NSLog(@"reloaded data %d",reload_count++);
-    unread_notifications = 0;
-    [_notification_table reloadData];
-    
-    [self setNotificationMenuBar];
-    
-    
-    //[[_scroll_view documentView] scrollPoint:currentScrollPosition];
+    if(!reloaded_in_last_2){ // every 2 seconds reload_count is set to 0
+        [self reload];
+    }else{
+        //attempt to reload in two seconds
+        //TODO kill previous thread
+        dispatch_async(dispatch_get_global_queue(4,0), ^{
+            [NSThread sleepForTimeInterval:2.0f];
+            [self postReload];
+        });
+    }
+}
+
+-(void)postReload{
+    if(!reloaded_in_last_2){
+        [self reload];
+    }
+}
+
+-(void)reload{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        reloaded_in_last_2 = true;
+        _time_fields = [[NSMutableArray alloc] init];
+        _notification_views = [[NSMutableArray alloc] init];
+        
+        unread_notifications = 0;
+        [_notification_table reloadData];
+        
+        [self setNotificationMenuBar];
+    });
 }
 
 int unread_notifications;
@@ -680,17 +672,15 @@ int notification_view_padding = 20;
             _window_item.title = @"View 999+ Unread Notifications";
         }
         _statusItem.image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
-        if(!streamOpen){
-            [_errorItem setHidden:false];
-        }
     }else{
         _window_item.title = @"View Notifications";
         _statusItem.image = [NSImage imageNamed:@"menu_bellicon.png"];
-        if(!streamOpen){
-            if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
-                _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
-                [_errorItem setHidden:false];
-            }
+    }
+    
+    if(!streamOpen){
+        if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
+            _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
+            [_errorItem setHidden:false];
         }
     }
 }
@@ -769,15 +759,17 @@ int notification_view_padding = 20;
 bool serverReplied = false;
 -(void)check{
     if(!streamOpen){
-        [self initNetworkCommunication];
+        [self openSocket];
     }else if(!serverReplied){
         [self sendCode];
     }
+    
+    //reset reload count (prevents recursive call) maximum 1 reload ever 2 seconds
+    reloaded_in_last_2 = false;
 }
 
-
 -(void)handleIncomingNotification:(NSString*)json{
-    NSLog(@"\rFULL notification:\r\r%@", json);
+    serverReplied = true;
     NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary* json_dic = [NSJSONSerialization
                           JSONObjectWithData:data
@@ -786,33 +778,40 @@ bool serverReplied = false;
     
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     BOOL refresh = false;
+    NSMutableArray* notifications = [[NSMutableArray alloc] init];
     
     for (NSDictionary* notification in json_dic) {
         NSString* firstval = [NSString stringWithFormat:@"%@", notification];;
         if([[firstval substringToIndex:3]  isEqual: @"id:"]){
             //TELL SERVER TO DELETE THIS MESSAGE
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(streamOpen){
-                    NSData *data = [[NSData alloc] initWithData:[firstval dataUsingEncoding:NSASCIIStringEncoding]];
-                    [outputStream write:[data bytes] maxLength:[data length]];
-                }
-            });
-        }else{
-            NSString* _id = [notification objectForKey:@"id"];
-            if(![_alreadyStoredIDs containsObject:_id]){
-                [_alreadyStoredIDs addObject:_id];
-                [self storeNotification:notification];
-                [self sendLocalNotification:[notification objectForKey:@"title"]
-                               message:[notification objectForKey:@"message"]
-                              imageURL:[notification objectForKey:@"image"]
-                                  link:[notification objectForKey:@"link"]
-                ];
-                refresh = true;
+            if(streamOpen){
+                [webSocket send:firstval];
             }
+        }else{
+            [self storeNotification:notification];
+            refresh = true;
+            [notifications addObject:notification];
         }
     }
     
     if(refresh){
+        if([notifications count] <= 5){
+            for (NSDictionary* notification in notifications){
+                [self sendLocalNotification:[notification objectForKey:@"title"]
+                                    message:[notification objectForKey:@"message"]
+                                   imageURL:[notification objectForKey:@"image"]
+                                       link:[notification objectForKey:@"link"]
+                ];
+            }
+        }else{
+            //send notification with ammount of notifications.
+            NSUserNotification *note = [[NSUserNotification alloc] init];
+            [note setHasActionButton:false];
+            [note setTitle:[NSString stringWithFormat:@"You have %d new notifications!",(int)[notifications count]]];
+            [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
+            [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             if([arrayofdics count] == 0){
                 [self createBodyWindow];
@@ -885,10 +884,16 @@ bool serverReplied = false;
 
 -(void)deleteNotification:(int)index{
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
-    [arrayofdics removeObjectAtIndex:index];
-    [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
+    int notification_count = (int)[arrayofdics count];
     
-    [_notification_views removeObjectAtIndex:(int)[arrayofdics count] - index];
+    if(notification_count == 1){
+        _scroll_view.documentView = [self noNotificationsView];
+    }else{
+        [arrayofdics removeObjectAtIndex:index];
+        [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
+        [_notification_views removeObjectAtIndex:notification_count - index - 1];
+    }
+    
     [self reloadData];
 }
 
@@ -960,22 +965,24 @@ bool serverReplied = false;
 - (void) userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
     int theid = [notification.userInfo[@"id"] intValue];
-    NSString* url_string = notification.userInfo[@"url"];
-    
-    NSURL* url;
-    if(![url_string  isEqual: @" "]){
-        @try {
-            url = [NSURL URLWithString:url_string];
-        } @catch (NSException *exception) {
-            NSLog(@"error with link url");
+    if(theid){
+        NSString* url_string = notification.userInfo[@"url"];
+        
+        NSURL* url;
+        if(![url_string  isEqual: @" "]){
+            @try {
+                url = [NSURL URLWithString:url_string];
+            } @catch (NSException *exception) {
+                NSLog(@"error with link url");
+            }
         }
+        
+        if(url)
+            [[NSWorkspace sharedWorkspace] openURL:url];
+        
+        [self markAsRead:true index:theid - 1];
+        [center removeDeliveredNotification: notification];
     }
-    
-    if(url)
-        [[NSWorkspace sharedWorkspace] openURL:url];
-    
-    [self markAsRead:true index:theid - 1];
-    [center removeDeliveredNotification: notification];
 }
 
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
@@ -983,166 +990,28 @@ bool serverReplied = false;
 }
 
 
-
-#pragma mark - telnet
-
-NSInputStream* inputStream;
-NSOutputStream* outputStream;
-BOOL streamOpen = false;
-
-- (void)sendCode{
-    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
-    NSString* key = [[NSUserDefaults standardUserDefaults] objectForKey:@"key"];
-    NSString* message = [NSString stringWithFormat:@"%@|%@", credentials, key];
-    if(streamOpen){
-        NSData *data = [[NSData alloc] initWithData:[message dataUsingEncoding:NSASCIIStringEncoding]];
-        [outputStream write:[data bytes] maxLength:[data length]];
-    }
-}
-
-- (void)initNetworkCommunication { //called in viewDidLoad of the view controller
+#pragma mark - socketRocket
+SRWebSocket *webSocket;
+- (void)openSocket
+{
     serverReplied = false;
     streamOpen = false;
     
-    //clear input and output stream
-    [inputStream setDelegate:nil];
-    [inputStream close];
-    [inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    inputStream = nil;
-    [outputStream setDelegate:nil];
-    [outputStream close];
-    [outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    outputStream = nil;
+    webSocket.delegate = nil;
+    [webSocket close];
     
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"185.117.22.245", 38815, &readStream, &writeStream);
-    inputStream = (__bridge NSInputStream *)readStream;
-    outputStream = (__bridge NSOutputStream *)writeStream;
+    webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:@"wss://s.notifi.it"]];
+    webSocket.delegate = (id)self;
     
-    [inputStream setDelegate:(id)self];
-    [outputStream setDelegate:(id)self];
-    
-    [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
-    [inputStream open];
-    [outputStream open];
+    [webSocket open];
 }
 
-- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
-    
-    switch (streamEvent) {
-            
-        case NSStreamEventOpenCompleted:
-            if(_statusItem.image != [NSImage imageNamed:@"menu_bellicon.png" ]){
-                [self setNotificationMenuBar];
-                [_errorItem setHidden:true];
-            }
-            streamOpen = true;
-            break;
-            
-        case NSStreamEventHasBytesAvailable:
-            if (theStream == inputStream) {
-                int len;
-                uint8_t buffer[1024];
-                NSString* incoming_message = @"";
-                while ([inputStream hasBytesAvailable]) {
-                    len = (int)[inputStream read:buffer maxLength:sizeof(buffer)];
-                    if (len > 0) {
-                        NSString *mess = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
-                            incoming_message = [NSString stringWithFormat:@"%@%@",incoming_message,mess];
-                    }
-                }
-                [self handleStreamMessage:incoming_message];
-            }
-            
-            break;
-
-            
-        case NSStreamEventErrorOccurred:
-            [self closeSocket];
-            break;
-            
-        case NSStreamEventEndEncountered:
-            [self closeSocket];
-            break;
-        
-        case NSStreamEventHasSpaceAvailable:
-            //NSLog(@"Space Availible.");
-            break;
-            
-        default:
-            NSLog(@"Unknown event- %lu", (unsigned long)streamEvent);
-    }
-    
-}
-
--(void)handleStreamMessage:(NSString*)message{
-    if(![message isEqual: @""]){
-        if(!serverReplied){
-            NSLog(@"Connected to server");
-        }
-        hasPong = true;
-        serverReplied = true;
-        
-        //json input
-        if([message length] >= 9){
-            NSString* beg_label = @"--begin--";
-            NSString* end_label = @"--end--";
-            
-            if(_split_message == nil){
-                _split_message = @"";
-            }
-            
-            message = [NSString stringWithFormat:@"%@%@", _split_message, message];
-            
-            if([[message substringToIndex:9] isEqual: beg_label] &&
-               [[message substringFromIndex:[message length]-7] isEqual: end_label]){
-            
-                //split message
-                NSMutableArray* groups = [[NSMutableArray alloc] init];
-                while ([message length] > 0) {
-                    NSRange r1 = [message rangeOfString:beg_label];
-                    NSRange r2 = [message rangeOfString:end_label];
-                    NSRange rSub = NSMakeRange(r1.location + r1.length, r2.location - r1.location - r1.length);
-                    [groups addObject:[message substringWithRange:rSub]];
-                    NSRange after = NSMakeRange(r2.location + r2.length, message.length - r2.location - r2.length);
-                    message = [message substringWithRange:after];
-                }
-                
-                for(NSString* message in groups){
-                    dispatch_async(dispatch_get_global_queue(0,0), ^{
-                        [self handleIncomingNotification:message];
-                    });
-                }
-                
-                _split_message = nil;
-            }else{
-                _split_message = message;
-            }
-        }
-    }
-}
-
--(void)closeSocket{
-    serverReplied = false;
-    streamOpen = false;
-    NSLog(@"Terminated connection!");
-    if(_statusItem.image != [NSImage imageNamed:@"menu_error_bellicon.png" ]){
-        _statusItem.image = [NSImage imageNamed:@"menu_error_bellicon.png" ];
-        [_errorItem setHidden:false];
-    }
-}
-
-bool hasPong;
--(void)sendPing{
+bool receivedPong = false;
+- (void)sendPing:(id)sender;
+{
     if(streamOpen){
-        NSLog(@"sent ping");
-        hasPong = false;
-        NSData *data = [[NSData alloc] initWithData:[@"ping" dataUsingEncoding:NSASCIIStringEncoding]];
-        [outputStream write:[data bytes] maxLength:[data length]];
-        
+        receivedPong = false;
+        [webSocket sendPing:nil];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             [NSThread sleepForTimeInterval:2.0f];
             [self hasReceivedPong];
@@ -1151,11 +1020,63 @@ bool hasPong;
 }
 
 -(void)hasReceivedPong{
-    if(!hasPong){
+    if(!receivedPong){
         [self closeSocket];
-    }else{
-        NSLog(@"received pong");
     }
+}
+
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
+{
+    NSLog(@"Websocket Connected");
+    streamOpen = true;
+    [self setNotificationMenuBar];
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
+{
+    [self closeSocket];
+    webSocket = nil;
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(nonnull NSString *)string
+{
+    dispatch_async(dispatch_get_global_queue(0,0), ^{
+        [self handleIncomingNotification:string];
+    });
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+{
+    NSLog(@"WebSocket closed");
+    [self closeSocket];
+    webSocket = nil;
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
+{
+    receivedPong = true;
+}
+
+
+#pragma mark - telnet
+
+BOOL streamOpen = false;
+- (void)sendCode{
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
+    NSString* key = [[NSUserDefaults standardUserDefaults] objectForKey:@"key"];
+    NSString* message = [NSString stringWithFormat:@"%@|%@", credentials, key];
+    if(streamOpen){
+        [webSocket send:message];
+    }
+}
+
+-(void)closeSocket{
+    if(streamOpen){
+        NSLog(@"Terminated connection!");
+    }
+    serverReplied = false;
+    streamOpen = false;
+    [self setNotificationMenuBar];
 }
 
 #pragma mark - menu bar

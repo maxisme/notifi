@@ -3,10 +3,16 @@ namespace Notify;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
  
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require "/var/www/notifi.it/socket/db.php";
+
+//set all users as not connected in table
+$con = connect();
+mysqli_query($con, "UPDATE `users`
+SET isConnected = 0
+"); 
 
 class Note implements MessageComponentInterface { 
     protected $clients;
@@ -18,17 +24,11 @@ class Note implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
-		echo "\nNew client. Connected from $conn->remoteAddress";
+		echo "New client.";
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
-		if($msg == "ping"){
-			foreach ($this->clients as $client) {
-				if ($from === $client) { //current client only
-					$this->sendNotifications($client);
-				}
-			}
-		}else if(substr($msg,0,3) == "id:"){
+		if(substr($msg,0,3) == "id:"){
 			//handle reply from user to say they have received notification
 			$decrypted_string = decrypt(substr($msg,3,strlen($msg)));
 			
@@ -48,7 +48,7 @@ class Note implements MessageComponentInterface {
 
 			//check if user is valid
 			if(!isValidUser($credentials, $key)){
-				echo "\nilegal login from: $credentials with key:\n$key\n";
+				echo "\nilegal login from: $credentials with key:\n$key";
 				$from->send("Invalid Credentials");
 				$from->close();
 			}
@@ -57,6 +57,7 @@ class Note implements MessageComponentInterface {
 				if ($from === $client) { //current client only
 					$client->clientCode = $credentials;
 					$this->sendNotifications($client);
+					userConnected($client->clientCode, true);
 				}
 			}
 		} 
@@ -81,9 +82,9 @@ class Note implements MessageComponentInterface {
 					$id = $row['id'];
 					array_push($stack,"id:".encrypt($id."|".$credentials));
 				}
-				$client->send("--begin--".json_encode($stack)."--end--");
+				$client->send(json_encode($stack));
 
-				echo "\n".date("r")." - sent msg:\n".json_encode($stack)." to:$client->clientCode with ip: ".$client->remoteAddress;
+				echo "\n".date("r")." - sent message to:$client->clientCode";
 			}else{
 				$client->send("1");
 			}
@@ -91,12 +92,16 @@ class Note implements MessageComponentInterface {
 	}
 
     public function onClose(ConnectionInterface $conn) {
-		echo "connection closed\n";
+		echo "\nconnection closed";
+		foreach($this->clients as $client){
+			userConnected($client->clientCode, false);
+		}
         $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
-		echo "connection error\n";
+		echo "\nconnection error:";
+		print_r($e);
         $conn->close();
     }
 }

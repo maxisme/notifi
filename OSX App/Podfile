@@ -1,0 +1,4 @@
+target 'notifi' do
+  pod 'SocketRocket'
+  pod 'AsyncImageDownloaderOSX'
+end

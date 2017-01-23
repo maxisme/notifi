@@ -2,12 +2,13 @@
 
 #INITIAL VARIABLES THAT NEED TO BE CUSTOMISED
 project_name="notifi"
+project_type=".xcworkspace"
 project_path="/Users/maxmitch/Documents/notifi/OSX App/"
 dev_team="3H49MXS325"
 zip_project_output="/Users/maxmitch/Documents/notifi/notifi.it/notifi.zip"
 
 #NOT IMPORTANT INITIAL VARIABLES
-xcode_project=$project_path$project_name".xcodeproj"
+xcode_project=$project_path$project_name$project_type
 plist=$project_path"buildOptions.plist" 
 xcarchive=$project_path"tmp.xcarchive"
 
@@ -26,19 +27,22 @@ function countDown {
 echo "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>method</key><string>developer-id</string><key>teamID</key><string>$dev_team</string></dict></plist>" > "$plist"
 
 #build project
-xcodebuild -project "$xcode_project" -scheme "$project_name" -configuration Release clean archive -archivePath "$xcarchive" DEVELOPMENT_TEAM=$dev_team
+type="-project"
+#Change '-project' to '-workspace'. Depending on if $project_type is '.xcodeproj' or '.xcworkspace'.
+if [[ $project_type == ".xcworkspace" ]]; then
+	type="-workspace"
+fi
+xcodebuild $type "$xcode_project" -scheme "$project_name" -configuration Release clean archive -archivePath "$xcarchive" DEVELOPMENT_TEAM=$dev_team
 
-#check if succeeded
-if [ $? -ne 0 ]; then 
-	echo -e "Error."
+#check if last command succeeded
+if [ $? -ne 0 ]; then
 	countDown
 fi
 
 xcodebuild -exportArchive -archivePath "$xcarchive" -exportOptionsPlist "$plist" -exportPath "$project_path"
 
-#check if succeeded
+#check if last command succeeded
 if [ $? -ne 0 ]; then 
-	echo "Error with export."
 	countDown
 fi
 
