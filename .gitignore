@@ -24,9 +24,8 @@ notifi.it/vendor
 *.psd
 composer.lock
 notifi.it/vendor
-OSX App/alert.aiff
-OSX App/alert.mp3
 notifi.it/_compareTemp
 google*.html
-OSX App/Pods
+Mac App/Pods
 Podfile.lock
+server.path

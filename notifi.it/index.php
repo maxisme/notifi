@@ -4,7 +4,7 @@ session_start();
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
+<head> 
 	<!-- meta stuff -->
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta name="description" content="A minimal notification app for your Mac">
@@ -13,16 +13,16 @@ session_start();
 	<!-- google fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-	<!-- google recaptcha -->
+	<!-- google recaptcha --> 
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<!-- jquery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<!-- transferme.it css -->
-	<link rel="stylesheet" type="text/css" href="https://transferme.it/css/style.css"/>
-	<!-- transferme.it scripts -->
-	<script type="text/javascript" src="https://transferme.it/scripts/jquery.easing.min.js"></script>
-	<script type="text/javascript" src="https://transferme.it/scripts/scrolling-nav.js"></script>
-	<script type="text/javascript" src="https://transferme.it/scripts/script.js"></script>
+	<!-- maxis.me css -->
+	<link rel="stylesheet" type="text/css" href="https://maxis.me/template/css/style.css"/>
+	<!-- maxis.me scripts -->
+	<script type="text/javascript" src="https://maxis.me/template/scripts/jquery.easing.min.js"></script>
+	<script type="text/javascript" src="https://maxis.me/template/scripts/scrolling-nav.js"></script>
+	<script type="text/javascript" src="https://maxis.me/template/scripts/script.js"></script>
 
 	<title>Notifi</title>
 </head>
