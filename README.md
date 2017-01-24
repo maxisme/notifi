@@ -59,15 +59,15 @@ curl_close($chpush);
 
 ### Screen Shots
 #### Menu
-<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
+<img width=100 src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
 #### Window
-<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
+<img width=100 src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
 #### Notification
-<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Notification.png">
+<img width=100 src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Notification.png">
 #### Right Click
-<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/RightClick.png">
+<img width=100 src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/RightClick.png">
 #### Read message
-<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Read.png">
+<img width=100 src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Read.png">
 ____
 
 #### TODO
