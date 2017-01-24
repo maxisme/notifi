@@ -27,7 +27,7 @@
 @property (nonatomic, weak) NSImageView *window_up_arrow_view;
 @property (nonatomic) NSWindow* window;
 @property (nonatomic, weak) NSView* view;
-@property (strong) NSMutableArray *time_fields;
+@property (strong) NSMutableArray *time_labels;
 @property (strong) NSMutableArray *notification_views;
 @property (nonatomic, strong) NSScrollView *scroll_view;
 @property (nonatomic, strong) NSTableView* notification_table;

@@ -423,7 +423,7 @@ bool reloaded_in_last_2 = false;
 -(void)reload{
     dispatch_async(dispatch_get_main_queue(), ^{
         reloaded_in_last_2 = true;
-        _time_fields = [[NSMutableArray alloc] init];
+        _time_labels = [[NSMutableArray alloc] init];
         _notification_views = [[NSMutableArray alloc] init];
         
         unread_notifications = 0;
@@ -572,7 +572,7 @@ int notification_view_padding = 20;
     [view addSubview:title_field];
     
     //--   add time
-    MyLabel* time_field = [[MyLabel alloc] initWithFrame:
+    MyLabel* time_label = [[MyLabel alloc] initWithFrame:
                                CGRectMake(
                                           padding_right,
                                           title_field.frame.origin.y - 24,
@@ -580,13 +580,13 @@ int notification_view_padding = 20;
                                           20
                                           )
                                ];
-    time_field.font = [NSFont fontWithName:@"Raleway-Medium" size:10];
-    time_field.backgroundColor = [NSColor clearColor];
-    [time_field setAlignment:NSTextAlignmentLeft];
-    [time_field setTextColor:_offwhite];
-    [time_field setSelectable:YES];
-    time_field.editable = false;
-    time_field.bordered =false;
+    time_label.font = [NSFont fontWithName:@"Raleway-Medium" size:10];
+    time_label.backgroundColor = [NSColor clearColor];
+    [time_label setAlignment:NSTextAlignmentLeft];
+    [time_label setTextColor:_offwhite];
+    [time_label setSelectable:YES];
+    time_label.editable = false;
+    time_label.bordered =false;
     
     //get nsdate
     NSDateFormatter *serverFormat = [[NSDateFormatter alloc]init];
@@ -605,18 +605,21 @@ int notification_view_padding = 20;
     NSString *stringDate = [myFormat stringFromDate:convertedDate];
     
     NSString* timestr = [NSString stringWithFormat:@"%@ %@",stringDate, [self dateDiff:convertedDate]];
-    time_field.time = convertedDate;
-    time_field.str_time = stringDate;
-    [time_field setStringValue:timestr];
-    [_time_fields addObject:time_field];
-    [view addSubview:time_field];
+    
+    //dynamic time
+    time_label.time = convertedDate;
+    time_label.str_time = stringDate;
+    [_time_labels addObject:time_label];
+    
+    [time_label setStringValue:timestr];
+    [view addSubview:time_label];
     
     //-- add info
     if(![mes  isEqual: @" "]){
         MyLabel* info = [[MyLabel alloc] initWithFrame:
                              CGRectMake(
                                         padding_right,
-                                        time_field.frame.origin.y - info_height + 5,
+                                        time_label.frame.origin.y - info_height + 5,
                                         text_width,
                                         info_height
                                         )
@@ -640,9 +643,9 @@ int notification_view_padding = 20;
 }
 
 -(void)updateTimes{
-    for(MyLabel* label in _time_fields){
-        NSString* timestr = [NSString stringWithFormat:@"%@ %@",label.str_time, [self dateDiff:label.time]];
-        [label setStringValue:timestr];
+    for(MyLabel* time_label in _time_labels){
+        NSString* timestr = [NSString stringWithFormat:@"%@ %@", time_label.str_time, [self dateDiff:time_label.time]];
+        [time_label setStringValue:timestr];
     }
 }
 
