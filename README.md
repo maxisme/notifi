@@ -73,9 +73,9 @@ ____
 ## TODO
 
 - [x] More efficient way to sort notification views in window.
-- [ ] When clicking on notification popup does not always open notifi OSX app.
+- [ ] When clicking on notification popup does not always open notifi Mac app.
 - [x] Links not clickable
 - [x] Fix icon to show error even when has notifications.
-- [ ] For some reason after deleting notifications in the window if you follow the mouse arround you can see the cursor for text and links and also if you right click it throws an error because of it thinking there is an object there. I believe this may have something todo with wantsLayer
-- [ ] time not updating automatically.
+- [ ] For some reason after deleting notifications in the window if you follow the mouse around you can see the cursor for text and links and also if you right click it throws an error because of it thinking there is an object there. I believe this may have something todo with wantsLayer
+- [x] time not updating automatically.
 - [ ] fix horizontal scrolling in window
