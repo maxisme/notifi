@@ -57,7 +57,7 @@ curl_exec($chpush);
 curl_close($chpush);
 ```
 
-### Screen Shots
+## Screen Shots
 #### Menu
 <img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
 #### Window
