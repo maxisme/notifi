@@ -6,19 +6,19 @@ function clean($string) {
 }
 
 function connect(){
-	$db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
-	$db_user = trim(file_get_contents(dirname(__DIR__)."/db.user"));
+	$db_pass = trim(file_get_contents("/var/www/notifi.it/db.pass"));
+	$db_user = trim(file_get_contents("/var/www/notifi.it/db.user"));
 	
 	$con = mysqli_connect("localhost", "$db_user", "$db_pass", 'notifi');
 	if (!$con) {
 		die("error connecting to database");
 	} 
-	return $con;
+	return $con; 
 } 
 
 function getNotifications($credentials){
 	$credentials = clean($credentials);
-	$key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$con = connect();
 	$query = mysqli_query($con, "SELECT
@@ -44,7 +44,7 @@ function getNotifications($credentials){
 
 function deleteNotification($id, $credentials){
 	$credentials = clean($credentials);
-	$key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$con = connect();
 	$id = mysqli_real_escape_string($con, $id);
@@ -130,7 +130,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 }
 
 function isValidUser($credentials, $key){
-	$encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$encryption_key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$con = connect();
 
@@ -162,7 +162,7 @@ function filter_str($string){
 }
 
 function userExists($credentials){
-	$encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$encryption_key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	$con = connect();
 
 	$users = mysqli_query($con, "SELECT id
@@ -177,7 +177,7 @@ function userExists($credentials){
 }
 
 function userConnected($credentials, $isConnected){
-	$encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$encryption_key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	$con = connect();
 	
 	$isConnected = (int)$isConnected;
@@ -200,7 +200,7 @@ function randomString($length) {
 } 
 
 function encrypt($string){
-	$key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$iv = mcrypt_create_iv(
 		mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC),
@@ -220,7 +220,7 @@ function encrypt($string){
 }
 
 function decrypt($string){
-	$key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
+	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$data = base64_decode($string);
 	$iv = substr($data, 0, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
