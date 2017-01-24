@@ -443,9 +443,9 @@ int notification_view_padding = 20;
     int notification_width = window_width * 0.9;
     float x = window_width * 0.05;
     
-    int notification_height = 0;
     int image_width = 70;
     int image_height = 70;
+    int time_height = 20;
     
     MyNotificationView *view = [[MyNotificationView alloc] init];
     view.wantsLayer = TRUE;
@@ -496,10 +496,11 @@ int notification_view_padding = 20;
         info_height = rect.size.height;  //calculated height of dynamic info
     }
     
-    notification_height += info_height + title_height + notification_view_padding*2 + title_height + 5;
+    int extra_padding = 10;
+    int notification_height = title_height + time_height + info_height + notification_view_padding*2 + extra_padding;
     
     if(![imgURL isEqual: @" "]){ // handle extra height if image
-        int min_height = image_height + notification_view_padding*2 + title_height + 5;
+        int min_height = image_height + time_height + notification_view_padding*2;
         if(notification_height < min_height){
             notification_height = min_height;
         }
@@ -575,9 +576,9 @@ int notification_view_padding = 20;
     MyLabel* time_label = [[MyLabel alloc] initWithFrame:
                                CGRectMake(
                                           padding_right,
-                                          title_field.frame.origin.y - 24,
+                                          title_field.frame.origin.y - time_height,
                                           text_width,
-                                          20
+                                          time_height
                                           )
                                ];
     time_label.font = [NSFont fontWithName:@"Raleway-Medium" size:10];
