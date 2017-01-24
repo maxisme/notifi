@@ -57,6 +57,17 @@ curl_exec($chpush);
 curl_close($chpush);
 ```
 
+### Screen Shots
+#### Menu
+<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
+#### Window
+<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
+#### Notification
+<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Notification.png">
+#### Right Click
+<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/RightClick.png">
+#### Read message
+<img src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Read.png">
 ____
 
 #### TODO
@@ -66,3 +77,5 @@ ____
 - [x] Links not clickable
 - [x] Fix icon to show error even when has notifications.
 - [ ] For some reason after deleting notifications in the window if you follow the mouse arround you can see the cursor for text and links and also if you right click it throws an error because of it thinking there is an object there. I believe this may have something todo with wantsLayer
+- [ ] time not updating automatically.
+- [ ] fix horizontal scrolling in window
