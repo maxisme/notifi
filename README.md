@@ -13,7 +13,7 @@
 
 ## HTTP Request Examples
 
-### Curl
+#### Curl
 ```
 curl -d "credentials=<credentials>" \
 -d "title=New download" \
@@ -23,7 +23,7 @@ curl -d "credentials=<credentials>" \
 https://notifi.it/api
 ```
 
-### Python
+#### Python
 ```python
 import requests
 
@@ -38,7 +38,7 @@ data = {
 r = requests.post(('https://notifi.it/api', data=data))
 ```
 
-### PHP
+#### PHP
 ```
 curl_setopt_array(
   $chpush = curl_init(),
@@ -70,7 +70,7 @@ curl_close($chpush);
 <img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Read.png">
 ____
 
-#### TODO
+## TODO
 
 - [x] More efficient way to sort notification views in window.
 - [ ] When clicking on notification popup does not always open notifi OSX app.
