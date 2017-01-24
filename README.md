@@ -56,7 +56,6 @@ curl_setopt_array(
 curl_exec($chpush);
 curl_close($chpush);
 ```
-____
 
 ## Screen Shots
 #### Menu
