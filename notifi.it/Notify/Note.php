@@ -93,7 +93,7 @@ class Note implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $conn) {
 		echo "\nconnection closed";
-		foreach($this->clients as $client){
+		foreach($this->clients as $client){ //misleading as there will only ever be one client...
 			userConnected($client->clientCode, false);
 		}
         $this->clients->detach($conn);

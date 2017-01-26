@@ -17,10 +17,9 @@ if(isBruteForce($db_user, $db_pass, $encryption_key, $credentials, 2)){
 	die("\nToo many requests from IP address try again in 1 minute!");
 }
 
-// check if user is already in database
 $con = connect();
 
-//limit ammount of requests per ip
+// check if user is already in database
 $result_user = mysqli_query($con, "SELECT id
 FROM `users`
 WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
@@ -38,13 +37,14 @@ if ($mysqli->connect_error) {
 
 $stmt = $mysqli->prepare("INSERT INTO `users` (`credentials`, `key`) VALUES (
 AES_ENCRYPT(?,'$encryption_key'), 
-AES_ENCRYPT(?,'$encryption_key')
+PASSWORD(?)
 );");
 
 $stmt->bind_param('ss', $credentials, $key);
 if($stmt->execute()){
-	echo $key;
+	echo $key; //return key
 }
+
 $stmt->close();
 $mysqli->close();
 

@@ -137,16 +137,15 @@ function isValidUser($credentials, $key){
 	$users = mysqli_query($con, "SELECT id
 	FROM `users`
 	WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
-	AND `key` = AES_ENCRYPT('$key', '$encryption_key')
+	AND `key` = PASSWORD('$key')
 	"); 
 
 	if(mysqli_num_rows($users) > 0){
 		//update login time
-		$time = date('r');
 		mysqli_query($con, "UPDATE `users`
-		SET `last_login` = '".$time."' 
+		SET `last_login` = now()
 		WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
-		AND `key` = AES_ENCRYPT('$key', '$encryption_key')
+		AND `key` = PASSWORD('$key')
 		"); 
 		
 		return true;
