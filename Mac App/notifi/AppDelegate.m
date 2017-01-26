@@ -256,7 +256,7 @@ NSImageView *window_up_arrow_view;
         //INITIATE NSTABLE
         _notification_table = [[NSTableView alloc] initWithFrame:_scroll_view.frame];
         NSTableColumn *column =[[NSTableColumn alloc]initWithIdentifier:@"1"];
-        [column setWidth:window_width];
+        [column setWidth:_scroll_view.frame.size.width - 5]; //I swear me needing to do this is a bug
         [_notification_table addTableColumn:column];
         [_notification_table setHeaderView:nil];
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -370,14 +370,8 @@ NSImageView *window_up_arrow_view;
 }
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    NSView *view = [tableView makeViewWithIdentifier:@"MyView" owner:self];
-    
-    NSView * myview = [_notification_views objectAtIndex:row];
-    
-    float height = myview.frame.size.height + (myview.frame.origin.y * 2);
-    NSView* newView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, window_width, height)];
-    [newView addSubview:myview];
-    view = newView;
+    NSView* view = [[NSView alloc] init];
+    [view addSubview:[_notification_views objectAtIndex:row]];
     return view;
 }
 
@@ -439,9 +433,10 @@ int notification_view_padding = 20;
 
 -(NSView*)createNotificationView:(NSString*)title_string message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url time:(NSString*)time_string read:(bool)read rowid:(int)rowid
 {
-    
-    int notification_width = window_width * 0.9;
-    float x = window_width * 0.05;
+    float width_perc = 0.9;
+    int notification_width = _scroll_view.frame.size.width * width_perc;
+    float x = window_width * (1 - width_perc)/2;
+    int y = 5;
     
     int image_width = 70;
     int image_height = 70;
@@ -507,7 +502,7 @@ int notification_view_padding = 20;
     }
     
     //set view frame
-    [view setFrame:CGRectMake(x, 5, notification_width, notification_height - 45)];
+    [view setFrame:CGRectMake(x, y, notification_width, notification_height - 45)];
     
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     view.theid = (int)[arrayofdics count] - rowid - 1;
@@ -709,6 +704,7 @@ int notification_view_padding = 20;
 -(void)newCredentials{
     if(![_credentialsItem.title isEqual: @"Fetching credentials..."]){
         [_credentialsItem setTitle:@"Fetching credentials..."];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"arrayofdics"];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             NSString *alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
             NSMutableString *credential_key = [NSMutableString stringWithCapacity:25];
@@ -757,6 +753,10 @@ int notification_view_padding = 20;
                 [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
                 [_credentialsItem setTitle:credential_key];
             }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self closeSocket];
+            });
         });
     }
 }
@@ -774,58 +774,70 @@ bool serverReplied = false;
     reloaded_in_last_2 = false;
 }
 
--(void)handleIncomingNotification:(NSString*)json{
+-(void)handleIncomingNotification:(NSString*)message{
     serverReplied = true;
-    NSData* data = [json dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary* json_dic = [NSJSONSerialization
-                          JSONObjectWithData:data
-                          options:kNilOptions
-                          error:nil];
-    
-    NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
-    BOOL refresh = false;
-    NSMutableArray* notifications = [[NSMutableArray alloc] init];
-    
-    for (NSDictionary* notification in json_dic) {
-        NSString* firstval = [NSString stringWithFormat:@"%@", notification];;
-        if([[firstval substringToIndex:3]  isEqual: @"id:"]){
-            //TELL SERVER TO DELETE THIS MESSAGE
-            if(streamOpen){
-                [_webSocket send:firstval];
+    if([message  isEqual: @"Invalid Credentials"]){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"Invalid Credentials!"];
+            [alert setInformativeText:@"For some suspicious reason your credentials have been altered. You will now be assigned new ones."];
+            [alert addButtonWithTitle:@"Ok"];
+            [alert runModal];
+            
+            [self newCredentials];
+        });
+    }else{
+        NSData* data = [message dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary* json_dic = [NSJSONSerialization
+                              JSONObjectWithData:data
+                              options:kNilOptions
+                              error:nil];
+        
+        NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
+        BOOL refresh = false;
+        NSMutableArray* notifications = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary* notification in json_dic) {
+            NSString* firstval = [NSString stringWithFormat:@"%@", notification];;
+            if([[firstval substringToIndex:3]  isEqual: @"id:"]){
+                //TELL SERVER TO DELETE THIS MESSAGE
+                if(streamOpen){
+                    [_webSocket send:firstval];
+                }
+            }else{
+                [self storeNotification:notification];
+                refresh = true;
+                [notifications addObject:notification];
             }
-        }else{
-            [self storeNotification:notification];
-            refresh = true;
-            [notifications addObject:notification];
-        }
-    }
-    
-    if(refresh){
-        if([notifications count] <= 5){
-            for (NSDictionary* notification in notifications){
-                [self sendLocalNotification:[notification objectForKey:@"title"]
-                                    message:[notification objectForKey:@"message"]
-                                   imageURL:[notification objectForKey:@"image"]
-                                       link:[notification objectForKey:@"link"]
-                                        _id:[arrayofdics count] + [notifications count]
-                ];
-            }
-        }else{
-            //send notification with ammount of notifications.
-            NSUserNotification *note = [[NSUserNotification alloc] init];
-            [note setHasActionButton:false];
-            [note setTitle:[NSString stringWithFormat:@"You have %d new notifications!",(int)[notifications count]]];
-            [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
-            [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if([arrayofdics count] == 0){
-                [self createBodyWindow];
+        if(refresh){
+            if([notifications count] <= 5){
+                for (NSDictionary* notification in notifications){
+                    [self sendLocalNotification:[notification objectForKey:@"title"]
+                                        message:[notification objectForKey:@"message"]
+                                       imageURL:[notification objectForKey:@"image"]
+                                           link:[notification objectForKey:@"link"]
+                                            _id:[arrayofdics count] + [notifications count]
+                    ];
+                }
             }else{
-                [self reloadData];
+                //send notification with ammount of notifications.
+                NSUserNotification *note = [[NSUserNotification alloc] init];
+                [note setHasActionButton:false];
+                [note setTitle:[NSString stringWithFormat:@"You have %d new notifications!",(int)[notifications count]]];
+                [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
+                [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
             }
-        });
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if([arrayofdics count] == 0){
+                    [self createBodyWindow];
+                }else{
+                    [self reloadData];
+                }
+            });
+        }
     }
 }
 
@@ -1020,20 +1032,15 @@ bool receivedPong = false;
         [_webSocket sendPing:nil];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             [NSThread sleepForTimeInterval:2.0f];
-            [self hasReceivedPong];
+            if(!receivedPong){
+                [self closeSocket];
+            }
         });
-    }
-}
-
--(void)hasReceivedPong{
-    if(!receivedPong){
-        [self closeSocket];
     }
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
-    NSLog(@"Websocket Connected");
     streamOpen = true;
     [self setNotificationMenuBar];
 }
@@ -1063,8 +1070,6 @@ bool receivedPong = false;
     receivedPong = true;
 }
 
-
-#pragma mark - telnet
 
 BOOL streamOpen = false;
 - (void)sendCode{
