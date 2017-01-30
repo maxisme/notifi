@@ -44,6 +44,7 @@
 -(void)markAsRead:(bool)read index:(int)index;
 -(void)deleteNotification:(int)index;
 -(NSString*)notificationLink:(int)index;
+-(NSString*)imageLink:(int)index;
 
 
 @end

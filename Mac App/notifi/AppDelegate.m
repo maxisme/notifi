@@ -12,6 +12,7 @@
 // ----- notification view interface -----
 @interface MyNotificationView: NSView
 @property (nonatomic) int theid;
+@property (nonatomic) NSString* link;
 @property (atomic, weak) AppDelegate* thisapp;
 @end
 
@@ -26,10 +27,19 @@
     
     [theMenu insertItemWithTitle:@"Delete notification" action:@selector(deleteNoti) keyEquivalent:@"" atIndex:1];
     
+    [theMenu addItem:[NSMenuItem separatorItem]];
     NSString* url = [_thisapp notificationLink:_theid];
     if(![url  isEqual: @" "] && url != nil){
-        [theMenu addItem:[NSMenuItem separatorItem]];
-        [theMenu insertItemWithTitle:@"Open Link" action:@selector(openLink) keyEquivalent:@"" atIndex:1];
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open Link" action:@selector(openLink:) keyEquivalent:@""];
+        [menuItem setRepresentedObject:url];
+        [theMenu addItem:menuItem];
+    }
+    
+    NSString* imageLink = [_thisapp imageLink:_theid];
+    if(![imageLink  isEqual: @" "] && imageLink != nil){
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open Image" action:@selector(openLink:) keyEquivalent:@""];
+        [menuItem setRepresentedObject:imageLink];
+        [theMenu addItem:menuItem];
     }
     
     [NSMenu popUpContextMenu:theMenu withEvent:event forView:(id)self];
@@ -51,9 +61,18 @@
     [_thisapp deleteNotification:_theid];
 }
 
-- (void)openLink{
-    [self markRead];
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_thisapp notificationLink:_theid]]];
+- (void)openLink:(id)sender{
+    NSString* url = @"";
+    if([sender representedObject]){
+        url = [sender representedObject];
+    }else{
+        url = sender;
+    }
+    
+    if(![url  isEqual: @""]){
+        [self markRead];
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+    }
 }
 @end
 
@@ -91,7 +110,7 @@
 - (void)mouseUp:(NSEvent *)event
 {
     if(![super.link  isEqual: @" "] && super.link != nil){
-        [(MyNotificationView*)self.superview openLink];
+        [(MyNotificationView*)self.superview openLink:super.link];
     }
 }
 @end
@@ -227,10 +246,11 @@ NSImageView *window_up_arrow_view;
     //----------------- top stuff -----------------
     int top_bar_height = 90;
     
-    NSImage *icon = [self resizeImage:[NSImage imageNamed:@"bell.png"] size:NSMakeSize(50, 50)];
-    
-    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(80/2), window_height-top_bar_height, 80, 80)];
+    NSImage *icon = [NSImage imageNamed:@"bell.png"];
+    int image_height = 50;
+    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(image_height/2), window_height-top_bar_height + image_height/4, image_height, image_height)];
     [iconView setImage:icon];
+    [iconView setImageScaling:NSImageScaleProportionallyUpOrDown];
     [_view addSubview:iconView];
     
     NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - top_bar_height, window_width, 1)];
@@ -529,12 +549,11 @@ int notification_view_padding = 20;
     if(![imgURL isEqual: @" "]){
         [[[AsyncImageDownloader alloc] initWithMediaURL:imgURL successBlock:^(NSImage *image){
             NSRect imageRect = NSMakeRect(7,view.frame.size.height - image_height - 7,image_width,image_height);
-            NSSize size = NSMakeSize(image_width, image_height);
-            NSImage *newImg = [self resizeImage:image size:size];
             
             NSImageView *image_view = [[NSImageView alloc] initWithFrame:imageRect];
+            [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
             image_view.bounds = imageRect;
-            image_view.image  = newImg;
+            image_view.image  = image;
             [view addSubview:image_view];
         } failBlock:^(NSError *error) {
             NSLog(@"Failed to download image due to %@!", error);
@@ -871,6 +890,12 @@ bool serverReplied = false;
     NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
     NSMutableDictionary *dic = [[arrayofdics objectAtIndex:index] mutableCopy];
     return [dic objectForKey:@"link"];
+}
+
+-(NSString*)imageLink:(int)index{
+    NSMutableArray *arrayofdics = [[[NSUserDefaults standardUserDefaults] objectForKey:@"arrayofdics"] mutableCopy];
+    NSMutableDictionary *dic = [[arrayofdics objectAtIndex:index] mutableCopy];
+    return [dic objectForKey:@"image"];
 }
 
 -(void)markAsRead:(bool)read index:(int)index{
@@ -1270,45 +1295,6 @@ BOOL streamOpen = false;
     
     //failed
     return @"";
-}
-
-- (NSImage*) resizeImage:(NSImage*)sourceImage size:(NSSize)size{
-    
-    NSRect targetFrame = NSMakeRect(0, 0, size.width, size.height);
-    NSImage*  targetImage = [[NSImage alloc] initWithSize:size];
-    
-    NSSize sourceSize = [sourceImage size];
-    
-    float ratioH = size.height/ sourceSize.height;
-    float ratioW = size.width / sourceSize.width;
-    
-    NSRect cropRect = NSZeroRect;
-    if (ratioH >= ratioW) {
-        cropRect.size.width = floor (size.width / ratioH);
-        cropRect.size.height = sourceSize.height;
-    } else {
-        cropRect.size.width = sourceSize.width;
-        cropRect.size.height = floor(size.height / ratioW);
-    }
-    
-    cropRect.origin.x = floor( (sourceSize.width - cropRect.size.width)/2 );
-    cropRect.origin.y = floor( (sourceSize.height - cropRect.size.height)/2 );
-    
-    
-    
-    [targetImage lockFocus];
-    
-    [sourceImage drawInRect:targetFrame
-                   fromRect:cropRect       //portion of source image to draw
-                  operation:NSCompositeCopy  //compositing operation
-                   fraction:1.0              //alpha (transparency) value
-             respectFlipped:YES              //coordinate system
-                      hints:@{NSImageHintInterpolation:
-                                  [NSNumber numberWithInt:NSImageInterpolationLow]}];
-    
-    [targetImage unlockFocus];
-    
-    return targetImage;
 }
 
 #pragma mark - quit
