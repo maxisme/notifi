@@ -126,7 +126,7 @@
     [self createStatusBarItem];
     
     [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(check) userInfo:nil repeats:YES];
-    [NSTimer scheduledTimerWithTimeInterval:30.0f target:self selector:@selector(sendPing:) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:30.0f target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
     [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateTimes) userInfo:nil repeats:YES];
     
     //mark menu item
@@ -982,14 +982,16 @@ bool serverReplied = false;
 
 - (void) userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
-    int theid = [notification.userInfo[@"id"] intValue];
-    if(theid){
+    bool openWindow = true;
+    if(notification.userInfo[@"id"]){
+        int theid = [notification.userInfo[@"id"] intValue];
         NSString* url_string = notification.userInfo[@"url"];
         
         NSURL* url;
         if(![url_string  isEqual: @" "]){
             @try {
                 url = [NSURL URLWithString:url_string];
+                openWindow = false;
             } @catch (NSException *exception) {
                 NSLog(@"error with link url");
             }
@@ -999,14 +1001,15 @@ bool serverReplied = false;
             [[NSWorkspace sharedWorkspace] openURL:url];
         
         [self markAsRead:true index:theid - 1];
-        [center removeDeliveredNotification: notification];
     }
+    if (openWindow)
+        [self showWindow];
+    [center removeDeliveredNotification: notification];
 }
 
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
     return YES;
 }
-
 
 #pragma mark - socketRocket
 
@@ -1025,7 +1028,7 @@ bool serverReplied = false;
 }
 
 bool receivedPong = false;
-- (void)sendPing:(id)sender;
+- (void)sendPing;
 {
     if(streamOpen){
         receivedPong = false;
