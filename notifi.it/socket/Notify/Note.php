@@ -16,7 +16,7 @@ SET isConnected = 0
 
 class Note implements MessageComponentInterface { 
     protected $clients;
-	protected $clientCodes = array();
+	protected $credential;
 
     public function __construct() {
         $this->clients = new \SplObjectStorage; 
@@ -38,6 +38,8 @@ class Note implements MessageComponentInterface {
 			
 			deleteNotification($id, $credentials);
 		}else{
+			// opening connection message from user
+
 			$arr = explode("|", $msg);
 			$credentials = $arr[0];
 			$key = $arr[1];
@@ -54,37 +56,38 @@ class Note implements MessageComponentInterface {
 			}
 
 			foreach ($this->clients as $client) {
-				if ($from === $client) { //current client only
-					$client->clientCode = $credentials;
+				if (!isset($client->credential) && $from === $client) { //current client only
+					echo myHash($credentials);
+					$client->credential = myHash($credentials);
 					$this->sendNotifications($client);
-					userConnected($client->clientCode, true);
+					userConnected($client->credential, true);
 				}
 			}
 		} 
     }
 	
-	public function onCurl($credentials) {
+	public function onCurl($hashedCredentials) {
 		foreach ($this->clients as $client) {
-			if($credentials == $client->clientCode){
+			if(isset($client->credential) && $hashedCredentials == $client->credential){
 				$this->sendNotifications($client);
 			}
         }
 	}
 	
 	public function sendNotifications($client){
-		$credentials = $client->clientCode;
-		if(!empty($credentials)){
-			$query = getNotifications($credentials);
+		$hashedCredentials = $client->credential;
+		echo "\nsend note to: $hashedCredentials";
+		if(!empty($hashedCredentials)){
+			$query = getNotifications($hashedCredentials);
 			if($query != ""){
 				$stack = array();
 				while($row = mysqli_fetch_assoc($query)){
 					array_push($stack, $row);
 					$id = $row['id'];
-					array_push($stack,"id:".encrypt($id."|".$credentials));
+					// client sends this back for server to delete message
+					array_push($stack, "id:".encrypt($id."|".$hashedCredentials));
 				}
 				$client->send(json_encode($stack));
-
-				echo "\n".date("r")." - sent message to:$client->clientCode";
 			}else{
 				$client->send("1");
 			}
@@ -95,7 +98,7 @@ class Note implements MessageComponentInterface {
 		echo "\nconnection closed";
 		foreach ($this->clients as $client) {
 			if ($conn == $client) {
-				userConnected($client->clientCode, false);
+				userConnected($client->credential, false);
 			}
 		} 
         $this->clients->detach($conn);
