@@ -63,10 +63,11 @@
 
 - (void)openLink:(id)sender{
     NSString* url = @"";
-    if([sender representedObject]){
-        url = [sender representedObject];
-    }else{
+    if([sender isKindOfClass:[NSString class]]){
+        //passed string param
         url = sender;
+    }else{
+        url = [sender representedObject];
     }
     
     if(![url  isEqual: @""]){
@@ -437,6 +438,8 @@ bool reloaded_in_last_2 = false;
 -(void)reload{
     dispatch_async(dispatch_get_main_queue(), ^{
         reloaded_in_last_2 = true;
+        _time_labels = nil;
+        _notification_views = nil;
         _time_labels = [[NSMutableArray alloc] init];
         _notification_views = [[NSMutableArray alloc] init];
         
@@ -606,7 +609,7 @@ int notification_view_padding = 20;
     //get nsdate
     NSDateFormatter *serverFormat = [[NSDateFormatter alloc]init];
     [serverFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [serverFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"EST"]]; //server time zone `date +%Z`
+    [serverFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]]; //server time zone `date +%Z`
     NSDate *date = [serverFormat dateFromString:time_string];
     
     //change to local time zone
@@ -660,6 +663,7 @@ int notification_view_padding = 20;
 -(void)updateTimes{
     for(MyLabel* time_label in _time_labels){
         NSString* timestr = [NSString stringWithFormat:@"%@ %@", time_label.str_time, [self dateDiff:time_label.time]];
+        NSLog(@"update time: %@",timestr);
         [time_label setStringValue:timestr];
     }
 }
@@ -932,11 +936,12 @@ bool serverReplied = false;
     
     if(notification_count == 1){
         _scroll_view.documentView = [self noNotificationsView];
-    }else{
-        [arrayofdics removeObjectAtIndex:index];
-        [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
-        [_notification_views removeObjectAtIndex:notification_count - index - 1];
     }
+    
+    [arrayofdics removeObjectAtIndex:index];
+    [[NSUserDefaults standardUserDefaults] setObject:arrayofdics forKey:@"arrayofdics"];
+    [_notification_views removeObjectAtIndex:notification_count - index - 1];
+    [_time_labels removeObjectAtIndex:notification_count - index - 1];
     
     [self reloadData];
 }
@@ -958,7 +963,8 @@ bool serverReplied = false;
         [alert setAlertStyle:NSWarningAlertStyle];
         
         if ([alert runModal] == NSAlertFirstButtonReturn) {
-            _notification_views = nil;
+            [self reloadData];
+            
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"arrayofdics"];
             [self createBodyWindow];
         }
@@ -1160,6 +1166,10 @@ BOOL streamOpen = false;
     NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"Create New Credentials" action:@selector(createNewCredentials) keyEquivalent:@"n"];
     [newCredentials setTarget:self];
     [mainMenu addItem:newCredentials];
+    
+//    NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"Do not disturb" action:@selector(createNewCredentials) keyEquivalent:@"n"];
+//    [newCredentials setTarget:self];
+//    [mainMenu addItem:newCredentials];
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     

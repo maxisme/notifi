@@ -34,7 +34,7 @@ $email_user = trim(file_get_contents("/var/www/notifi.it/email.user"));
 $email_pass = trim(file_get_contents("/var/www/notifi.it/email.pass"));
 $email_server = trim(file_get_contents("/var/www/notifi.it/email.server"));
 
-require '../vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
+require_once "../../vendor/autoload.php";
 
 $mail = new PHPMailer;
 
