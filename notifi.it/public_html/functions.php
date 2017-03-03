@@ -13,23 +13,22 @@ function connect(){
 		die("error connecting to database");
 	} 
 	return $con; 
-} 
+}
 
-function getNotifications($credentials){
-	$credentials = clean($credentials);
+function getNotifications($hashedCredentials){
+	$hashedCredentials = clean($hashedCredentials);
 	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$con = connect();
 	$query = mysqli_query($con, "SELECT
 	id,
 	DATE_FORMAT(time, '%Y-%m-%d %T') as time,
-	AES_DECRYPT(credentials, '$key') as credentials,
 	AES_DECRYPT(title, '$key') as title, 
 	AES_DECRYPT(message, '$key')as message,
 	AES_DECRYPT(image, '$key') as image,
 	AES_DECRYPT(link, '$key') as link
 	FROM `notifications`
-	WHERE credentials = AES_ENCRYPT('$credentials', '$key')
+	WHERE credentials = '$hashedCredentials'
 	AND title != ''
 	ORDER BY time ASC
 	");
@@ -43,41 +42,27 @@ function getNotifications($credentials){
 
 function deleteNotification($id, $credentials){
 	$credentials = clean($credentials);
-	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
 	
 	$con = connect();
 	$id = mysqli_real_escape_string($con, $id);
 	mysqli_query($con, "DELETE 
 	FROM `notifications`
 	WHERE `id`=$id 
-	AND `credentials`=AES_ENCRYPT('$credentials', '$key')");
+	AND `credentials`= '$credentials'");
 }
 
-function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0){
+function isBruteForce($credentials = " ", $perMin = 0){
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$ip_limit = 20;
 	$cred_limit = 20;
 	$ip_to_cred_limit = 10;
 	
 	//STORE BRUTE FORCE IP
-	$mysqli = new mysqli("localhost", "$db_user", "$db_pass", 'notifi');
-	if ($mysqli->connect_error) {
-		die('Connect Error (' . $mysqli->connect_errno . ') '. $mysqli->connect_error);
-	}
-
-	$stmt = $mysqli->prepare("INSERT INTO `brute_force` (`credentials`, `ip`) VALUES (
-	AES_ENCRYPT(?,'$key'), 
-	AES_ENCRYPT(?,'$key')
-	);");
-
-	$stmt->bind_param('ss', $credentials, $ip);
-	$stmt->execute();
-	$stmt->close();
-	$mysqli->close();
-	
-	
-	//CHECK IF BRUTE FORCE - TODO:SELECT NEEDS TO BE CHANGED TO OBJECT
 	$con = connect();
+	
+	mysqli_query($con, "INSERT INTO `brute_force` 
+	(`credentials`, `ip`) 
+	VALUES ('".myHash($credentials)."', '".myHash($ip)."')");
 	
 	//delete all requests that are over a minute old
 	mysqli_query($con, "DELETE
@@ -89,7 +74,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 	//limit ammount of requests per ip
 	$limit_ip_query = mysqli_query($con, "SELECT id
 	FROM `brute_force`
-	WHERE ip = AES_ENCRYPT('$ip', '$key')
+	WHERE ip = '".myHash($ip)."'
 	AND `time` >= date_sub(now(), interval 1 minute)
 	"); 
 
@@ -105,7 +90,7 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 		//limit ammount of requests to user credential
 		$limit_cred_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
-		WHERE credentials = AES_ENCRYPT('$credentials', '$key')
+		WHERE credentials = '".myHash($credentials)."'
 		AND `time` >= date_sub(now(), interval 1 minute)
 		");
 
@@ -116,8 +101,8 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 		//limit ammount of requests per ip to user credential 
 		$limit_spec_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
-		WHERE credentials = AES_ENCRYPT('$credentials', '$key')
-		AND ip = AES_ENCRYPT('$ip', '$key')
+		WHERE credentials = '".myHash($credentials)."'
+		AND ip = '".myHash($ip)."'
 		AND `time` >= date_sub(now(), interval 1 minute)
 		");
 
@@ -129,22 +114,20 @@ function isBruteForce($db_user, $db_pass, $key, $credentials = " ", $perMin = 0)
 }
 
 function isValidUser($credentials, $key){
-	$encryption_key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
-	
 	$con = connect();
 
 	$users = mysqli_query($con, "SELECT id
 	FROM `users`
-	WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
-	AND `key` = PASSWORD('$key')
+	WHERE `credentials` = '".myHash($credentials)."'
+	AND `key` = '".myHash($key)."'
 	"); 
 
 	if(mysqli_num_rows($users) > 0){
 		//update login time
 		mysqli_query($con, "UPDATE `users`
 		SET `last_login` = now()
-		WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
-		AND `key` = PASSWORD('$key')
+		WHERE `credentials` = '".myHash($credentials)."'
+		AND `key` = '".myHash($key)."'
 		"); 
 		
 		return true;
@@ -153,19 +136,12 @@ function isValidUser($credentials, $key){
 	return false;
 }
 
-function filter_str($string){
-	$string = str_replace("--begin", "__begin", $string);
-	$string = str_replace("--end", "__end", $string);
-	return $string;
-}
-
-function userExists($credentials){
-	$encryption_key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
+function userExists($hashedCredentials){
 	$con = connect();
 
 	$users = mysqli_query($con, "SELECT id
 	FROM `users`
-	WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
+	WHERE `credentials` = '$hashedCredentials'
 	"); 
 
 	if(mysqli_num_rows($users) > 0){
@@ -174,15 +150,14 @@ function userExists($credentials){
 	return false;
 }
 
-function userConnected($credentials, $isConnected){
-	$encryption_key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
+function userConnected($hashedCredentials, $isConnected){
 	$con = connect();
 	
 	$isConnected = (int)$isConnected;
 	
 	mysqli_query($con, "UPDATE `users`
 	SET isConnected = $isConnected
-	WHERE `credentials` = AES_ENCRYPT('$credentials', '$encryption_key')
+	WHERE `credentials` = '$hashedCredentials'
 	"); 
 }
 
@@ -242,5 +217,9 @@ function decrypt($string){
 		$iv,
 		$tag
 	);
+}
+
+function myHash($str){
+	return hash("sha256",$str);
 }
 ?>
