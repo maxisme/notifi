@@ -5,7 +5,7 @@ project_name="notifi"
 project_type=".xcworkspace"
 project_path="/Users/maxmitch/Documents/notifi/Mac App/"
 dev_team="3H49MXS325"
-zip_project_output="/Users/maxmitch/Documents/notifi/notifi.it/notifi.zip"
+zip_project_output="/Users/maxmitch/Documents/notifi/notifi.it/public_html/notifi.zip"
 
 #NOT IMPORTANT INITIAL VARIABLES
 xcode_project=$project_path$project_name$project_type
@@ -56,7 +56,7 @@ git push origin master
 
 #upload to website
 server_path=$(cat "/Users/maxmitch/Documents/notifi/server.path")
-scp "$zip_project_output" $server_path
+scp -P 606 "$zip_project_output" $server_path
 
 #remove temp files used in build
 echo "cleaning up..."
