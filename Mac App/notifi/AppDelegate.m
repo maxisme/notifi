@@ -751,30 +751,30 @@ int notification_view_padding = 20;
                                                         error:&error];
             NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
             
-            if([content length] != 100){
-                NSAlert *alert = [[NSAlert alloc] init];
-                [alert setMessageText:@"Error Fetching credentials!"];
-                [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
-                [alert addButtonWithTitle:@"Ok"];
-                [alert runModal];
-            }else if([content  isEqual: @"0"]){
-                [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
-                NSAlert *alert = [[NSAlert alloc] init];
-                [alert setMessageText:@"Error credentials already registered!"];
-                [alert setInformativeText:@"Please try again."];
-                [alert addButtonWithTitle:@"Ok"];
-                [alert runModal];
-            }else if(error){
-                [_credentialsItem setTitle:@"Error Fetching credentials!"];
-                NSAlert *alert = [[NSAlert alloc] init];
-                [alert setMessageText:@"Error Fetching credentials!"];
-                [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
-                [alert addButtonWithTitle:@"Ok"];
-                [alert runModal];
-            }else{
+            if([content length] == 100){
                 [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
                 [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
                 [_credentialsItem setTitle:credential_key];
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSAlert *alert = [[NSAlert alloc] init];
+                    if([content length] != 100){
+                        [alert setMessageText:@"Error Fetching credentials!"];
+                        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
+                        [alert addButtonWithTitle:@"Ok"];
+                    }else if([content  isEqual: @"0"]){
+                        [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
+                        [alert setMessageText:@"Error credentials already registered!"];
+                        [alert setInformativeText:@"Please try again."];
+                        [alert addButtonWithTitle:@"Ok"];
+                    }else if(error){
+                        [_credentialsItem setTitle:@"Error Fetching credentials!"];
+                        [alert setMessageText:@"Error Fetching credentials!"];
+                        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
+                        [alert addButtonWithTitle:@"Ok"];
+                    }
+                    [alert runModal];
+                });
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
