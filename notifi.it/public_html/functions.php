@@ -1,5 +1,4 @@
 <?php
-
 function clean($string) {
    $string = str_replace(' ', '', $string); // removes all spaces
    return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
@@ -196,43 +195,52 @@ function randomString($length) {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
-} 
+}
 
 function encrypt($string){
+	$tag_length = 16;
+	$algo = 'aes-256-gcm';
+
+	$tag = random_bytes($tag_length);
+	$iv   = random_bytes(openssl_cipher_iv_length($algo));
 	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
-	
-	$iv = mcrypt_create_iv(
-		mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC),
-		MCRYPT_DEV_URANDOM
+
+	$encr = openssl_encrypt(
+		$string,
+		$algo,
+		$key,
+		OPENSSL_RAW_DATA,
+		$iv,
+		$tag
 	);
 
-	return base64_encode(
-		$iv .
-		mcrypt_encrypt(
-			MCRYPT_RIJNDAEL_256,
-			hash('sha256', $key, true),
-			$string,
-			MCRYPT_MODE_CBC,
-			$iv
-		)
-	);
+	//echo "tag: $tag<br>iv:$iv<br>encr:$encr";
+
+	return utf8_encode($tag.$iv.$encr);
 }
 
 function decrypt($string){
-	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
-	
-	$data = base64_decode($string);
-	$iv = substr($data, 0, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
+	$string = utf8_decode($string);
 
-	return rtrim(
-		mcrypt_decrypt(
-			MCRYPT_RIJNDAEL_256,
-			hash('sha256', $key, true),
-			substr($data, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC)),
-			MCRYPT_MODE_CBC,
-			$iv
-		),
-		"\0"
+	$tag_length = 16;
+	$algo = 'aes-256-gcm';
+
+	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
+	$iv_size = openssl_cipher_iv_length($algo);
+
+	$tag = substr($string, 0, $tag_length);
+	$iv = substr($string, $tag_length, $iv_size);
+	$ciphertext = substr($string,$tag_length + $iv_size);
+
+	//echo "tag: $tag<br>iv:$iv<br>encr:$ciphertext";
+
+	return openssl_decrypt(
+		$ciphertext,
+		$algo,
+		$key,
+		OPENSSL_RAW_DATA,
+		$iv,
+		$tag
 	);
 }
 ?>

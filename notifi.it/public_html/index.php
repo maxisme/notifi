@@ -1,5 +1,7 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -48,7 +50,7 @@ session_start();
 			<a id="down" href="download">download</a><br/><br/>
 		</div>
 	</page> 
-
+ 
 	<!-- HOW IT WORKS -->
 	<page id="howitworks">
 		<h2>How It Works</h2>
@@ -57,19 +59,19 @@ session_start();
 				Notifi is a <strong>FREE</strong>, minimal <strong>Push Notification app</strong> that sits in your MAC OSX menu bar. When you open the app for the first time you are given a key that uniquely identifys you. <em>Blured in the image below:</em>
 			</p>
 			<p>
-				<img width="30%" src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
+				<img style="zoom:98.6%" src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
 			</p>
 			<p class="info">
 				With this key you can send HTTP requests to receive notifications on your mac.
 			</p>
 			<p>
-				<img width="30%" src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
+				<img style="zoom:98.6%"  src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
 			</p>
 			<h3>Okay I have downloaded it. Now what?</h3>
 			<p class="info">
 				First click on Notifi which will appear on your menu bar at the top of your Mac. Here you can open your notifications and get your unique <strong>Credentials</strong>.<br/><br/> Send a notification with your desired programming language or through the terminal - <a target="_blank" href="https://github.com/maxisme/notifi#http-request-examples">See examples</a>.
 				<p>
-					<img width="30%" src="https://raw.githubusercontent.com/maxisme/notifi/master/Screen%20Shots/Notification.png">
+					<img style="zoom:98.6%" src="https://raw.githubusercontent.com/maxisme/notifi/master/Screen%20Shots/Notification.png">
 				</p>
 			</p>
 			<h3>Want to know more?</h3>
@@ -80,7 +82,7 @@ session_start();
 			<p class="info">
 				There are currently
 				<?php 
-				require "/var/www/notifi.it/socket/db.php";
+				require "/var/www/notifi.it/socket/functions.php";
 				$con = connect();
 
 				$query = mysqli_query($con, "SELECT connected

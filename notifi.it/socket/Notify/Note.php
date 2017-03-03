@@ -6,7 +6,7 @@ use Ratchet\ConnectionInterface;
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-require "/var/www/notifi.it/socket/db.php";
+require "/var/www/notifi.it/public_html/functions.php";
 
 //set all users as not connected in table
 $con = connect();
@@ -93,9 +93,11 @@ class Note implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $conn) {
 		echo "\nconnection closed";
-		foreach($this->clients as $client){ //misleading as there will only ever be one client...
-			userConnected($client->clientCode, false);
-		}
+		foreach ($this->clients as $client) {
+			if ($conn == $client) {
+				userConnected($client->clientCode, false);
+			}
+		} 
         $this->clients->detach($conn);
     }
 

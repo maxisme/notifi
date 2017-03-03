@@ -5,7 +5,7 @@ $db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
 $db_user = trim(file_get_contents(dirname(__DIR__)."/db.user"));
 $key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 
-require "/var/www/notifi.it/socket/db.php";
+require "/var/www/notifi.it/public_html/functions.php";
 
 $word_limit = 20000;
 //post data

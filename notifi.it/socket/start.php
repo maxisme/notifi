@@ -1,5 +1,5 @@
 <?php
-require '/var/www/notifi.it/socket/vendor/autoload.php';
+require '/var/www/notifi.it/vendor/autoload.php';
 
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
@@ -11,7 +11,7 @@ $note = new Note();
 $ws = new WsServer($note);
 $ws->disableVersion(0); // old, bad, protocol version
 
-$server = IoServer::factory(
+$server = IoServer::factory( 
 	new HttpServer($ws),
 	1203
 ); 
