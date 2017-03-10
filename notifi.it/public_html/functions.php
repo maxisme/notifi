@@ -8,7 +8,7 @@ function connect(){
 	$db_pass = trim(file_get_contents("/var/www/notifi.it/db.pass"));
 	$db_user = trim(file_get_contents("/var/www/notifi.it/db.user"));
 	
-	$con = mysqli_connect("localhost", "$db_user", "$db_pass", 'notifi');
+	$con = mysqli_connect("127.0.0.1", "$db_user", "$db_pass", 'notifi');
 	if (!$con) {
 		die("error connecting to database");
 	} 
@@ -32,7 +32,7 @@ function getNotifications($hashedCredentials){
 	AND title != ''
 	ORDER BY time ASC
 	");
-	
+
 	if(mysqli_num_rows($query) == 0){
 		return "";
 	}
@@ -53,6 +53,7 @@ function deleteNotification($id, $credentials){
 
 function isBruteForce($credentials = " ", $perMin = 0){
 	$ip = $_SERVER['REMOTE_ADDR'];
+	//limits per min
 	$ip_limit = 20;
 	$cred_limit = 20;
 	$ip_to_cred_limit = 10;
@@ -68,8 +69,7 @@ function isBruteForce($credentials = " ", $perMin = 0){
 	mysqli_query($con, "DELETE
 	FROM `brute_force`
 	WHERE `time` < date_sub(now(), interval 1 minute)
-	"); 
-
+	");
 
 	//limit ammount of requests per ip
 	$limit_ip_query = mysqli_query($con, "SELECT id
