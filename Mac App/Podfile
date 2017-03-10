@@ -1,4 +1,5 @@
 target 'notifi' do
   pod 'SocketRocket'
   pod 'AsyncImageDownloaderOSX'
+  pod 'SAMKeychain'
 end

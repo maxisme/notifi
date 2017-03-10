@@ -138,6 +138,11 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self onlyOneInstanceOfApp];
+    
+    //initiate keychain
+    _keychainQuery = [[SAMKeychainQuery alloc] init];
+    _keychainQuery.account = @"notifi.it";
+    
     NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
     if([credentials length] != 25){
         [self newCredentials];
@@ -724,25 +729,16 @@ int notification_view_padding = 20;
     }
 }
 
+bool failedCredentials = false;
 -(void)newCredentials{
     if(![_credentialsItem.title isEqual: @"Fetching credentials..."]){
         [_credentialsItem setTitle:@"Fetching credentials..."];
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"arrayofdics"];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
-            NSString *alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
-            NSMutableString *credential_key = [NSMutableString stringWithCapacity:25];
-            for (NSUInteger i = 0U; i < 25; i++) {
-                u_int32_t r = arc4random() % [alphabet length];
-                unichar c = [alphabet characterAtIndex:r];
-                [credential_key appendFormat:@"%C", c];
-            }
-            
-            NSString *urlString = [NSString stringWithFormat:@"https://notifi.it/getCode.php?credentials=%@",credential_key];
-            urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            NSURL *url = [NSURL URLWithString:urlString];
+            NSURL *url = [NSURL URLWithString:@"https://notifi.it/getCode.php"];
             NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
-                                                        cachePolicy:NSURLRequestReturnCacheDataElseLoad
-                                                    timeoutInterval:30];
+                                                        cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                    timeoutInterval:3];
             NSData *urlData;
             NSURLResponse *response;
             NSError *error;
@@ -751,28 +747,32 @@ int notification_view_padding = 20;
                                                         error:&error];
             NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
             
-            if([content length] == 100){
-                [[NSUserDefaults standardUserDefaults] setObject:content forKey:@"key"];
-                [[NSUserDefaults standardUserDefaults] setObject:credential_key forKey:@"credentials"];
-                [_credentialsItem setTitle:credential_key];
+            NSString* key = [self jsonToVal:content key:@"key"];
+            NSString* credentials = [self jsonToVal:content key:@"credentials"];
+            
+            if(![key isEqual: @""] && ![credentials isEqual: @""]){
+                failedCredentials = false;
+                [self storeKey:@"credential_key" withPassword:key];
+                [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"];
+                [_credentialsItem setTitle:credentials];
             }else{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSAlert *alert = [[NSAlert alloc] init];
-                    if([content length] != 100){
-                        [alert setMessageText:@"Error Fetching credentials!"];
-                        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
-                        [alert addButtonWithTitle:@"Ok"];
-                    }else if([content  isEqual: @"0"]){
-                        [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
-                        [alert setMessageText:@"Error credentials already registered!"];
-                        [alert setInformativeText:@"Please try again."];
-                        [alert addButtonWithTitle:@"Ok"];
-                    }else if(error){
-                        [_credentialsItem setTitle:@"Error Fetching credentials!"];
-                        [alert setMessageText:@"Error Fetching credentials!"];
+                failedCredentials = true;
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setInformativeText:@"Please try again."];
+                [alert addButtonWithTitle:@"Ok"];
+                if([content  isEqual: @"0"]){
+                    [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
+                    [alert setMessageText:@"Credentials already registered!"];
+                }else{
+                    [_credentialsItem setTitle:@"Error Fetching credentials!"];
+                    [alert setMessageText:@"Error Fetching credentials!"];
+                    if(error){
                         [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
-                        [alert addButtonWithTitle:@"Ok"];
+                    }else{
+                        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
                     }
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [alert runModal];
                 });
             }
@@ -787,12 +787,13 @@ int notification_view_padding = 20;
 #pragma mark - handle icoming notification
 bool serverReplied = false;
 -(void)check{
-    if(!streamOpen){
-        [self openSocket];
-    }else if(!serverReplied){
-        [self sendCode];
+    if(!failedCredentials){
+        if(!streamOpen){
+            [self openSocket];
+        }else if(!serverReplied){
+            [self sendCode];
+        }
     }
-    
     //reset reload count (prevents recursive call) maximum 1 reload ever 2 seconds
     reloaded_in_last_2 = false;
 }
@@ -1108,7 +1109,8 @@ bool receivedPong = false;
 BOOL streamOpen = false;
 - (void)sendCode{
     NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
-    NSString* key = [[NSUserDefaults standardUserDefaults] objectForKey:@"key"];
+    NSString* key = [self getKey:@"credential_key"];
+    
     NSString* message = [NSString stringWithFormat:@"%@|%@", credentials, key];
     if(streamOpen){
         [_webSocket send:message];
@@ -1125,6 +1127,7 @@ BOOL streamOpen = false;
 }
 
 #pragma mark - menu bar
+
 - (void)createStatusBarItem {
     NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
     _statusItem = [statusBar statusItemWithLength:NSSquareStatusItemLength];
@@ -1166,10 +1169,6 @@ BOOL streamOpen = false;
     NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"Create New Credentials" action:@selector(createNewCredentials) keyEquivalent:@"n"];
     [newCredentials setTarget:self];
     [mainMenu addItem:newCredentials];
-    
-//    NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"Do not disturb" action:@selector(createNewCredentials) keyEquivalent:@"n"];
-//    [newCredentials setTarget:self];
-//    [mainMenu addItem:newCredentials];
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
@@ -1281,6 +1280,12 @@ BOOL streamOpen = false;
 
 #pragma mark - special functions
 
+-(NSString*)jsonToVal:(NSString*)json key:(NSString*)key{
+    NSMutableDictionary* dic = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
+    if([dic objectForKey:key]) return [dic objectForKey:key];
+    return @"";
+}
+
 -(NSString *)dateDiff:(NSDate *)convertedDate {
     
     NSDate *todayDate = [NSDate date];
@@ -1305,6 +1310,35 @@ BOOL streamOpen = false;
     
     //failed
     return @"";
+}
+
+#pragma mark - keychain
+-(BOOL)storeKey:(NSString*)service withPassword:(NSString*)pass{
+    NSError* error = nil;
+    
+    _keychainQuery.service = service;
+    [_keychainQuery setPassword:pass];
+    [_keychainQuery save:&error];
+    
+    if(!error) return TRUE;
+    return FALSE;
+}
+
+-(NSString*)getKey:(NSString*)service{
+    NSError* error;
+    
+    _keychainQuery.service = service;
+    [_keychainQuery fetch:&error];
+    
+    if(error){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Error fetching your Key!"];
+        [alert setInformativeText:[NSString stringWithFormat:@"There was an error fetching your key. Please contact hello@notifi.it.\r %@",error]];
+        [alert addButtonWithTitle:@"Ok"];
+        return @" ";
+    }
+    
+    return [_keychainQuery password];
 }
 
 #pragma mark - quit

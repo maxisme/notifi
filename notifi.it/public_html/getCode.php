@@ -9,17 +9,12 @@ $encryption_key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 
 $con = connect();
 
-$credentials = trim(mysqli_real_escape_string($con,$_GET['credentials']));
+if(isBruteForce()) {
+    die("\nToo many requests from IP address try again in 1 minute!");
+}
+
+$credentials = randomString(25);
 $key = randomString(100);
-if(strlen($credentials) != 25){
-	die();
-}
-
-if(isBruteForce($credentials, 2)){
-	die("\nToo many requests from IP address try again in 1 minute!");
-}
-
-$con = connect();
 
 // check if user is already in database
 $result_user = mysqli_query($con, "SELECT id
@@ -36,7 +31,10 @@ $insert_key = mysqli_query($con, "INSERT INTO `users` (`credentials`, `key`) VAL
 );");
 
 if($insert_key){
-	echo $key; //return key
+    die(json_encode(array(
+        "key" => $key,
+        "credentials" => $credentials
+    )));
 }
 
 ?>

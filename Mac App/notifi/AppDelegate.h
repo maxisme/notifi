@@ -9,14 +9,16 @@
 #import <Cocoa/Cocoa.h>
 #import <SRWebSocket.h>
 #import <AsyncImageDownloader.h>
+#import <SAMKeychain.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource>
 
-@property (nonatomic) NSMenuItem* showOnStartupItem;
-@property (nonatomic) NSMenuItem* credentialsItem;
-@property (nonatomic) NSMenuItem* errorItem;
-@property (nonatomic) NSMenuItem* window_item;
-@property (nonatomic) NSStatusItem *statusItem;
+@property SAMKeychainQuery *keychainQuery;
+@property NSMenuItem* showOnStartupItem;
+@property NSMenuItem* credentialsItem;
+@property NSMenuItem* errorItem;
+@property NSMenuItem* window_item;
+@property NSStatusItem *statusItem;
 
 //window
 @property NSColor* black;
@@ -24,17 +26,17 @@
 @property NSColor* red;
 @property NSColor* grey;
 @property NSColor* offwhite;
-@property (nonatomic, weak) NSImageView *window_up_arrow_view;
-@property (nonatomic) NSWindow* window;
-@property (nonatomic, weak) NSView* view;
+@property NSImageView *window_up_arrow_view;
+@property NSWindow* window;
+@property NSView* view;
 @property (strong) NSMutableArray *time_labels;
 @property (strong) NSMutableArray *notification_views;
-@property (nonatomic, strong) NSScrollView *scroll_view;
-@property (nonatomic, strong) NSTableView* notification_table;
+@property (strong) NSScrollView *scroll_view;
+@property (strong) NSTableView* notification_table;
 @property (strong) NSString* split_message;
 
-@property (nonatomic) int notification_id;
-@property (nonatomic) NSMutableArray *alreadyStoredIDs;
+@property int notification_id;
+@property NSMutableArray *alreadyStoredIDs;
 
 //SR
 //@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
@@ -45,7 +47,6 @@
 -(void)deleteNotification:(int)index;
 -(NSString*)notificationLink:(int)index;
 -(NSString*)imageLink:(int)index;
-
 
 @end
 
