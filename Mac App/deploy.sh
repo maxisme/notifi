@@ -56,7 +56,7 @@ git push origin master
 
 #upload to website
 server_path=$(cat "/Users/maxmitch/Documents/notifi/server.path")
-scp -P 606 "$zip_project_output" $server_path
+scp "$zip_project_output" $server_path
 
 #remove temp files used in build
 echo "cleaning up..."
