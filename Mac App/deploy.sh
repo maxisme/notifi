@@ -5,7 +5,7 @@ project_name="notifi"
 project_type=".xcworkspace"
 project_path="/Users/maxmitch/Documents/notifi/Mac App/"
 dev_team="3H49MXS325"
-zip_project_output="/Users/maxmitch/Documents/notifi/notifi.it/public_html/notifi.zip"
+dmg_project_output="/Users/maxmitch/Documents/notifi/notifi.it/public_html/notifi.dmg"
 
 #NOT IMPORTANT INITIAL VARIABLES
 xcode_project=$project_path$project_name$project_type
@@ -46,17 +46,17 @@ if [ $? -ne 0 ]; then
 	countDown
 fi
 
-#zip signed project
 cd "$project_path" || exit
-zip -r -y "$zip_project_output" "$project_name.app"
+
+bash ~/createdmg "$dmg_project_output" "$project_name.app/"
 
 #commit
-git commit "$zip_project_output" -m "Update Mac App - via build script"
+git commit "$dmg_project_output" -m "Update Mac App - via build script"
 git push origin master
 
 #upload to website
 server_path=$(cat "/Users/maxmitch/Documents/notifi/server.path")
-scp "$zip_project_output" $server_path
+scp "$dmg_project_output" $server_path
 
 #remove temp files used in build
 echo "cleaning up..."

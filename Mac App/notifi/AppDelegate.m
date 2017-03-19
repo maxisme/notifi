@@ -421,15 +421,17 @@ NSImageView *window_up_arrow_view;
 }
 
 bool reloaded_in_last_2 = false;
+NSUInteger errorGeneration;
 -(void)reloadData{
     if(!reloaded_in_last_2){ // every 2 seconds reload_count is set to 0
         [self reload];
     }else{
+        errorGeneration++;
+        NSUInteger capturedGeneration = errorGeneration;
         //attempt to reload in two seconds
         //TODO kill previous thread
-        dispatch_async(dispatch_get_global_queue(0,0), ^{
-            [NSThread sleepForTimeInterval:2.0f];
-            [self postReload];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (errorGeneration == capturedGeneration) [self postReload];
         });
     }
 }
@@ -668,7 +670,6 @@ int notification_view_padding = 20;
 -(void)updateTimes{
     for(MyLabel* time_label in _time_labels){
         NSString* timestr = [NSString stringWithFormat:@"%@ %@", time_label.str_time, [self dateDiff:time_label.time]];
-        NSLog(@"update time: %@",timestr);
         [time_label setStringValue:timestr];
     }
 }
