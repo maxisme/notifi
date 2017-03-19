@@ -30,3 +30,5 @@ Mac App/Pods
 Podfile.lock
 server.path
 notifi.it/favicons
+Mac App/keys
+updates.php

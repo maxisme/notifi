@@ -468,6 +468,8 @@ int notification_view_padding = 20;
     float x = window_width * (1 - width_perc)/2;
     int y = 5;
     
+    int title_font_size = 20;
+    
     int image_width = 70;
     int image_height = 70;
     int time_height = 20;
@@ -487,7 +489,7 @@ int notification_view_padding = 20;
     NSMutableParagraphStyle *centredStyle_title = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     NSDictionary *attrs_title = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle_title,
                            NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Raleway-ExtraBold" size:15],
+                           [NSFont fontWithName:@"Raleway-ExtraBold" size:title_font_size],
                            NSFontAttributeName,
                            _black,
                            NSForegroundColorAttributeName,
@@ -546,7 +548,7 @@ int notification_view_padding = 20;
     }
     
     NSShadow *dropShadow = [[NSShadow alloc] init];
-    [dropShadow setShadowColor:_black];
+    [dropShadow setShadowColor:[NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:0.7]];
     [dropShadow setShadowOffset:NSMakeSize(0, 0)];
     [dropShadow setShadowBlurRadius:3.0];
     [view setShadow:dropShadow];
@@ -584,7 +586,7 @@ int notification_view_padding = 20;
         title_field.link = url;
         [title_field setSelectable:NO];
     }
-    title_field.font = [NSFont fontWithName:@"Raleway-ExtraBold" size:15];
+    title_field.font = [NSFont fontWithName:@"Raleway-ExtraBold" size:title_font_size];
     title_field.preferredMaxLayoutWidth = text_width;
     title_field.backgroundColor = [NSColor clearColor];
     [title_field setAlignment:NSTextAlignmentLeft];
@@ -592,7 +594,6 @@ int notification_view_padding = 20;
     title_field.editable = false;
     title_field.bordered = false;
     title_field.attributedStringValue = attributedString_title;
-    [title_field setWantsLayer:true];
     
     [view addSubview:title_field];
     
@@ -1173,6 +1174,10 @@ BOOL streamOpen = false;
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
+    NSMenuItem* updates = [[NSMenuItem alloc] initWithTitle:@"Check for updates..." action:@selector(checkUpdate) keyEquivalent:@""];
+    [updates setTarget:self];
+    [mainMenu addItem:updates];
+    
     _showOnStartupItem = [[NSMenuItem alloc] initWithTitle:@"Open Notifi at login" action:@selector(openOnStartup) keyEquivalent:@""];
     [_showOnStartupItem setTarget:self];
     [mainMenu addItem:_showOnStartupItem];
@@ -1356,5 +1361,10 @@ BOOL streamOpen = false;
     
 }
 
+#pragma mark - sparkle
+
+-(void)checkUpdate{
+    [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdates:NULL];
+}
 
 @end

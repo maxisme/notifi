@@ -50,6 +50,10 @@ cd "$project_path" || exit
 
 bash ~/createdmg "$dmg_project_output" "$project_name.app/"
 
+#remove temp files used in build
+echo "cleaning up..."
+rm -rf "$project_path$project_name.app" "$xcarchive" "$plist"
+
 #commit
 git commit "$dmg_project_output" -m "Update Mac App - via build script"
 git push origin master
@@ -57,9 +61,5 @@ git push origin master
 #upload to website
 server_path=$(cat "/Users/maxmitch/Documents/notifi/server.path")
 scp "$dmg_project_output" $server_path
-
-#remove temp files used in build
-echo "cleaning up..."
-rm -rf "$project_path$project_name.app" "$xcarchive" "$plist"
 
 countDown
