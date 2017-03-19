@@ -7,9 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <SRWebSocket.h>
-#import <AsyncImageDownloader.h>
-#import <SAMKeychain.h>
+#import "SRWebSocket.h"
+#import "AsyncImageDownloader.h"
+#import "SAMKeychain.h"
+#import <Sparkle/Sparkle.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource>
 

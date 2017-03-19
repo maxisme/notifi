@@ -1,10 +1,11 @@
 <p align="center"><img height="150px" src="https://github.com/maxisme/notifi/blob/master/bell.png"></p>
+
 # [Notifi](https://notifi.it/)
 
 ## Usage
-- Install the Notifi [OSX client application](https://notifi.it/download)
+- Install the Notifi [Mac client application](https://notifi.it/download)
 - Create a HTTP request using your chosen method, with the following params:
-  - `credentials` (your credentials given to you by the client-side app)
+  - `credentials` (your credentials given to you by the client-side app) - **Required**
   - `title` (notification title) - **Required**
   - `message` (notification body) - _Optional_
   - `image` (image to send with the notification) - _Optional_
