@@ -60,7 +60,7 @@ class Note implements MessageComponentInterface {
 					echo myHash($credentials);
 					$client->credential = myHash($credentials);
 					$this->sendNotifications($client);
-					userConnected($client->credential, true);
+					userConnected($client->credential, 1);
 				}
 			}
 		} 
@@ -98,7 +98,7 @@ class Note implements MessageComponentInterface {
 		echo "\nconnection closed";
 		foreach ($this->clients as $client) {
 			if ($conn == $client) {
-				userConnected($client->credential, false);
+				userConnected($client->credential, 0);
 			}
 		} 
         $this->clients->detach($conn);

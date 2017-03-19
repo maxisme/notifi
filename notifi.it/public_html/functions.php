@@ -156,7 +156,7 @@ function userConnected($hashedCredentials, $isConnected){
 	$isConnected = (int)$isConnected;
 	
 	mysqli_query($con, "UPDATE `users`
-	SET isConnected = $isConnected
+	SET isConnected = '$isConnected'
 	WHERE `credentials` = '$hashedCredentials'
 	"); 
 }

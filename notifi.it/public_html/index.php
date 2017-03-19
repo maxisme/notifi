@@ -78,21 +78,6 @@ ini_set("display_errors", 1);
 			<p class="info">
 				Notifi is open source on <a target="_blank" href="https://github.com/maxisme/notifi">GitHub</a>.
 			</p>
-			<h3>How many people are using Notifi?</h3>
-			<p class="info">
-				There are currently
-				<?php 
-				require "/var/www/notifi.it/socket/functions.php";
-				$con = connect();
-
-				$query = mysqli_query($con, "SELECT connected
-				FROM `live_user_count`
-				");
-				while($row = mysqli_fetch_assoc($query)){
-					echo $row['connected'];
-					break;
-				}
-			?> users connected.</p>
 		</div>
 	</page>
 

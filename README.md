@@ -81,3 +81,46 @@ ____
 - [ ] fix horizontal scrolling in window
 
 - [ ] Getting weird `Uncommitted CATransaction` errors.
+
+____
+
+## Setup - Ubuntu 14.04
+
+```
+apt-get install nginx
+```
+
+```
+sudo apt-get install python-software-properties software-properties-common
+sudo LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
+sudo apt-get update
+sudo apt-get install php7.1 php7.1-fpm php7.1-mysql
+```
+
+```
+apt-get install mysql-server
+```
+
+```
+apt-get install build-essential libtool autoconf uuid-dev pkg-config git libsodium-dev
+```
+
+```
+wget https://archive.org/download/zeromq_4.1.4/zeromq-4.1.4.tar.gz # Latest tarball on 07/08/2016
+tar -xvzf zeromq-4.1.4.tar.gz
+cd zeromq-4.1.4
+./configure
+make
+sudo make install
+sudo ldconfig
+```
+
+```
+git clone git://github.com/mkoppanen/php-zmq.git
+cd php-zmq
+phpize && ./configure
+make
+sudo make install
+```
+
+Then add the line `extension=zmq.so` to your php `.ini`
