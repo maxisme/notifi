@@ -736,53 +736,47 @@ bool failedCredentials = false;
     if(![_credentialsItem.title isEqual: @"Fetching credentials..."]){
         [_credentialsItem setTitle:@"Fetching credentials..."];
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"arrayofdics"];
-        dispatch_async(dispatch_get_global_queue(0,0), ^{
-            NSURL *url = [NSURL URLWithString:@"https://notifi.it/getCode.php"];
-            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
-                                                        cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                    timeoutInterval:3];
-            NSData *urlData;
-            NSURLResponse *response;
-            NSError *error;
-            urlData = [NSURLConnection sendSynchronousRequest:urlRequest
-                                            returningResponse:&response
-                                                        error:&error];
-            NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
-            
-            NSString* key = [self jsonToVal:content key:@"key"];
-            NSString* credentials = [self jsonToVal:content key:@"credentials"];
-            
-            if(![key isEqual: @""] && ![credentials isEqual: @""]){
-                failedCredentials = false;
-                [self storeKey:@"credential_key" withPassword:key];
-                [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"];
-                [_credentialsItem setTitle:credentials];
+        NSURL *url = [NSURL URLWithString:@"https://notifi.it/getCode.php"];
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
+                                                    cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                timeoutInterval:3];
+        NSData *urlData;
+        NSURLResponse *response;
+        NSError *error;
+        urlData = [NSURLConnection sendSynchronousRequest:urlRequest
+                                        returningResponse:&response
+                                                    error:&error];
+        NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+        
+        NSString* key = [self jsonToVal:content key:@"key"];
+        NSString* credentials = [self jsonToVal:content key:@"credentials"];
+        
+        if(![key isEqual: @""] && ![credentials isEqual: @""]){
+            failedCredentials = false;
+            [self storeKey:@"credential_key" withPassword:key];
+            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"];
+            [_credentialsItem setTitle:credentials];
+        }else{
+            failedCredentials = true;
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setInformativeText:@"Please try again."];
+            [alert addButtonWithTitle:@"Ok"];
+            if([content  isEqual: @"0"]){
+                [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
+                [alert setMessageText:@"Credentials already registered!"];
             }else{
-                failedCredentials = true;
-                NSAlert *alert = [[NSAlert alloc] init];
-                [alert setInformativeText:@"Please try again."];
-                [alert addButtonWithTitle:@"Ok"];
-                if([content  isEqual: @"0"]){
-                    [_credentialsItem setTitle:@"Please click 'Create New Credentials'!"];
-                    [alert setMessageText:@"Credentials already registered!"];
+                [_credentialsItem setTitle:@"Error Fetching credentials!"];
+                [alert setMessageText:@"Error Fetching credentials!"];
+                if(error){
+                    [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
                 }else{
-                    [_credentialsItem setTitle:@"Error Fetching credentials!"];
-                    [alert setMessageText:@"Error Fetching credentials!"];
-                    if(error){
-                        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
-                    }else{
-                        [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
-                    }
+                    [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
                 }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [alert runModal];
-                });
             }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self closeSocket];
-            });
-        });
+            [alert runModal];
+        }
+    
+        [self closeSocket];
     }
 }
 
