@@ -33,7 +33,7 @@ data = {
   'title': 'New download',
   'message': 'Lorem Ipsum',
   'link': 'https://google.com',
-  'img': 'https://imgur.com/someimage.png'
+  'image': 'https://imgur.com/someimage.png'
 }
 
 r = requests.post(('https://notifi.it/api', data=data))
@@ -50,7 +50,7 @@ curl_setopt_array(
       "title" => 'New download',
       "message" => 'Lorem Ipsum',
       "link" => 'https://google.com',
-      "img" => 'https://imgur.com/someimage.png',
+      "image" => 'https://imgur.com/someimage.png',
     )
   )
 );
