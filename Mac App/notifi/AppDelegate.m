@@ -214,9 +214,9 @@ NSImageView *window_up_arrow_view;
     
     // Create a view
     _view = [[self window] contentView];
-    [_view setWantsLayer:YES];
     _view.layer.backgroundColor = [NSColor clearColor].CGColor;
     _view.layer.cornerRadius = 2;
+    [_view setWantsLayer:YES];
     
     //fill background
     NSTextField* bg = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, window_width, window_height-15)];
@@ -411,8 +411,7 @@ NSImageView *window_up_arrow_view;
                                    link:[dic objectForKey:@"link"]
                                    time:[dic objectForKey:@"time"]
                                    read:[[dic objectForKey:@"read"] boolValue]
-                                  rowid:(int)row
-            ].frame.size.height + row_padding;
+                                  rowid:(int)row ].frame.size.height + row_padding;
 }
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
@@ -436,13 +435,13 @@ NSUInteger errorGeneration;
     }
 }
 
--(void)postReload{
+-(void) postReload{
     if(!reloaded_in_last_2){
         [self reload];
     }
 }
 
--(void)reload{
+-(void) reload{
     dispatch_async(dispatch_get_main_queue(), ^{
         reloaded_in_last_2 = true;
         _time_labels = nil;
@@ -468,7 +467,7 @@ int notification_view_padding = 20;
     float x = window_width * (1 - width_perc)/2;
     int y = 5;
     
-    int title_font_size = 20;
+    int title_font_size = 17;
     
     int image_width = 70;
     int image_height = 70;
@@ -552,7 +551,7 @@ int notification_view_padding = 20;
     [dropShadow setShadowOffset:NSMakeSize(0, 0)];
     [dropShadow setShadowBlurRadius:3.0];
     [view setShadow:dropShadow];
-    view.layer.cornerRadius = 10.0f;
+    view.layer.cornerRadius = 7.0f;
     
     
     //body of notification
