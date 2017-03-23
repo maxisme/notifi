@@ -46,23 +46,20 @@ class Note implements MessageComponentInterface {
 
 			if(strlen($credentials) != 25){
 				$from->close();
-			}
-
-			//check if user is valid
-			if(!isValidUser($credentials, $key)){
+			}else if(!isValidUser($credentials, $key)){ //check if user is valid
 				echo "\nilegal login from: $credentials with key:\n$key";
 				$from->send("Invalid Credentials");
 				$from->close();
-			}
-
-			foreach ($this->clients as $client) {
-				if (!isset($client->credential) && $from === $client) { //current client only
-					echo myHash($credentials);
-					$client->credential = myHash($credentials);
-					$this->sendNotifications($client);
-					userConnected($client->credential, 1);
-				}
-			}
+			}else {
+                foreach ($this->clients as $client) {
+                    if (!isset($client->credential) && $from === $client) { //current client only
+                        echo myHash($credentials);
+                        $client->credential = myHash($credentials);
+                        $this->sendNotifications($client);
+                        userConnected($client->credential, 1);
+                    }
+                }
+            }
 		} 
     }
 	
@@ -99,6 +96,7 @@ class Note implements MessageComponentInterface {
 		foreach ($this->clients as $client) {
 			if ($conn == $client) {
 				userConnected($client->credential, 0);
+                $client->credential = NULL;
 			}
 		} 
         $this->clients->detach($conn);
