@@ -124,15 +124,12 @@ function isValidUser($credentials, $key){
 
 	if(mysqli_num_rows($users) > 0){
 		//update login time
-		mysqli_query($con, "UPDATE `users`
+		return mysqli_query($con, "UPDATE `users`
 		SET `last_login` = now()
 		WHERE `credentials` = '".myHash($credentials)."'
 		AND `key` = '".myHash($key)."'
-		"); 
-		
-		return true;
+		");
 	}
-	
 	return false;
 }
 
@@ -142,12 +139,9 @@ function userExists($hashedCredentials){
 	$users = mysqli_query($con, "SELECT id
 	FROM `users`
 	WHERE `credentials` = '$hashedCredentials'
-	"); 
+	");
 
-	if(mysqli_num_rows($users) > 0){
-		return true;
-	}
-	return false;
+    return mysqli_num_rows($users) > 0;
 }
 
 function userConnected($hashedCredentials, $isConnected){
@@ -155,7 +149,7 @@ function userConnected($hashedCredentials, $isConnected){
 	
 	$isConnected = (int)$isConnected;
 	
-	mysqli_query($con, "UPDATE `users`
+	return mysqli_query($con, "UPDATE `users`
 	SET isConnected = '$isConnected'
 	WHERE `credentials` = '$hashedCredentials'
 	"); 

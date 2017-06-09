@@ -28,9 +28,12 @@ class Note implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
+        $con = connect();
+        $msg = mysqli_real_escape_string($con, $msg);
+
 		if(substr($msg,0,3) == "id:"){
 			//handle reply from user to say they have received notification
-			$decrypted_string = decrypt(substr($msg,3,strlen($msg)));
+			$decrypted_string = decrypt(base64_decode(substr($msg,3,strlen($msg))));
 			
 			$arr = explode("|", $decrypted_string);
 			$id = $arr[0];
@@ -39,18 +42,14 @@ class Note implements MessageComponentInterface {
 			deleteNotification($id, $credentials);
 		}else{
 			// opening connection message from user
-
 			$arr = explode("|", $msg);
 			$credentials = $arr[0];
 			$key = $arr[1];
 
 			if(strlen($credentials) != 25){
 				$from->close();
-			}else if(!isValidUser($credentials, $key)){ //check if user is valid
-				echo "\nilegal login from: $credentials with key:\n$key";
-				$from->send("Invalid Credentials");
-				$from->close();
-			}else {
+			}else if(isValidUser($credentials, $key)){
+			    //VALID USER
                 foreach ($this->clients as $client) {
                     if (!isset($client->credential) && $from === $client) { //current client only
                         echo myHash($credentials);
@@ -59,6 +58,10 @@ class Note implements MessageComponentInterface {
                         userConnected($client->credential, 1);
                     }
                 }
+			}else {
+                echo "\nilegal login from: $credentials with key:\n$key";
+                $from->send("Invalid Credentials");
+                $from->close();
             }
 		} 
     }
@@ -73,7 +76,6 @@ class Note implements MessageComponentInterface {
 	
 	public function sendNotifications($client){
 		$hashedCredentials = $client->credential;
-		echo "\nsend note to: $hashedCredentials";
 		if(!empty($hashedCredentials)){
 			$query = getNotifications($hashedCredentials);
 			if($query != ""){
@@ -82,7 +84,7 @@ class Note implements MessageComponentInterface {
 					array_push($stack, $row);
 					$id = $row['id'];
 					// client sends this back for server to delete message
-					array_push($stack, "id:".encrypt($id."|".$hashedCredentials));
+					array_push($stack, "id:".base64_encode(encrypt($id."|".$hashedCredentials)));
 				}
 				$client->send(json_encode($stack));
 			}else{

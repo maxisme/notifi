@@ -23,26 +23,27 @@ if (isset($_POST["link"]))
 
 //validation
 if(empty($credentials) || strlen($credentials) != 25){
-	die("Invalid credentials\n");
+	die("Invalid credentials!\n");
 } 
 
 if(empty($title)){
-	die("You must enter a title\n");
+	die("You must enter a title!\n");
 }else if(strlen($title) > $char_limit){
-	die("Title too long! Must be less than $char_limit charachters\n");
+	die("Title too long! Must be less than $char_limit charachters!\n");
 }
 
 if(empty($message)){
 	$message = " "; 
 }else if(strlen($message) > $char_limit){
-	die("Message too long! Must be less than $char_limit charachters\n");
+	die("Message too long! Must be less than $char_limit charachters!\n");
 }
 
 if(empty($imageURL)){
 	$imageURL = " "; 
 }else{
 	if (!@getimagesize($imageURL)) {
-		echo "$imageURL is not a valid image. Sent without image!\n";
+		echo "Not a valid image. Sent without image!\n";
+        $imageURL = " ";
 	}else {
         $img_size = get_headers($imageURL, 1)["Content-Length"] / 1048576; //bytes to mb
 	    if($img_size > $img_limit) {
@@ -60,7 +61,7 @@ if(empty($link)){
 }
 
 if(isBruteForce($credentials)){
-	die("Too many requests! Please wait a minute.\n");
+	die("You have made too many requests! Please wait a minute.\n");
 }
 
 //check if user exists

@@ -8,9 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SRWebSocket.h"
-#import "AsyncImageDownloader.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "SAMKeychain.h"
 #import <Sparkle/Sparkle.h>
+#import <QuartzCore/QuartzCore.h>
+#import "KPCScaleToFillNSImageView.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource>
 
@@ -43,11 +45,12 @@
 //@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
 @property (nonatomic, strong) SRWebSocket *webSocket;
 
--(bool)notificationRead:(int)index;
--(void)markAsRead:(bool)read index:(int)index;
--(void)deleteNotification:(int)index;
--(NSString*)notificationLink:(int)index;
--(NSString*)imageLink:(int)index;
+-(void)markAsRead:(bool)read notificationID:(int)notificationID;
+-(void)deleteNotification:(int)notificationID;
+
+-(NSString*)notificationLink:(int)notificationID;
+-(NSString*)imageLink:(int)notificationID;
+-(bool)notificationRead:(int)notificationID;
 
 @end
 

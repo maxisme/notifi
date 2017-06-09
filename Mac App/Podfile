@@ -1,6 +1,6 @@
 target 'notifi' do
   pod 'SocketRocket'
-  pod 'AsyncImageDownloaderOSX'
+  pod 'SDWebImage'
   pod 'SAMKeychain'
   pod 'Sparkle'
   use_frameworks!
