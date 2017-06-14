@@ -3,5 +3,6 @@ target 'notifi' do
   pod 'SDWebImage'
   pod 'SAMKeychain'
   pod 'Sparkle'
+  pod 'STHTTPRequest'
   use_frameworks!
 end

@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SRWebSocket.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <STHTTPRequest/STHTTPRequest.h>
 #import "SAMKeychain.h"
 #import <Sparkle/Sparkle.h>
 #import <QuartzCore/QuartzCore.h>
@@ -18,6 +19,7 @@
 
 @property SAMKeychainQuery *keychainQuery;
 @property NSMenuItem* showOnStartupItem;
+@property NSMenuItem* remNotification;
 @property NSMenuItem* credentialsItem;
 @property NSMenuItem* errorItem;
 @property NSMenuItem* window_item;
