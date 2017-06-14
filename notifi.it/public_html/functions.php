@@ -40,27 +40,25 @@ function getNotifications($hashedCredentials){
 	return $query;
 }
 
-function deleteNotification($id, $credentials){
+function deleteNotification($con, $id, $credentials){
 	$credentials = clean($credentials);
-	
-	$con = connect();
 	$id = mysqli_real_escape_string($con, $id);
+
 	mysqli_query($con, "DELETE 
 	FROM `notifications`
 	WHERE `id`=$id 
 	AND `credentials`= '$credentials'");
 }
 
-function isBruteForce($credentials = " ", $perMin = 0){
+function isBruteForce($con, $credentials = " "){
 	$ip = $_SERVER['REMOTE_ADDR'];
 	//limits per min
-	$ip_limit = 20;
-	$cred_limit = 20;
-	$ip_to_cred_limit = 10;
-	
+	$ip_limit = 20; // max a specific IP is alowed to send
+	$cred_limit = 10; // max a user is allowed to receive
+	$ip_to_cred_limit = 5; // max a specific IP to specific credentials
+
+    // ----- db admin ----
 	//STORE BRUTE FORCE IP
-	$con = connect();
-	
 	mysqli_query($con, "INSERT INTO `brute_force` 
 	(`credentials`, `ip`) 
 	VALUES ('".myHash($credentials)."', '".myHash($ip)."')");
@@ -71,7 +69,8 @@ function isBruteForce($credentials = " ", $perMin = 0){
 	WHERE `time` < date_sub(now(), interval 1 minute)
 	");
 
-	//limit ammount of requests per ip
+    // ----- checks ----
+	// $ip_limit
 	$limit_ip_query = mysqli_query($con, "SELECT id
 	FROM `brute_force`
 	WHERE ip = '".myHash($ip)."'
@@ -81,13 +80,9 @@ function isBruteForce($credentials = " ", $perMin = 0){
 	if(mysqli_num_rows($limit_ip_query) > $ip_limit){
 		return true;
 	}
-	
-	if($perMin > 0 && mysqli_num_rows($limit_ip_query) > $perMin){
-		return true;
-	}
 
 	if($credentials != " "){
-		//limit ammount of requests to user credential
+		// $cred_limit
 		$limit_cred_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
 		WHERE credentials = '".myHash($credentials)."'
@@ -98,7 +93,7 @@ function isBruteForce($credentials = " ", $perMin = 0){
 			return true;
 		} 
 
-		//limit ammount of requests per ip to user credential 
+		// $ip_to_cred_limit
 		$limit_spec_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
 		WHERE credentials = '".myHash($credentials)."'
@@ -110,32 +105,33 @@ function isBruteForce($credentials = " ", $perMin = 0){
 			return true;
 		}
 	}
+
 	return false;
 }
 
-function isValidUser($credentials, $key){
-	$con = connect();
-
-	$users = mysqli_query($con, "SELECT id
-	FROM `users`
-	WHERE `credentials` = '".myHash($credentials)."'
+function isValidUser($con, $credentials, $key, $UUID, $app_version){
+	$where_statement = "WHERE `credentials` = '".myHash($credentials)."'
 	AND `key` = '".myHash($key)."'
-	"); 
+	AND `UUID` = '".myHash($UUID)."'";
+
+	// MySQL statements
+	$users = mysqli_query($con, "SELECT id
+	FROM `users` 
+	$where_statement
+	");
 
 	if(mysqli_num_rows($users) > 0){
 		//update login time
-		return mysqli_query($con, "UPDATE `users`
-		SET `last_login` = now()
-		WHERE `credentials` = '".myHash($credentials)."'
-		AND `key` = '".myHash($key)."'
+        $query = mysqli_query($con, "UPDATE `users`
+		SET `last_login` = now(), `app_version` = '$app_version'
+		$where_statement
 		");
+		return $query;
 	}
 	return false;
 }
 
-function userExists($hashedCredentials){
-	$con = connect();
-
+function userExists($con, $hashedCredentials){
 	$users = mysqli_query($con, "SELECT id
 	FROM `users`
 	WHERE `credentials` = '$hashedCredentials'
@@ -145,8 +141,7 @@ function userExists($hashedCredentials){
 }
 
 function userConnected($hashedCredentials, $isConnected){
-	$con = connect();
-	
+    $con = connect();
 	$isConnected = (int)$isConnected;
 	
 	return mysqli_query($con, "UPDATE `users`
