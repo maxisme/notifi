@@ -6,6 +6,7 @@ $con = connect();
 if(isBruteForce($con)) die("\nToo many requests from IP address try again in 1 minute!");
 
 $UUID = mysqli_real_escape_string($con, $_POST['UUID']);
+if(!validUUID($UUID)) die("Invalid UUID");
 
 //get unique credentials
 do {
