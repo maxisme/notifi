@@ -49,8 +49,13 @@ class Note implements MessageComponentInterface {
             $UUID = $arr[2];
             $app_version = $arr[3];
 
-            if(!preg_match("/^\d*\.\d*$/", $app_version)){
+            if(empty($app_version) || !preg_match("/^\d*\.\d*$/", $app_version)){
                 $from->send("Invalid app_version");
+                $from->close();
+            }
+
+            if(empty($UUID) || !validUUID($UUID)){
+                $from->send("Invalid UUID");
                 $from->close();
             }
 

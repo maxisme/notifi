@@ -10,7 +10,7 @@ if(!validUUID($UUID)) die("Invalid UUID");
 
 //get unique credentials
 do {
-    $credentials = "SCqJj4PDPwJtUbn9qyAV6ftFv";
+    $credentials = randomString(25);
     $key = randomString(100);
 
     // check if user is already in database

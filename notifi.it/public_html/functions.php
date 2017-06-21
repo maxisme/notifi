@@ -57,6 +57,11 @@ function isBruteForce($con, $credentials = " "){
 	$cred_limit = 10; // max a user is allowed to receive
 	$ip_to_cred_limit = 5; // max a specific IP to specific credentials
 
+    // validation - pointless MAYBE
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        return true;
+    }
+
     // ----- db admin ----
 	//STORE BRUTE FORCE IP
 	mysqli_query($con, "INSERT INTO `brute_force` 
@@ -70,6 +75,22 @@ function isBruteForce($con, $credentials = " "){
 	");
 
     // ----- checks ----
+
+    // check if ip is in whitelist
+    $whitelist_ip_query = mysqli_query($con,"SELECT ip_limit, cred_limit, ip_to_cred_limit
+    FROM `allowed_ips`
+    INNER JOIN `users`
+    on `users`.UUID = `allowed_ips`.UUID
+    WHERE `allowed_ips`.ip = '$ip'
+    AND `users`.credentials = '".myHash($credentials)."'");
+
+    while ($row = mysqli_fetch_array($whitelist_ip_query)) {
+        $ip_limit = $row['ip_limit'];
+        $cred_limit = $row['cred_limit'];
+        $ip_to_cred_limit = $row['ip_to_cred_limit'];
+        break;
+    }
+
 	// $ip_limit
 	$limit_ip_query = mysqli_query($con, "SELECT id
 	FROM `brute_force`

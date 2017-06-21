@@ -55,6 +55,8 @@
     
     [self addTrackingArea:self.trackingArea];
 }
+
+
 @end
 
 // ----- NotificationImage interface -----
@@ -171,6 +173,7 @@
 
 // ----- notification view interface -----
 @interface MyNotificationView: NSView
+@property (strong) NSTrackingArea* trackingArea;
 @property (nonatomic) int notificationID;
 @property (nonatomic) NSString* link;
 @property (atomic, weak) AppDelegate* thisapp;
@@ -204,11 +207,28 @@
     
     [NSMenu popUpContextMenu:theMenu withEvent:event forView:(id)self];
 }
-- (void)mouseDown:(NSEvent *)event
+
+-(void)updateTrackingAreas
 {
-    //needs to be here for some reason to pass on the mouseup event to the label
+    if(self.trackingArea != nil) {
+        [self removeTrackingArea:self.trackingArea];
+    }
+    
+    int opts = (NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways);
+    self.trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+                                                     options:opts
+                                                       owner:self
+                                                    userInfo:nil];
+    
+    [self addTrackingArea:self.trackingArea];
 }
 
+- (void)mouseDown:(NSEvent *)event
+{
+    // needs to be here for some reason to pass on the mouseup event to the label
+}
+
+// events
 - (void)markRead {
     [_thisapp markAsRead:true notificationID:self.notificationID];
 }
@@ -376,11 +396,8 @@
 
 @end
 
-// ----- window interface ----- 
+// ----- window interface -----
 @interface MyWindow: NSWindow <NSWindowDelegate>
-{
-}
-- (BOOL) canBecomeKeyWindow;
 @end
 
 @implementation MyWindow
@@ -417,43 +434,17 @@
     [NSTimer scheduledTimerWithTimeInterval:30.0f target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
     [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateTimes) userInfo:nil repeats:YES];
     
+    // scroll call back
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onScroll) name:NSViewBoundsDidChangeNotification object:_scroll_view];
+    
     [self createWindow];
+    
+    [self checkUpdate:true];
 }
 
 #pragma mark - window
-
--(void)positionWindow{
-    //position variables
-    float screen_width = [[NSScreen mainScreen] frame].size.width;
-    
-    float window_height = self.window.frame.size.height;
-    float window_width = self.window.frame.size.width;
-    
-    int top_arrow_height = 20;
-    
-    NSRect menu_icon_frame = [[_statusItem valueForKey:@"window"] frame];
-    float menu_icon_width = menu_icon_frame.size.width;
-    float menu_icon_x = menu_icon_frame.origin.x;
-    float menu_icon_y = menu_icon_frame.origin.y;
-    
-    //calculate positions
-    float arrow_x = window_width/2 - (top_arrow_height/2);
-    float arrow_y = window_height - top_arrow_height;
-    
-    float window_x = menu_icon_x - window_width/2 + menu_icon_width/2;
-    float window_y = menu_icon_y - window_height;
-    NSLog(@"x:%f y:%f w:%f h:%f indow_w: %f", window_x, window_y, window_width, window_height, screen_width);
-    if(window_width + window_x > screen_width){ //window is far right
-        int side_padding = 10;
-        window_x = screen_width - window_width - side_padding;
-        arrow_x = menu_icon_x + menu_icon_width/2 - window_x - side_padding;
-    }
-    
-    //update
-    [_window_up_arrow_view setFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
-    [_window setFrame:NSMakeRect(window_x, window_y, window_width, window_height) display:true];
-}
-
+float screen_height; // used when opening new window to check if different screen
+int top_arrow_height;
 -(void)createWindow{
     
     _black = [NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:1.0];
@@ -464,35 +455,35 @@
     
     //position variables
     float screen_width = [[NSScreen mainScreen] frame].size.width;
-    float screen_height = [[NSScreen mainScreen] frame].size.height;
+    screen_height = [[NSScreen mainScreen] frame].size.height;
     
     float window_height = screen_height * 0.7;
     int window_width = 350;
+    top_arrow_height = 20;
     
-    int top_arrow_height = 20;
+    int side_padding = 10;
     
+    //position variables
     NSRect menu_icon_frame = [[_statusItem valueForKey:@"window"] frame];
+    float menu_icon_width = menu_icon_frame.size.width;
     float menu_icon_x = menu_icon_frame.origin.x;
-    float menu_icon_height = menu_icon_frame.size.height;
-    
+    float menu_icon_y = menu_icon_frame.origin.y;
     
     //calculate positions
     float arrow_x = window_width/2 - (top_arrow_height/2);
     float arrow_y = window_height - top_arrow_height;
+    float window_x = (menu_icon_x + menu_icon_width/2) - window_width / 2;
+    float window_y = menu_icon_y - window_height;
     
-    float window_x = menu_icon_x - window_width/2 + menu_icon_frame.size.width/2;
-    float window_y = screen_height - menu_icon_height - window_height;
-    
-    if(window_width + window_x > screen_width){ //window is far right
-        int side_padding = 10;
+    if(window_width + window_x > screen_width){ //window will fall out of screen
         window_x = screen_width - window_width - side_padding;
-        arrow_x = menu_icon_frame.origin.x + menu_icon_frame.size.width/2 - window_x - side_padding;
+        arrow_x = menu_icon_x + menu_icon_width/2 - window_x - side_padding;
     }
     
+    _window = nil; // no idea why you have to do this when creating a new window for different monitor size
     _window = [[MyWindow alloc] initWithContentRect:NSMakeRect(window_x, window_y, window_width, window_height) styleMask:0 backing:NSBackingStoreBuffered defer:YES];
     [_window setIdentifier:@"default"];
-    [_window setOpaque:NO];
-    [_window setBackgroundColor: [NSColor clearColor]];
+    [_window setBackgroundColor:[NSColor clearColor]];
     [_window setReleasedWhenClosed: YES];
     [_window setDelegate:(id)self];
     [_window setHasShadow: YES];
@@ -506,32 +497,29 @@
     prefMenu.target = self;
     
     // Create a view
+    _view = nil;
     _view = [[self window] contentView];
-    _view.layer.backgroundColor = [NSColor clearColor].CGColor;
-    _view.layer.cornerRadius = 2;
     [_view setWantsLayer:YES];
-    
-    NSTextField* bg = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5)  )];
-    bg.backgroundColor = _white;
-    bg.editable = false;
-    bg.bordered = false;
-    bg.wantsLayer = YES;
-    bg.layer.cornerRadius = 10.0f;
-    [_view addSubview:bg];
+    [_view.layer setBackgroundColor:[NSColor clearColor].CGColor];
     
     NSImage* window_up_arrow = [NSImage imageNamed:@"up_arrow.png"];
     _window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
     [_window_up_arrow_view setImage:window_up_arrow];
     [_view addSubview:_window_up_arrow_view];
     
+    NSView *vis_view = [[NSView alloc] initWithFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5))];
+    [vis_view setWantsLayer:YES];
+    //    [vis_view setState:NSVisualEffectStateActive];
+    //    [vis_view setBlendingMode:NSVisualEffectBlendingModeBehindWindow];
+    [vis_view.layer setBackgroundColor:_white.CGColor];
+    vis_view.layer.cornerRadius = 10;
+    [_view addSubview:vis_view];
+    
+    
     [self createBodyWindow];
 }
 
 -(void)createBodyWindow{
-    
-    //----------------- initial variables -----------------
-    prevheight = notification_view_padding;
-    
     //----------------- top stuff -----------------
     int top_bar_height = 90;
     int window_width = _window.frame.size.width;
@@ -558,12 +546,33 @@
     int cog_height = 20;
     int cog_pad = 10;
     MyCog *cogView = [[MyCog alloc] initWithFrame:NSMakeRect(window_width - (cog_height + cog_pad), window_height-(cog_height + top_arrow_height + cog_pad), cog_height, cog_height)];
-    //settings menu
     [cogView setCustomMenu:[self defaultStatusBarMenu]];
     [cogView setImage:cog];
     [cogView setImageScaling:NSImageScaleProportionallyUpOrDown];
     [cogView updateTrackingAreas];
     [_view addSubview:cogView];
+    
+    // network error message
+    MyLabel* error_label = [[MyLabel alloc] initWithFrame:
+                   CGRectMake(
+                              0,
+                              iconView.frame.origin.y - 20, // 20
+                              window_width,
+                              20
+                              )
+                   ];
+    [error_label setStringValue:@"Network Error!"];
+    error_label.font = [NSFont fontWithName:@"Raleway-SemiBold" size:8];
+    error_label.backgroundColor = [NSColor clearColor];
+    [error_label setAlignment:NSTextAlignmentCenter];
+    [error_label setTextColor:_grey];
+    [error_label setSelectable:YES];
+    [error_label setWantsLayer:YES];
+    error_label.editable = false;
+    error_label.bordered = false;
+    error_label.hidden = true;
+    error_label.tag = 1;
+    [_view addSubview:error_label];
     
     int bottom_buttons_height = 40;
     //----------------- body -----------------
@@ -575,6 +584,7 @@
     
     [_scroll_view setBorderType:NSNoBorder];
     [_scroll_view setHasVerticalScroller:YES];
+    [_scroll_view setPostsBoundsChangedNotifications:YES];
     _scroll_view.backgroundColor = _offwhite;
     NSShadow *dropShadow = [[NSShadow alloc] init];
     [dropShadow setShadowColor:[NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:0.5]];
@@ -588,14 +598,15 @@
     }else{
         //INITIATE NSTABLE
         _notification_table = [[NSTableView alloc] initWithFrame:_scroll_view.frame];
-        NSTableColumn *column =[[NSTableColumn alloc]initWithIdentifier:@"1"];
+        NSTableColumn *column =[[NSTableColumn alloc] initWithIdentifier:@"1"];
         [column setWidth:_scroll_view.frame.size.width - 5]; //I swear me needing to do this is a bug
         [_notification_table addTableColumn:column];
         [_notification_table setHeaderView:nil];
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
         [_notification_table setDelegate:(id)self];
         [_notification_table setDataSource:(id)self];
-        _notification_table.backgroundColor = _offwhite;
+        [_notification_table setBackgroundColor:[NSColor clearColor]];
+        [[_notification_table enclosingScrollView] setDrawsBackground:NO];
         [self reloadData];
         
         _scroll_view.documentView = _notification_table;
@@ -608,8 +619,11 @@
     MyButton* markAllAsReadBtn = [[MyButton alloc] initWithFrame:CGRectMake(p / 2, 5, (window_width / 2) - p, 30)];
     [markAllAsReadBtn setButtonType:NSMomentaryChangeButton];
     [markAllAsReadBtn setAlignment:NSTextAlignmentCenter];
-    [markAllAsReadBtn setFont:[NSFont fontWithName:@"Raleway-SemiBold" size:12]];
+//    [markAllAsReadBtn setImage:[NSImage imageNamed:@"Rounded Button.png"]];
+//    [markAllAsReadBtn setImageScaling:NSImageScaleAxesIndependently];
+    [markAllAsReadBtn setFont:[NSFont fontWithName:@"Raleway-Bold" size:12]];
     markAllAsReadBtn.bordered =false;
+    [markAllAsReadBtn setFocusRingType:NSFocusRingTypeNone];
     [markAllAsReadBtn setTitle:@"MARK ALL AS READ"];
     [markAllAsReadBtn setAction:@selector(markAllAsRead)];
     [markAllAsReadBtn updateTrackingAreas];
@@ -617,13 +631,15 @@
     
     //delete all button
     MyButton *deleteNotifications = [[MyButton alloc] initWithFrame:CGRectMake(window_width / 2 + (p /2), 5, window_width /2 - p, 30)];
+//    [deleteNotifications setImage:[NSImage imageNamed:@"Rounded Button.png"]];
+//    [deleteNotifications setImageScaling:NSImageScaleAxesIndependently];
     [deleteNotifications setButtonType:NSMomentaryChangeButton];
     NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [centredStyle setAlignment:NSCenterTextAlignment];
     
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
                            NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Raleway-SemiBold" size:12],
+                           [NSFont fontWithName:@"Raleway-Bold" size:12],
                            NSFontAttributeName,
                            _red,
                            NSForegroundColorAttributeName,
@@ -633,6 +649,7 @@
                                            attributes:attrs];
     
     [deleteNotifications setAttributedTitle:attributedString];
+    [deleteNotifications setFocusRingType:NSFocusRingTypeNone];
     deleteNotifications.bordered =false;
     [deleteNotifications setAction:@selector(deleteAll)];
     [deleteNotifications updateTrackingAreas];
@@ -643,20 +660,81 @@
     [_view addSubview:deleteNotifications];
 }
 
-bool animating = false;
+-(void)positionWindow{
+    int side_padding = 10;
+    
+    //position variables
+    float window_height = self.window.frame.size.height;
+    float window_width = self.window.frame.size.width;
+    NSRect menu_icon_frame = [[_statusItem valueForKey:@"window"] frame];
+    float menu_icon_width = menu_icon_frame.size.width;
+    float menu_icon_x = menu_icon_frame.origin.x;
+    float menu_icon_y = menu_icon_frame.origin.y;
+    
+    //calculate positions
+    float arrow_x = window_width/2 - (top_arrow_height/2);
+    float arrow_y = window_height - top_arrow_height;
+    float window_x = (menu_icon_x + menu_icon_width/2) - window_width / 2;
+    float window_y = menu_icon_y - window_height;
+    
+    if(window_width + window_x > [[NSScreen mainScreen] frame].size.width){ //window will fall out of screen
+        window_x = [[NSScreen mainScreen] frame].size.width - window_width - side_padding;
+        arrow_x = menu_icon_x + menu_icon_width/2 - window_x - side_padding;
+    }
+    
+    // update positions
+    [_window_up_arrow_view setFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
+    [_window setFrame:NSMakeRect(window_x, window_y, window_width, window_height) display:true];
+}
+
+- (void)blurView:(NSView *)view
+{
+    NSView *blurView = [[NSView alloc] initWithFrame:view.bounds];
+    blurView.wantsLayer = YES;
+    blurView.layer.backgroundColor = [NSColor clearColor].CGColor;
+    blurView.layer.masksToBounds = YES;
+    blurView.layerUsesCoreImageFilters = YES;
+    blurView.layer.needsDisplayOnBoundsChange = YES;
+    
+    CIFilter *saturationFilter = [CIFilter filterWithName:@"CIColorControls"];
+    [saturationFilter setDefaults];
+    [saturationFilter setValue:@2.0 forKey:@"inputSaturation"];
+    
+    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"]; // Other blur types are available
+    [blurFilter setDefaults];
+    [blurFilter setValue:@2.0 forKey:@"inputRadius"];
+    
+    blurView.layer.backgroundFilters = @[saturationFilter, blurFilter];
+    
+    [view addSubview:blurView];
+    
+    [blurView setNeedsDisplay:YES];
+}
+
+-(void)onScroll{
+    [self animateNotifications:false];
+}
+
+NSImage* after_image;
+bool animating_bell = false;
 -(void)animateBell:(NSImage*)image{
-    // get these data points by making every point a keyframe on after effects copying and then copying and pasting them into a file
-    NSArray *numbers = [@"-20,-15.1022,-10.5422,-6.32,-2.43556,1.11111,4.32,7.19111,9.72444,11.92,13.7778,15.2978,16.48,17.3244,17.8311,18,13.6178,9.53778,5.76,2.28444,-0.888889,-3.76,-6.32889,-8.59556,-10.56,-12.2222,-13.5822,-14.64,-15.3956,-15.8489,-16,-12.1333,-8.53333,-5.2,-2.13333,0.666667,3.2,5.46667,7.46667,9.2,10.6667,11.8667,12.8,13.4667,13.8667,14,10.52,7.28,4.28,1.52,-1,-3.28,-5.32,-7.12,-8.68,-10,-11.08,-11.92,-12.52,-12.88,-13,-9.77778,-6.77778,-4,-1.44444,0.888889,3,4.88889,6.55556,8,9.22222,10.2222,11,11.5556,11.8889,12,9.16444,6.52444,4.08,1.83111,-0.222222,-2.08,-3.74222,-5.20889,-6.48,-7.55556,-8.43556,-9.12,-9.60889,-9.90222,-10,-7.68,-5.52,-3.52,-1.68,-7.10543e-15,1.52,2.88,4.08,5.12,6,6.72,7.28,7.68,7.92,8,6.19556,4.51556,2.96,1.52889,0.222222,-0.96,-2.01778,-2.95111,-3.76,-4.44444,-5.00444,-5.44,-5.75111,-5.93778,-6,-4.71111,-3.51111,-2.4,-1.37778,-0.444444,0.4,1.15556,1.82222,2.4,2.88889,3.28889,3.6,3.82222,3.95556,4,3.22667,2.50667,1.84,1.22667,0.666667,0.16,-0.293333,-0.693333,-1.04,-1.33333,-1.57333,-1.76,-1.89333,-1.97333,-2,-1.74222,-1.50222,-1.28,-1.07556,-0.888889,-0.72,-0.568889,-0.435556,-0.32,-0.222222,-0.142222,-0.08,-0.0355556,-0.0088888" componentsSeparatedByString:@","];
-    if(!animating){
-        animating = true;
+    if(!animating_bell){
+        animating_bell = true;
+        after_image = nil;
+        // get these data points by making every point a keyframe on after effects copying and then copying and pasting them into a file
+        NSArray *numbers = [@"-20,-15.1022,-10.5422,-6.32,-2.43556,1.11111,4.32,7.19111,9.72444,11.92,13.7778,15.2978,16.48,17.3244,17.8311,18,13.6178,9.53778,5.76,2.28444,-0.888889,-3.76,-6.32889,-8.59556,-10.56,-12.2222,-13.5822,-14.64,-15.3956,-15.8489,-16,-12.1333,-8.53333,-5.2,-2.13333,0.666667,3.2,5.46667,7.46667,9.2,10.6667,11.8667,12.8,13.4667,13.8667,14,10.52,7.28,4.28,1.52,-1,-3.28,-5.32,-7.12,-8.68,-10,-11.08,-11.92,-12.52,-12.88,-13,-9.77778,-6.77778,-4,-1.44444,0.888889,3,4.88889,6.55556,8,9.22222,10.2222,11,11.5556,11.8889,12,9.16444,6.52444,4.08,1.83111,-0.222222,-2.08,-3.74222,-5.20889,-6.48,-7.55556,-8.43556,-9.12,-9.60889,-9.90222,-10,-7.68,-5.52,-3.52,-1.68,-7.10543e-15,1.52,2.88,4.08,5.12,6,6.72,7.28,7.68,7.92,8,6.19556,4.51556,2.96,1.52889,0.222222,-0.96,-2.01778,-2.95111,-3.76,-4.44444,-5.00444,-5.44,-5.75111,-5.93778,-6,-4.71111,-3.51111,-2.4,-1.37778,-0.444444,0.4,1.15556,1.82222,2.4,2.88889,3.28889,3.6,3.82222,3.95556,4,3.22667,2.50667,1.84,1.22667,0.666667,0.16,-0.293333,-0.693333,-1.04,-1.33333,-1.57333,-1.76,-1.89333,-1.97333,-2,-1.74222,-1.50222,-1.28,-1.07556,-0.888889,-0.72,-0.568889,-0.435556,-0.32,-0.222222,-0.142222,-0.08,-0.0355556,-0.0088888" componentsSeparatedByString:@","];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             for (NSString *i in numbers) {
                 float x = [i floatValue];
                 [NSThread sleepForTimeInterval:0.012];
                 _statusItem.image = [image imageRotated:x];
             }
-            _statusItem.image = image;
-            animating = false;
+            if(after_image){
+                _statusItem.image = after_image;
+            }else{
+                _statusItem.image = image;
+            }
+            animating_bell = false;
         });
     }
 }
@@ -671,21 +749,21 @@ bool animating = false;
     [centredStyle setAlignment:NSTextAlignmentCenter];
     
     //no notifications text
-    int title_height = 60;
+    int title_height = 65;
     NSDictionary *noNotificationsAttrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
-                           NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Raleway-SemiBold" size:25],
-                           NSFontAttributeName,
-                           _grey,
-                           NSForegroundColorAttributeName,
-                           nil];
+                                          NSParagraphStyleAttributeName,
+                                          [NSFont fontWithName:@"Raleway-Bold" size:37],
+                                          NSFontAttributeName,
+                                          _grey,
+                                          NSForegroundColorAttributeName,
+                                          nil];
     NSMutableAttributedString *noNotificationsString =
     [[NSMutableAttributedString alloc] initWithString:@"No Notifications"
                                            attributes:noNotificationsAttrs];
     MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
                                  CGRectMake(
                                             0,
-                                            _scroll_view.frame.size.height/2 - title_height/2 + 30,
+                                            _scroll_view.frame.size.height/2 - title_height/2 + 10,
                                             window_width,
                                             title_height
                                             )
@@ -698,35 +776,37 @@ bool animating = false;
     [title_field setWantsLayer:true];
     [title_field setAllowsEditingTextAttributes:YES];
     [title_field setSelectable:YES];
+    title_field.tag = 1;
     [view addSubview:title_field];
     
     //send curls
     NSDictionary *sendCurlAttrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
-                                          NSParagraphStyleAttributeName,
-                                          [NSFont fontWithName:@"Raleway-Medium" size:13],
-                                          NSFontAttributeName,
-                                          _grey,
-                                          NSForegroundColorAttributeName,
-                                          nil];
+                                   NSParagraphStyleAttributeName,
+                                   [NSFont fontWithName:@"Raleway-Medium" size:13],
+                                   NSFontAttributeName,
+                                   _grey,
+                                   NSForegroundColorAttributeName,
+                                   nil];
     NSMutableAttributedString *sendCurlString =
-    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Send HTTP requests with your credentials\n%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]]
+    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Send HTTP requests with the credentials\n%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]]
                                            attributes:sendCurlAttrs];
     [sendCurlString beginEditing];
-//    [sendCurlString applyFontTraits:NSBoldFontMask
-//                              range:NSMakeRange(5,4)];
-    [sendCurlString applyFontTraits:NSItalicFontMask
-                              range:NSMakeRange(41, 25)];
+    //    [sendCurlString applyFontTraits:NSBoldFontMask
+    //                              range:NSMakeRange(5,4)];
+    [sendCurlString applyFontTraits:NSBoldFontMask
+                              range:NSMakeRange(40, 25)];
     [sendCurlString addAttribute:NSLinkAttributeName value: @"https://github.com/maxisme/notifi#http-request-examples" range:NSMakeRange(5,4)];
     [sendCurlString endEditing];
     
     MyTitleLabel* curl_field = [[MyTitleLabel alloc] initWithFrame:
-                                 CGRectMake(
-                                            0,
-                                            title_field.frame.origin.y - 50,
-                                            window_width,
-                                            60
-                                            )
-                                 ];
+                                CGRectMake(
+                                           0,
+                                           title_field.frame.origin.y - 50,
+                                           window_width,
+                                           60
+                                           )
+                                ];
+    curl_field.tag = 2;
     curl_field.editable = false;
     curl_field.bordered = false;
     curl_field.backgroundColor = [NSColor clearColor];
@@ -809,48 +889,83 @@ NSUInteger errorGeneration;
 }
 
 #pragma mark - notification
+NSMutableArray *animatedNotifications;
+//-(void)hideNotifications{
+//    int right =  - _window.frame.size.width;
+//    
+//    for(MyNotificationView* notification in _notification_views){
+//        // original position of notification
+//        int or_x = notification.frame.origin.x;
+//        int or_y = notification.frame.origin.y;
+//        
+//        NSPoint startPoint = NSMakePoint(or_x + right, or_y);
+//        [notification setFrameOrigin:startPoint];
+//    }
+//}
 
--(void)animateNotifications{
-    int right = _window.frame.size.width / 2;
+-(void)animateNotifications:(bool)should_delay{
+    NSScrollView* scrollView = [_notification_table enclosingScrollView];
+    CGRect visibleRect = scrollView.contentView.visibleRect;
+    NSRange range = [_notification_table rowsInRect:visibleRect];
+    int right =  - _window.frame.size.width;
+    int num_notifications = (int)[_notification_views count];
     
-    //notifications
-    for(int x = (int)[_notification_views count] - 1; x >= 0 ; x--){
-        MyNotificationView* notification = [_notification_views objectAtIndex:x];
-        int or_x = notification.frame.origin.x;
-        int or_y = notification.frame.origin.y;
-        float dt = x * 0.07;
+    int start = (int)range.location;
+    if(start > 1) start -= 1;
+    int end = start + (int)range.length;
+    if(end > num_notifications - 1) end = num_notifications - 1;
     
-        [notification animateWithDuration:dt animation:^{
-            NSPoint startPoint = NSMakePoint(or_x + right, or_y);
-            [notification setFrameOrigin:startPoint];
+    if([_scroll_view.documentView isKindOfClass:[NSTableView class]]){ // there are notifications
+        for(int x = start; x <= end; x++){
+            NSString* ex = [NSString stringWithFormat:@"%d", x];
+            if(![animatedNotifications containsObject:ex]){
+                NSLog(@"range: %@",NSStringFromRange(range));
+                NSLog(@"s:%d e:%d x:%d", start, end, x);
+                [animatedNotifications addObject:ex];
+                MyNotificationView* notification = [_notification_views objectAtIndex:x];
+                float delay = 0;
+                if (should_delay) delay = (x - start) * 0.07;
+                
+                int or_x = notification.frame.origin.x;
+                int or_y = notification.frame.origin.y;
+                
+                [notification animateWithDuration:delay animation:^{
+                    NSPoint startPoint = NSMakePoint(or_x + right, or_y);
+                    [notification setFrameOrigin:startPoint];
+                } completion:^{
+                    [notification animateWithDuration:1 animation:^{
+                        NSPoint endPoint = NSMakePoint(or_x, or_y);
+                        [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
+                        [[notification animator] setFrameOrigin:endPoint];
+                    }];
+                }];
+            }
+        }
+    }else{
+        MyNotificationView* notification = _scroll_view.documentView;
+        
+        //animate no notifications label
+        MyTitleLabel* no_notifications = (MyTitleLabel*)[notification viewWithTag:1];
+        int nn_or_x = no_notifications.frame.origin.x;
+        int nn_or_y = no_notifications.frame.origin.y;
+        
+        MyTitleLabel* info = (MyTitleLabel*)[notification viewWithTag:2];
+        int i_or_x = info.frame.origin.x;
+        int i_or_y = info.frame.origin.y;
+        
+        [notification animateWithDuration:0 animation:^{
+            [no_notifications setFrameOrigin:NSMakePoint(nn_or_x + right, nn_or_y)];
+            [info setFrameOrigin:NSMakePoint(i_or_x - right, i_or_y)];
         } completion:^{
             [notification animateWithDuration:1 animation:^{
-                NSPoint endPoint = NSMakePoint(or_x, or_y);
                 [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.1 :0.7 :0.2 :1]];
-                [[notification animator] setFrameOrigin:endPoint];
+                [[no_notifications animator] setFrameOrigin:NSMakePoint(nn_or_x, nn_or_y)];
+                [[info animator] setFrameOrigin:NSMakePoint(i_or_x, i_or_y)];
             }];
         }];
     }
-    
-//    MyNotificationView* view = _scroll_view.documentView;
-//    view.wantsLayer = YES;
-//    int or_x = _scroll_view.documentView.frame.origin.x;
-//    int or_y = _scroll_view.documentView.frame.origin.y;
-//    
-//    //no notifications
-//    [view animateWithDuration:0 animation:^{
-//        NSPoint startPoint = NSMakePoint(or_x + right, or_y);
-//        [view setFrameOrigin:startPoint];
-//    } completion:^{
-//        [view animateWithDuration:1 animation:^{
-//            NSPoint endPoint = NSMakePoint(or_x, or_y);
-//            [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.1 :0.7 :0.2 :1]];
-//            [[view animator] setFrameOrigin:endPoint];
-//        }];
-//    }];
 }
 
-float prevheight;
 int notification_view_padding = 20;
 int unread_notification_count = 0;
 -(NSView*)createNotificationView:(NSString*)title_string message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url time:(NSString*)time_string read:(bool)read notificationID:(int)notificationID
@@ -860,13 +975,15 @@ int unread_notification_count = 0;
     float x = _scroll_view.frame.size.width * (1 - width_perc)/2;
     int y = 5;
     
-    int title_font_size = 17;
-    int info_font_size = 12;
+    //fonts
+    NSFont* title_font = [NSFont fontWithName:@"Raleway-SemiBold" size:17];
+    NSFont* info_font = [NSFont fontWithName:@"Raleway-Medium" size:12];
+    NSFont* time_font = [NSFont fontWithName:@"Raleway-Medium" size:10];
     
     int image_width = 70;
     int image_height = 70;
     
-    int time_height = 20;
+    int time_height = 17;
     
     NSView *view = [[NSView alloc] init];
     view.wantsLayer = TRUE;
@@ -882,10 +999,10 @@ int unread_notification_count = 0;
     //height of title
     NSMutableParagraphStyle *centredStyle_title = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     NSDictionary *attrs_title = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle_title,
-                           NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Raleway-ExtraBold" size:title_font_size],
-                           NSFontAttributeName,
-                           nil];
+                                 NSParagraphStyleAttributeName,
+                                 title_font,
+                                 NSFontAttributeName,
+                                 nil];
     
     NSMutableAttributedString *attributedString_title = [[NSMutableAttributedString alloc] initWithString:title_string attributes:attrs_title];
     if(![url  isEqual: @" "]){
@@ -893,7 +1010,6 @@ int unread_notification_count = 0;
         [attributedString_title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
     }
     CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-    
     float title_height = rect_title.size.height; //calculated height of dynamic title
     
     //height of info
@@ -903,7 +1019,7 @@ int unread_notification_count = 0;
         NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
                                NSParagraphStyleAttributeName,
-                               [NSFont fontWithName:@"Raleway-SemiBold" size:info_font_size],
+                               info_font,
                                NSFontAttributeName,
                                nil];
         NSMutableAttributedString *attributedString =
@@ -945,12 +1061,12 @@ int unread_notification_count = 0;
     
     //--    add title
     MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
-                         CGRectMake(
-                                    padding_right,
-                                    view.frame.size.height - title_height,
-                                    text_width,
-                                    title_height
-                                    )
+                                 CGRectMake(
+                                            padding_right,
+                                            view.frame.size.height - title_height,
+                                            text_width,
+                                            title_height
+                                            )
                                  ];
     [title_field setWantsLayer:YES];
     [title_field setSelectable:YES];
@@ -958,7 +1074,7 @@ int unread_notification_count = 0;
         title_field.link = url;
         [title_field setSelectable:NO];
     }
-    title_field.font = [NSFont fontWithName:@"Raleway-ExtraBold" size:title_font_size];
+    title_field.font = title_font;
     title_field.backgroundColor = [NSColor clearColor];
     [title_field setAlignment:NSTextAlignmentLeft];
     title_field.tag = notificationID;
@@ -975,14 +1091,14 @@ int unread_notification_count = 0;
     
     //--   add time
     MyLabel* time_label = [[MyLabel alloc] initWithFrame:
-                               CGRectMake(
-                                          padding_right,
-                                          title_field.frame.origin.y - time_height,
-                                          text_width,
-                                          time_height
-                                          )
-                               ];
-    time_label.font = [NSFont fontWithName:@"Raleway-Medium" size:10];
+                           CGRectMake(
+                                      padding_right,
+                                      title_field.frame.origin.y - time_height,
+                                      text_width,
+                                      time_height
+                                      )
+                           ];
+    time_label.font = time_font;
     time_label.backgroundColor = [NSColor clearColor];
     [time_label setAlignment:NSTextAlignmentLeft];
     [time_label setTextColor:_grey];
@@ -1018,15 +1134,15 @@ int unread_notification_count = 0;
     //-- add info
     if(![mes  isEqual: @" "]){
         MyLabel* info = [[MyLabel alloc] initWithFrame:
-                             CGRectMake(
-                                        padding_right,
-                                        time_label.frame.origin.y - info_height + 5,
-                                        text_width,
-                                        info_height
-                                        )
-                             ];
+                         CGRectMake(
+                                    padding_right,
+                                    time_label.frame.origin.y - info_height + 5,
+                                    text_width,
+                                    info_height
+                                    )
+                         ];
         [view layoutSubtreeIfNeeded];
-        info.font = [NSFont fontWithName:@"Raleway-Medium" size:info_font_size];
+        info.font = info_font;
         info.preferredMaxLayoutWidth = text_width;
         info.backgroundColor = [NSColor clearColor];
         [info setAlignment:NSTextAlignmentLeft];
@@ -1039,10 +1155,11 @@ int unread_notification_count = 0;
     }
     
     MyNotificationView *view1 = [[MyNotificationView alloc] initWithFrame:view.frame];
+    [view1 updateTrackingAreas];
     view1.notificationID = notificationID;
     view1.thisapp = self;
     
-    //create shadow
+    // create notification shadow
     NSShadow *dropShadow = [[NSShadow alloc] init];
     [dropShadow setShadowColor:[NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:0.5]];
     [dropShadow setShadowOffset:NSMakeSize(0, 0)];
@@ -1065,12 +1182,34 @@ int unread_notification_count = 0;
 -(void)showWindow{
     [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
     
-    [self positionWindow];
-    [NSApp activateIgnoringOtherApps:YES];
-    [_window makeKeyAndOrderFront:_view];
-    [_window makeFirstResponder:_scroll_view.documentView];
+    if([[NSScreen mainScreen] frame].size.height != screen_height){
+        _window = nil;
+        [self createWindow];
+    }
     
-    [self animateNotifications];
+    [self positionWindow];
+    _window.alphaValue = 0;
+    [NSApp activateIgnoringOtherApps:YES];
+    [_window makeKeyAndOrderFront: nil];
+    [self fadeWindow:true];
+    
+    animatedNotifications = [NSMutableArray array];
+    [self animateNotifications:true];
+    
+    //remove potential selection
+    [_view.window makeFirstResponder:nil];
+    [_view setNeedsDisplay:YES];
+}
+
+- (void)fadeWindow:(BOOL)in {
+    _window.alphaValue = in ? 0.0f : 1.0f;
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+        context.duration = 0.4;
+        _window.animator.alphaValue = in ? 1.0f : 0.0f;
+    }
+    completionHandler:^{
+        _window.alphaValue = in ? 1.0f : 0.0f;
+    }];
 }
 
 //when clicking icon
@@ -1107,24 +1246,13 @@ bool failedCredentials = false;
         [_credentialsItem setTitle:@"Fetching credentials..."];
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"];
         
-        NSURL *url = [NSURL URLWithString:@""];
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
-                                                    cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                timeoutInterval:3];
-        NSData *urlData;
-        NSURLResponse *response;
-        NSError *error;
-        urlData = [NSURLConnection sendSynchronousRequest:urlRequest
-                                        returningResponse:&response
-                                                    error:&error];
-        NSString* content = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
-        
         STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://notifi.it/getCode.php"];
         r.POSTDictionary = @{ @"UUID":[self getSystemUUID]};
-        NSString *body = [r startSynchronousWithError:nil];
+        NSError *error = nil;
+        NSString *content = [r startSynchronousWithError:&error];
         
-        NSString* key = [self jsonToVal:body key:@"key"];
-        NSString* credentials = [self jsonToVal:body key:@"credentials"];
+        NSString* key = [self jsonToVal:content key:@"key"];
+        NSString* credentials = [self jsonToVal:content key:@"credentials"];
         
         if(![key isEqual: @""] && ![credentials isEqual: @""]){
             failedCredentials = false;
@@ -1151,7 +1279,7 @@ bool failedCredentials = false;
             }
             [alert runModal];
         }
-    
+        
         [self closeSocket];
     }
 }
@@ -1188,9 +1316,9 @@ bool serverReplied = false;
     }else{
         NSData* data = [message dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary* json_dic = [NSJSONSerialization
-                              JSONObjectWithData:data
-                              options:kNilOptions
-                              error:nil];
+                                  JSONObjectWithData:data
+                                  options:kNilOptions
+                                  error:nil];
         
         NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
         
@@ -1219,7 +1347,7 @@ bool serverReplied = false;
                                        imageURL:[notification objectForKey:@"image"]
                                            link:[notification objectForKey:@"link"]
                                  notificationID:[[notification objectForKey:@"id"] intValue]
-                    ];
+                     ];
                 }
             }else{
                 //send notification with the amount of notifications rather than individual notifications
@@ -1297,37 +1425,41 @@ bool serverReplied = false;
     int row = [self rowFromNotification:notificationID];
     MyNotificationView* notification = [_notification_views objectAtIndex:row];
     MyTitleLabel* title = (MyTitleLabel*)[notification viewWithTag:notification.notificationID];
-    [title setWantsLayer:true];
-    int or_x = title.frame.origin.x;
-    int or_y = title.frame.origin.y;
-    int top = title.frame.size.height;
     
-    
-    
-    [title animateWithDuration:0 animation:^{
-        if(read){
-            unread_notification_count--;
-            title.textColor = _grey;
-        }else{
-            unread_notification_count++;
-            title.textColor = _red;
-        }
-        NSPoint startPoint = NSMakePoint(or_x, or_y + top);
-        [title setFrameOrigin:startPoint];
-    }completion:^{
-        [title animateWithDuration:0.8 animation:^{
-            [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
-            NSPoint endPoint = NSMakePoint(or_x, or_y);
-            [[title animator] setFrameOrigin:endPoint];
+    if((title.textColor == _red && read) || (title.textColor == _grey && !read)){ // not already read or not already not read
+        int or_x = title.frame.origin.x;
+        int or_y = title.frame.origin.y;
+        int top = title.frame.size.height;
+        
+        [title animateWithDuration:0 animation:^{
+            if(read){
+                unread_notification_count--;
+                title.textColor = _grey;
+            }else{
+                unread_notification_count++;
+                title.textColor = _red;
+            }
+            NSPoint startPoint = NSMakePoint(or_x, or_y + top);
+            [title setFrameOrigin:startPoint];
+        }completion:^{
+            [title animateWithDuration:0.8 animation:^{
+                [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
+                NSPoint endPoint = NSMakePoint(or_x, or_y);
+                [[title animator] setFrameOrigin:endPoint];
+            }];
         }];
-    }];
-    [self updateReadIcon:false];
+        [self updateReadIcon:false];
+    }
 }
 
 -(void)markAllAsRead{
-    for(int x = (int)[_notification_views count] - 1; x >= 0 ; x--){
-        MyNotificationView* notification = [_notification_views objectAtIndex:x];
-        [self markAsRead:true notificationID:notification.notificationID];
+    if(unread_notification_count > 0){
+        for(int x = (int)[_notification_views count] - 1; x >= 0 ; x--){
+            MyNotificationView* notification = [_notification_views objectAtIndex:x];
+            [self markAsRead:true notificationID:notification.notificationID];
+        }
+    }else{
+        //shake button
     }
 }
 
@@ -1337,6 +1469,7 @@ bool serverReplied = false;
     
     if(notification_count <= 1){
         _scroll_view.documentView = [self noNotificationsView];
+        [self animateNotifications:false];
     }
     
     int index = [self indexFromNotification:notificationID notifications:notifications];
@@ -1395,22 +1528,34 @@ bool serverReplied = false;
     return ((int)[_notification_views count] - 1) - [self rowFromNotification:notificationID];
 }
 
--(void)updateReadIcon:(bool)animate{
-    NSImage* error_icon = [NSImage imageNamed:@"menu_error_bellicon.png" ];
-    NSImage* alert_icon = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
-    NSImage* menu_icon = [NSImage imageNamed:@"menu_bellicon.png" ];
-    
-    if(!serverReplied){
-        if(_statusItem.image != error_icon) _statusItem.image = error_icon;
-    }else if(unread_notification_count > 0){
-        if(animate){
-            [self animateBell:alert_icon];
-        }else if(_statusItem.image != alert_icon){
-            _statusItem.image = alert_icon;
+
+-(void)updateReadIcon:(bool)ani{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSImage* error_icon = [NSImage imageNamed:@"menu_error_bellicon.png" ];
+        NSImage* alert_icon = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
+        NSImage* menu_icon = [NSImage imageNamed:@"menu_bellicon.png" ];
+        
+        MyLabel* title = (MyLabel*)[_view viewWithTag:1];
+        title.hidden = true;
+        if(!serverReplied){
+            title.hidden = false;
+            if(_statusItem.image != error_icon){
+                _statusItem.image = error_icon;
+                after_image = error_icon;
+            }
+        }else if(unread_notification_count > 0){
+            if(ani){
+                [self animateBell:alert_icon];
+            }else{
+                _statusItem.image = alert_icon;
+            }
+        }else{
+            if(_statusItem.image != menu_icon){
+                _statusItem.image = menu_icon;
+                after_image = menu_icon;
+            }
         }
-    }else{
-        if(_statusItem.image != menu_icon) _statusItem.image = menu_icon;
-    }
+    });
 }
 
 #pragma mark - notifications
@@ -1419,9 +1564,9 @@ bool serverReplied = false;
     
     //pass variables through notification
     notification.userInfo = @{
-        @"notificationID" : [NSString stringWithFormat:@"%lu", notificationID],
-        @"url" : url
-    };
+                              @"notificationID" : [NSString stringWithFormat:@"%lu", notificationID],
+                              @"url" : url
+                              };
     
     [notification setTitle:title];
     
@@ -1580,14 +1725,6 @@ BOOL streamOpen = false;
 
 - (NSMenu *)defaultStatusBarMenu {
     NSMenu* mainMenu = [[NSMenu alloc] init];
-    
-    _errorItem = [[NSMenuItem alloc] initWithTitle:@"Network Error!" action:nil keyEquivalent:@""];
-    [_errorItem setTarget:self];
-    [_errorItem setEnabled:false];
-    [_errorItem setHidden:true];
-    [mainMenu addItem:_errorItem];
-    
-    [mainMenu addItem:[NSMenuItem separatorItem]];
     
     _credentialsItem = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] action:nil keyEquivalent:@""];
     [_credentialsItem setTarget:self];
@@ -1830,13 +1967,19 @@ BOOL streamOpen = false;
 }
 
 #pragma mark - sparkle
-
 -(void)checkUpdate{
-    if(_window && [_window isVisible]){
-        [_window orderOut:self];
+    [self checkUpdate:false];
+}
+-(void)checkUpdate:(BOOL)background{
+    if(!background){
+        if(_window && [_window isVisible]){
+            [_window orderOut:self];
+        }
+        
+        [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdates:NULL];
+    }else{
+        [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdatesInBackground];
     }
-    
-    [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdates:NULL];
 }
 
 @end

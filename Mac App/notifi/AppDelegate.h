@@ -21,7 +21,6 @@
 @property NSMenuItem* showOnStartupItem;
 @property NSMenuItem* remNotification;
 @property NSMenuItem* credentialsItem;
-@property NSMenuItem* errorItem;
 @property NSMenuItem* window_item;
 @property NSStatusItem *statusItem;
 
