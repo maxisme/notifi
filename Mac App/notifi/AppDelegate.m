@@ -499,8 +499,8 @@ int top_arrow_height;
     // Create a view
     _view = nil;
     _view = [[self window] contentView];
-    [_view setWantsLayer:YES];
     [_view.layer setBackgroundColor:[NSColor clearColor].CGColor];
+    [_view setWantsLayer:YES];
     
     NSImage* window_up_arrow = [NSImage imageNamed:@"up_arrow.png"];
     _window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
@@ -890,19 +890,6 @@ NSUInteger errorGeneration;
 
 #pragma mark - notification
 NSMutableArray *animatedNotifications;
-//-(void)hideNotifications{
-//    int right =  - _window.frame.size.width;
-//    
-//    for(MyNotificationView* notification in _notification_views){
-//        // original position of notification
-//        int or_x = notification.frame.origin.x;
-//        int or_y = notification.frame.origin.y;
-//        
-//        NSPoint startPoint = NSMakePoint(or_x + right, or_y);
-//        [notification setFrameOrigin:startPoint];
-//    }
-//}
-
 -(void)animateNotifications:(bool)should_delay{
     NSScrollView* scrollView = [_notification_table enclosingScrollView];
     CGRect visibleRect = scrollView.contentView.visibleRect;
@@ -919,8 +906,6 @@ NSMutableArray *animatedNotifications;
         for(int x = start; x <= end; x++){
             NSString* ex = [NSString stringWithFormat:@"%d", x];
             if(![animatedNotifications containsObject:ex]){
-                NSLog(@"range: %@",NSStringFromRange(range));
-                NSLog(@"s:%d e:%d x:%d", start, end, x);
                 [animatedNotifications addObject:ex];
                 MyNotificationView* notification = [_notification_views objectAtIndex:x];
                 float delay = 0;
@@ -972,7 +957,8 @@ int unread_notification_count = 0;
 {
     float width_perc = 0.9;
     int notification_width = _scroll_view.frame.size.width * width_perc;
-    float x = _scroll_view.frame.size.width * (1 - width_perc)/2;
+    int x = _scroll_view.frame.size.width * (1 - width_perc)/2;
+    NSLog(@"x:%d ",x);
     int y = 5;
     
     //fonts
@@ -986,7 +972,7 @@ int unread_notification_count = 0;
     int time_height = 17;
     
     NSView *view = [[NSView alloc] init];
-    view.wantsLayer = TRUE;
+    [view setWantsLayer:YES];
     
     //check if image variable
     int padding_right = 5;
@@ -1154,7 +1140,8 @@ int unread_notification_count = 0;
         [view addSubview:info];
     }
     
-    MyNotificationView *view1 = [[MyNotificationView alloc] initWithFrame:view.frame];
+    MyNotificationView *view1 = [[MyNotificationView alloc] initWithFrame:NSMakeRect(0, 0, _scroll_view.frame.size.width, view.frame.size.height)];
+    [view1 setWantsLayer:YES];
     [view1 updateTrackingAreas];
     view1.notificationID = notificationID;
     view1.thisapp = self;
@@ -1165,7 +1152,7 @@ int unread_notification_count = 0;
     [dropShadow setShadowOffset:NSMakeSize(0, 0)];
     [dropShadow setShadowBlurRadius:2.0];
     [view1 setShadow:dropShadow];
-    [view setFrame:NSMakeRect(0, 0, view.frame.size.width, view.frame.size.height)];
+    
     [view1 addSubview:view];
     [_notification_views addObject:view1];
     
