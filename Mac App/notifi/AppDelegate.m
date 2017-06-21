@@ -483,6 +483,7 @@ int top_arrow_height;
     _window = nil; // no idea why you have to do this when creating a new window for different monitor size
     _window = [[MyWindow alloc] initWithContentRect:NSMakeRect(window_x, window_y, window_width, window_height) styleMask:0 backing:NSBackingStoreBuffered defer:YES];
     [_window setIdentifier:@"default"];
+    [_window setOpaque:NO];
     [_window setBackgroundColor:[NSColor clearColor]];
     [_window setReleasedWhenClosed: YES];
     [_window setDelegate:(id)self];
@@ -499,8 +500,8 @@ int top_arrow_height;
     // Create a view
     _view = nil;
     _view = [[self window] contentView];
-    [_view.layer setBackgroundColor:[NSColor clearColor].CGColor];
     [_view setWantsLayer:YES];
+    [_view.layer setBackgroundColor:[NSColor clearColor].CGColor];
     
     NSImage* window_up_arrow = [NSImage imageNamed:@"up_arrow.png"];
     _window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
@@ -1153,6 +1154,7 @@ int unread_notification_count = 0;
     [dropShadow setShadowBlurRadius:2.0];
     [view1 setShadow:dropShadow];
     
+    [view setFrame:NSMakeRect(x, y, view.frame.size.width, view.frame.size.height)];
     [view1 addSubview:view];
     [_notification_views addObject:view1];
     
