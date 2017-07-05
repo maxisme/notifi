@@ -1,9 +1,9 @@
 <p align="center"><img height="150px" src="https://github.com/maxisme/notifi/blob/master/bell.png"></p>
 
-# [Notifi](https://notifi.it/)
+# [notifi](https://notifi.it/)
 
 ## Usage
-- Install the Notifi [Mac client application](https://notifi.it/download)
+- First download [notifi](https://notifi.it/download)
 - Create a HTTP request using your chosen method, with the following params:
   - `credentials` (your credentials given to you by the client-side app) - **Required**
   - `title` (notification title) - **Required**
@@ -27,7 +27,6 @@ https://notifi.it/api
 #### Python
 ```python
 import requests
-
 data = {
   'credentials': '<credentials>',
   'title': 'New download',
@@ -36,7 +35,7 @@ data = {
   'image': 'https://imgur.com/someimage.png'
 }
 
-r = requests.post(('https://notifi.it/api', data=data))
+requests.post(('https://notifi.it/api', data=data))
 ```
 
 #### PHP
