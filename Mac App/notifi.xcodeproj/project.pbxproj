@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		3486AF5B90ADCF406A866D70 /* Pods_notifi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB203359588D007975D84CFB /* Pods_notifi.framework */; };
 		48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */; };
+		481695741F046523003D6023 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 481695731F046523003D6023 /* Credits.html */; };
 		482C8A931E09742400E5C173 /* MyApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 482C8A921E09742400E5C173 /* MyApplication.m */; };
 		482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9C1E0B0D0700E5C173 /* CoreData.framework */; };
 		482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9E1E0B0D4000E5C173 /* AppKit.framework */; };
-		48353CED1EF4499E009E2545 /* Rounded Button.png in Resources */ = {isa = PBXBuildFile; fileRef = 48353CEC1EF4499E009E2545 /* Rounded Button.png */; };
 		484439EC1EA8C2D5009C7043 /* Anton Saputro.png in Resources */ = {isa = PBXBuildFile; fileRef = 484439EB1EA8C2D5009C7043 /* Anton Saputro.png */; };
+		486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CC1F2FA2FA008E7492 /* sad.png */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
@@ -29,12 +30,13 @@
 /* Begin PBXFileReference section */
 		48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPCScaleToFillNSImageView.m; sourceTree = "<group>"; };
 		48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPCScaleToFillNSImageView.h; sourceTree = "<group>"; };
+		481695731F046523003D6023 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		482C8A921E09742400E5C173 /* MyApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyApplication.m; sourceTree = "<group>"; };
 		482C8A941E09743100E5C173 /* MyApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyApplication.h; sourceTree = "<group>"; };
 		482C8A9C1E0B0D0700E5C173 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		482C8A9E1E0B0D4000E5C173 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		48353CEC1EF4499E009E2545 /* Rounded Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Rounded Button.png"; sourceTree = "<group>"; };
 		484439EB1EA8C2D5009C7043 /* Anton Saputro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Anton Saputro.png"; sourceTree = "<group>"; };
+		486FA2CC1F2FA2FA008E7492 /* sad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sad.png; sourceTree = "<group>"; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
 		488F6B521E80A84C00B7809C /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		48AD3F901DB9438600B47CA5 /* notifi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notifi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,8 +108,8 @@
 				48B028301DBBAC51007D2462 /* menu_bellicon.png */,
 				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
 				48AE54B71E0451EA00E8777F /* bell.png */,
+				486FA2CC1F2FA2FA008E7492 /* sad.png */,
 				484439EB1EA8C2D5009C7043 /* Anton Saputro.png */,
-				48353CEC1EF4499E009E2545 /* Rounded Button.png */,
 				48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */,
 				48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */,
 				48DD0F051E1BC57D00773859 /* Assets.xcassets */,
@@ -116,6 +118,7 @@
 				48AD3F961DB9438600B47CA5 /* Supporting Files */,
 				482C8A921E09742400E5C173 /* MyApplication.m */,
 				482C8A941E09743100E5C173 /* MyApplication.h */,
+				481695731F046523003D6023 /* Credits.html */,
 			);
 			path = notifi;
 			sourceTree = "<group>";
@@ -169,7 +172,7 @@
 		48AD3F881DB9438600B47CA5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "max mitchell";
 				TargetAttributes = {
 					48AD3F8F1DB9438600B47CA5 = {
@@ -204,13 +207,14 @@
 			files = (
 				48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */,
 				48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */,
+				486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */,
 				484439EC1EA8C2D5009C7043 /* Anton Saputro.png in Resources */,
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
-				48353CED1EF4499E009E2545 /* Rounded Button.png in Resources */,
+				481695741F046523003D6023 /* Credits.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +292,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -296,7 +302,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -336,7 +346,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -344,7 +356,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -378,7 +394,7 @@
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notifi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -394,7 +410,7 @@
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = co.m4x.notifi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

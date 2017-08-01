@@ -66,6 +66,7 @@ class Note implements MessageComponentInterface {
                 foreach ($this->clients as $client) {
                     if (!isset($client->credential) && $from === $client) { //current client only
                         $client->credential = myHash($credentials);
+                        $client->send("1"); // authorised message
                         $this->sendNotifications($client);
                         userConnected($client->credential, 1);
                     }
@@ -99,8 +100,6 @@ class Note implements MessageComponentInterface {
 					array_push($stack, "id:".base64_encode(encrypt($id."|".$hashedCredentials)));
 				}
 				$client->send(json_encode($stack));
-			}else{
-				$client->send("1");
 			}
 		}
 	}

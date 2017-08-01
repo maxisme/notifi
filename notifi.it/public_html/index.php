@@ -46,7 +46,7 @@ $meta_keywords = "OSX, Mac, Notify, Notifi, notifi, notification, app, api, curl
 <page>
     <div align="center">
         <br/><br/><img height="350" src="logo.png"><br/><br/><br/>
-        <h1>notifi</h1>
+        <h1>n o t i f i</h1>
         <div id="navMenu">
             <a class="page-scroll" href="#howitworks">How It Works</a> | <a class="page-scroll" href="#contact">Contact</a> | <a class="page-scroll" href="#tsandcs">Ts & Cs</a>
         </div>

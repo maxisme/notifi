@@ -4,5 +4,6 @@ target 'notifi' do
   pod 'SAMKeychain'
   pod 'Sparkle'
   pod 'STHTTPRequest'
+  pod 'CocoaLumberjack'
   use_frameworks!
 end

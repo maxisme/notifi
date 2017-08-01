@@ -46,7 +46,7 @@ function deleteNotification($con, $id, $credentials){
 
 	mysqli_query($con, "DELETE 
 	FROM `notifications`
-	WHERE `id`=$id 
+	WHERE `id` = $id 
 	AND `credentials`= '$credentials'");
 }
 

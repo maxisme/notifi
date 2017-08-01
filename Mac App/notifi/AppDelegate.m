@@ -7,20 +7,48 @@
 //
 
 #import "AppDelegate.h"
+#import <Security/Security.h>
 
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
+
+
+@interface MyTable: NSTableView
+@end
+
+@implementation MyTable
+- (BOOL)selectionShouldChangeInTableView:(NSTableView *)aTableView
+{
+    return NO;
+}
+- (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)rowIndex
+{
+    return NO;
+}
+@end
 // ----- MyButton interface -----
 @interface MyButton: NSButton
 @property (strong) NSTrackingArea* trackingArea;
+@property float opacity_min;
 @end
 
 @implementation MyButton
 -(void)mouseEntered:(NSEvent *)theEvent {
-    [super resetCursorRects];
-    [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
     
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    flash.fromValue = [NSNumber numberWithFloat:1.0];
-    flash.toValue = [NSNumber numberWithFloat:0.7];
+    flash.fromValue = [NSNumber numberWithFloat:1];
+    
+    NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
+    if((int)[notifications count] != 0){
+        [super resetCursorRects];
+        [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
+        
+        flash.toValue = [NSNumber numberWithFloat:self.opacity_min];
+    }
+    
     flash.duration = 0.2;
     [flash setFillMode:kCAFillModeForwards];
     [flash setRemovedOnCompletion:NO];
@@ -32,8 +60,14 @@
     [super resetCursorRects];
     
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    flash.fromValue = [NSNumber numberWithFloat:0.7];
-    flash.toValue = [NSNumber numberWithFloat:1.0];
+    
+    flash.fromValue = [NSNumber numberWithFloat:self.opacity_min];
+    
+    NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
+    if((int)[notifications count] != 0){
+        flash.toValue = [NSNumber numberWithFloat:1];
+    }
+    
     flash.duration = 0.2;
     [flash setFillMode:kCAFillModeForwards];
     [flash setRemovedOnCompletion:NO];
@@ -130,11 +164,14 @@
 }
 
 -(void)mouseEntered:(NSEvent *)theEvent {
+    [super resetCursorRects];
+    [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
     [self animate];
 }
 
 -(void)mouseExited:(NSEvent *)theEvent
 {
+    [super resetCursorRects];
     [self.layer removeAllAnimations];
 }
 
@@ -159,8 +196,8 @@
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
     self.layer.frame = old;
     CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotate.removedOnCompletion = NO;
     rotate.fillMode = kCAFillModeForwards;
+    rotate.removedOnCompletion = NO;
     rotate.fromValue = [NSNumber numberWithFloat:0.0f];
     rotate.toValue = [NSNumber numberWithFloat: - M_PI * 2.0f];
     rotate.duration = 3.0f;
@@ -175,37 +212,52 @@
 @interface MyNotificationView: NSView
 @property (strong) NSTrackingArea* trackingArea;
 @property (nonatomic) int notificationID;
+@property (nonatomic) NSAttributedString* title_string;
+@property (nonatomic) NSString* message_string;
 @property (nonatomic) NSString* link;
+@property (nonatomic) float real_height;
+@property (nonatomic) float shrink_height;
 @property (atomic, weak) AppDelegate* thisapp;
 @end
 
 @implementation MyNotificationView
 - (void) rightMouseDown:(NSEvent *)event {
-    NSMenu *theMenu = [[NSMenu alloc] initWithTitle:@"Contextual Menu"];
-    if([_thisapp notificationRead:self.notificationID]){
-        [theMenu insertItemWithTitle:@"Mark Unread" action:@selector(markUnread) keyEquivalent:@"" atIndex:0];
-    }else{
-        [theMenu insertItemWithTitle:@"Mark Read" action:@selector(markRead) keyEquivalent:@"" atIndex:0];
+    if(self.notificationID){ // none when no notification
+        NSMenu *theMenu = [[NSMenu alloc] initWithTitle:@"Contextual Menu"];
+        
+        if(self.frame.size.height != self.real_height){
+            NSMenuItem *expandItem = [[NSMenuItem alloc] initWithTitle:@"Expand" action:@selector(expandNotification:) keyEquivalent:@""];
+            [expandItem setRepresentedObject:self];
+            [theMenu addItem:expandItem];
+            [theMenu addItem:[NSMenuItem separatorItem]];
+        }
+        
+        if([_thisapp notificationRead:self.notificationID]){
+            [theMenu addItemWithTitle:@"Mark Unread" action:@selector(markUnread) keyEquivalent:@""];
+        }else{
+            [theMenu addItemWithTitle:@"Mark Read" action:@selector(markRead) keyEquivalent:@""];
+        }
+        
+        [theMenu addItemWithTitle:@"Delete Notification" action:@selector(deleteNoti) keyEquivalent:@""];
+        
+        [theMenu addItem:[NSMenuItem separatorItem]];
+        
+        NSString* url = [_thisapp notificationLink:self.notificationID];
+        if(![url  isEqual: @" "] && url != nil){
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open Link" action:@selector(openLink:) keyEquivalent:@""];
+            [menuItem setRepresentedObject:url];
+            [theMenu addItem:menuItem];
+        }
+        
+        NSString* imageLink = [_thisapp imageLink:self.notificationID];
+        if(![imageLink  isEqual: @" "] && imageLink != nil){
+            NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open Image" action:@selector(openLink:) keyEquivalent:@""];
+            [menuItem setRepresentedObject:imageLink];
+            [theMenu addItem:menuItem];
+        }
+        
+        [NSMenu popUpContextMenu:theMenu withEvent:event forView:(id)self];
     }
-    
-    [theMenu insertItemWithTitle:@"Delete Notification" action:@selector(deleteNoti) keyEquivalent:@"" atIndex:1];
-    
-    [theMenu addItem:[NSMenuItem separatorItem]];
-    NSString* url = [_thisapp notificationLink:self.notificationID];
-    if(![url  isEqual: @" "] && url != nil){
-        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open Link" action:@selector(openLink:) keyEquivalent:@""];
-        [menuItem setRepresentedObject:url];
-        [theMenu addItem:menuItem];
-    }
-    
-    NSString* imageLink = [_thisapp imageLink:self.notificationID];
-    if(![imageLink  isEqual: @" "] && imageLink != nil){
-        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Open Image URL" action:@selector(openLink:) keyEquivalent:@""];
-        [menuItem setRepresentedObject:imageLink];
-        [theMenu addItem:menuItem];
-    }
-    
-    [NSMenu popUpContextMenu:theMenu withEvent:event forView:(id)self];
 }
 
 -(void)updateTrackingAreas
@@ -225,10 +277,18 @@
 
 - (void)mouseDown:(NSEvent *)event
 {
-    // needs to be here for some reason to pass on the mouseup event to the label
+    // needs to be here for some reason to pass on the mouseup event to the label (LINK?)
+    if(self.frame.size.height != self.real_height) [self expandNotification:self];
 }
 
 // events
+- (void)expandNotification:(id)sender {
+    if(![sender isKindOfClass:[self class]]){
+        sender = [sender representedObject];
+    }
+    [_thisapp expandTableView:sender];
+}
+
 - (void)markRead {
     [_thisapp markAsRead:true notificationID:self.notificationID];
 }
@@ -284,7 +344,6 @@
 }
 @end
 
-
 // ----- label interface -----
 @interface MyLabel: NSTextField
 @property (nonatomic) NSString* link;
@@ -293,6 +352,34 @@
 @end
 
 @implementation MyLabel
+
+- (void)resetCursorRects
+{
+    [super resetCursorRects];
+}
+
+//- (void)mouseDown:(NSEvent *)theEvent{
+//    [self.superview mouseDown:theEvent];
+//}
+
+- (BOOL)textView:(NSTextView *)textView clickedOnLink:(id)link atIndex:
+(NSUInteger)charIndex{
+    NSLog(@"test1 %@",link);
+    return NO;
+}
+
+- (void)textViewDidChangeSelection:(NSNotification *)a{
+    [self setNeedsDisplay:YES];
+    [self setNeedsLayout:YES];
+    [self setNeedsUpdateConstraints:YES];
+    [self.superview setNeedsLayout:YES];
+    [self.superview setNeedsDisplay:YES];
+}
+
+// prevent the default right click menu
+- (NSMenu *)textView:(NSTextView *)view menu:(NSMenu *)menu forEvent:(NSEvent *)event atIndex:(NSUInteger)charIndex{
+    return nil;
+}
 
 - (void) rightMouseDown:(NSEvent *)event {
     [self.superview rightMouseDown:event];
@@ -332,20 +419,9 @@
 
 @implementation MyTitleLabel
 
-- (void)resetCursorRects
-{
-    if(![super.link  isEqual: @" "]){
-        [super resetCursorRects];
-        [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
-    }
-}
-
 - (void)mouseUp:(NSEvent *)event
 {
-    if(![super.link  isEqual: @" "] && super.link != nil){
-        NSView* v = self.superview;
-        [(MyNotificationView*)v.superview openLink:super.link];
-    }
+    if(super.link && ![super.link  isEqual: @" "]) [(MyNotificationView*)self.superview openLink:super.link];
 }
 
 @end
@@ -408,11 +484,16 @@
 @end
 
 @interface AppDelegate ()
+@property (strong) MyTable *notification_table;
 @end
 
 @implementation AppDelegate
 
+NSString* how_to_url = @"https://github.com/maxisme/notifi#http-request-examples";
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [self setupLogging];
+    
     [self onlyOneInstanceOfApp];
     
     //initiate keychain
@@ -444,17 +525,18 @@
 
 #pragma mark - window
 float screen_height; // used when opening new window to check if different screen
+float screen_width;
 int top_arrow_height;
 -(void)createWindow{
-    
     _black = [NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:1.0];
     _white = [NSColor colorWithRed:1.00 green:1.00 blue:1.00 alpha:1.0];
     _red = [NSColor colorWithRed:0.74 green:0.13 blue:0.13 alpha:1.0];
     _grey = [NSColor colorWithRed:0.43 green:0.43 blue:0.43 alpha:1.0];
-    _offwhite = [NSColor colorWithRed:0.98 green:0.98 blue:0.98 alpha:1.0];
+    _boarder = [NSColor colorWithRed:0.92 green:0.91 blue:0.91 alpha:1.0];
+    _offwhite = [NSColor colorWithRed:0.96 green:0.96 blue:0.96 alpha:1.0];
     
     //position variables
-    float screen_width = [[NSScreen mainScreen] frame].size.width;
+    screen_width = [[NSScreen mainScreen] frame].size.width;
     screen_height = [[NSScreen mainScreen] frame].size.height;
     
     float window_height = screen_height * 0.7;
@@ -501,28 +583,31 @@ int top_arrow_height;
     _view = nil;
     _view = [[self window] contentView];
     [_view setWantsLayer:YES];
-    [_view.layer setBackgroundColor:[NSColor clearColor].CGColor];
+    _view.autoresizingMask = NSViewHeightSizable;
+	[_view.layer setBackgroundColor:[NSColor clearColor].CGColor];
     
     NSImage* window_up_arrow = [NSImage imageNamed:@"up_arrow.png"];
     _window_up_arrow_view = [[NSImageView alloc] initWithFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
     [_window_up_arrow_view setImage:window_up_arrow];
     [_view addSubview:_window_up_arrow_view];
     
-    NSView *vis_view = [[NSView alloc] initWithFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5))];
-    [vis_view setWantsLayer:YES];
+    _vis_view = [[NSView alloc] initWithFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5))];
+    [_vis_view setWantsLayer:YES];
     //    [vis_view setState:NSVisualEffectStateActive];
     //    [vis_view setBlendingMode:NSVisualEffectBlendingModeBehindWindow];
-    [vis_view.layer setBackgroundColor:_white.CGColor];
-    vis_view.layer.cornerRadius = 10;
-    [_view addSubview:vis_view];
-    
+    [_vis_view.layer setBackgroundColor:_white.CGColor];
+    _vis_view.layer.cornerRadius = 10;
+    [_view addSubview:_vis_view];
     
     [self createBodyWindow];
 }
 
+MyButton* markAllAsReadBtn;
 -(void)createBodyWindow{
-    //----------------- top stuff -----------------
+    int bottom_buttons_height = 40;
     int top_bar_height = 90;
+    
+    //----------------- top stuff -----------------
     int window_width = _window.frame.size.width;
     int window_height = _window.frame.size.height;
     
@@ -561,52 +646,54 @@ int top_arrow_height;
                               window_width,
                               20
                               )
-                   ];
+                            ];
+    [error_label setWantsLayer:YES];
     [error_label setStringValue:@"Network Error!"];
-    error_label.font = [NSFont fontWithName:@"Raleway-SemiBold" size:8];
-    error_label.backgroundColor = [NSColor clearColor];
+    error_label.font = [NSFont fontWithName:@"OpenSans-Regular" size:8];
+    error_label.backgroundColor = _white;
     [error_label setAlignment:NSTextAlignmentCenter];
     [error_label setTextColor:_grey];
     [error_label setSelectable:YES];
-    [error_label setWantsLayer:YES];
     error_label.editable = false;
     error_label.bordered = false;
     error_label.hidden = true;
     error_label.tag = 1;
     [_view addSubview:error_label];
     
-    int bottom_buttons_height = 40;
+    //top line boarder
+    NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - top_bar_height, window_width, 1)];
+    hor_bor_top.wantsLayer = TRUE;
+    [hor_bor_top.layer setBackgroundColor:[_boarder CGColor]];
+    [_view addSubview:hor_bor_top];
+    
+    
     //----------------- body -----------------
     
     //scroll view
     float scroll_height = (window_height - top_bar_height) - bottom_buttons_height;
-    
     _scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, bottom_buttons_height, window_width, scroll_height)];
-    
+    [_scroll_view setWantsLayer:YES];
     [_scroll_view setBorderType:NSNoBorder];
     [_scroll_view setHasVerticalScroller:YES];
     [_scroll_view setPostsBoundsChangedNotifications:YES];
+    [_scroll_view setDrawsBackground:NO];
     _scroll_view.backgroundColor = _offwhite;
-    NSShadow *dropShadow = [[NSShadow alloc] init];
-    [dropShadow setShadowColor:[NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:0.5]];
-    [dropShadow setShadowOffset:NSMakeSize(0, 0)];
-    [dropShadow setShadowBlurRadius:3.0];
-    [_scroll_view setShadow:dropShadow];
     
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     if((int)[notifications count] == 0){
         _scroll_view.documentView = [self noNotificationsView];
     }else{
         //INITIATE NSTABLE
-        _notification_table = [[NSTableView alloc] initWithFrame:_scroll_view.frame];
-        NSTableColumn *column =[[NSTableColumn alloc] initWithIdentifier:@"1"];
+        _notification_table = [[MyTable alloc] initWithFrame:_scroll_view.frame];
+        NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:@"1"];
         [column setWidth:_scroll_view.frame.size.width - 5]; //I swear me needing to do this is a bug
+        [column setEditable:FALSE];
         [_notification_table addTableColumn:column];
         [_notification_table setHeaderView:nil];
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
         [_notification_table setDelegate:(id)self];
         [_notification_table setDataSource:(id)self];
-        [_notification_table setBackgroundColor:[NSColor clearColor]];
+        [_notification_table setBackgroundColor:_offwhite];
         [[_notification_table enclosingScrollView] setDrawsBackground:NO];
         [self reloadData];
         
@@ -615,56 +702,66 @@ int top_arrow_height;
     [_view addSubview:_scroll_view];
     
     //----------------- bottom stuff -----------------
-    int p = 40;
+    int button_y = 7;
+    float min_opac = 0.7;
+    float button_size = 12;
+    int p = 35;
+    
+    //horizontal border bottom
+    NSView *hor_bor_bot = [[NSView alloc] initWithFrame:CGRectMake(0, bottom_buttons_height, window_width, 1)];
+    hor_bor_bot.wantsLayer = TRUE;
+    [hor_bor_bot.layer setBackgroundColor:[_boarder CGColor]];
+    [_view addSubview:hor_bor_bot];
+    
     //mark all as read button
-    MyButton* markAllAsReadBtn = [[MyButton alloc] initWithFrame:CGRectMake(p / 2, 5, (window_width / 2) - p, 30)];
+    markAllAsReadBtn = [[MyButton alloc] initWithFrame:CGRectMake(p / 2, button_y, (window_width / 2) - p, 25)];
+    [markAllAsReadBtn setWantsLayer:YES];
+    [markAllAsReadBtn setOpacity_min:min_opac];
     [markAllAsReadBtn setButtonType:NSMomentaryChangeButton];
     [markAllAsReadBtn setAlignment:NSTextAlignmentCenter];
-//    [markAllAsReadBtn setImage:[NSImage imageNamed:@"Rounded Button.png"]];
-//    [markAllAsReadBtn setImageScaling:NSImageScaleAxesIndependently];
-    [markAllAsReadBtn setFont:[NSFont fontWithName:@"Raleway-Bold" size:12]];
-    markAllAsReadBtn.bordered =false;
+    [markAllAsReadBtn setFont:[NSFont fontWithName:@"OpenSans-Bold" size:button_size]];
+    markAllAsReadBtn.bordered = false;
     [markAllAsReadBtn setFocusRingType:NSFocusRingTypeNone];
     [markAllAsReadBtn setTitle:@"MARK ALL AS READ"];
     [markAllAsReadBtn setAction:@selector(markAllAsRead)];
     [markAllAsReadBtn updateTrackingAreas];
     [_view addSubview:markAllAsReadBtn];
     
+    //vertical button splitter boarder
+    NSView *vert_bor_top = [[NSView alloc] initWithFrame:CGRectMake((window_width / 2) -  1, 0, 1, bottom_buttons_height)];
+    vert_bor_top.wantsLayer = TRUE;
+    [vert_bor_top.layer setBackgroundColor:[_boarder CGColor]];
+    [_view addSubview:vert_bor_top];
+    
     //delete all button
-    MyButton *deleteNotifications = [[MyButton alloc] initWithFrame:CGRectMake(window_width / 2 + (p /2), 5, window_width /2 - p, 30)];
-//    [deleteNotifications setImage:[NSImage imageNamed:@"Rounded Button.png"]];
-//    [deleteNotifications setImageScaling:NSImageScaleAxesIndependently];
+    MyButton *deleteNotifications = [[MyButton alloc] initWithFrame:CGRectMake(window_width / 2 + (p /2), button_y, window_width /2 - p, 25)];
+    [deleteNotifications setWantsLayer:YES];
+    [deleteNotifications setOpacity_min:min_opac];
     [deleteNotifications setButtonType:NSMomentaryChangeButton];
+    
     NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [centredStyle setAlignment:NSCenterTextAlignment];
     
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
                            NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Raleway-Bold" size:12],
+                           [NSFont fontWithName:@"OpenSans-Bold" size:button_size],
                            NSFontAttributeName,
                            _red,
                            NSForegroundColorAttributeName,
                            nil];
-    NSMutableAttributedString *attributedString =
-    [[NSMutableAttributedString alloc] initWithString:@"DELETE ALL"
-                                           attributes:attrs];
-    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"DELETE ALL" attributes:attrs];
     [deleteNotifications setAttributedTitle:attributedString];
     [deleteNotifications setFocusRingType:NSFocusRingTypeNone];
     deleteNotifications.bordered =false;
     [deleteNotifications setAction:@selector(deleteAll)];
     [deleteNotifications updateTrackingAreas];
-    deleteNotifications.layer.borderWidth = 3;
-    deleteNotifications.layer.borderColor = _red.CGColor;
-    deleteNotifications.layer.cornerRadius = 8;
-    deleteNotifications.wantsLayer = YES;
+    
     [_view addSubview:deleteNotifications];
 }
 
 -(void)positionWindow{
-    int side_padding = 10;
     
-    //position variables
+    //position variables relative to status item
     float window_height = self.window.frame.size.height;
     float window_width = self.window.frame.size.width;
     NSRect menu_icon_frame = [[_statusItem valueForKey:@"window"] frame];
@@ -672,71 +769,63 @@ int top_arrow_height;
     float menu_icon_x = menu_icon_frame.origin.x;
     float menu_icon_y = menu_icon_frame.origin.y;
     
-    //calculate positions
+    //calculate positions of window on screen and arrow
     float arrow_x = window_width/2 - (top_arrow_height/2);
     float arrow_y = window_height - top_arrow_height;
     float window_x = (menu_icon_x + menu_icon_width/2) - window_width / 2;
     float window_y = menu_icon_y - window_height;
     
-    if(window_width + window_x > [[NSScreen mainScreen] frame].size.width){ //window will fall out of screen
-        window_x = [[NSScreen mainScreen] frame].size.width - window_width - side_padding;
-        arrow_x = menu_icon_x + menu_icon_width/2 - window_x - side_padding;
-    }
+    //
+    
+//    int side_padding = 5;
+//    if(window_width + window_x > screen_width){ //window will fall out of screen
+//        window_x = screen_width - window_width - side_padding;
+//        arrow_x = menu_icon_x + menu_icon_width/2 - window_x - side_padding;
+//    }
     
     // update positions
     [_window_up_arrow_view setFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
     [_window setFrame:NSMakeRect(window_x, window_y, window_width, window_height) display:true];
-}
-
-- (void)blurView:(NSView *)view
-{
-    NSView *blurView = [[NSView alloc] initWithFrame:view.bounds];
-    blurView.wantsLayer = YES;
-    blurView.layer.backgroundColor = [NSColor clearColor].CGColor;
-    blurView.layer.masksToBounds = YES;
-    blurView.layerUsesCoreImageFilters = YES;
-    blurView.layer.needsDisplayOnBoundsChange = YES;
-    
-    CIFilter *saturationFilter = [CIFilter filterWithName:@"CIColorControls"];
-    [saturationFilter setDefaults];
-    [saturationFilter setValue:@2.0 forKey:@"inputSaturation"];
-    
-    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"]; // Other blur types are available
-    [blurFilter setDefaults];
-    [blurFilter setValue:@2.0 forKey:@"inputRadius"];
-    
-    blurView.layer.backgroundFilters = @[saturationFilter, blurFilter];
-    
-    [view addSubview:blurView];
-    
-    [blurView setNeedsDisplay:YES];
+    [_vis_view setFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5))];
 }
 
 -(void)onScroll{
-    [self animateNotifications:false];
+    if([_notification_views count] > 0) [self animateNotifications:false];
+}
+
+NSTimer* animate_bell_timer;
+int bell_image_cnt;
+-(void)animateBell:(NSImage*)image{
+    if(!animate_bell_timer){
+        after_image = nil;
+    }else{
+        // cancel timer
+        [animate_bell_timer invalidate];
+        animate_bell_timer = nil;
+    }
+    
+    bell_image_cnt = 0;
+    animate_bell_timer = [NSTimer scheduledTimerWithTimeInterval:0.0015 target:self selector:@selector(updateBellImage) userInfo:nil repeats:YES];
 }
 
 NSImage* after_image;
-bool animating_bell = false;
--(void)animateBell:(NSImage*)image{
-    if(!animating_bell){
-        animating_bell = true;
-        after_image = nil;
-        // get these data points by making every point a keyframe on after effects copying and then copying and pasting them into a file
-        NSArray *numbers = [@"-20,-15.1022,-10.5422,-6.32,-2.43556,1.11111,4.32,7.19111,9.72444,11.92,13.7778,15.2978,16.48,17.3244,17.8311,18,13.6178,9.53778,5.76,2.28444,-0.888889,-3.76,-6.32889,-8.59556,-10.56,-12.2222,-13.5822,-14.64,-15.3956,-15.8489,-16,-12.1333,-8.53333,-5.2,-2.13333,0.666667,3.2,5.46667,7.46667,9.2,10.6667,11.8667,12.8,13.4667,13.8667,14,10.52,7.28,4.28,1.52,-1,-3.28,-5.32,-7.12,-8.68,-10,-11.08,-11.92,-12.52,-12.88,-13,-9.77778,-6.77778,-4,-1.44444,0.888889,3,4.88889,6.55556,8,9.22222,10.2222,11,11.5556,11.8889,12,9.16444,6.52444,4.08,1.83111,-0.222222,-2.08,-3.74222,-5.20889,-6.48,-7.55556,-8.43556,-9.12,-9.60889,-9.90222,-10,-7.68,-5.52,-3.52,-1.68,-7.10543e-15,1.52,2.88,4.08,5.12,6,6.72,7.28,7.68,7.92,8,6.19556,4.51556,2.96,1.52889,0.222222,-0.96,-2.01778,-2.95111,-3.76,-4.44444,-5.00444,-5.44,-5.75111,-5.93778,-6,-4.71111,-3.51111,-2.4,-1.37778,-0.444444,0.4,1.15556,1.82222,2.4,2.88889,3.28889,3.6,3.82222,3.95556,4,3.22667,2.50667,1.84,1.22667,0.666667,0.16,-0.293333,-0.693333,-1.04,-1.33333,-1.57333,-1.76,-1.89333,-1.97333,-2,-1.74222,-1.50222,-1.28,-1.07556,-0.888889,-0.72,-0.568889,-0.435556,-0.32,-0.222222,-0.142222,-0.08,-0.0355556,-0.0088888" componentsSeparatedByString:@","];
-        dispatch_async(dispatch_get_global_queue(0,0), ^{
-            for (NSString *i in numbers) {
-                float x = [i floatValue];
-                [NSThread sleepForTimeInterval:0.012];
-                _statusItem.image = [image imageRotated:x];
-            }
-            if(after_image){
-                _statusItem.image = after_image;
-            }else{
-                _statusItem.image = image;
-            }
-            animating_bell = false;
-        });
+- (void)updateBellImage
+{
+    NSImage* image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];;
+    NSArray *numbers = [@"-20,-15.1022,-10.5422,-6.32,-2.43556,1.11111,4.32,7.19111,9.72444,11.92,13.7778,15.2978,16.48,17.3244,17.8311,18,13.6178,9.53778,5.76,2.28444,-0.888889,-3.76,-6.32889,-8.59556,-10.56,-12.2222,-13.5822,-14.64,-15.3956,-15.8489,-16,-12.1333,-8.53333,-5.2,-2.13333,0.666667,3.2,5.46667,7.46667,9.2,10.6667,11.8667,12.8,13.4667,13.8667,14,10.52,7.28,4.28,1.52,-1,-3.28,-5.32,-7.12,-8.68,-10,-11.08,-11.92,-12.52,-12.88,-13,-9.77778,-6.77778,-4,-1.44444,0.888889,3,4.88889,6.55556,8,9.22222,10.2222,11,11.5556,11.8889,12,9.16444,6.52444,4.08,1.83111,-0.222222,-2.08,-3.74222,-5.20889,-6.48,-7.55556,-8.43556,-9.12,-9.60889,-9.90222,-10,-7.68,-5.52,-3.52,-1.68,-7.10543e-15,1.52,2.88,4.08,5.12,6,6.72,7.28,7.68,7.92,8,6.19556,4.51556,2.96,1.52889,0.222222,-0.96,-2.01778,-2.95111,-3.76,-4.44444,-5.00444,-5.44,-5.75111,-5.93778,-6,-4.71111,-3.51111,-2.4,-1.37778,-0.444444,0.4,1.15556,1.82222,2.4,2.88889,3.28889,3.6,3.82222,3.95556,4,3.22667,2.50667,1.84,1.22667,0.666667,0.16,-0.293333,-0.693333,-1.04,-1.33333,-1.57333,-1.76,-1.89333,-1.97333,-2,-1.74222,-1.50222,-1.28,-1.07556,-0.888889,-0.72,-0.568889,-0.435556,-0.32,-0.222222,-0.142222,-0.08,-0.0355556,-0.0088888" componentsSeparatedByString:@","];
+    
+    if(bell_image_cnt == [numbers count] - 1){
+        if(!after_image) after_image = image;
+        [_statusItem setImage:after_image];
+        
+        // cancel timer
+        [animate_bell_timer invalidate];
+        animate_bell_timer = nil;
+    }else{
+        NSString *i = numbers[bell_image_cnt];
+        float x = [i floatValue];
+        [_statusItem setImage:[image imageRotated:x]];
+        bell_image_cnt++;
     }
 }
 
@@ -746,76 +835,80 @@ bool animating_bell = false;
     MyNotificationView *view = [[MyNotificationView alloc] initWithFrame:_scroll_view.frame];
     view.wantsLayer = TRUE;
     
+    
+    //no notifications text
     NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [centredStyle setAlignment:NSTextAlignmentCenter];
     
-    //no notifications text
-    int title_height = 65;
+    int title_height = 60;
     NSDictionary *noNotificationsAttrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
                                           NSParagraphStyleAttributeName,
-                                          [NSFont fontWithName:@"Raleway-Bold" size:37],
+                                          [NSFont fontWithName:@"OpenSans-Bold" size:30],
                                           NSFontAttributeName,
                                           _grey,
                                           NSForegroundColorAttributeName,
                                           nil];
     NSMutableAttributedString *noNotificationsString =
-    [[NSMutableAttributedString alloc] initWithString:@"No Notifications"
+    [[NSMutableAttributedString alloc] initWithString:@"No Notifications!"
                                            attributes:noNotificationsAttrs];
-    MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
+    
+    MyLabel* title_field = [[MyLabel alloc] initWithFrame:
                                  CGRectMake(
                                             0,
-                                            _scroll_view.frame.size.height/2 - title_height/2 + 10,
+                                            _scroll_view.frame.size.height/2 - title_height/2 - 20,
                                             window_width,
                                             title_height
                                             )
                                  ];
-    title_field.editable = false;
-    title_field.bordered = false;
-    title_field.backgroundColor = [NSColor clearColor];
-    [title_field setAlignment:NSTextAlignmentCenter];
-    title_field.attributedStringValue = noNotificationsString;
     [title_field setWantsLayer:true];
-    [title_field setAllowsEditingTextAttributes:YES];
+    [title_field setBackgroundColor:_offwhite];
     [title_field setSelectable:YES];
+    [title_field setAllowsEditingTextAttributes:true];
+    [title_field setAttributedStringValue:noNotificationsString];
+    [title_field setEditable:false];
+    [title_field setBordered:false];
     title_field.tag = 1;
+    
     [view addSubview:title_field];
+    
+    // SAD ICON IMAGE
+    int image_hw = 150;
+    NSImageView *image_view = [[NSImageView alloc] initWithFrame:NSMakeRect((window_width / 2) - image_hw / 2, title_field.frame.origin.y + (image_hw /2), image_hw, image_hw)];
+    [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
+    [image_view setImage:[NSImage imageNamed:@"sad.png"]];
+    image_view.tag = 3;
+    [view addSubview:image_view];
     
     //send curls
     NSDictionary *sendCurlAttrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
                                    NSParagraphStyleAttributeName,
-                                   [NSFont fontWithName:@"Raleway-Medium" size:13],
+                                   [NSFont fontWithName:@"OpenSans-Regular" size:13],
                                    NSFontAttributeName,
                                    _grey,
                                    NSForegroundColorAttributeName,
                                    nil];
     NSMutableAttributedString *sendCurlString =
-    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Send HTTP requests with the credentials\n%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]]
-                                           attributes:sendCurlAttrs];
-    [sendCurlString beginEditing];
-    //    [sendCurlString applyFontTraits:NSBoldFontMask
-    //                              range:NSMakeRange(5,4)];
-    [sendCurlString applyFontTraits:NSBoldFontMask
-                              range:NSMakeRange(40, 25)];
-    [sendCurlString addAttribute:NSLinkAttributeName value: @"https://github.com/maxisme/notifi#http-request-examples" range:NSMakeRange(5,4)];
-    [sendCurlString endEditing];
+    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use simple HTTP requests along with your unique credentials: %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]] attributes:sendCurlAttrs];
+    [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(86, 25)];
+    [sendCurlString addAttribute:NSLinkAttributeName value:how_to_url range:NSMakeRange(36,13)];
     
-    MyTitleLabel* curl_field = [[MyTitleLabel alloc] initWithFrame:
+    MyLabel* curl_field = [[MyLabel alloc] initWithFrame:
                                 CGRectMake(
-                                           0,
-                                           title_field.frame.origin.y - 50,
-                                           window_width,
-                                           60
+                                           10,
+                                           title_field.frame.origin.y - 70,
+                                           window_width - 20,
+                                           70
                                            )
                                 ];
     curl_field.tag = 2;
-    curl_field.editable = false;
-    curl_field.bordered = false;
-    curl_field.backgroundColor = [NSColor clearColor];
-    [curl_field setAlignment:NSTextAlignmentCenter];
-    curl_field.attributedStringValue = sendCurlString;
     [curl_field setWantsLayer:true];
-    [curl_field setAllowsEditingTextAttributes:YES];
+    [curl_field setBackgroundColor:_offwhite];
     [curl_field setSelectable:YES];
+    [curl_field setAllowsEditingTextAttributes:true];
+    [curl_field setAttributedStringValue:sendCurlString];
+    [curl_field setEditable:false];
+    [curl_field setBordered:false];
+    [curl_field setBackgroundColor:_offwhite];
     
     [view addSubview:curl_field];
     
@@ -829,34 +922,24 @@ bool animating_bell = false;
     return notifications.count;
 }
 
+int table_row_padding = 10;
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     // format cell view
     NSView* view = [[NSView alloc] init];
-    [view addSubview:[_notification_views objectAtIndex:row]];
+    [view setWantsLayer:YES];
+    [view addSubview:[_notification_views objectAtIndex:([_notification_views count] - 1) - row]];
     return view;
 }
 
 - (CGFloat) tableView:(NSTableView *) tableView heightOfRow:(NSInteger) row {
-    int row_padding = 15;
-    NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    NSMutableDictionary *dic = notifications[([notifications count] - 1) - row]; // backwards
-    return [self createNotificationView:[dic objectForKey:@"title"]
-                                message:[dic objectForKey:@"message"]
-                               imageURL:[dic objectForKey:@"image"]
-                                   link:[dic objectForKey:@"link"]
-                                   time:[dic objectForKey:@"time"]
-                                   read:[[dic objectForKey:@"read"] boolValue]
-                         notificationID:[[dic objectForKey:@"id"] intValue]] . frame.size.height + row_padding;
-}
-
-- (void)tableView:(NSTableView *)tableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
-    NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    [notifications replaceObjectAtIndex:([notifications count] - 1) - rowIndex withObject:anObject];
+    NSView* notification = [_notification_views objectAtIndex:([_notification_views count] - 1) - row];
+    return notification.frame.size.height + table_row_padding;
 }
 
 bool reloaded_in_last_2 = false;
 NSUInteger errorGeneration;
 -(void)reloadData{
+    NSLog(@"CALLED RELOAD TABLE");
     if(!reloaded_in_last_2){ // every 2 seconds set to false
         [self reload];
     }else{
@@ -883,35 +966,57 @@ NSUInteger errorGeneration;
         _time_labels = [[NSMutableArray alloc] init];
         _notification_views = [[NSMutableArray alloc] init];
         
+        NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
+        for(NSMutableDictionary* dic in notifications){
+            MyNotificationView* notification = [self createNotificationView:[dic objectForKey:@"title"]
+                                                        message:[dic objectForKey:@"message"]
+                                                       imageURL:[dic objectForKey:@"image"]
+                                                           link:[dic objectForKey:@"link"]
+                                                           time:[dic objectForKey:@"time"]
+                                                           read:[[dic objectForKey:@"read"] boolValue]
+                                                 notificationID:[[dic objectForKey:@"id"] intValue]];
+            [_notification_views addObject:notification];
+        }
+        
         [_notification_table reloadData];
-        [_notification_table setWantsLayer:YES];
         [self updateReadIcon:true];
     });
 }
 
 #pragma mark - notification
-NSMutableArray *animatedNotifications;
 -(void)animateNotifications:(bool)should_delay{
+    [self animateNotifications:should_delay scroll:false];
+}
+
+NSMutableArray *animatedNotifications;
+-(void)animateNotifications:(bool)should_delay scroll:(bool)should_scroll{
     NSScrollView* scrollView = [_notification_table enclosingScrollView];
     CGRect visibleRect = scrollView.contentView.visibleRect;
     NSRange range = [_notification_table rowsInRect:visibleRect];
-    int right =  - _window.frame.size.width;
-    int num_notifications = (int)[_notification_views count];
+    
+    NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
+    int num_notifications = (int)[notifications count];
+    
+    int right =  - _window.frame.size.width; // start position of animation
     
     int start = (int)range.location;
     if(start > 1) start -= 1;
     int end = start + (int)range.length;
-    if(end > num_notifications - 1) end = num_notifications - 1;
+    if(end >= num_notifications) end = num_notifications - 1; // end is the last notification
     
-    if([_scroll_view.documentView isKindOfClass:[NSTableView class]]){ // there are notifications
-        for(int x = start; x <= end; x++){
+    if(num_notifications > 0){ // there are notifications
+        for(int j = end; j >= start; j--){
+            int x = (num_notifications - 1) - j; // flip order
             NSString* ex = [NSString stringWithFormat:@"%d", x];
-            if(![animatedNotifications containsObject:ex]){
+            if(![animatedNotifications containsObject:ex]){ // not already animated
                 [animatedNotifications addObject:ex];
                 MyNotificationView* notification = [_notification_views objectAtIndex:x];
-                float delay = 0;
-                if (should_delay) delay = (x - start) * 0.07;
                 
+                //handle delay
+                float delay = 0;
+                if (should_delay) delay = (j - start) * 0.07; // on first show
+                
+                //original positions
                 int or_x = notification.frame.origin.x;
                 int or_y = notification.frame.origin.y;
                 
@@ -924,6 +1029,15 @@ NSMutableArray *animatedNotifications;
                         [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
                         [[notification animator] setFrameOrigin:endPoint];
                     }];
+                    if(should_scroll){
+                        [NSAnimationContext beginGrouping];
+                        [[NSAnimationContext currentContext] setDuration:0.5];
+                        NSClipView* clipView = [_scroll_view contentView];
+                        NSPoint newOrigin = [clipView bounds].origin;
+                        newOrigin.y = 0;
+                        [[clipView animator] setBoundsOrigin:newOrigin];
+                        [NSAnimationContext endGrouping];
+                    }
                 }];
             }
         }
@@ -943,155 +1057,150 @@ NSMutableArray *animatedNotifications;
             [no_notifications setFrameOrigin:NSMakePoint(nn_or_x + right, nn_or_y)];
             [info setFrameOrigin:NSMakePoint(i_or_x - right, i_or_y)];
         } completion:^{
-            [notification animateWithDuration:1 animation:^{
-                [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.1 :0.7 :0.2 :1]];
+            [notification animateWithDuration:0.7 animation:^{
+                [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
                 [[no_notifications animator] setFrameOrigin:NSMakePoint(nn_or_x, nn_or_y)];
                 [[info animator] setFrameOrigin:NSMakePoint(i_or_x, i_or_y)];
+                [_window makeKeyAndOrderFront: info];
             }];
         }];
     }
 }
 
+-(BOOL)hasNotifications{
+    NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
+    return (int)[notifications count] != 0;
+}
+
 int notification_view_padding = 20;
 int unread_notification_count = 0;
--(NSView*)createNotificationView:(NSString*)title_string message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url time:(NSString*)time_string read:(bool)read notificationID:(int)notificationID
+
+//TODO: CALCULATE THESE DYNAMICALLY
+int one_row_title_height = 25;
+int one_row_info_height = 21;
+
+-(MyNotificationView*)createNotificationView:(NSString*)title_string message:(NSString*)message_string imageURL:(NSString*)imgURL link:(NSString*)url time:(NSString*)time_string read:(bool)read notificationID:(int)notificationID
 {
     float width_perc = 0.9;
     int notification_width = _scroll_view.frame.size.width * width_perc;
-    int x = _scroll_view.frame.size.width * (1 - width_perc)/2;
-    NSLog(@"x:%d ",x);
-    int y = 5;
+    int x = _scroll_view.frame.size.width * ((1 - width_perc) / 2);
+    int y = table_row_padding / 2;
     
     //fonts
-    NSFont* title_font = [NSFont fontWithName:@"Raleway-SemiBold" size:17];
-    NSFont* info_font = [NSFont fontWithName:@"Raleway-Medium" size:12];
-    NSFont* time_font = [NSFont fontWithName:@"Raleway-Medium" size:10];
+    NSFont* title_font = [NSFont fontWithName:@"Roboto-Medium" size:17];
+    NSFont* info_font = [NSFont fontWithName:@"OpenSans-Regular" size:12];
+    NSFont* time_font = [NSFont fontWithName:@"OpenSans-Regular" size:10];
     
-    int image_width = 70;
-    int image_height = 70;
+    int image_hw = 50;
     
-    int time_height = 17;
+    int time_height = 18;
     
-    NSView *view = [[NSView alloc] init];
+    MyNotificationView *view = [[MyNotificationView alloc] init];
     [view setWantsLayer:YES];
+    view.notificationID = notificationID;
+    view.thisapp = self;
     
     //check if image variable
-    int padding_right = 5;
+    int top_padding = 15;
+    int side_padding = 15;
     if(![imgURL isEqual: @" "]){
-        padding_right = 80;
+        side_padding = image_hw + top_padding * 2;
     }
     
-    float text_width = notification_width*0.98 - padding_right;
+    float text_width = notification_width * 0.95 - side_padding;
     
-    //height of title
-    NSMutableParagraphStyle *centredStyle_title = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    NSDictionary *attrs_title = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle_title,
-                                 NSParagraphStyleAttributeName,
-                                 title_font,
-                                 NSFontAttributeName,
-                                 nil];
+    //check if title has link
+    if(![url  isEqual: @" "]) title_string = [@"🔗 " stringByAppendingString:title_string];
     
-    NSMutableAttributedString *attributedString_title = [[NSMutableAttributedString alloc] initWithString:title_string attributes:attrs_title];
-    if(![url  isEqual: @" "]){
-        NSRange range = NSMakeRange(0, attributedString_title.length);
-        [attributedString_title addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
-    }
-    CGRect rect_title = [attributedString_title boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-    float title_height = rect_title.size.height; //calculated height of dynamic title
+    //------ height of title
+    float title_height =[self calculateStringHeight:title_string font:title_font width:text_width];
     
-    //height of info
+    //------- height of info
     float info_height = 0.0;
-    if(![mes  isEqual: @" "]){
-        //calculate height of view by height of info text area
-        NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
-                               NSParagraphStyleAttributeName,
-                               info_font,
-                               NSFontAttributeName,
-                               nil];
-        NSMutableAttributedString *attributedString =
-        [[NSMutableAttributedString alloc] initWithString:mes
-                                               attributes:attrs];
-        CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(text_width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
-        
-        info_height = rect.size.height;
+    if(![message_string isEqual: @" "]){
+        info_height = [self calculateStringHeight:message_string font:info_font width:text_width];
     }
     
     //calculate total height of notification
-    int extra_padding = 8;
-    int notification_height = title_height + time_height + info_height + (notification_view_padding * 2) + extra_padding;
+    int notification_height = title_height + time_height + info_height + (top_padding * 3);
     
-    if(![imgURL isEqual: @" "]){ // handle extra height if image
-        int min_height = image_height + time_height + notification_view_padding;
+    if(![imgURL isEqual: @" "]){ // handle extra heightNSColor if image
+        int min_height = image_hw + top_padding * 4;
         if(notification_height < min_height){
             notification_height = min_height;
         }
     }
     
     //create view
-    [view setFrame:CGRectMake(x, y, notification_width, notification_height - 45)];
+    [view setFrame:CGRectMake(x, y, notification_width, notification_height - (top_padding * 2))];
     [view.layer setBackgroundColor:[_white CGColor]];
-    
+    view.layer.borderColor = [_boarder CGColor];
+    view.layer.borderWidth = 1;
     view.layer.cornerRadius = 7.0f;
     view.layer.masksToBounds = YES;
     
     //body of notification
     //--      add image
     if(![imgURL isEqual: @" "]){
-        NSRect imageRect = NSMakeRect(0, view.frame.size.height - image_height, image_width, image_height);
-        NotificationImage *image_view = [[NotificationImage alloc] initWithFrame:imageRect];
+        NSView* rounded_image_view = [[NSView alloc] initWithFrame:NSMakeRect(top_padding, view.frame.size.height - image_hw - top_padding, image_hw, image_hw)];
+        [rounded_image_view setWantsLayer:YES];
+        rounded_image_view.layer.cornerRadius = 5; // circle
+        rounded_image_view.layer.masksToBounds = YES;
+        
+        NotificationImage *image_view = [[NotificationImage alloc] initWithFrame:NSMakeRect(0, 0, image_hw + 5, image_hw + 5)];
         [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
         [image_view sd_setImageWithURL:[NSURL URLWithString:imgURL]];
         image_view.image_url = imgURL;
-        [view addSubview:image_view];
+        [rounded_image_view addSubview:image_view];
+        
+        [view addSubview:rounded_image_view];
     }
     
     //--    add title
     MyTitleLabel* title_field = [[MyTitleLabel alloc] initWithFrame:
                                  CGRectMake(
-                                            padding_right,
-                                            view.frame.size.height - title_height,
+                                            side_padding,
+                                            view.frame.size.height - title_height - (top_padding / 1.9),
                                             text_width,
                                             title_height
                                             )
                                  ];
-    [title_field setWantsLayer:YES];
-    [title_field setSelectable:YES];
-    if(![url  isEqual: @" "]){
-        title_field.link = url;
-        [title_field setSelectable:NO];
-    }
-    title_field.font = title_font;
-    title_field.backgroundColor = [NSColor clearColor];
-    [title_field setAlignment:NSTextAlignmentLeft];
+    [title_field setEditable:false];
+    [title_field setFont:title_font];
+    [title_field setBordered:false];
+    [title_field setSelectable:true];
+    [title_field setBezeled:false];
+    [title_field setDrawsBackground:false];
     title_field.tag = notificationID;
     [title_field setTextColor:_grey];
     if(!read){
         [title_field setTextColor:_red];
         unread_notification_count++;
     }
-    title_field.editable = false;
-    title_field.bordered = false;
-    title_field.attributedStringValue = attributedString_title;
+    
+    if(![url  isEqual: @" "]) title_field.link = url;
+    
+    [title_field setStringValue:title_string];
     
     [view addSubview:title_field];
     
     //--   add time
     MyLabel* time_label = [[MyLabel alloc] initWithFrame:
                            CGRectMake(
-                                      padding_right,
+                                      side_padding,
                                       title_field.frame.origin.y - time_height,
                                       text_width,
                                       time_height
                                       )
                            ];
-    time_label.font = time_font;
-    time_label.backgroundColor = [NSColor clearColor];
-    [time_label setAlignment:NSTextAlignmentLeft];
+    NSLog(@"create");
+    [time_label setFont:time_font];
     [time_label setTextColor:_grey];
-    [time_label setSelectable:YES];
-    time_label.editable = false;
-    time_label.bordered =false;
+    [time_label setEditable:false];
+    [time_label setBordered:false];
+    [time_label setSelectable:true];
+    [time_label setBezeled:false];
+    [time_label setDrawsBackground:false];
     
     //get nsdate
     NSDateFormatter *serverFormat = [[NSDateFormatter alloc]init];
@@ -1119,46 +1228,144 @@ int unread_notification_count = 0;
     [view addSubview:time_label];
     
     //-- add info
-    if(![mes  isEqual: @" "]){
-        MyLabel* info = [[MyLabel alloc] initWithFrame:
+    MyLabel* info;
+    if(![message_string isEqual: @" "]){
+        info = [[MyLabel alloc] initWithFrame:
                          CGRectMake(
-                                    padding_right,
-                                    time_label.frame.origin.y - info_height + 5,
+                                    side_padding,
+                                    time_label.frame.origin.y - info_height,
                                     text_width,
                                     info_height
                                     )
                          ];
-        [view layoutSubtreeIfNeeded];
-        info.font = info_font;
-        info.preferredMaxLayoutWidth = text_width;
-        info.backgroundColor = [NSColor clearColor];
-        [info setAlignment:NSTextAlignmentLeft];
+        [info setFont:info_font];
+        [info setBackgroundColor:_white];
         [info setTextColor:_black];
-        [info setSelectable:YES];
-        info.editable = false;
-        info.bordered = false;
-        [info setStringValue:mes];
+//        [info setPreferredMaxLayoutWidth:text_width];
+        [info setEditable:false];
+        [info setSelectable:true];
+        [info setBordered:false];
+        [info setBezeled:false];
+        [info setDrawsBackground:false];
         [view addSubview:info];
     }
     
-    MyNotificationView *view1 = [[MyNotificationView alloc] initWithFrame:NSMakeRect(0, 0, _scroll_view.frame.size.width, view.frame.size.height)];
-    [view1 setWantsLayer:YES];
-    [view1 updateTrackingAreas];
-    view1.notificationID = notificationID;
-    view1.thisapp = self;
+    // RESET HEIGHT OF NOTIFICATION TO SHRUNK DOWN SIZE
     
-    // create notification shadow
-    NSShadow *dropShadow = [[NSShadow alloc] init];
-    [dropShadow setShadowColor:[NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:0.5]];
-    [dropShadow setShadowOffset:NSMakeSize(0, 0)];
-    [dropShadow setShadowBlurRadius:2.0];
-    [view1 setShadow:dropShadow];
+    //change strings
+    if(title_height > one_row_title_height){
+        int cnt = 1;
+        NSString *str = @"";
+        do{
+            str = [NSString stringWithFormat:@"%@...", [title_string substringToIndex:cnt]];
+            cnt++;
+        }while([self calculateStringHeight:str font:title_font width:text_width] <= one_row_title_height);
+        str = [NSString stringWithFormat:@"%@...", [title_string substringToIndex:cnt - 1]];
+        
+        [title_field setStringValue:str];
+    }
     
-    [view setFrame:NSMakeRect(x, y, view.frame.size.width, view.frame.size.height)];
-    [view1 addSubview:view];
-    [_notification_views addObject:view1];
+    if(info_height > one_row_info_height){
+        int cnt = 1;
+        NSString *str = @"";
+        int height = 0;
+        do{
+            str = [NSString stringWithFormat:@"%@...", [message_string substringToIndex:cnt]];
+            cnt++;
+            height = [self calculateStringHeight:str font:info_font width:text_width];
+            NSLog(@"height: %d",height);
+        }while(height <= one_row_title_height);
+        str = [NSString stringWithFormat:@"%@...", [message_string substringToIndex:cnt - 2]];
+        
+        NSMutableAttributedString* attributed_string = [[NSMutableAttributedString alloc] initWithString:str];
+        [attributed_string addAttribute:NSLinkAttributeName value:how_to_url range:NSMakeRange(cnt - 2,3)];
+        [info setAttributedStringValue:attributed_string];
+        [info resetCursorRects];
+    }else{
+        [info setStringValue:message_string];
+    }
     
-    return view1;
+    view.message_string = message_string;
+    view.title_string = title_string;
+    view.real_height = notification_height - (top_padding * 2);
+    view.shrink_height = pre_shrink_height;
+    if(view.real_height < pre_shrink_height){
+        view.shrink_height = view.real_height;
+    }
+    
+    [view setFrame:CGRectMake(x, y, notification_width, view.shrink_height)];
+    for (NSView* subview in view.subviews) {
+        [subview.animator setFrame:NSMakeRect(subview.frame.origin.x, subview.frame.origin.y - (view.real_height - view.shrink_height), subview.frame.size.width, subview.frame.size.height)];
+    }
+    
+    [view updateTrackingAreas];
+    
+    return view;
+}
+
+-(int)calculateStringHeight:(NSString*)string font:(NSFont*)font width:(int)width{
+    NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:style,
+                                 NSParagraphStyleAttributeName,
+                                 font,
+                                 NSFontAttributeName,
+                                 nil];
+    
+    NSMutableAttributedString *attributed_string = [[NSMutableAttributedString alloc] initWithString:string attributes:attrs];
+    CGRect rect = [attributed_string boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+    return rect.size.height; //calculated height of dynamic title
+}
+
+-(void)expandTableView:(MyNotificationView*)view{
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:0.25];
+    
+    //change the views height and all sub views
+    for (id subview in view.subviews) {
+        if([subview isKindOfClass:[MyTitleLabel class]]){
+            MyTitleLabel* title = subview;
+            [title setAttributedStringValue:view.title_string];
+        }else if([subview isKindOfClass:[MyLabel class]]){
+            MyLabel* info = subview;
+            if(!info.str_time) [info setStringValue:view.message_string];
+        }
+        
+        if(view.frame.size.height != view.real_height){
+            NSView *s = subview;
+            [s.animator setFrame:NSMakeRect(s.frame.origin.x, s.frame.origin.y + (view.real_height - view.shrink_height), s.frame.size.width, s.frame.size.height )];
+        }
+    }
+    [view.animator setFrame:NSMakeRect(view.frame.origin.x,view.frame.origin.y,view.frame.size.width, view.real_height)];
+    
+    //update table
+    NSInteger row = [_notification_table rowForView:view]; // find row
+    [_notification_table noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:row]];
+    NSRect r = [_notification_table rectOfRow:row];
+    [_notification_table scrollRectToVisible:r];
+    
+    [NSAnimationContext endGrouping];
+}
+
+int pre_shrink_height = 79;
+-(void)shrinkTableView:(MyNotificationView*)view{
+    [self shrinkTableView:view animate:YES];
+}
+
+-(void)shrinkTableView:(MyNotificationView*)view animate:(bool)should_animate{
+    
+    [NSAnimationContext beginGrouping];
+    if(should_animate) [[NSAnimationContext currentContext] setDuration:0.25];
+    
+    //change the views height and all sub views
+    [view.animator setFrame:NSMakeRect(view.frame.origin.x,view.frame.origin.y,view.frame.size.width, view.shrink_height)];
+    
+    //update table
+    NSInteger row = [_notification_table rowForView:view]; // find row
+    [_notification_table noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:row]];
+    NSRect r = [_notification_table rectOfRow:row];
+    [_notification_table scrollRectToVisible:r];
+    
+    [NSAnimationContext endGrouping];
 }
 
 -(void)updateTimes{
@@ -1169,35 +1376,39 @@ int unread_notification_count = 0;
 }
 
 -(void)showWindow{
+    DDLogVerbose(@"showwindow");
     [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
     
-    if([[NSScreen mainScreen] frame].size.height != screen_height){
-        _window = nil;
-        [self createWindow];
-    }
+    _window.alphaValue = 0;
+    _window.animator.alphaValue = 0.0f;
     
     [self positionWindow];
-    _window.alphaValue = 0;
     [NSApp activateIgnoringOtherApps:YES];
     [_window makeKeyAndOrderFront: nil];
-    [self fadeWindow:true];
-    
-    animatedNotifications = [NSMutableArray array];
-    [self animateNotifications:true];
     
     //remove potential selection
     [_view.window makeFirstResponder:nil];
-    [_view setNeedsDisplay:YES];
-}
-
-- (void)fadeWindow:(BOOL)in {
-    _window.alphaValue = in ? 0.0f : 1.0f;
+    
+    //fade in
     [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
         context.duration = 0.4;
-        _window.animator.alphaValue = in ? 1.0f : 0.0f;
+        _window.animator.alphaValue = 1.0f;
+        
+        //animate
+        animatedNotifications = [NSMutableArray array];
+        [self animateNotifications:true];
     }
     completionHandler:^{
-        _window.alphaValue = in ? 1.0f : 0.0f;
+        
+        //remove potential selection
+        [_view.window makeFirstResponder:nil];
+        
+        [_view setNeedsDisplay:YES];
+        [_notification_table setNeedsDisplay:YES];
+        [_scroll_view setNeedsDisplay:YES];
+        
+        [_window makeKeyAndOrderFront: _scroll_view];
+        [_scroll_view becomeFirstResponder];
     }];
 }
 
@@ -1274,24 +1485,21 @@ bool failedCredentials = false;
 }
 
 #pragma mark - handle icoming notification
-bool serverReplied = false;
+bool userAuthed = false;
 -(void)check{
     if(!failedCredentials){
         if(!streamOpen){
             [self openSocket];
-        }else if(!serverReplied){
-            [self sendCode];
+        }else if(!userAuthed){
+            DDLogVerbose(@"Requesting User Auth");
+            [self authUser];
         }
     }
-    //reset reload count (prevents recursive call) maximum 1 reload ever 2 seconds
+    //reset reload count (prevents recursive call of table reload) maximum 1 reload ever 2 seconds
     reloaded_in_last_2 = false;
 }
 
 -(void)handleIncomingNotification:(NSString*)message{
-    if(!serverReplied){
-        serverReplied = true;
-        [self updateReadIcon:false];
-    }
     if([message  isEqual: @"Invalid Credentials"]){
         dispatch_async(dispatch_get_main_queue(), ^{
             NSAlert *alert = [[NSAlert alloc] init];
@@ -1303,57 +1511,82 @@ bool serverReplied = false;
             [self newCredentials];
         });
     }else{
+        DDLogVerbose(@"Received User Auth");
+        userAuthed = true;
+        [self updateReadIcon:false];
+        
+        NSError* error = nil;
         NSData* data = [message dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary* json_dic = [NSJSONSerialization
                                   JSONObjectWithData:data
                                   options:kNilOptions
-                                  error:nil];
-        
-        NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-        
-        BOOL shouldRefresh = false;
-        NSMutableArray* incoming_notifications = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary* notification in json_dic) {
-            NSString* firstval = [NSString stringWithFormat:@"%@", notification];
-            if([[firstval substringToIndex:3]  isEqual: @"id:"]){
-                // TELL SERVER TO REMOVE THIS MESSAGE
-                if(streamOpen){
-                    [_webSocket send:firstval];
+                                  error:&error];
+        if(!error){
+            BOOL shouldRefresh = false;
+            NSMutableArray* incoming_notifications = [[NSMutableArray alloc] init];
+            
+            for (NSDictionary* notification in json_dic) {
+                NSString* firstval = [NSString stringWithFormat:@"%@", notification];
+                if([[firstval substringToIndex:3]  isEqual: @"id:"]){
+                    // TELL SERVER TO REMOVE THIS MESSAGE
+                    if(streamOpen){
+                        [_webSocket send:firstval];
+                    }
+                }else{
+                    [self storeNotification:notification]; 
+                    shouldRefresh = true;
+                    [incoming_notifications addObject:notification];
                 }
-            }else{
-                [self storeNotification:notification];
-                shouldRefresh = true;
-                [incoming_notifications addObject:notification];
-            }
-        }
-        
-        if(shouldRefresh){
-            if([incoming_notifications count] <= 5){
-                for (NSDictionary* notification in incoming_notifications){
-                    [self sendLocalNotification:[notification objectForKey:@"title"]
-                                        message:[notification objectForKey:@"message"]
-                                       imageURL:[notification objectForKey:@"image"]
-                                           link:[notification objectForKey:@"link"]
-                                 notificationID:[[notification objectForKey:@"id"] intValue]
-                     ];
-                }
-            }else{
-                //send notification with the amount of notifications rather than individual notifications
-                NSUserNotification *note = [[NSUserNotification alloc] init];
-                [note setHasActionButton:false];
-                [note setTitle:[NSString stringWithFormat:@"You have %d new notifications!",(int)[incoming_notifications count]]];
-                [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
-                [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
             }
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if([notifications count] == 0){
-                    [self createBodyWindow];
+            if(shouldRefresh){
+                //update ui and add notifications
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(_scroll_view.documentView != _notification_table){
+                        [self reloadData];
+                        _scroll_view.documentView = _notification_table;
+                    }
+                    
+                    for (NSDictionary* notification in incoming_notifications){
+                         MyNotificationView* n = [self createNotificationView:[notification objectForKey:@"title"]
+                                                         message:[notification objectForKey:@"message"]
+                                                        imageURL:[notification objectForKey:@"image"]
+                                                            link:[notification objectForKey:@"link"]
+                                                            time:[notification objectForKey:@"time"]
+                                                            read:[[notification objectForKey:@"read"] boolValue]
+                                                  notificationID:[[notification objectForKey:@"id"] intValue]];
+                        [_notification_views addObject:n];
+                        [_notification_table insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NSTableViewAnimationEffectGap];
+                    }
+                    
+                    [self animateNotifications:NO scroll:true];
+                    
+                    [self updateReadIcon:true];
+                });
+                
+                //send notification
+                if([incoming_notifications count] <= 5){
+                    for (NSDictionary* notification in incoming_notifications){
+                        if(![_window isKeyWindow]){
+                            [self sendLocalNotification:[notification objectForKey:@"title"]
+                                                message:[notification objectForKey:@"message"]
+                                               imageURL:[notification objectForKey:@"image"]
+                                                   link:[notification objectForKey:@"link"]
+                                         notificationID:[[notification objectForKey:@"id"] intValue]
+                             ];
+                        }
+                    }
                 }else{
-                    [self reloadData];
+                    //send notification with the amount of notifications rather than each individual notifications
+                    NSUserNotification *note = [[NSUserNotification alloc] init];
+                    [note setHasActionButton:false];
+                    [note setTitle:[NSString stringWithFormat:@"You have %d new notifications!",(int)[incoming_notifications count]]];
+                    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
+                    [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
                 }
-            });
+            }
+        }else if(![message isEqualToString:@"1"]){
+            DDLogError(@"Unrecognised message from socket: %@", message);
         }
     }
 }
@@ -1361,40 +1594,51 @@ bool serverReplied = false;
 #pragma mark - notification storage
 
 -(void)storeNotification:(NSDictionary*)notificationDic{
-    NSMutableDictionary *dic = [notificationDic mutableCopy];
-    //add read object to dic
-    [dic setObject:[NSNumber numberWithBool:0] forKey:@"read"];
-    
-    //get stored notifications
+    // get all notifications
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     if([notifications count] == 0){
         notifications = [[NSMutableArray alloc] init];
     }
     
-    //add dic to notifications
-    [notifications addObject:dic];
+    // make sure no duplicate notifications
+    bool duplicate = false;
+    for (id object in notifications) {
+        if ([[object valueForKey:@"id"] isEqual:[notificationDic valueForKey:@"id"]]) {
+            // already have a stored notification with this id
+            duplicate = true;
+        }
+    }
     
-    //store notifications
-    [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
+    if(!duplicate){
+        // add read variable to dic
+        NSMutableDictionary *notification = [notificationDic mutableCopy];
+        [notification setObject:[NSNumber numberWithBool:0] forKey:@"read"];
+        
+        // add notification to notifications
+        [notifications addObject:notification];
+        
+        // store updated notifications
+        [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
+    }
 }
 
 -(bool)notificationRead:(int)notificationID{
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    int index = [self indexFromNotification:notificationID notifications:notifications];
+    int index = ((int)[notifications count] - 1) - [self rowFromNotification:notificationID];
     NSMutableDictionary *dic = [[notifications objectAtIndex:index] mutableCopy];
     return [[dic objectForKey:@"read"] boolValue];
 }
 
 -(NSString*)notificationLink:(int)notificationID{
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    int index = [self indexFromNotification:notificationID notifications:notifications];
+    int index = ((int)[notifications count] - 1) - [self rowFromNotification:notificationID];
     NSMutableDictionary *dic = [[notifications objectAtIndex:index] mutableCopy];
     return [dic objectForKey:@"link"];
 }
 
 -(NSString*)imageLink:(int)notificationID{
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    int index = [self indexFromNotification:notificationID notifications:notifications];
+    int index = ((int)[notifications count] - 1) - [self rowFromNotification:notificationID];
     NSMutableDictionary *dic = [[notifications objectAtIndex:index] mutableCopy];
     return [dic objectForKey:@"image"];
 }
@@ -1403,80 +1647,82 @@ bool serverReplied = false;
     //update stored notification
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     
-    int index = [self indexFromNotification:notificationID notifications:notifications];
+    int index = ((int)[notifications count] - 1) - [self rowFromNotification:notificationID];
     
     NSMutableDictionary *dic = [[notifications objectAtIndex:index] mutableCopy];
     [dic setObject:[NSNumber numberWithBool:read] forKey:@"read"];
     [notifications replaceObjectAtIndex:index withObject:dic];
     [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
     
-    //update view
-    int row = [self rowFromNotification:notificationID];
-    MyNotificationView* notification = [_notification_views objectAtIndex:row];
+    MyNotificationView* notification = [_notification_views objectAtIndex:index];
     MyTitleLabel* title = (MyTitleLabel*)[notification viewWithTag:notification.notificationID];
     
-    if((title.textColor == _red && read) || (title.textColor == _grey && !read)){ // not already read or not already not read
-        int or_x = title.frame.origin.x;
-        int or_y = title.frame.origin.y;
-        int top = title.frame.size.height;
-        
-        [title animateWithDuration:0 animation:^{
-            if(read){
-                unread_notification_count--;
-                title.textColor = _grey;
-            }else{
-                unread_notification_count++;
-                title.textColor = _red;
-            }
-            NSPoint startPoint = NSMakePoint(or_x, or_y + top);
-            [title setFrameOrigin:startPoint];
-        }completion:^{
-            [title animateWithDuration:0.8 animation:^{
-                [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
-                NSPoint endPoint = NSMakePoint(or_x, or_y);
-                [[title animator] setFrameOrigin:endPoint];
-            }];
+    int or_x = title.frame.origin.x;
+    int or_y = title.frame.origin.y;
+    int top = title.frame.size.height;
+    
+    [title animateWithDuration:0 animation:^{
+        if(read){
+            unread_notification_count--;
+            title.textColor = _grey;
+        }else{
+            unread_notification_count++;
+            title.textColor = _red;
+        }
+        NSPoint startPoint = NSMakePoint(or_x, or_y + top);
+        [title setFrameOrigin:startPoint];
+    }completion:^{
+        [title animateWithDuration:0.4 animation:^{
+            [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.80 :0.27 :0.00 :1.00]];
+            NSPoint endPoint = NSMakePoint(or_x, or_y);
+            [[title animator] setFrameOrigin:endPoint];
         }];
-        [self updateReadIcon:false];
-    }
+    }];
+    NSLog(@"unread notifications :%d", unread_notification_count);
+    [self updateReadIcon:false];
+    
+    // TODO
+    // update button opacity
+//    if(unread_notification_count <= 0){
+//        [markAllAsReadBtn.layer setOpacity:markAllAsReadBtn.opacity_min];
+//    }
 }
 
 -(void)markAllAsRead{
     if(unread_notification_count > 0){
-        for(int x = (int)[_notification_views count] - 1; x >= 0 ; x--){
-            MyNotificationView* notification = [_notification_views objectAtIndex:x];
+        for(MyNotificationView* notification in _notification_views){
             [self markAsRead:true notificationID:notification.notificationID];
         }
-    }else{
-        //shake button
     }
 }
 
 -(void)deleteNotification:(int)notificationID{
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    int notification_count = (int)[notifications count];
     
-    if(notification_count <= 1){
-        _scroll_view.documentView = [self noNotificationsView];
-        [self animateNotifications:false];
+    int row =  [self rowFromNotification:notificationID];
+    int index = ((int)[notifications count] - 1) - row;
+    
+    //reduce notification count if notification was read
+    if([[notifications objectAtIndex:index][@"read"] isEqualToNumber:[NSNumber numberWithBool:NO]]){
+        unread_notification_count--;
     }
     
-    int index = [self indexFromNotification:notificationID notifications:notifications];
-    
-    //check if notification was read or unread
-    if([[notifications objectAtIndex:index][@"read"] isEqualToNumber:[NSNumber numberWithBool:NO]]) unread_notification_count--;
-    
-    //update stored notifications
+    //remove notification from stored notifications
     [notifications removeObjectAtIndex:index]; // as rows are presented backwards
     [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     //update GUI
-    int row = [self rowFromNotification:notificationID];
-    [_notification_views removeObjectAtIndex:row];
-    [_time_labels removeObjectAtIndex:row];
+    [_notification_views removeObjectAtIndex:index];
+    [_time_labels removeObjectAtIndex:index];
     [_notification_table removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] withAnimation:NSTableViewAnimationEffectFade];
     
     [self updateReadIcon:false];
+    
+    if([notifications count] == 0){
+        _scroll_view.documentView = [self noNotificationsView];
+        [self animateNotifications:true];
+    }
 }
 
 -(void)deleteAll{
@@ -1492,14 +1738,16 @@ bool serverReplied = false;
         NSAlert *alert = [[NSAlert alloc] init];
         [alert addButtonWithTitle:@"OK"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setMessageText:[NSString stringWithFormat:@"Permanently delete %d notifications?", (int)[notifications count]]];
-        [alert setInformativeText:@"Notifications cannot be restored without some sort of wizardry."];
+        [alert setMessageText:[NSString stringWithFormat:@"Delete %d Notifications?", (int)[notifications count]]];
+        [alert setInformativeText:@"Warning: Notifications cannot be restored without some sort of wizardry."];
         [alert setAlertStyle:NSWarningAlertStyle];
         
         if ([alert runModal] == NSAlertFirstButtonReturn) {
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             [self reloadData];
-            [self createBodyWindow];
+            [self createWindow];
         }
     }
 }
@@ -1507,16 +1755,11 @@ bool serverReplied = false;
 -(int)rowFromNotification:(int)notificationID{
     for(int x = (int)[_notification_views count] - 1; x >= 0 ; x--){
         MyNotificationView* notification_view = [_notification_views objectAtIndex:x];
-        if(notification_view.notificationID == notificationID) return x;
+        if(notification_view.notificationID == notificationID) return ((int)[_notification_views count] - 1) - x;
     }
     [NSException raise:@"Invalid notificationID value" format:@"notificationID - %d is out of bounds", notificationID];
     return -1;
 }
-
--(int)indexFromNotification:(int)notificationID notifications:(NSMutableArray *)notifications{
-    return ((int)[_notification_views count] - 1) - [self rowFromNotification:notificationID];
-}
-
 
 -(void)updateReadIcon:(bool)ani{
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1526,7 +1769,7 @@ bool serverReplied = false;
         
         MyLabel* title = (MyLabel*)[_view viewWithTag:1];
         title.hidden = true;
-        if(!serverReplied){
+        if(!userAuthed){
             title.hidden = false;
             if(_statusItem.image != error_icon){
                 _statusItem.image = error_icon;
@@ -1568,7 +1811,7 @@ bool serverReplied = false;
             [notification setContentImage:image];
         }
         @catch (NSException * e) {
-            NSLog(@"ERROR loading image from URL: %@",imgURL);
+            DDLogError(@"Problem loading image from URL: %@", imgURL);
         }
     }
     
@@ -1603,7 +1846,7 @@ bool serverReplied = false;
                 url = [NSURL URLWithString:url_string];
                 openWindow = false;
             } @catch (NSException *exception) {
-                NSLog(@"error with link url");
+                DDLogError(@"problem with link url - %@", url_string);
             }
         }
         
@@ -1621,19 +1864,22 @@ bool serverReplied = false;
 }
 
 #pragma mark - socketRocket
-
+bool connecting_socket = false;
 - (void)openSocket
 {
-    serverReplied = false;
-    streamOpen = false;
-    
-    _webSocket.delegate = nil;
-    [_webSocket close];
-    
-    _webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:@"wss://s.notifi.it"]];
-    _webSocket.delegate = (id)self;
-    
-    [_webSocket open];
+    if(!connecting_socket){
+        DDLogVerbose(@"Attempting to connect to socket");
+        connecting_socket = true;
+        streamOpen = false;
+        
+        _webSocket.delegate = nil;
+        [_webSocket close];
+        
+        _webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:@"wss://s.notifi.it"]];
+        _webSocket.delegate = (id)self;
+        
+        [_webSocket open];
+    }
 }
 
 bool receivedPong = false;
@@ -1642,8 +1888,8 @@ bool receivedPong = false;
     if(streamOpen){
         receivedPong = false;
         [_webSocket sendPing:nil];
-        dispatch_async(dispatch_get_global_queue(0,0), ^{
-            [NSThread sleepForTimeInterval:2.0f];
+        //check for pong in last 2 seconds
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if(!receivedPong){
                 [self closeSocket];
             }
@@ -1653,6 +1899,7 @@ bool receivedPong = false;
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
+    DDLogVerbose(@"WebSocket open");
     streamOpen = true;
 }
 
@@ -1670,7 +1917,7 @@ bool receivedPong = false;
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-    NSLog(@"WebSocket closed");
+    DDLogVerbose(@"WebSocket closed");
     [self closeSocket];
 }
 
@@ -1681,7 +1928,7 @@ bool receivedPong = false;
 
 
 BOOL streamOpen = false;
-- (void)sendCode{
+- (void)authUser{
     NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
     NSString* key = [self getKey:@"credential_key"];
     
@@ -1693,9 +1940,10 @@ BOOL streamOpen = false;
 
 -(void)closeSocket{
     if(streamOpen){
-        NSLog(@"Terminated connection!");
+        DDLogVerbose(@"Terminated socket connection!");
     }
-    serverReplied = false;
+    connecting_socket = false;
+    userAuthed = false;
     streamOpen = false;
     _webSocket = nil;
     [self updateReadIcon:false];
@@ -1731,16 +1979,10 @@ BOOL streamOpen = false;
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
-    _remNotification = [[NSMenuItem alloc] initWithTitle:@"Sticky Notifications" action:@selector(shouldMakeSticky) keyEquivalent:@""];
-    [_remNotification setTarget:self];
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"sticky_notification"]) [_remNotification setState:NSOnState];
-    [mainMenu addItem:_remNotification];
-    
-    [mainMenu addItem:[NSMenuItem separatorItem]];
-    
-    NSMenuItem* updates = [[NSMenuItem alloc] initWithTitle:@"Check For Updates..." action:@selector(checkUpdate) keyEquivalent:@""];
-    [updates setTarget:self];
-    [mainMenu addItem:updates];
+    _stickyNotifications = [[NSMenuItem alloc] initWithTitle:@"Sticky Notifications" action:@selector(shouldMakeSticky) keyEquivalent:@""];
+    [_stickyNotifications setTarget:self];
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"sticky_notification"]) [_stickyNotifications setState:NSOnState];
+    [mainMenu addItem:_stickyNotifications];
     
     _showOnStartupItem = [[NSMenuItem alloc] initWithTitle:@"Open notifi At Login" action:@selector(openOnStartup) keyEquivalent:@""];
     [_showOnStartupItem setTarget:self];
@@ -1750,6 +1992,22 @@ BOOL streamOpen = false;
         [_showOnStartupItem setState:NSOffState];
     }
     [mainMenu addItem:_showOnStartupItem];
+    
+    [mainMenu addItem:[NSMenuItem separatorItem]];
+    
+    NSMenuItem* rec = [[NSMenuItem alloc] initWithTitle:@"How To Receive Notifications..." action:@selector(howToRec) keyEquivalent:@""];
+    [rec setTarget:self];
+    [mainMenu addItem:rec];
+    
+    NSMenuItem* updates = [[NSMenuItem alloc] initWithTitle:@"Check For Updates..." action:@selector(checkUpdate) keyEquivalent:@""];
+    [updates setTarget:self];
+    [mainMenu addItem:updates];
+    
+    NSMenuItem* view_log = [[NSMenuItem alloc] initWithTitle:@"View Log..." action:@selector(showLoggingFile) keyEquivalent:@""];
+    [view_log setTarget:self];
+    [mainMenu addItem:view_log];
+    
+    [mainMenu addItemWithTitle:@"About..." action:@selector(showAbout) keyEquivalent:@""];
     
     [mainMenu addItem:[NSMenuItem separatorItem]];
     
@@ -1763,6 +2021,10 @@ BOOL streamOpen = false;
     return mainMenu;
 }
 
+-(void)howToRec{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:how_to_url]];
+}
+
 -(void)copyCredentials{
     NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
     
@@ -1774,9 +2036,9 @@ BOOL streamOpen = false;
 - (void)shouldMakeSticky{
     bool sticky_notification = ![[NSUserDefaults standardUserDefaults] boolForKey:@"sticky_notification"];
     if(!sticky_notification){
-        [_remNotification setState:NSOffState];
+        [_stickyNotifications setState:NSOffState];
     }else{
-        [_remNotification setState:NSOnState];
+        [_stickyNotifications setState:NSOnState];
     }
     [[NSUserDefaults standardUserDefaults] setBool:sticky_notification forKey:@"sticky_notification"];
 }
@@ -1949,7 +2211,7 @@ BOOL streamOpen = false;
 
 - (void)onlyOneInstanceOfApp {
     if ([[NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]] count] > 1) {
-        NSLog(@"already running");
+        DDLogVerbose(@"already running app so terminated");
         [self quit];
     }
     
@@ -1969,6 +2231,31 @@ BOOL streamOpen = false;
     }else{
         [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdatesInBackground];
     }
+}
+
+#pragma mark - logging
+NSString *log_file_path;
+-(void)setupLogging{
+    DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
+    fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
+    fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+    [DDLog addLogger:fileLogger];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    log_file_path = [[fileLogger currentLogFileInfo] filePath];
+}
+
+-(void)showLoggingFile{
+    [[NSWorkspace sharedWorkspace] openFile:log_file_path];
+}
+
+
+#pragma mark - about
+
+-(void)showAbout{
+    if(_window && [_window isVisible]){
+        [_window orderOut:self];
+    }
+    [[NSApplication sharedApplication] orderFrontStandardAboutPanel:self];
 }
 
 @end
