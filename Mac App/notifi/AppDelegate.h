@@ -6,59 +6,38 @@
 //  Copyright © 2016 max mitchell. All rights reserved.
 //
 
+// apple
 #import <Cocoa/Cocoa.h>
-#import "SRWebSocket.h"
-#import <SDWebImage/UIImageView+WebCache.h>
-#import <STHTTPRequest/STHTTPRequest.h>
-#import "SAMKeychain.h"
-#import <Sparkle/Sparkle.h>
-#import <QuartzCore/QuartzCore.h>
-#import "KPCScaleToFillNSImageView.h"
 
-#define LOG_LEVEL_DEF ddLogLevel
-@import CocoaLumberjack;
+@class Keys;
+@class NotificationTable;
+@class Socket;
+@class SettingsMenu;
+@class Window;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource>
 
-@property SAMKeychainQuery *keychainQuery;
-@property NSMenuItem* showOnStartupItem;
-@property NSMenuItem* stickyNotifications;
-@property NSMenuItem* credentialsItem;
-@property NSMenuItem* window_item;
-@property NSStatusItem *statusItem;
+@property NSMutableArray* notifications;
 
-//window
-@property NSColor* black;
-@property NSColor* white;
-@property NSColor* red;
-@property NSColor* grey;
-@property NSColor* boarder;
-@property NSColor* offwhite;
+@property Keys *keychain;
+@property SettingsMenu* sm;
+
+@property NSStatusItem* status_item;
+
+@property NSMenuItem* window_item;
+
+@property (nonatomic, strong) Socket* s;
+@property bool socket_authed;
+
+@property Window* window;
 @property NSImageView *window_up_arrow_view;
-@property NSWindow* window;
 @property NSView* view;
 @property NSView *vis_view;
-@property (strong) NSMutableArray *time_labels;
-@property (strong) NSMutableArray *notification_views;
 @property (strong) NSScrollView *scroll_view;
-
-@property (strong) NSString* split_message;
+@property (nonatomic, strong) NotificationTable* notification_table;
 
 @property NSWindow* about_window;
 
-@property int notification_id;
-@property NSMutableArray *alreadyStoredIDs;
-
-//SR
-//@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
-@property (nonatomic, strong) SRWebSocket *webSocket;
-
--(void)expandTableView:(NSView*)view;
--(void)markAsRead:(bool)read notificationID:(int)notificationID;
--(void)deleteNotification:(int)notificationID;
--(NSString*)notificationLink:(int)notificationID;
--(NSString*)imageLink:(int)notificationID;
--(bool)notificationRead:(int)notificationID;
-
 @end
+
 

@@ -51,7 +51,8 @@ if($imageURL != $DEFAULT){
             echo "Not a valid image. Sent without image!\n";
             $imageURL = $DEFAULT;
         } else {
-            $img_size = get_headers($imageURL, 1)["Content-Length"] / 1048576; //bytes to mb
+            $img_header_size = get_headers($imageURL, 1)["Content-Length"];
+            $img_size = $img_header_size / 1048576; //bytes to mb
             if ($img_size > $img_size_limit) {
                 echo "Image too large. Must be under ${img_size_limit}MB. It is ${img_size}MB. Sent without image!\n";
                 $imageURL = $DEFAULT;

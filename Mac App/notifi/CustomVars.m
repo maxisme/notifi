@@ -1,0 +1,56 @@
+//
+//  Colours.m
+//  notifi
+//
+//  Created by Max Mitchell on 21/01/2018.
+//  Copyright © 2018 max mitchell. All rights reserved.
+//
+
+#import "CustomVars.h"
+
+@implementation CustomVars
++(NSColor *)black{
+    return [NSColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:1.0];
+}
+
++(NSColor *)white{
+    return [NSColor colorWithRed:1.00 green:1.00 blue:1.00 alpha:1.0];
+}
+
++(NSColor *)red{
+    return [NSColor colorWithRed:0.74 green:0.13 blue:0.13 alpha:1.0];
+}
+
++(NSColor *)grey{
+    return [NSColor colorWithRed:0.43 green:0.43 blue:0.43 alpha:1.0];
+}
+
++(NSColor *)boarder{
+    return [NSColor colorWithRed:0.92 green:0.91 blue:0.91 alpha:1.0];
+}
+
++(NSColor *)offwhite{
+    return [NSColor colorWithRed:0.96 green:0.96 blue:0.96 alpha:1.0];
+}
+
++(NSString *)how_to{
+    return @"https://github.com/maxisme/notifi#http-request-examples";
+}
+
++(NSString *)default_empty{
+    return @" ";
+}
+
++(NSString *)notificationStorageKey{
+    return @"notifications";
+}
+
++(NSString *)credentialStorageKey{
+    return @"credentials";
+}
+
++(int)windowWidth{
+    return 350;
+}
+
+@end

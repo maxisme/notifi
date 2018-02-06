@@ -6,7 +6,6 @@
 //  Copyright © 2016 max mitchell. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MyApplication.h"
 
 @implementation MyApplication

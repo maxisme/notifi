@@ -12,11 +12,13 @@ require "/var/www/notifi.it/public_html/functions.php";
 $con = connect();
 mysqli_query($con, "UPDATE `users`
 SET isConnected = 0
-"); 
+");
+
 
 class Note implements MessageComponentInterface { 
     protected $clients;
 	protected $credential;
+    private $delete_str = "id:";
 
     public function __construct() {
         $this->clients = new \SplObjectStorage; 
@@ -31,10 +33,9 @@ class Note implements MessageComponentInterface {
         $con = connect();
         $msg = mysqli_real_escape_string($con, $msg);
 
-        $delete_str = "id:";
-		if(substr($msg,0, strlen($delete_str)) == $delete_str){
+		if(substr($msg,0, strlen($this->delete_str)) == $this->delete_str){
 			//handle reply from user to say they have received notification
-			$decrypted_string = decrypt(base64_decode(substr($msg, strlen($delete_str), strlen($msg))));
+			$decrypted_string = decrypt(base64_decode(substr($msg, strlen($this->delete_str), strlen($msg))));
 			
 			$arr = explode("|", $decrypted_string);
 			$id = $arr[0];
@@ -97,7 +98,7 @@ class Note implements MessageComponentInterface {
 					array_push($stack, $row);
 					$id = $row['id'];
 					// client sends this back for server to delete message
-					array_push($stack, "id:".base64_encode(encrypt($id."|".$hashedCredentials)));
+					array_push($stack, $this->delete_str.base64_encode(encrypt($id."|".$hashedCredentials)));
 				}
 				$client->send(json_encode($stack));
 			}

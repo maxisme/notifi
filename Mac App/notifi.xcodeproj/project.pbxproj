@@ -8,14 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		3486AF5B90ADCF406A866D70 /* Pods_notifi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB203359588D007975D84CFB /* Pods_notifi.framework */; };
+		48110582201F731C004D2040 /* AnimateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110581201F731C004D2040 /* AnimateView.m */; };
+		48110588201FEB2D004D2040 /* Window.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110587201FEB2D004D2040 /* Window.m */; };
 		48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */; };
 		481695741F046523003D6023 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 481695731F046523003D6023 /* Credits.html */; };
 		482C8A931E09742400E5C173 /* MyApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 482C8A921E09742400E5C173 /* MyApplication.m */; };
 		482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9C1E0B0D0700E5C173 /* CoreData.framework */; };
 		482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9E1E0B0D4000E5C173 /* AppKit.framework */; };
 		484439EC1EA8C2D5009C7043 /* Anton Saputro.png in Resources */ = {isa = PBXBuildFile; fileRef = 484439EB1EA8C2D5009C7043 /* Anton Saputro.png */; };
+		484935CE2018DB6700ED058A /* CustomFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935CD2018DB6700ED058A /* CustomFunctions.m */; };
+		484935D12018DFB400ED058A /* Socket.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D02018DFB400ED058A /* Socket.m */; };
+		484935D420194B9200ED058A /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D320194B9200ED058A /* Log.m */; };
 		486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CC1F2FA2FA008E7492 /* sad.png */; };
+		486FA2CF1F320C92008E7492 /* Setyo Ari Wibowo.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CE1F320C92008E7492 /* Setyo Ari Wibowo.png */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
+		48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DCB2018A1170078F388 /* SettingsMenu.m */; };
+		48785DD12018B2710078F388 /* Keys.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DD02018B2710078F388 /* Keys.m */; };
+		4892A25B2015304B003F56EC /* Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A25A2015304B003F56EC /* Notification.m */; };
+		4892A2642015315F003F56EC /* NotificationTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A2632015315F003F56EC /* NotificationTable.m */; };
+		4892A26720153204003F56EC /* ControllButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A26620153204003F56EC /* ControllButton.m */; };
+		4892A26A20153242003F56EC /* NotificationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A26920153242003F56EC /* NotificationImage.m */; };
+		4892A26D20153271003F56EC /* Cog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A26C20153271003F56EC /* Cog.m */; };
+		4892A270201532B0003F56EC /* NotificationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A26F201532B0003F56EC /* NotificationLink.m */; };
+		4892A273201532E5003F56EC /* NotificationLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A272201532E5003F56EC /* NotificationLabel.m */; };
+		4892A27620153559003F56EC /* NSImage+Rotated.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27520153559003F56EC /* NSImage+Rotated.m */; };
+		4892A27C20153BD8003F56EC /* CustomVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27B20153BD8003F56EC /* CustomVars.m */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
 		48AD3FA91DBA500100B47CA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48AD3FA81DBA500100B47CA5 /* Security.framework */; };
@@ -28,6 +45,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		48110580201F731C004D2040 /* AnimateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimateView.h; sourceTree = "<group>"; };
+		48110581201F731C004D2040 /* AnimateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimateView.m; sourceTree = "<group>"; };
+		48110586201FEB2D004D2040 /* Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Window.h; sourceTree = "<group>"; };
+		48110587201FEB2D004D2040 /* Window.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Window.m; sourceTree = "<group>"; };
 		48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPCScaleToFillNSImageView.m; sourceTree = "<group>"; };
 		48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPCScaleToFillNSImageView.h; sourceTree = "<group>"; };
 		481695731F046523003D6023 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
@@ -36,9 +57,38 @@
 		482C8A9C1E0B0D0700E5C173 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		482C8A9E1E0B0D4000E5C173 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		484439EB1EA8C2D5009C7043 /* Anton Saputro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Anton Saputro.png"; sourceTree = "<group>"; };
+		484935CC2018DB6700ED058A /* CustomFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomFunctions.h; sourceTree = "<group>"; };
+		484935CD2018DB6700ED058A /* CustomFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomFunctions.m; sourceTree = "<group>"; };
+		484935CF2018DFB400ED058A /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
+		484935D02018DFB400ED058A /* Socket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Socket.m; sourceTree = "<group>"; };
+		484935D220194B9200ED058A /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		484935D320194B9200ED058A /* Log.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		486FA2CC1F2FA2FA008E7492 /* sad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sad.png; sourceTree = "<group>"; };
+		486FA2CE1F320C92008E7492 /* Setyo Ari Wibowo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Setyo Ari Wibowo.png"; sourceTree = "<group>"; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
+		48785DCA2018A1170078F388 /* SettingsMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsMenu.h; sourceTree = "<group>"; };
+		48785DCB2018A1170078F388 /* SettingsMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsMenu.m; sourceTree = "<group>"; };
+		48785DCF2018B2710078F388 /* Keys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
+		48785DD02018B2710078F388 /* Keys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Keys.m; sourceTree = "<group>"; };
 		488F6B521E80A84C00B7809C /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		4892A25A2015304B003F56EC /* Notification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Notification.m; sourceTree = "<group>"; };
+		4892A2632015315F003F56EC /* NotificationTable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationTable.m; sourceTree = "<group>"; };
+		4892A26520153204003F56EC /* ControllButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllButton.h; sourceTree = "<group>"; };
+		4892A26620153204003F56EC /* ControllButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllButton.m; sourceTree = "<group>"; };
+		4892A26820153242003F56EC /* NotificationImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationImage.h; sourceTree = "<group>"; };
+		4892A26920153242003F56EC /* NotificationImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationImage.m; sourceTree = "<group>"; };
+		4892A26B20153271003F56EC /* Cog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cog.h; sourceTree = "<group>"; };
+		4892A26C20153271003F56EC /* Cog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cog.m; sourceTree = "<group>"; };
+		4892A26E201532B0003F56EC /* NotificationLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationLink.h; sourceTree = "<group>"; };
+		4892A26F201532B0003F56EC /* NotificationLink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationLink.m; sourceTree = "<group>"; };
+		4892A271201532E5003F56EC /* NotificationLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationLabel.h; sourceTree = "<group>"; };
+		4892A272201532E5003F56EC /* NotificationLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationLabel.m; sourceTree = "<group>"; };
+		4892A27420153559003F56EC /* NSImage+Rotated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+Rotated.h"; sourceTree = "<group>"; };
+		4892A27520153559003F56EC /* NSImage+Rotated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Rotated.m"; sourceTree = "<group>"; };
+		4892A278201535F8003F56EC /* Notification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Notification.h; sourceTree = "<group>"; };
+		4892A27920153677003F56EC /* NotificationTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationTable.h; sourceTree = "<group>"; };
+		4892A27A2015385A003F56EC /* CustomVars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomVars.h; sourceTree = "<group>"; };
+		4892A27B20153BD8003F56EC /* CustomVars.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomVars.m; sourceTree = "<group>"; };
 		48AD3F901DB9438600B47CA5 /* notifi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notifi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AD3F931DB9438600B47CA5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		48AD3F941DB9438600B47CA5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,6 +130,61 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		48785DCD2018A5D70078F388 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				4892A278201535F8003F56EC /* Notification.h */,
+				4892A25A2015304B003F56EC /* Notification.m */,
+				4892A26820153242003F56EC /* NotificationImage.h */,
+				4892A26920153242003F56EC /* NotificationImage.m */,
+				4892A26E201532B0003F56EC /* NotificationLink.h */,
+				4892A26F201532B0003F56EC /* NotificationLink.m */,
+				4892A271201532E5003F56EC /* NotificationLabel.h */,
+				4892A272201532E5003F56EC /* NotificationLabel.m */,
+				4892A27920153677003F56EC /* NotificationTable.h */,
+				4892A2632015315F003F56EC /* NotificationTable.m */,
+				48110580201F731C004D2040 /* AnimateView.h */,
+				48110581201F731C004D2040 /* AnimateView.m */,
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
+		48785DCE2018B2390078F388 /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				48785DCD2018A5D70078F388 /* Notification */,
+				4892A27420153559003F56EC /* NSImage+Rotated.h */,
+				4892A27520153559003F56EC /* NSImage+Rotated.m */,
+				4892A26B20153271003F56EC /* Cog.h */,
+				4892A26C20153271003F56EC /* Cog.m */,
+				4892A26520153204003F56EC /* ControllButton.h */,
+				4892A26620153204003F56EC /* ControllButton.m */,
+				48785DCA2018A1170078F388 /* SettingsMenu.h */,
+				48785DCB2018A1170078F388 /* SettingsMenu.m */,
+				48110586201FEB2D004D2040 /* Window.h */,
+				48110587201FEB2D004D2040 /* Window.m */,
+			);
+			name = GUI;
+			sourceTree = "<group>";
+		};
+		4892A27720153581003F56EC /* Custom Classes */ = {
+			isa = PBXGroup;
+			children = (
+				48785DCE2018B2390078F388 /* GUI */,
+				4892A27A2015385A003F56EC /* CustomVars.h */,
+				4892A27B20153BD8003F56EC /* CustomVars.m */,
+				48785DCF2018B2710078F388 /* Keys.h */,
+				48785DD02018B2710078F388 /* Keys.m */,
+				484935CC2018DB6700ED058A /* CustomFunctions.h */,
+				484935CD2018DB6700ED058A /* CustomFunctions.m */,
+				484935CF2018DFB400ED058A /* Socket.h */,
+				484935D02018DFB400ED058A /* Socket.m */,
+				484935D220194B9200ED058A /* Log.h */,
+				484935D320194B9200ED058A /* Log.m */,
+			);
+			name = "Custom Classes";
+			sourceTree = "<group>";
+		};
 		48AD3F871DB9438600B47CA5 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +214,7 @@
 				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
 				48AE54B71E0451EA00E8777F /* bell.png */,
 				486FA2CC1F2FA2FA008E7492 /* sad.png */,
+				486FA2CE1F320C92008E7492 /* Setyo Ari Wibowo.png */,
 				484439EB1EA8C2D5009C7043 /* Anton Saputro.png */,
 				48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */,
 				48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */,
@@ -119,6 +225,7 @@
 				482C8A921E09742400E5C173 /* MyApplication.m */,
 				482C8A941E09743100E5C173 /* MyApplication.h */,
 				481695731F046523003D6023 /* Credits.html */,
+				4892A27720153581003F56EC /* Custom Classes */,
 			);
 			path = notifi;
 			sourceTree = "<group>";
@@ -211,6 +318,7 @@
 				484439EC1EA8C2D5009C7043 /* Anton Saputro.png in Resources */,
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
+				486FA2CF1F320C92008E7492 /* Setyo Ari Wibowo.png in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
@@ -227,13 +335,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-notifi-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6B6781832190895796A18A4B /* [CP] Embed Pods Frameworks */ = {
@@ -242,9 +353,24 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-notifi/Pods-notifi-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/STHTTPRequest/STHTTPRequest.framework",
+				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
+				"${PODS_ROOT}/Sparkle/Sparkle.framework",
+				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/STHTTPRequest.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework",
+				"${DWARF_DSYM_FOLDER_PATH}/Sparkle.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -273,10 +399,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				484935CE2018DB6700ED058A /* CustomFunctions.m in Sources */,
+				48785DD12018B2710078F388 /* Keys.m in Sources */,
+				4892A26A20153242003F56EC /* NotificationImage.m in Sources */,
 				48AD3F981DB9438600B47CA5 /* main.m in Sources */,
 				48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */,
+				4892A26D20153271003F56EC /* Cog.m in Sources */,
+				4892A27C20153BD8003F56EC /* CustomVars.m in Sources */,
+				4892A25B2015304B003F56EC /* Notification.m in Sources */,
+				4892A270201532B0003F56EC /* NotificationLink.m in Sources */,
+				484935D12018DFB400ED058A /* Socket.m in Sources */,
+				4892A2642015315F003F56EC /* NotificationTable.m in Sources */,
+				4892A26720153204003F56EC /* ControllButton.m in Sources */,
+				484935D420194B9200ED058A /* Log.m in Sources */,
+				48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */,
+				4892A27620153559003F56EC /* NSImage+Rotated.m in Sources */,
 				482C8A931E09742400E5C173 /* MyApplication.m in Sources */,
 				48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */,
+				48110582201F731C004D2040 /* AnimateView.m in Sources */,
+				4892A273201532E5003F56EC /* NotificationLabel.m in Sources */,
+				48110588201FEB2D004D2040 /* Window.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,8 +471,10 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -377,8 +521,10 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -392,6 +538,8 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3H49MXS325;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -408,6 +556,8 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 3H49MXS325;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
