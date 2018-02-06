@@ -33,7 +33,6 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     Log* l __unused = [[Log alloc] init]; // l is never used as uses NSNotification to communicate
 
-    [Log log:@"dhbsdhjbfhdhjdf"];
     [CustomFunctions onlyOneInstanceOfApp];
     
     //initiate keychain
@@ -60,7 +59,7 @@
     
     [self createWindow];
     
-    [self checkUpdate:true];
+    [CustomFunctions checkForUpdate:false];
     
     // EVENT LISTENERS
     //update menu icon
@@ -84,7 +83,6 @@
     }];
     
     [_s setOnCloseBlock:^{
-        _socket_authed = false;
         [weakSelf updateMenuBarIcon:false];
     }];
     
@@ -579,7 +577,7 @@ NSMutableArray *animatedNotifications;
         NSImage* alert_icon = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
         NSImage* menu_icon = [NSImage imageNamed:@"menu_bellicon.png" ];
         
-        if(!_socket_authed){
+        if(!_s.authed){
             if(_status_item.image != error_icon){
                 _status_item.image = error_icon;
                 after_image = error_icon;
@@ -717,7 +715,7 @@ NSMutableArray *animatedNotifications;
             [self newCredentials];
         });
     }else{
-        _socket_authed = true;
+        _s.authed = true;
         [self updateMenuBarIcon:false];
         
         NSError* error = nil;
@@ -737,7 +735,7 @@ NSMutableArray *animatedNotifications;
                 NSString* firstval = [NSString stringWithFormat:@"%@", notification];
                 if([[firstval substringToIndex:3]  isEqual: @"id:"]){
                     // TELL SERVER TO REMOVE STORED MESSAGE
-                    if(_socket_authed){
+                    if(_s.authed){
                         [_s send:firstval];
                     }
                 }else{
@@ -958,25 +956,4 @@ NSMutableArray *animatedNotifications;
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
     return YES;
 }
-
-#pragma mark - sparkle
--(void)checkUpdate{
-    [self checkUpdate:false];
-}
--(void)checkUpdate:(BOOL)background{
-    if(!background){
-        if(_window && [_window isVisible]){
-            [_window orderOut:self];
-        }
-        
-        [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdates:NULL];
-    }else{
-        [[SUUpdater updaterForBundle:[NSBundle bundleForClass:[self class]]] checkForUpdatesInBackground];
-    }
-}
-
-#pragma mark - logging
-NSString *log_file_path;
-
-
 @end

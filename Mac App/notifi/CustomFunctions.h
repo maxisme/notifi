@@ -20,5 +20,5 @@
 + (void)sendNotificationCenter:(id)message name:(NSString*)name;
 + (unsigned long)stringToUL:(NSString*)str;
 + (void)copyText:(NSString*)text;
-
++ (void)checkForUpdate:(bool)fg;
 @end

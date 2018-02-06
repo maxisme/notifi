@@ -13,8 +13,8 @@
 @property (nonatomic, strong) SRWebSocket *web_socket;
 @property (nonatomic) NSString *url;
 @property (nonatomic) bool received_pong;
-@property (nonatomic) bool connecting;
 @property (nonatomic) bool connected;
+@property (nonatomic) bool authed;
 @property (copy, nonatomic) void (^onConnectBlock)(void);
 @property (copy, nonatomic) void (^onCloseBlock)(void);
 @property (copy, nonatomic) void (^onMessageBlock)(NSString*);

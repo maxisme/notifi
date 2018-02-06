@@ -10,7 +10,6 @@
 
 #import <SocketRocket/SRWebSocket.h>
 #import "CustomFunctions.h"
-#import "Log.h"
 
 @implementation Socket
 
@@ -34,7 +33,7 @@
 }
 
 -(void)destroy{
-    _connecting = true;
+    _authed = false;
     _connected = false;
     _web_socket.delegate = nil;
     _web_socket = nil;

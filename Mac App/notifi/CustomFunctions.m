@@ -7,6 +7,7 @@
 //
 
 #import "CustomFunctions.h"
+#import <Sparkle/Sparkle.h>
 
 @implementation CustomFunctions
 
@@ -135,6 +136,14 @@
     NSPasteboard *pasteBoard = [NSPasteboard generalPasteboard];
     [pasteBoard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, nil] owner:nil];
     [pasteBoard setString:text forType:NSStringPboardType];
+}
+
++ (void)checkForUpdate:(bool)fg{
+    if(fg){
+        [[SUUpdater sharedUpdater] checkForUpdates:self];
+    }else{
+        [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
+    }
 }
 
 @end

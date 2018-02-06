@@ -55,9 +55,9 @@
     [updates setTarget:self];
     [self addItem:updates];
     
-    NSMenuItem* view_log = [[NSMenuItem alloc] initWithTitle:@"View Log..." action:@selector(showLoggingFile) keyEquivalent:@""];
-    [view_log setTarget:self];
-    [self addItem:view_log];
+//    NSMenuItem* view_log = [[NSMenuItem alloc] initWithTitle:@"View Log..." action:@selector(showLoggingFile) keyEquivalent:@""];
+//    [view_log setTarget:self];
+//    [self addItem:view_log];
     
     [self addItemWithTitle:@"About..." action:@selector(showAbout) keyEquivalent:@""];
     
@@ -75,6 +75,9 @@
 }
 
 #pragma mark - menu functions
+-(void)checkUpdate{
+    [CustomFunctions checkForUpdate:true];
+}
 
 -(void)openOnStartup{
     [CustomFunctions openOnStartup];
