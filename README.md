@@ -68,6 +68,9 @@ curl_close($chpush);
 #### Read message
 <img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Read.png">
 
+#### Settings
+<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Settings.png">
+
 ____
 
 ## TODO
