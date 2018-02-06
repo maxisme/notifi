@@ -58,14 +58,9 @@ curl_close($chpush);
 ```
 
 ## Screen Shots
-#### Menu
-<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
 
 #### Window
 <img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
-
-#### Notification
-<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Notification.png">
 
 #### Right Click
 <img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/RightClick.png">
