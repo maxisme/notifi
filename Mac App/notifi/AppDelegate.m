@@ -30,6 +30,8 @@
 #import "Log.h"
 
 @implementation AppDelegate
+#define STICKYTIME 10
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     Log* l __unused = [[Log alloc] init]; // l is never used as uses NSNotification to communicate
 
@@ -161,7 +163,6 @@ int top_arrow_height;
     [self createBodyWindow];
 }
 
-ControlButton* markAllAsReadBtn;
 -(void)createBodyWindow{
     int bottom_buttons_height = 40;
     int top_bar_height = 90;
@@ -198,22 +199,21 @@ ControlButton* markAllAsReadBtn;
     [_view addSubview:cogView];
     
     // network error message
-    NSTextField* error_label = [[NSTextField alloc] init];
-    [error_label setFrame:CGRectMake(0, iconView.frame.origin.y - 20, window_width, 20)];
-    [error_label setWantsLayer:true];
-    [error_label setRefusesFirstResponder:true];
-    [error_label setEditable:false];
-    [error_label setBordered:false];
-    [error_label setSelectable:true];
-    [error_label setDrawsBackground:false];
-    [error_label setStringValue:@"Network Error!"];
-    [error_label setFont:[NSFont fontWithName:@"OpenSans-Bold" size:8]];
-    [error_label setAlignment:NSTextAlignmentCenter];
-    [error_label setTextColor: [CustomVars red]];
+    _error_label = [[NSTextField alloc] init];
+    [_error_label setFrame:CGRectMake(0, iconView.frame.origin.y - 20, window_width, 20)];
+    [_error_label setWantsLayer:true];
+    [_error_label setRefusesFirstResponder:true];
+    [_error_label setEditable:false];
+    [_error_label setBordered:false];
+    [_error_label setSelectable:true];
+    [_error_label setDrawsBackground:false];
+    [_error_label setStringValue:@"Network Error!"];
+    [_error_label setFont:[NSFont fontWithName:@"OpenSans-Bold" size:8]];
+    [_error_label setAlignment:NSTextAlignmentCenter];
+    [_error_label setTextColor: [CustomVars red]];
     
-    error_label.hidden = true;
-    error_label.tag = 1;
-    [_view addSubview:error_label];
+    [_error_label setHidden:true];
+    [_view addSubview:_error_label];
     
     //top line boarder
     NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - top_bar_height, window_width, 1)];
@@ -270,7 +270,7 @@ ControlButton* markAllAsReadBtn;
     [_view addSubview:hor_bor_bot];
     
     //mark all as read button
-    markAllAsReadBtn = [[ControlButton alloc] initWithFrame:CGRectMake(p / 2, button_y, (window_width / 2) - p, 25)];
+    ControlButton* markAllAsReadBtn = [[ControlButton alloc] initWithFrame:CGRectMake(p / 2, button_y, (window_width / 2) - p, 25)];
     [markAllAsReadBtn setWantsLayer:YES];
     [markAllAsReadBtn setOpacity_min:min_opac];
     [markAllAsReadBtn setButtonType:NSMomentaryChangeButton];
@@ -313,67 +313,6 @@ ControlButton* markAllAsReadBtn;
     [deleteNotifications updateTrackingAreas];
     
     [_view addSubview:deleteNotifications];
-}
-
--(void)positionWindow{
-    //position variables relative to status item
-    float window_height = self.window.frame.size.height;
-    float window_width = self.window.frame.size.width;
-    NSRect menu_icon_frame = [[_status_item valueForKey:@"window"] frame];
-    float menu_icon_width = menu_icon_frame.size.width;
-    float menu_icon_x = menu_icon_frame.origin.x;
-    float menu_icon_y = menu_icon_frame.origin.y;
-    
-    //calculate positions of window on screen and arrow
-    float arrow_x = window_width/2 - (top_arrow_height/2);
-    float arrow_y = window_height - top_arrow_height;
-    float window_x = (menu_icon_x + menu_icon_width/2) - window_width / 2;
-    float window_y = menu_icon_y - window_height;
-    
-    // update positions
-    [_window_up_arrow_view setFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
-    [_window setFrame:NSMakeRect(window_x, window_y, window_width, window_height) display:true];
-    [_vis_view setFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5))];
-}
-
--(void)onScroll{
-    if([[_scroll_view.documentView className] isEqual: @"NotificationTable"]) [self animate:false];
-}
-
-NSTimer* animate_bell_timer;
-int bell_image_cnt;
--(void)animateBell:(NSImage*)image{
-    if(!animate_bell_timer){
-        after_image = nil;
-    }
-    
-    // cancel timer
-    [animate_bell_timer invalidate];
-    animate_bell_timer = nil;
-    bell_image_cnt = 0;
-    
-    animate_bell_timer = [NSTimer scheduledTimerWithTimeInterval:0.015 target:self selector:@selector(updateBellImage) userInfo:nil repeats:YES];
-}
-
-NSImage* after_image;
-- (void)updateBellImage
-{
-    NSImage* image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];;
-    NSArray *numbers = [@"-20,-15.1022,-10.5422,-6.32,-2.43556,1.11111,4.32,7.19111,9.72444,11.92,13.7778,15.2978,16.48,17.3244,17.8311,18,13.6178,9.53778,5.76,2.28444,-0.888889,-3.76,-6.32889,-8.59556,-10.56,-12.2222,-13.5822,-14.64,-15.3956,-15.8489,-16,-12.1333,-8.53333,-5.2,-2.13333,0.666667,3.2,5.46667,7.46667,9.2,10.6667,11.8667,12.8,13.4667,13.8667,14,10.52,7.28,4.28,1.52,-1,-3.28,-5.32,-7.12,-8.68,-10,-11.08,-11.92,-12.52,-12.88,-13,-9.77778,-6.77778,-4,-1.44444,0.888889,3,4.88889,6.55556,8,9.22222,10.2222,11,11.5556,11.8889,12,9.16444,6.52444,4.08,1.83111,-0.222222,-2.08,-3.74222,-5.20889,-6.48,-7.55556,-8.43556,-9.12,-9.60889,-9.90222,-10,-7.68,-5.52,-3.52,-1.68,-7.10543e-15,1.52,2.88,4.08,5.12,6,6.72,7.28,7.68,7.92,8,6.19556,4.51556,2.96,1.52889,0.222222,-0.96,-2.01778,-2.95111,-3.76,-4.44444,-5.00444,-5.44,-5.75111,-5.93778,-6,-4.71111,-3.51111,-2.4,-1.37778,-0.444444,0.4,1.15556,1.82222,2.4,2.88889,3.28889,3.6,3.82222,3.95556,4,3.22667,2.50667,1.84,1.22667,0.666667,0.16,-0.293333,-0.693333,-1.04,-1.33333,-1.57333,-1.76,-1.89333,-1.97333,-2,-1.74222,-1.50222,-1.28,-1.07556,-0.888889,-0.72,-0.568889,-0.435556,-0.32,-0.222222,-0.142222,-0.08,-0.0355556,-0.0088888" componentsSeparatedByString:@","];
-    
-    if(bell_image_cnt == [numbers count] - 1){
-        if(!after_image) after_image = image;
-        [_status_item setImage:after_image];
-        
-        // cancel timer
-        [animate_bell_timer invalidate];
-        animate_bell_timer = nil;
-    }else{
-        NSString *i = numbers[bell_image_cnt];
-        float x = [i floatValue];
-        [_status_item setImage:[image imageRotated:x]];
-        bell_image_cnt++;
-    }
 }
 
 -(NSView*)noNotificationsView{
@@ -441,8 +380,71 @@ NSImage* after_image;
     return view;
 }
 
-#pragma mark - Table View Data Source
+-(void)positionWindow{
+    //position variables relative to status item
+    float window_height = self.window.frame.size.height;
+    float window_width = self.window.frame.size.width;
+    NSRect menu_icon_frame = [[_status_item valueForKey:@"window"] frame];
+    float menu_icon_width = menu_icon_frame.size.width;
+    float menu_icon_x = menu_icon_frame.origin.x;
+    float menu_icon_y = menu_icon_frame.origin.y;
+    
+    //calculate positions of window on screen and arrow
+    float arrow_x = window_width/2 - (top_arrow_height/2);
+    float arrow_y = window_height - top_arrow_height;
+    float window_x = (menu_icon_x + menu_icon_width/2) - window_width / 2;
+    float window_y = menu_icon_y - window_height;
+    
+    // update positions
+    [_window_up_arrow_view setFrame:NSMakeRect(arrow_x, arrow_y, top_arrow_height, top_arrow_height)];
+    [_window setFrame:NSMakeRect(window_x, window_y, window_width, window_height) display:true];
+    [_vis_view setFrame:CGRectMake(0, 0, window_width, window_height - (top_arrow_height - 5))];
+}
 
+// called on on scroll to animate notifications
+-(void)onScroll{
+    if([[_scroll_view.documentView className] isEqual: @"NotificationTable"]) [self animate:false];
+}
+
+#pragma mark - bell animation
+int bell_image_cnt;
+-(void)animateBell:(NSImage*)image{
+    if(!_animate_bell_timer){
+        after_image = nil;
+    }else{
+        // cancel timer if it exists
+        [_animate_bell_timer invalidate];
+        _animate_bell_timer = nil;
+    }
+    
+    _animate_bell_timer = [NSTimer scheduledTimerWithTimeInterval:0.015 target:self selector:@selector(updateBellImage) userInfo:nil repeats:YES];
+}
+
+NSImage* after_image;
+- (void)updateBellImage
+{
+    NSImage* image = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
+    
+    // list of degrees to animate the bell icon (`image`) to
+    NSArray *numbers = [@"-20,-15.1022,-10.5422,-6.32,-2.43556,1.11111,4.32,7.19111,9.72444,11.92,13.7778,15.2978,16.48,17.3244,17.8311,18,13.6178,9.53778,5.76,2.28444,-0.888889,-3.76,-6.32889,-8.59556,-10.56,-12.2222,-13.5822,-14.64,-15.3956,-15.8489,-16,-12.1333,-8.53333,-5.2,-2.13333,0.666667,3.2,5.46667,7.46667,9.2,10.6667,11.8667,12.8,13.4667,13.8667,14,10.52,7.28,4.28,1.52,-1,-3.28,-5.32,-7.12,-8.68,-10,-11.08,-11.92,-12.52,-12.88,-13,-9.77778,-6.77778,-4,-1.44444,0.888889,3,4.88889,6.55556,8,9.22222,10.2222,11,11.5556,11.8889,12,9.16444,6.52444,4.08,1.83111,-0.222222,-2.08,-3.74222,-5.20889,-6.48,-7.55556,-8.43556,-9.12,-9.60889,-9.90222,-10,-7.68,-5.52,-3.52,-1.68,-7.10543e-15,1.52,2.88,4.08,5.12,6,6.72,7.28,7.68,7.92,8,6.19556,4.51556,2.96,1.52889,0.222222,-0.96,-2.01778,-2.95111,-3.76,-4.44444,-5.00444,-5.44,-5.75111,-5.93778,-6,-4.71111,-3.51111,-2.4,-1.37778,-0.444444,0.4,1.15556,1.82222,2.4,2.88889,3.28889,3.6,3.82222,3.95556,4,3.22667,2.50667,1.84,1.22667,0.666667,0.16,-0.293333,-0.693333,-1.04,-1.33333,-1.57333,-1.76,-1.89333,-1.97333,-2,-1.74222,-1.50222,-1.28,-1.07556,-0.888889,-0.72,-0.568889,-0.435556,-0.32,-0.222222,-0.142222,-0.08,-0.0355556,-0.0088888" componentsSeparatedByString:@","];
+    
+    if(bell_image_cnt == [numbers count] - 1){
+        // end timer when external counter (bell_image_cnt) finishes the animation angles.
+        if(!after_image) after_image = image;
+        [_status_item setImage:after_image];
+        
+        // cancel timer
+        [_animate_bell_timer invalidate];
+        _animate_bell_timer = nil;
+    }else{
+        NSString *i = numbers[bell_image_cnt];
+        float x = [i floatValue];
+        [_status_item setImage:[image imageRotated:x]];
+        bell_image_cnt++;
+    }
+}
+
+#pragma mark - Table View Data Source
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
     return _notifications.count;
 }
@@ -577,10 +579,14 @@ NSMutableArray *animatedNotifications;
         NSImage* alert_icon = [NSImage imageNamed:@"alert_menu_bellicon.png" ];
         NSImage* menu_icon = [NSImage imageNamed:@"menu_bellicon.png" ];
         
+        [_error_label setHidden:true];
+        
         if(!_s.authed){
             if(_status_item.image != error_icon){
                 _status_item.image = error_icon;
                 after_image = error_icon;
+                [_error_label setStringValue:@"Network Error"];
+                [_error_label setHidden:false];
             }
         }else if([self numUnreadNotifications] > 0){
             if(ani){
@@ -666,12 +672,12 @@ NSMutableArray *animatedNotifications;
         NSError *error = nil;
         NSString *content = [r startSynchronousWithError:&error];
         
-        NSString* key = [CustomFunctions jsonToVal:content key:@"key"];
+        NSString* key = [CustomFunctions jsonToVal:content key:@"key"]; // password to credentials so no one else can use credentials
         NSString* credentials = [CustomFunctions jsonToVal:content key:@"credentials"];
         
         if(![key isEqual: @""] && ![credentials isEqual: @""]){
-            [_keychain setKey:@"credential_key" withPassword:key];
-            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"];
+            [_keychain setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
+            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"]; // store credentials in normal storage
             [_sm.credentials setTitle:credentials];
             
             //close window
@@ -768,8 +774,8 @@ NSMutableArray *animatedNotifications;
                     [self updateMenuBarIcon:true];
                 });
                 
-                //send notification
                 if([incoming_notifications count] <= 5){
+                    //send notification individualy
                     for (NSDictionary* notification in incoming_notifications){
                         if(![_window isKeyWindow]){
                             [self sendLocalNotification:[notification objectForKey:@"title"]
@@ -810,9 +816,7 @@ NSMutableArray *animatedNotifications;
 
 //used to get Notification class object
 -(Notification*)notificationFromID:(unsigned long)ID{
-    for(Notification* n in _notifications){
-        if(n.ID == ID) return n;
-    }
+    for(Notification* n in _notifications) if(n.ID == ID) return n;
     return nil;
 }
 
@@ -821,7 +825,7 @@ NSMutableArray *animatedNotifications;
     for(Notification* n in _notifications) [n markRead];
 }
 
-// from nsnotification
+// from nsnotification (right click event)
 -(void)deleteNote:(NSNotification*)obj{
     NSNumber* num = (NSNumber*)obj.userInfo;
     unsigned long ID = [num unsignedLongValue];
@@ -849,6 +853,7 @@ NSMutableArray *animatedNotifications;
     }
 }
 
+// removes all stored notifications
 -(void)deleteAll{
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     
@@ -878,7 +883,6 @@ NSMutableArray *animatedNotifications;
         }
     }
 }
-
 
 #pragma mark - notifications
 -(void)sendLocalNotification:(NSString*)title message:(NSString*)mes imageURL:(NSString*)imgURL link:(NSString*)url ID:(unsigned long)ID{
@@ -915,9 +919,9 @@ NSMutableArray *animatedNotifications;
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
     [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
     
-    // remove notification after ceratain amount of time depending
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"sticky_notification"]){
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        // remove notification after ceratain amount of time depending
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, STICKYTIME * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [[NSUserNotificationCenter defaultUserNotificationCenter] removeDeliveredNotification: notification];
         });
     }

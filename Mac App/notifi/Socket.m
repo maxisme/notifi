@@ -80,7 +80,7 @@
 }
 
 -(void)send:(NSString*)m{
-    [_web_socket send:m];
+    if(self.connected) [_web_socket send:m];
 }
 
 -(void)close{
