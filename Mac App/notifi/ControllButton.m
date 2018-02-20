@@ -11,7 +11,6 @@
 
 @implementation ControlButton
 -(void)mouseEntered:(NSEvent *)theEvent {
-    
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
     flash.fromValue = [NSNumber numberWithFloat:1];
     

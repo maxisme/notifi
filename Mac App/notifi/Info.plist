@@ -38,11 +38,5 @@
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://notifi.it/sparkle/updates.php</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>fonts/Raleway-SemiBold.ttf</string>
-		<string>fonts/Raleway-Medium.ttf</string>
-		<string>fonts/Raleway-ExtraBold.ttf</string>
-	</array>
 </dict>
 </plist>

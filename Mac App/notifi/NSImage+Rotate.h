@@ -8,6 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NSImage (Rotated)
-- (NSImage *)imageRotated:(float)degrees;
+@interface NSImage (Rotate)
+- (NSImage *)rotate:(float)degrees;
 @end

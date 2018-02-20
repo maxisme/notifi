@@ -107,8 +107,14 @@
 + (NSString*)jsonToVal:(NSString*)json key:(NSString*)key{
     NSMutableDictionary* dic = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
     if([dic objectForKey:key]) return [dic objectForKey:key];
-    [NSException raise:@"No JSON value found" format:@"Key %@ is invalid.", key];
     return @"";
+}
+
++ (NSString*)dicToJsonString:(NSDictionary*)dic{
+    NSError* error;
+    NSData *jd = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
+    if (error) return @"";
+    return [[NSString alloc] initWithData:jd encoding:NSUTF8StringEncoding];
 }
 
 + (NSString *)getSystemUUID {
@@ -129,13 +135,20 @@
 }
 
 + (unsigned long)stringToUL:(NSString*)str{
-    return [[NSNumber numberWithInteger:[str integerValue]] unsignedLongValue];
+    return [[[[NSNumberFormatter alloc] init] numberFromString:str] unsignedLongValue];
 }
 
 + (void)copyText:(NSString*)text{
     NSPasteboard *pasteBoard = [NSPasteboard generalPasteboard];
     [pasteBoard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, nil] owner:nil];
     [pasteBoard setString:text forType:NSStringPboardType];
+}
+
++ (NSImage*)setImgOriginalSize:(NSImage*)image{
+    NSBitmapImageRep *rep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+    NSSize size = NSMakeSize([rep pixelsWide], [rep pixelsHigh]);
+    [image setSize:size];
+    return image;
 }
 
 + (void)checkForUpdate:(bool)fg{

@@ -97,7 +97,7 @@
 }
 
 -(void)howToRec{
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[CustomVars how_to]]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[CustomVars how_to:_credentials.title]]];
 }
 
 -(void)copyCredentials{

@@ -15,29 +15,29 @@
 
 - (id)initWithURL:(NSString*)url{
     if (self != [super init]) return nil;
-    
     _url = url;
     
-    [self create];
+    [self open];
     
-    // send ping every 30 seconds to make sure still connected to server
-    [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
+    // send ping every 10 seconds to make sure still connected to server
+    [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
     
     return self;
 }
 
--(void)create{
+-(void)open{
+    [self destroy];
     _web_socket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:_url]];
     [_web_socket setDelegate:(id)self];
     [_web_socket open];
 }
 
 -(void)destroy{
-    _authed = false;
-    _connected = false;
+    [_web_socket close];
     _web_socket.delegate = nil;
     _web_socket = nil;
-    [_web_socket close];
+    _authed = false;
+    _connected = false;
 }
 
 - (void)sendPing{
@@ -58,8 +58,13 @@
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
-    NSLog(@"open");
+    NSLog(@"socket open");
     _connected = true;
+    
+    if(_reconnect_timer){
+        [_reconnect_timer invalidate];
+        _reconnect_timer = nil;
+    }
     
     if (self.onConnectBlock) _onConnectBlock();
 }
@@ -80,19 +85,17 @@
 }
 
 -(void)send:(NSString*)m{
-    if(self.connected) [_web_socket send:m];
+    if(_web_socket.readyState == SR_OPEN) [_web_socket send:m];
 }
 
 -(void)close{
     [self destroy];
     
-    // run user code
     if (self.onCloseBlock) _onCloseBlock();
     
-    // automatic reconnect attempt after 2 seconds
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self create];
-    });
+    // attempt to open socket again every 5 seconds
+    if(!_reconnect_timer) _reconnect_timer = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(open) userInfo:nil repeats:YES];
 }
 
 @end
+

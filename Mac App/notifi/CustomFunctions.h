@@ -16,9 +16,11 @@
 
 + (CGFloat)widthOfString:(NSString *)string withFont:(NSFont *)font;
 + (NSString*)jsonToVal:(NSString*)json key:(NSString*)key;
++ (NSString*)dicToJsonString:(NSDictionary*)dic;
 + (NSString *)getSystemUUID;
 + (void)sendNotificationCenter:(id)message name:(NSString*)name;
 + (unsigned long)stringToUL:(NSString*)str;
 + (void)copyText:(NSString*)text;
 + (void)checkForUpdate:(bool)fg;
++ (NSImage*)setImgOriginalSize:(NSImage*)image;
 @end

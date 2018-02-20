@@ -6,9 +6,9 @@
 //  Copyright © 2018 max mitchell. All rights reserved.
 //
 
-#import "AnimateView.h"
+#import "NSView+animate.h"
 
-@implementation AnimateView
+@implementation NSView (Animate)
 - (void)animateWithDuration:(NSTimeInterval)duration
                   animation:(void (^)(void))animationBlock
 {

@@ -1,0 +1,11 @@
+title: notifi
+email: hello@notifi.it
+logo: images/logo.png
+download-file: notifi.dmg
+recaptcha:
+  pub: 6LckXEcUAAAAAEIVSE5Su4jGPYl1KIKYRlFZw-Mu
+  priv: 6LckXEcUAAAAAOuwqoPKgUCVXkUDDSOwWjQWaD3Y
+meta:
+  keywords: notifi, notifi it, notify, notification, push notification, curl, mac, osx, mac to mac
+  description: Send simple push notifications to your Mac using HTTP.
+  ico: images/icon.ico

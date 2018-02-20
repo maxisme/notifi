@@ -7,10 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "AnimateView.h"
 
 @class NotificationLabel;
-@interface Notification: AnimateView
+@interface Notification: NSView
 
 @property (strong) NSTrackingArea* trackingArea;
 

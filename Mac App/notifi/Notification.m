@@ -12,6 +12,7 @@
 #import "NotificationImage.h"
 #import "NotificationLabel.h"
 #import "NotificationLink.h"
+#import "NSView+animate.h"
 
 @implementation Notification
 
@@ -25,24 +26,23 @@ float one_row_info_height;
 -(id)initWithTitle:(NSString *)title message:(NSString *)message link:(NSString*)link image_url:(NSString*)image_url time_string:(NSString*)time_string read:(bool)read ID:(unsigned long)ID {
     if (self != [super init]) return nil;
     
+    int top_padding = 20;
+    int side_padding = 15;
     int info_padding = 4;
-    int image_hw = 50;
     int time_height = 18;
+    int image_hw = [CustomVars shrinkHeight:true] - top_padding;
     int width = [CustomVars windowWidth];
     EMPTY = [CustomVars default_empty];
     
     [self setWantsLayer:YES];
     
-    
     //fonts
-    _title_font = [NSFont fontWithName:@"Roboto-Medium" size:17];
-    _info_font = [NSFont fontWithName:@"OpenSans-Regular" size:12];
-    NSFont* time_font = [NSFont fontWithName:@"OpenSans-Regular" size:10];
+    _title_font = [NSFont fontWithName:@"Montserrat-SemiBold" size:17];
+    _info_font = [NSFont fontWithName:@"Montserrat-Regular" size:12];
+    NSFont* time_font = [NSFont fontWithName:@"Montserrat-Light" size:10];
     
-    int top_padding = 15;
-    int side_padding = 15;
     if(![image_url isEqual: EMPTY]){
-        side_padding = image_hw + top_padding * 2;
+        side_padding = image_hw + top_padding;
     }
     
     float text_width = width * 0.95 - side_padding;
@@ -57,7 +57,7 @@ float one_row_info_height;
     }
     
     //calculate total height of notification
-    int notification_height = title_height + time_height + info_height + (top_padding * 3);
+    int notification_height = title_height + time_height + info_height + (top_padding * 2.4);
     
     if(![image_url isEqual: EMPTY]){ // handle extra heightNSColor if image
         int min_height = image_hw + top_padding * 4;
@@ -78,38 +78,39 @@ float one_row_info_height;
     //body of notification
     //--      add image
     if(![image_url isEqual: EMPTY]){
-        NSView* rounded_image_view = [[NSView alloc] initWithFrame:NSMakeRect(top_padding, self.frame.size.height - image_hw - top_padding, image_hw, image_hw)];
+        NSView* rounded_image_view = [[NSView alloc] initWithFrame:NSMakeRect(top_padding / 2, self.frame.size.height - image_hw - (top_padding / 2), image_hw, image_hw)];
         [rounded_image_view setWantsLayer:YES];
         rounded_image_view.layer.cornerRadius = 5; // circle
         rounded_image_view.layer.masksToBounds = YES;
         
-        NotificationImage *image_view = [[NotificationImage alloc] initWithFrame:NSMakeRect(0, 0, image_hw + 5, image_hw + 5)];
-        [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
-        [image_view setImage_url:image_url];
-        image_view.image_url = image_url; // store for opening the link in browser
+        NotificationImage *image_view = [[NotificationImage alloc] initWithFrame:NSMakeRect(0, 0, image_hw, image_hw)];
+        [image_view setImageFromURL:image_url];
+        [image_view setUrl:image_url];
         [rounded_image_view addSubview:image_view];
         
         [self addSubview:rounded_image_view];
     }
     
-    //--    add title
-    _title_label = [[NotificationLabel alloc] init];
-    [_title_label setFrame:CGRectMake(side_padding, self.frame.size.height - title_height - (top_padding / 1.9), text_width, title_height)];
-    [_title_label setFont:_title_font];
-    [_title_label setDelegate:(id)self];
-    
+    int link_hw = 0;
     if(![link isEqual: EMPTY]){
         //add link image
-        int image_hw = 10;
+        link_hw = 15;
         int padding = 8;
         
-        NotificationLink *image_view = [[NotificationLink alloc] initWithFrame:NSMakeRect(padding, self.frame.size.height - image_hw - padding, image_hw, image_hw)];
+        NotificationLink *image_view = [[NotificationLink alloc] initWithFrame:NSMakeRect(side_padding, self.frame.size.height - link_hw - padding - 2, link_hw, link_hw)];
         [image_view setUrl:link];
         [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
         [image_view setImage:[NSImage imageNamed:@"Setyo Ari Wibowo.png"]];
         [self addSubview:image_view];
+        text_width = text_width - 15;
     }
     
+    
+    //--    add title
+    _title_label = [[NotificationLabel alloc] init];
+    [_title_label setFrame:CGRectMake(side_padding + link_hw, self.frame.size.height - (title_height + 4), text_width, title_height)]; // 4 is dynamic to font
+    [_title_label setFont:_title_font];
+    [_title_label setDelegate:(id)self];
     [_title_label setBackgroundColor: [CustomVars offwhite]];
     [_title_label setStringValue:title];
     [self addSubview:_title_label];
@@ -167,8 +168,8 @@ float one_row_info_height;
     self.time = convertedDate;
     self.str_time = formattedStringDate;
     self.expand_height = notification_height - (top_padding * 2);
-    self.shrink_height = 62;
-    if(info_height != info_padding) self.shrink_height = 79; // (ie there is info text)
+    self.shrink_height = [CustomVars shrinkHeight:false];
+    if(info_height != info_padding) self.shrink_height = [CustomVars shrinkHeight:true]; // (ie there is info text)
     self.text_width = text_width;
     
     //store for shrink and expand
@@ -287,6 +288,7 @@ float one_row_info_height;
         [NSAnimationContext endGrouping];
         [self markRead];
     }
+//    NSLog(@"%f",self.expand_height); //uncomment this when adding new fonts to test shrink height
     [self updateTrackingAreas];
 }
 
@@ -352,7 +354,7 @@ float one_row_info_height;
 
 - (void)markUnread {
     [self.layer setBackgroundColor:[[CustomVars white] CGColor]];
-    _title_label.textColor = [CustomVars red];
+    _title_label.textColor = [CustomVars black];
     _read = false;
     [self storeRead:false];
 }

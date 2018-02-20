@@ -33,8 +33,8 @@
     return [NSColor colorWithRed:0.96 green:0.96 blue:0.96 alpha:1.0];
 }
 
-+(NSString *)how_to{
-    return @"https://github.com/maxisme/notifi#http-request-examples";
++(NSString *)how_to:(NSString*)credentials{
+    return [NSString stringWithFormat:@"https://notifi.it/?c=%@#How-To", credentials];
 }
 
 +(NSString *)default_empty{
@@ -53,4 +53,8 @@
     return 350;
 }
 
++(int)shrinkHeight:(bool)hasInfo{
+    if(hasInfo) return 73;
+    return 55;
+}
 @end

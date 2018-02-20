@@ -59,38 +59,7 @@ $meta_keywords = "OSX, Mac, Notify, Notifi, notifi, notification, app, api, curl
 <page id="howitworks">
     <h2>How It Works</h2>
     <div>
-        <p class="info">
-            notifi is a <strong>FREE</strong>, minimal <strong>Push Notification app</strong> that sits in your menu bar
-            on your Mac. When opening the app for the first time you are given <i>credentials</i> these are used to
-            uniquely identify you.
-        </p>
-        <p>
-            <img style="zoom:98.6%" src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Menubar.png">
-        </p>
-        <p class="info">
-            With this key you can send <a target="_blank"
-                                          href="https://github.com/maxisme/notifi#http-request-examples">HTTP requests
-                (curl)</a> to receive notifications on your mac.
-        </p>
-        <p>
-            <img style="zoom:98.6%" src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
-        </p>
-        <h3>Okay I have downloaded it. Now what?</h3>
-        <p class="info">
-            First click on notifi which will appear on your menu bar at the top of your Mac. Here you can open your
-            notifications and get your unique <strong>Credentials</strong>.<br/><br/> Send a notification with your
-            desired programming language or through the terminal - <a target="_blank"
-                                                                      href="https://github.com/maxisme/notifi#http-request-examples">See
-                examples</a>.
-        <p>
-            <img style="zoom:98.6%"
-                 src="https://raw.githubusercontent.com/maxisme/notifi/master/Screen%20Shots/Notification.png">
-        </p>
-        </p>
-        <h3>Want to know more?</h3>
-        <p class="info">
-            notifi is open source on <a target="_blank" href="https://github.com/maxisme/notifi">GitHub</a>.
-        </p>
+
     </div>
 </page>
 
@@ -138,14 +107,6 @@ $meta_keywords = "OSX, Mac, Notify, Notifi, notifi, notification, app, api, curl
     <h2>Ts & Cs</h2>
 
     <div class="info">
-        By using the notifi application you are agreeing to these terms:<br/><br/> Use of the Service is at your own
-        risk. The Service is provided on an "AS IS" and "AS AVAILABLE" basis without any representation or endorsement
-        made and without warranty of any kind whether expressed or implied, including but not limited to the implied
-        warranties of satisfactory quality, fitness for a particular purpose, non-infringement, compatibility, security
-        and accuracy.<br/><br/>To the extent permitted by law, the Service, will not be liable for any indirect or
-        consequential loss or damage whatsoever (including without limitation, loss of business, opportunity, data,
-        profits) arising out of or in connection with the use of the Service.
-        <p><sub>icon from flaticon.com</sub></p>
     </div>
 </page>
 

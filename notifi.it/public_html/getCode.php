@@ -3,6 +3,8 @@ require "functions.php";
 
 $con = connect();
 
+if((string)$_POST['server_key'] != file_get_contents("../secret_server_code.pass")) die("Invalid Server Key");
+
 if(isBruteForce($con)) die("\nToo many requests from IP address try again in 1 minute!");
 
 $UUID = mysqli_real_escape_string($con, $_POST['UUID']);
@@ -10,8 +12,8 @@ if(!validUUID($UUID)) die("Invalid UUID");
 
 //get unique credentials
 do {
-    $credentials = randomString(25);
-    $key = randomString(100);
+    $credentials = randomString($credential_length);
+    $key = randomString($key_length);
 
     // check if user is already in database
     $result_user = mysqli_query($con, "SELECT `id`

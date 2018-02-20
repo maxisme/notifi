@@ -11,5 +11,7 @@
 
 @interface NotificationImage: KPCScaleToFillNSImageView
 @property (strong) NSTrackingArea* trackingArea;
-@property (strong) NSString* image_url;
+@property (strong) NSString* url;
+
+-(void)setImageFromURL:(NSString*)url;
 @end

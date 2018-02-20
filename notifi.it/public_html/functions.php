@@ -1,4 +1,8 @@
 <?php
+/* global variables */
+$credential_length = 25;
+$key_length = 100;
+
 function clean($string) {
    $string = str_replace(' ', '', $string); // removes all spaces
    return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
@@ -131,6 +135,10 @@ function isBruteForce($con, $credentials = " "){
 }
 
 function isValidUser($con, $credentials, $key, $UUID, $app_version){
+    global $credential_length;
+
+    if(strlen($credentials) != $credential_length) return false;
+
 	$where_statement = "WHERE `credentials` = '".myHash($credentials)."'
 	AND `key` = '".myHash($key)."'
 	AND `UUID` = '".myHash($UUID)."'";

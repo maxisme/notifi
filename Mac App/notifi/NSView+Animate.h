@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AnimateView: NSView
+@interface NSView (Animate)
 - (void) animateWithDuration:(NSTimeInterval)duration
                    animation:(void (^)(void))animationBlock;
 - (void) animateWithDuration:(NSTimeInterval)duration

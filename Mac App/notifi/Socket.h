@@ -11,6 +11,7 @@
 
 @interface Socket : NSObject
 @property (nonatomic, strong) SRWebSocket *web_socket;
+@property (nonatomic, strong) NSTimer *reconnect_timer;
 @property (nonatomic) NSString *url;
 @property (nonatomic) bool received_pong;
 @property (nonatomic) bool connected;
@@ -21,5 +22,6 @@
 
 - (id)initWithURL:(NSString*)url;
 - (void)send:(NSString*)m;
-- (void)close;
+- (void)open;
 @end
+

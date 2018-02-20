@@ -31,24 +31,30 @@ class Note implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $con = connect();
-        $msg = mysqli_real_escape_string($con, $msg);
 
 		if(substr($msg,0, strlen($this->delete_str)) == $this->delete_str){
+            $msg = mysqli_real_escape_string($con, $msg);
 			//handle reply from user to say they have received notification
 			$decrypted_string = decrypt(base64_decode(substr($msg, strlen($this->delete_str), strlen($msg))));
-			
+
 			$arr = explode("|", $decrypted_string);
+            if(count($arr) != 2) $from->close();
 			$id = $arr[0];
 			$credentials = $arr[1];
 			
 			deleteNotification($con, $id, $credentials);
 		}else{
-			// opening connection message from user
-			$arr = explode("|", $msg);
-			$credentials = $arr[0];
-			$key = $arr[1];
-            $UUID = $arr[2];
-            $app_version = $arr[3];
+		    $json = json_decode($msg);
+
+            if (json_last_error() != JSON_ERROR_NONE) $from->close();
+
+            $credentials = $json->credentials;
+            $key = $json->key;
+            $UUID = $json->UUID;
+            $app_version = $json->app_version;
+            $server_key = $json->server_key;
+
+            if($server_key != file_get_contents("/var/www/notifi.it/secret_server_code.pass")) $from->close();
 
             if(empty($app_version) || !preg_match("/^\d*\.\d*$/", $app_version)){
                 $from->send("Invalid app_version");

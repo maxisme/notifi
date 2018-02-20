@@ -10,8 +10,14 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation NotificationImage
+
+-(void)setImageFromURL:(NSString*)url{
+    NSData* image_data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+    [self setImage:[[NSImage alloc] initWithData:image_data]];
+}
+
 - (void)mouseDown:(NSEvent *)event {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:self.image_url]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:self.url]];
 }
 
 -(void)mouseEntered:(NSEvent *)theEvent {

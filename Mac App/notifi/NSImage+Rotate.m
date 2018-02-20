@@ -6,11 +6,11 @@
 //  Copyright © 2018 max mitchell. All rights reserved.
 //
 
-#import "NSImage+Rotated.h"
+#import "NSImage+Rotate.h"
 
-@implementation NSImage (Rotated)
+@implementation NSImage (Rotate)
 
-- (NSImage *)imageRotated:(float)degrees {
+- (NSImage *)rotate:(float)degrees {
     
     degrees = fmod(degrees, 360.);
     if (0 == degrees) {

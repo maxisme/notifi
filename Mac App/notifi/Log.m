@@ -7,12 +7,12 @@
 //
 
 #import "Log.h"
-#define LOG_LEVEL_DEF ddLogLevel
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "CustomFunctions.h"
 
 @implementation Log
 
+#define LOG_LEVEL_DEF ddLogLevel
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 -(id)init{
@@ -35,9 +35,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 +(void)log:(NSString*)mess{
     [self log:mess error:false];
 }
+
 +(void)log:(NSString*)mess error:(BOOL)error{
     NSDictionary *dict = @{ @"mess" : mess, @"error" : [NSNumber numberWithBool:error]};
-    [CustomFunctions sendNotificationCenter:dict name:@"log"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"log" object:nil userInfo:dict];
 }
 
 -(void)listener:(NSNotification*)obj{
