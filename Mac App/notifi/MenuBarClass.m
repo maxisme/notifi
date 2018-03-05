@@ -39,6 +39,7 @@
 #pragma mark - bell animation
 
 -(void)animateBell{
+    NSLog(@"animate");
     if(!_animate_bell_timer){
         _after_image = nil;
     }else{
@@ -65,6 +66,7 @@
         // cancel timer
         [_animate_bell_timer invalidate];
         _animate_bell_timer = nil;
+        _bell_image_cnt = 1;
     }else{
         NSString *i = angles[_bell_image_cnt];
         float x = [i floatValue];

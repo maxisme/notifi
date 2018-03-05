@@ -34,17 +34,6 @@
     
     _keychain = [[Keys alloc] init];
     _menu_bar.bell_image_cnt = 1;
-    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
-    if([credentials length] != 25){
-        //new user
-        [self newCredentials];
-        [CustomFunctions openOnStartup];
-        
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"sticky_notification"];
-    }
-    
-    //create new credentials listener
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newCredentials) name:@"create-credentials" object:nil];
     
     //update menu icon listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMBIcon:) name:@"update-menu-icon" object:nil];
@@ -52,12 +41,19 @@
     return self;
 }
 
--(void)newCredentials{
-    [_window.settings_menu.credentials setTitle:@"Fetching credentials..."];
++(void)newCredentials{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://notifi.it/getCode.php"];
-    r.POSTDictionary = @{ @"UUID":[CustomFunctions getSystemUUID], @"server_key": [LOOCryptString serverKey]};
+    NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{ @"UUID":[CustomFunctions getSystemUUID], @"server_key": [LOOCryptString serverKey]}];
+    // tell server off the current credentials to be able to create new ones.
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
+        [post addEntriesFromDictionary:@{
+                                        @"current_credentials": [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
+                                        @"current_key": [[[Keys alloc] init] getKey:@"credential_key"]
+                                        }];
+    }
+    r.POSTDictionary = post;
     NSError *error = nil;
     NSString *content = [r startSynchronousWithError:&error];
     
@@ -65,34 +61,20 @@
     NSString* credentials = [CustomFunctions jsonToVal:content key:@"credentials"];
     
     if(![key isEqual: @""] && ![credentials isEqual: @""]){
-        [_keychain setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
+        [[[Keys alloc] init] setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
         [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"]; // store credentials in normal storage
-        [_window.settings_menu.credentials setTitle:credentials];
-        
-        //close window
-        if(_window && [_window isVisible]) [_window orderOut:self];
-        
-        [_window setWindowBody];
     }else{
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setInformativeText:@"Please try again."];
         [alert addButtonWithTitle:@"Ok"];
-        if([content  isEqual: @"0"]){
-            [_window.settings_menu.credentials setTitle:@"Please click 'Create New Credentials'!"];
-            [alert setMessageText:@"Credentials already registered!"];
+        [alert setMessageText:@"Error Fetching credentials!"];
+        if(error){
+            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
         }else{
-            [_window.settings_menu.credentials setTitle:@"Error Fetching credentials!"];
-            [alert setMessageText:@"Error Fetching credentials!"];
-            if(error){
-                [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
-            }else{
-                [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
-            }
+            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
         }
         [alert runModal];
     }
-    
-    [self createSocket];
 }
 
 #pragma mark - socket
@@ -134,7 +116,7 @@
             [alert addButtonWithTitle:@"No"];
             
             NSInteger button = [alert runModal];
-            if (button == NSAlertFirstButtonReturn) [self newCredentials];
+            if (button == NSAlertFirstButtonReturn) [User newCredentials];
         });
     }else{
         _s.authed = true;
@@ -324,9 +306,5 @@
     }
     
     [center removeDeliveredNotification: notification];
-}
-
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
-    return YES;
 }
 @end

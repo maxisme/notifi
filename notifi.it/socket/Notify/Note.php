@@ -13,6 +13,7 @@ $con = connect();
 mysqli_query($con, "UPDATE `users`
 SET isConnected = 0
 ");
+mysqli_close($con);
 
 
 class Note implements MessageComponentInterface { 
@@ -83,7 +84,9 @@ class Note implements MessageComponentInterface {
                 $from->send("Invalid Credentials");
                 $from->close();
             }
-		} 
+		}
+
+        mysqli_close($con);
     }
 	
 	public function onCurl($hashedCredentials) {

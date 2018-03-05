@@ -54,7 +54,7 @@
 }
 
 +(int)shrinkHeight:(bool)hasInfo{
-    if(hasInfo) return 73;
+    if(hasInfo) return 70;
     return 55;
 }
 @end

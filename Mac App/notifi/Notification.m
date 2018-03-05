@@ -100,7 +100,7 @@ float one_row_info_height;
         NotificationLink *image_view = [[NotificationLink alloc] initWithFrame:NSMakeRect(side_padding, self.frame.size.height - link_hw - padding - 2, link_hw, link_hw)];
         [image_view setUrl:link];
         [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
-        [image_view setImage:[NSImage imageNamed:@"Setyo Ari Wibowo.png"]];
+        [image_view setImage:[NSImage imageNamed:@"link.png"]];
         [self addSubview:image_view];
         text_width = text_width - 15;
     }
@@ -288,7 +288,7 @@ float one_row_info_height;
         [NSAnimationContext endGrouping];
         [self markRead];
     }
-//    NSLog(@"%f",self.expand_height); //uncomment this when adding new fonts to test shrink height
+    NSLog(@"%f",self.expand_height); //uncomment this when adding new fonts to test shrink height (with and without info)
     [self updateTrackingAreas];
 }
 
@@ -378,8 +378,7 @@ float one_row_info_height;
 }
 
 #pragma mark - external events
-- (void)mouseUp:(NSEvent *)event
-{
+- (void)mouseUp:(NSEvent *)event {
     [Log log:@"md"];
     [self expand];
 }

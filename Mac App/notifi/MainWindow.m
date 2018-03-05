@@ -38,7 +38,7 @@
     [self setWindowBody];
     
     // scroll listener
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onScroll) name:NSViewBoundsDidChangeNotification object:_scroll_view];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onScroll) name:NSViewBoundsDidChangeNotification object:[_scroll_view contentView]];
     
     //delete notification listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteNote:) name:@"delete-notification" object:nil];
@@ -77,7 +77,7 @@
     
     //cog
     _settings_menu = [[SettingsMenu alloc] init];
-    NSImage *cog = [CustomFunctions setImgOriginalSize:[NSImage imageNamed:@"Anton Saputro.png"]];
+    NSImage *cog = [CustomFunctions setImgOriginalSize:[NSImage imageNamed:@"cog.png"]];
     Cog *cogView = [[Cog alloc] initWithFrame:NSMakeRect(window_width - (cog_height + cog_padding), window_height-(self.WINDOWTOMENUHEIGHT+ cog_height + cog_padding), cog_height, cog_height)];
     [cogView setCustomMenu:_settings_menu];
     [cogView setImage:cog];
@@ -388,7 +388,7 @@
 }
 
 -(void)onScroll{
-    if([[_scroll_view.documentView className] isEqual: @"NotificationTable"]) [self animate:false];
+//    if([[_scroll_view.documentView className] isEqual: @"NotificationTable"]) [self animate:false];
 }
 
 -(void)animate:(bool)should_delay{
@@ -399,21 +399,23 @@
     NSScrollView* scrollView = [_notification_table enclosingScrollView];
     CGRect visibleRect = scrollView.contentView.visibleRect;
     NSRange range = [_notification_table rowsInRect:visibleRect];
-    
-    int num_notifications = (int)[_notifications count];
-    
     int right =  - self.frame.size.width; // start position of animation
     
-    int start = (int)range.location;
-    if(start > 1) start -= 1;
-    int end = start + (int)range.length + 1;
-    if(end >= num_notifications) end = num_notifications; // end is the last notification
+    NSUInteger num_notifications = [_notifications count];
     
+    NSUInteger start = range.location;
+    if(start > 1) start -= 1;
+    NSUInteger end = start + range.length - 1;
+    if(end >= num_notifications) end = num_notifications; // end is the last notification
+//    NSLog(@"%lu - %lu", (unsigned long)start, (unsigned long)end);
     if(num_notifications > 0){ // there are notifications
-        for(int x = start; x < end; x++){
+        for(NSUInteger x = start; x < end; x++){
+            NSLog(@"%lu", x);
             Notification* n = [_notifications objectAtIndex:x];
-            NSNumber *num = [[NSNumber alloc] initWithUnsignedLong:n.ID];
+            NSNumber *num = [[NSNumber alloc] initWithUnsignedLongLong:n.ID];
+            NSLog(@"%@", num);
             if(![_notifications_animated containsObject:num]){ // not already animated
+//                NSLog(@"%lu", (unsigned long)[_notifications_animated count]);
                 [_notifications_animated addObject:num];
                 
                 //handle delay

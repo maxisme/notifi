@@ -18,6 +18,8 @@
 @property MainWindow *window;
 @property MenuBarClass *menu_bar;
 
++(void)newCredentials;
+
 -(id)initWithMenuBar:(MenuBarClass*)mb;
 -(void)createSocket;
 @end

@@ -1,6 +1,8 @@
 <?php
 /* global variables */
+global $credential_length;
 $credential_length = 25;
+global $key_length;
 $key_length = 100;
 
 function clean($string) {

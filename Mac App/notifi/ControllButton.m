@@ -12,10 +12,11 @@
 @implementation ControlButton
 -(void)mouseEntered:(NSEvent *)theEvent {
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    flash.fromValue = [NSNumber numberWithFloat:1];
     
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    if((int)[notifications count] != 0){
+    if((int)[notifications count] != 0){ // if there are notifications
+        flash.fromValue = [NSNumber numberWithFloat:1];
+        
         [super resetCursorRects];
         [self addCursorRect:self.bounds cursor:[NSCursor pointingHandCursor]];
         
@@ -34,10 +35,9 @@
     
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
     
-    flash.fromValue = [NSNumber numberWithFloat:self.opacity_min];
-    
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    if((int)[notifications count] != 0){
+    if((int)[notifications count] != 0){ // if there are notifications
+        flash.fromValue = [NSNumber numberWithFloat:self.opacity_min];
         flash.toValue = [NSNumber numberWithFloat:1];
     }
     

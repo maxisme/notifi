@@ -8,19 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		3486AF5B90ADCF406A866D70 /* Pods_notifi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB203359588D007975D84CFB /* Pods_notifi.framework */; };
-		48110582201F731C004D2040 /* AnimateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110581201F731C004D2040 /* AnimateView.m */; };
-		48110588201FEB2D004D2040 /* Window.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110587201FEB2D004D2040 /* Window.m */; };
+		48110582201F731C004D2040 /* NSView+Animate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110581201F731C004D2040 /* NSView+Animate.m */; };
+		48110588201FEB2D004D2040 /* MainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110587201FEB2D004D2040 /* MainWindow.m */; };
 		48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */; };
 		481695741F046523003D6023 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 481695731F046523003D6023 /* Credits.html */; };
 		482C8A931E09742400E5C173 /* MyApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 482C8A921E09742400E5C173 /* MyApplication.m */; };
 		482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9C1E0B0D0700E5C173 /* CoreData.framework */; };
 		482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9E1E0B0D4000E5C173 /* AppKit.framework */; };
-		484439EC1EA8C2D5009C7043 /* Anton Saputro.png in Resources */ = {isa = PBXBuildFile; fileRef = 484439EB1EA8C2D5009C7043 /* Anton Saputro.png */; };
 		484935CE2018DB6700ED058A /* CustomFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935CD2018DB6700ED058A /* CustomFunctions.m */; };
 		484935D12018DFB400ED058A /* Socket.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D02018DFB400ED058A /* Socket.m */; };
 		484935D420194B9200ED058A /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D320194B9200ED058A /* Log.m */; };
 		486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CC1F2FA2FA008E7492 /* sad.png */; };
-		486FA2CF1F320C92008E7492 /* Setyo Ari Wibowo.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CE1F320C92008E7492 /* Setyo Ari Wibowo.png */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
 		48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DCB2018A1170078F388 /* SettingsMenu.m */; };
 		48785DD12018B2710078F388 /* Keys.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DD02018B2710078F388 /* Keys.m */; };
@@ -31,7 +29,7 @@
 		4892A26D20153271003F56EC /* Cog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A26C20153271003F56EC /* Cog.m */; };
 		4892A270201532B0003F56EC /* NotificationLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A26F201532B0003F56EC /* NotificationLink.m */; };
 		4892A273201532E5003F56EC /* NotificationLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A272201532E5003F56EC /* NotificationLabel.m */; };
-		4892A27620153559003F56EC /* NSImage+Rotated.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27520153559003F56EC /* NSImage+Rotated.m */; };
+		4892A27620153559003F56EC /* NSImage+Rotate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27520153559003F56EC /* NSImage+Rotate.m */; };
 		4892A27C20153BD8003F56EC /* CustomVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27B20153BD8003F56EC /* CustomVars.m */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
@@ -40,15 +38,21 @@
 		48AE54B81E0451EA00E8777F /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54B71E0451EA00E8777F /* bell.png */; };
 		48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */; };
 		48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B028301DBBAC51007D2462 /* menu_bellicon.png */; };
+		48D4C208203E1F24002AA814 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C207203E1F23002AA814 /* link.png */; };
+		48D4C20A203E20A1002AA814 /* cog.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C209203E20A0002AA814 /* cog.png */; };
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
 		48E49A901E1D9DFF00DE3DBE /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 48E49A8F1E1D9DFF00DE3DBE /* fonts */; };
+		D65EE08420376D6700CD589D /* MenuBarClass.m in Sources */ = {isa = PBXBuildFile; fileRef = D65EE08320376D6700CD589D /* MenuBarClass.m */; };
+		D6C0F86A20371C39008673E3 /* LOOCryptString.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C0F86920371C39008673E3 /* LOOCryptString.m */; };
+		D6C0F8712037261D008673E3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C0F8702037261D008673E3 /* User.m */; };
+		D6C0F874203732F8008673E3 /* MenuWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C0F873203732F8008673E3 /* MenuWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		48110580201F731C004D2040 /* AnimateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimateView.h; sourceTree = "<group>"; };
-		48110581201F731C004D2040 /* AnimateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimateView.m; sourceTree = "<group>"; };
-		48110586201FEB2D004D2040 /* Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Window.h; sourceTree = "<group>"; };
-		48110587201FEB2D004D2040 /* Window.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Window.m; sourceTree = "<group>"; };
+		48110580201F731C004D2040 /* NSView+Animate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSView+Animate.h"; sourceTree = "<group>"; };
+		48110581201F731C004D2040 /* NSView+Animate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSView+Animate.m"; sourceTree = "<group>"; };
+		48110586201FEB2D004D2040 /* MainWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
+		48110587201FEB2D004D2040 /* MainWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainWindow.m; sourceTree = "<group>"; };
 		48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPCScaleToFillNSImageView.m; sourceTree = "<group>"; };
 		48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPCScaleToFillNSImageView.h; sourceTree = "<group>"; };
 		481695731F046523003D6023 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
@@ -56,7 +60,6 @@
 		482C8A941E09743100E5C173 /* MyApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyApplication.h; sourceTree = "<group>"; };
 		482C8A9C1E0B0D0700E5C173 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		482C8A9E1E0B0D4000E5C173 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		484439EB1EA8C2D5009C7043 /* Anton Saputro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Anton Saputro.png"; sourceTree = "<group>"; };
 		484935CC2018DB6700ED058A /* CustomFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomFunctions.h; sourceTree = "<group>"; };
 		484935CD2018DB6700ED058A /* CustomFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomFunctions.m; sourceTree = "<group>"; };
 		484935CF2018DFB400ED058A /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
@@ -64,7 +67,6 @@
 		484935D220194B9200ED058A /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		484935D320194B9200ED058A /* Log.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		486FA2CC1F2FA2FA008E7492 /* sad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sad.png; sourceTree = "<group>"; };
-		486FA2CE1F320C92008E7492 /* Setyo Ari Wibowo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Setyo Ari Wibowo.png"; sourceTree = "<group>"; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
 		48785DCA2018A1170078F388 /* SettingsMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsMenu.h; sourceTree = "<group>"; };
 		48785DCB2018A1170078F388 /* SettingsMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsMenu.m; sourceTree = "<group>"; };
@@ -83,8 +85,8 @@
 		4892A26F201532B0003F56EC /* NotificationLink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationLink.m; sourceTree = "<group>"; };
 		4892A271201532E5003F56EC /* NotificationLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationLabel.h; sourceTree = "<group>"; };
 		4892A272201532E5003F56EC /* NotificationLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationLabel.m; sourceTree = "<group>"; };
-		4892A27420153559003F56EC /* NSImage+Rotated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+Rotated.h"; sourceTree = "<group>"; };
-		4892A27520153559003F56EC /* NSImage+Rotated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Rotated.m"; sourceTree = "<group>"; };
+		4892A27420153559003F56EC /* NSImage+Rotate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+Rotate.h"; sourceTree = "<group>"; };
+		4892A27520153559003F56EC /* NSImage+Rotate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Rotate.m"; sourceTree = "<group>"; };
 		4892A278201535F8003F56EC /* Notification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Notification.h; sourceTree = "<group>"; };
 		4892A27920153677003F56EC /* NotificationTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationTable.h; sourceTree = "<group>"; };
 		4892A27A2015385A003F56EC /* CustomVars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomVars.h; sourceTree = "<group>"; };
@@ -99,11 +101,21 @@
 		48AE54B71E0451EA00E8777F /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_menu_bellicon.png; sourceTree = "<group>"; };
 		48B028301DBBAC51007D2462 /* menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_bellicon.png; sourceTree = "<group>"; };
+		48D4C207203E1F23002AA814 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
+		48D4C209203E20A0002AA814 /* cog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cog.png; sourceTree = "<group>"; };
 		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48E49A8F1E1D9DFF00DE3DBE /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"; sourceTree = "<group>"; };
 		C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.debug.xcconfig"; sourceTree = "<group>"; };
 		CB203359588D007975D84CFB /* Pods_notifi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notifi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D65EE08220376D6700CD589D /* MenuBarClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuBarClass.h; sourceTree = "<group>"; };
+		D65EE08320376D6700CD589D /* MenuBarClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuBarClass.m; sourceTree = "<group>"; };
+		D6C0F86820371C39008673E3 /* LOOCryptString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOOCryptString.h; sourceTree = "<group>"; };
+		D6C0F86920371C39008673E3 /* LOOCryptString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOOCryptString.m; sourceTree = "<group>"; };
+		D6C0F86F2037261D008673E3 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		D6C0F8702037261D008673E3 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		D6C0F872203732F8008673E3 /* MenuWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuWindow.h; sourceTree = "<group>"; };
+		D6C0F873203732F8008673E3 /* MenuWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,8 +155,6 @@
 				4892A272201532E5003F56EC /* NotificationLabel.m */,
 				4892A27920153677003F56EC /* NotificationTable.h */,
 				4892A2632015315F003F56EC /* NotificationTable.m */,
-				48110580201F731C004D2040 /* AnimateView.h */,
-				48110581201F731C004D2040 /* AnimateView.m */,
 			);
 			name = Notification;
 			sourceTree = "<group>";
@@ -153,16 +163,16 @@
 			isa = PBXGroup;
 			children = (
 				48785DCD2018A5D70078F388 /* Notification */,
-				4892A27420153559003F56EC /* NSImage+Rotated.h */,
-				4892A27520153559003F56EC /* NSImage+Rotated.m */,
 				4892A26B20153271003F56EC /* Cog.h */,
 				4892A26C20153271003F56EC /* Cog.m */,
 				4892A26520153204003F56EC /* ControllButton.h */,
 				4892A26620153204003F56EC /* ControllButton.m */,
 				48785DCA2018A1170078F388 /* SettingsMenu.h */,
 				48785DCB2018A1170078F388 /* SettingsMenu.m */,
-				48110586201FEB2D004D2040 /* Window.h */,
-				48110587201FEB2D004D2040 /* Window.m */,
+				48110586201FEB2D004D2040 /* MainWindow.h */,
+				48110587201FEB2D004D2040 /* MainWindow.m */,
+				D65EE08220376D6700CD589D /* MenuBarClass.h */,
+				D65EE08320376D6700CD589D /* MenuBarClass.m */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -171,16 +181,13 @@
 			isa = PBXGroup;
 			children = (
 				48785DCE2018B2390078F388 /* GUI */,
+				D6C0F875203737E3008673E3 /* Frameworks */,
+				D6C0F86F2037261D008673E3 /* User.h */,
+				D6C0F8702037261D008673E3 /* User.m */,
 				4892A27A2015385A003F56EC /* CustomVars.h */,
 				4892A27B20153BD8003F56EC /* CustomVars.m */,
-				48785DCF2018B2710078F388 /* Keys.h */,
-				48785DD02018B2710078F388 /* Keys.m */,
 				484935CC2018DB6700ED058A /* CustomFunctions.h */,
 				484935CD2018DB6700ED058A /* CustomFunctions.m */,
-				484935CF2018DFB400ED058A /* Socket.h */,
-				484935D02018DFB400ED058A /* Socket.m */,
-				484935D220194B9200ED058A /* Log.h */,
-				484935D320194B9200ED058A /* Log.m */,
 			);
 			name = "Custom Classes";
 			sourceTree = "<group>";
@@ -208,23 +215,15 @@
 			children = (
 				48AD3F931DB9438600B47CA5 /* AppDelegate.h */,
 				48AD3F941DB9438600B47CA5 /* AppDelegate.m */,
-				48AE54B51E04480800E8777F /* up_arrow.png */,
-				487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */,
-				48B028301DBBAC51007D2462 /* menu_bellicon.png */,
-				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
-				48AE54B71E0451EA00E8777F /* bell.png */,
-				486FA2CC1F2FA2FA008E7492 /* sad.png */,
-				486FA2CE1F320C92008E7492 /* Setyo Ari Wibowo.png */,
-				484439EB1EA8C2D5009C7043 /* Anton Saputro.png */,
-				48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */,
-				48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */,
 				48DD0F051E1BC57D00773859 /* Assets.xcassets */,
 				48AD3FA11DB9438600B47CA5 /* Info.plist */,
+				D6C0F86E20372122008673E3 /* images */,
 				48E49A8F1E1D9DFF00DE3DBE /* fonts */,
 				48AD3F961DB9438600B47CA5 /* Supporting Files */,
-				482C8A921E09742400E5C173 /* MyApplication.m */,
 				482C8A941E09743100E5C173 /* MyApplication.h */,
+				482C8A921E09742400E5C173 /* MyApplication.m */,
 				481695731F046523003D6023 /* Credits.html */,
+				D6C0F86B20371C3F008673E3 /* Classes */,
 				4892A27720153581003F56EC /* Custom Classes */,
 			);
 			path = notifi;
@@ -250,6 +249,51 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D6C0F86B20371C3F008673E3 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */,
+				48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */,
+				D6C0F86820371C39008673E3 /* LOOCryptString.h */,
+				D6C0F86920371C39008673E3 /* LOOCryptString.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		D6C0F86E20372122008673E3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				48AE54B51E04480800E8777F /* up_arrow.png */,
+				487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */,
+				48B028301DBBAC51007D2462 /* menu_bellicon.png */,
+				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
+				48AE54B71E0451EA00E8777F /* bell.png */,
+				486FA2CC1F2FA2FA008E7492 /* sad.png */,
+				48D4C207203E1F23002AA814 /* link.png */,
+				48D4C209203E20A0002AA814 /* cog.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
+		D6C0F875203737E3008673E3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D6C0F872203732F8008673E3 /* MenuWindow.h */,
+				D6C0F873203732F8008673E3 /* MenuWindow.m */,
+				48785DCF2018B2710078F388 /* Keys.h */,
+				48785DD02018B2710078F388 /* Keys.m */,
+				484935CF2018DFB400ED058A /* Socket.h */,
+				484935D02018DFB400ED058A /* Socket.m */,
+				484935D220194B9200ED058A /* Log.h */,
+				484935D320194B9200ED058A /* Log.m */,
+				48110580201F731C004D2040 /* NSView+Animate.h */,
+				48110581201F731C004D2040 /* NSView+Animate.m */,
+				4892A27420153559003F56EC /* NSImage+Rotate.h */,
+				4892A27520153559003F56EC /* NSImage+Rotate.m */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -258,7 +302,9 @@
 			buildConfigurationList = 48AD3FA41DB9438600B47CA5 /* Build configuration list for PBXNativeTarget "notifi" */;
 			buildPhases = (
 				432519AB3F04C11B2A09AD03 /* [CP] Check Pods Manifest.lock */,
+				D6C0F86C20371C77008673E3 /* Write Secret Server Code */,
 				48AD3F8C1DB9438600B47CA5 /* Sources */,
+				D6C0F86D20371CC6008673E3 /* Remove Secret Server Code */,
 				48AD3F8D1DB9438600B47CA5 /* Frameworks */,
 				48AD3F8E1DB9438600B47CA5 /* Resources */,
 				6B6781832190895796A18A4B /* [CP] Embed Pods Frameworks */,
@@ -315,14 +361,14 @@
 				48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */,
 				48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */,
 				486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */,
-				484439EC1EA8C2D5009C7043 /* Anton Saputro.png in Resources */,
+				48D4C208203E1F24002AA814 /* link.png in Resources */,
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
-				486FA2CF1F320C92008E7492 /* Setyo Ari Wibowo.png in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
 				481695741F046523003D6023 /* Credits.html in Resources */,
+				48D4C20A203E20A1002AA814 /* cog.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +438,34 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-notifi/Pods-notifi-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D6C0F86C20371C77008673E3 /* Write Secret Server Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Write Secret Server Code";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/secret_server_code/${CODE}/g\" {} +";
+		};
+		D6C0F86D20371CC6008673E3 /* Remove Secret Server Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove Secret Server Code";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -402,9 +476,11 @@
 				484935CE2018DB6700ED058A /* CustomFunctions.m in Sources */,
 				48785DD12018B2710078F388 /* Keys.m in Sources */,
 				4892A26A20153242003F56EC /* NotificationImage.m in Sources */,
+				D6C0F874203732F8008673E3 /* MenuWindow.m in Sources */,
 				48AD3F981DB9438600B47CA5 /* main.m in Sources */,
 				48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */,
 				4892A26D20153271003F56EC /* Cog.m in Sources */,
+				D6C0F8712037261D008673E3 /* User.m in Sources */,
 				4892A27C20153BD8003F56EC /* CustomVars.m in Sources */,
 				4892A25B2015304B003F56EC /* Notification.m in Sources */,
 				4892A270201532B0003F56EC /* NotificationLink.m in Sources */,
@@ -413,12 +489,14 @@
 				4892A26720153204003F56EC /* ControllButton.m in Sources */,
 				484935D420194B9200ED058A /* Log.m in Sources */,
 				48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */,
-				4892A27620153559003F56EC /* NSImage+Rotated.m in Sources */,
+				4892A27620153559003F56EC /* NSImage+Rotate.m in Sources */,
 				482C8A931E09742400E5C173 /* MyApplication.m in Sources */,
 				48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */,
-				48110582201F731C004D2040 /* AnimateView.m in Sources */,
+				D6C0F86A20371C39008673E3 /* LOOCryptString.m in Sources */,
+				48110582201F731C004D2040 /* NSView+Animate.m in Sources */,
 				4892A273201532E5003F56EC /* NotificationLabel.m in Sources */,
-				48110588201FEB2D004D2040 /* Window.m in Sources */,
+				D65EE08420376D6700CD589D /* MenuBarClass.m in Sources */,
+				48110588201FEB2D004D2040 /* MainWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

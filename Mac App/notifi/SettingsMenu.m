@@ -9,12 +9,15 @@
 #import "SettingsMenu.h"
 #import "CustomVars.h"
 #import "CustomFunctions.h"
+#import "User.h"
 
 @implementation SettingsMenu
 
 -(id)init {
     if (self != [super init]) return nil;
-        
+    
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]) return self;
+    
     _credentials = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] action:nil keyEquivalent:@""];
     [_credentials setTarget:self];
     [_credentials setEnabled:false];
@@ -92,7 +95,7 @@
     
     NSInteger button = [alert runModal];
     if (button == NSAlertFirstButtonReturn) {
-        [CustomFunctions sendNotificationCenter:nil name:@"create-credentials"];
+        [User newCredentials];
     }
 }
 

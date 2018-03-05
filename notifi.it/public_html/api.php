@@ -19,48 +19,71 @@ $char_limit = 20000;
 $img_size_limit = 10;
 $con = connect();
 
-//post data
-$credentials = trim(clean(mysqli_real_escape_string($con,$_POST['credentials'])));
-$title = trim(mysqli_real_escape_string($con,$_POST['title']));
-$message = isset($_POST["message"]) ? trim(mysqli_real_escape_string($con,$_POST['message'])) : $DEFAULT;
-$imageURL = isset($_POST["image"]) ? trim(mysqli_real_escape_string($con,$_POST['image'])) : $DEFAULT;
-$link = isset($_POST["link"]) ? trim(mysqli_real_escape_string($con,$_POST['link'])) : $DEFAULT;
+// get params (WARNING PHP 7+)
+$credentials = $_GET['credentials'] ?? $_POST['credentials'] ?? $_POST['c'] ?? $_GET['c'] ?? '';
+$title = $_GET['title'] ?? $_POST['title'] ?? $_POST['t'] ?? $_GET['t'] ?? '';
+$message = $_GET['message'] ?? $_POST['message'] ?? $_POST['m'] ?? $_GET['m'] ?? '';
+$image = $_GET['image'] ?? $_POST['image'] ?? $_POST['i'] ?? $_GET['i'] ?? '';
+$link = $_GET['link'] ?? $_POST['link'] ?? $_POST['l'] ?? $_GET['l'] ?? '';
 
-//validation
-if(isBruteForce($con, $credentials)){
-    die("You have made too many requests! Please wait a minute.\n");
-}
-
+// validation and clean up of variables
 if(empty($credentials) || strlen($credentials) != 25){
-	die("Invalid credentials!\n");
-} 
+    if($credentials == "<credentials>") die("\033[1mWARNING: You have not set your personal credentials given to you by the notifi app! You instead used the placeholder example '<credentials>'.\e[0m\n");
+    if(strlen($credentials) > 0) die("Invalid credentials!\n");
+    die(header("Location: /"));
+}else{
+    $credentials = trim(clean(mysqli_real_escape_string($con, $credentials)));
+
+    if(isBruteForce($con, $credentials)){
+        die("You have made too many requests! Please wait a minute.\n");
+    }
+}
 
 if(empty($title)){
-	die("You must enter a title!\n");
+    die("You must enter a title!\n");
 }else if(strlen($title) > $char_limit){
-	die("Title too long! Must be less than $char_limit characters!\n");
+    die("Title too long! Must be less than $char_limit characters!\n");
+}else{
+    $title = trim(mysqli_real_escape_string($con, $title));
 }
 
-if(strlen($message) > $char_limit){
-	die("Message too long! Must be less than $char_limit characters!\n");
+if(empty($message)) {
+    $message = $DEFAULT;
+}else if(strlen($message) > $char_limit){
+    die("Message too long! Must be less than $char_limit characters!\n");
+}else{
+    $message = trim(mysqli_real_escape_string($con, $message));
 }
 
-if($imageURL != $DEFAULT){
-    if(strpos($imageURL, 'http://') !== 0) { // not http image
-        if (!@getimagesize($imageURL)) {
+if(empty($image)) {
+    $image = $DEFAULT;
+}else{
+    $image = trim(mysqli_real_escape_string($con, $image));
+}
+
+if(empty($link)) {
+    $link = $DEFAULT;
+}else{
+    $link = trim(mysqli_real_escape_string($con, $link));
+}
+
+
+if($image != $DEFAULT){
+    if(strpos($image, 'http://') !== 0) { // not http image
+        if (!@getimagesize($image)) {
             echo "Not a valid image. Sent without image!\n";
-            $imageURL = $DEFAULT;
+            $image = $DEFAULT;
         } else {
-            $img_header_size = get_headers($imageURL, 1)["Content-Length"];
+            $img_header_size = get_headers($image, 1)["Content-Length"];
             $img_size = $img_header_size / 1048576; //bytes to mb
             if ($img_size > $img_size_limit) {
                 echo "Image too large. Must be under ${img_size_limit}MB. It is ${img_size}MB. Sent without image!\n";
-                $imageURL = $DEFAULT;
+                $image = $DEFAULT;
             }
         }
     }else{
         echo "Image links must be HTTPS. Sent without image!\n";
-        $imageURL = $DEFAULT;
+        $image = $DEFAULT;
     }
 }
 
@@ -84,7 +107,7 @@ if(userExists($con, myHash($credentials))) {
         '" . myHash($credentials) . "', 
         AES_ENCRYPT('$title','$key'),
         AES_ENCRYPT('$message','$key'),
-        AES_ENCRYPT('$imageURL','$key'),
+        AES_ENCRYPT('$image','$key'),
         AES_ENCRYPT('$link','$key')
     )");
 

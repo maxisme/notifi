@@ -26,7 +26,9 @@
 }
 
 -(void)open{
+    NSLog(@"opening socket");
     [self destroy];
+    
     _web_socket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:_url]];
     [_web_socket setDelegate:(id)self];
     [_web_socket open];
@@ -41,15 +43,18 @@
 }
 
 - (void)sendPing{
-    _received_pong = false;
-    if(_connected) [_web_socket sendPing:nil];
+    if(_web_socket.readyState == SR_OPEN){
+        [_web_socket sendPing:nil];
+        _received_pong = false;
+        
+        //check for pong in 1 second
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if(!_received_pong){
+                [self close];
+            }
+        });
+    }
     
-    //check for pong in 1 second
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(!_received_pong){
-            [self close];
-        }
-    });
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
@@ -71,6 +76,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
+    NSLog(@"Socket failed with error: %@", error);
     [self close];
 }
 
@@ -81,6 +87,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
+    NSLog(@"Socket closed with reason: %@", reason);
     [self close];
 }
 
@@ -89,12 +96,13 @@
 }
 
 -(void)close{
-    [self destroy];
-    
-    if (self.onCloseBlock) _onCloseBlock();
-    
-    // attempt to open socket again every 5 seconds
-    if(!_reconnect_timer) _reconnect_timer = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(open) userInfo:nil repeats:YES];
+    if(!_reconnect_timer){
+        if (self.onCloseBlock) _onCloseBlock();
+        [self destroy];
+        
+        // attempt to open socket again every 5 seconds
+        _reconnect_timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(open) userInfo:nil repeats:YES];
+    }
 }
 
 @end
