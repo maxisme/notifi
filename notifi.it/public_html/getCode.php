@@ -12,7 +12,7 @@ if(!validUUID($UUID)) die("Invalid UUID");
 
 //get unique credentials
 do {
-    $credentials = "SCqJj4PDPwJtUbn9qyAV6ftFv";
+    $credentials = randomString($credential_length);
     $key = randomString($key_length);
 
     // check if credentials are already in database

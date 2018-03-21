@@ -58,6 +58,7 @@ class Note implements MessageComponentInterface {
             if($server_key != file_get_contents("/var/www/notifi.it/secret_server_code.pass")) $from->close();
 
             if(empty($app_version) || !preg_match("/^\d*\.\d*$/", $app_version)){
+                echo "invalid app version";
                 $from->send("Invalid app_version");
                 $from->close();
             }
@@ -68,6 +69,8 @@ class Note implements MessageComponentInterface {
             }
 
 			if(strlen($credentials) != 25){
+                echo "invalid len";
+                $from->send("Invalid Credentials");
 				$from->close();
 			}else if(isValidUser($con, $credentials, $key, $UUID, $app_version)){
 			    //VALID USER

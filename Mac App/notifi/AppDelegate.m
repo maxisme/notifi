@@ -19,7 +19,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 //        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
-    
     [CustomFunctions onlyOneInstanceOfApp];
     NSLog(@"started notifi");
     

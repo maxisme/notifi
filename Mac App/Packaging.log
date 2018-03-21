@@ -1,747 +1,734 @@
-2018-02-20 16:06:58 +0000 [MT] Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x7fa27cf80000; archive(resolved)='<IDEArchive: 0x7fa27ce7e0f0>', distributionTask(resolved)='2', distributionMethod(resolved)='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team(resolved)='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
+2018-03-21 15:08:59 +0000 [MT] Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x7ffb1ab2d070; archive(resolved)='<IDEArchive: 0x7ffb1a5259c0>', distributionTask(resolved)='2', distributionMethod(resolved)='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team(resolved)='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
 	Chain (10, self inclusive):
-	<IDEDistributionProcessingPipelineContext: 0x7fa27cf80000; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionProcessingPipelineContext: 0x7fa27cf9fba0; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cf8a5f0; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cfa4e50; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cf83360; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cf98fb0; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cf9e160; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cd906e0; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='<IDEProvisioningBasicTeam 0x7fa27cfc1d90: teamID: 3H49MXS325, teamName: (null)>'>
-	<IDEDistributionContext: 0x7fa27cf2e2a0; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7fa27cf15e20>', team='(null)'>
-	<IDEDistributionContext: 0x7fa27cf3c1c0; archive = '<IDEArchive: 0x7fa27ce7e0f0>', distributionMethod='(null)', team='(null)'>
-</IDEDistributionProcessingPipelineContext: 0x7fa27cf80000>
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionCreateDestRootStep
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionCopyItemStep
-2018-02-20 16:06:58 +0000 [MT] Running /usr/bin/ditto '-V' '/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app'
-2018-02-20 16:06:58 +0000  >>> Copying /Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app 
-2018-02-20 16:06:58 +0000  copying file ./Contents/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  8946 bytes for ./Contents/_CodeSignature/CodeResources
-2018-02-20 16:06:58 +0000  copying file ./Contents/MacOS/notifi ... 
-2018-02-20 16:06:58 +0000  191200 bytes for ./Contents/MacOS/notifi
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/bell.png ... 
-2018-02-20 16:06:58 +0000  21759 bytes for ./Contents/Resources/bell.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/sad.png ... 
-2018-02-20 16:06:58 +0000  32212 bytes for ./Contents/Resources/sad.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/Setyo Ari Wibowo.png ... 
-2018-02-20 16:06:58 +0000  18806 bytes for ./Contents/Resources/Setyo Ari Wibowo.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/AppIcon.icns ... 
-2018-02-20 16:06:58 +0000  141943 bytes for ./Contents/Resources/AppIcon.icns
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/menu_bellicon.png ... 
-2018-02-20 16:06:58 +0000  20632 bytes for ./Contents/Resources/menu_bellicon.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/Assets.car ... 
-2018-02-20 16:06:58 +0000  111464 bytes for ./Contents/Resources/Assets.car
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/menu_error_bellicon.png ... 
-2018-02-20 16:06:58 +0000  20507 bytes for ./Contents/Resources/menu_error_bellicon.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/Anton Saputro.png ... 
-2018-02-20 16:06:58 +0000  18075 bytes for ./Contents/Resources/Anton Saputro.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/alert_menu_bellicon.png ... 
-2018-02-20 16:06:58 +0000  20644 bytes for ./Contents/Resources/alert_menu_bellicon.png
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/up_arrow.png ... 
-2018-02-20 16:06:58 +0000  19598 bytes for ./Contents/Resources/up_arrow.png
-copying file ./Contents/Resources/Credits.html ... 
-2018-02-20 16:06:58 +0000  13527 bytes for ./Contents/Resources/Credits.html
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/fonts/Montserrat-Light.ttf ... 
-2018-02-20 16:06:58 +0000  259416 bytes for ./Contents/Resources/fonts/Montserrat-Light.ttf
+	<IDEDistributionProcessingPipelineContext: 0x7ffb1ab2d070; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionProcessingPipelineContext: 0x7ffb1ab12610; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1ab2f450; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1aa0faa0; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1aa0a360; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1ab15bf0; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1ab0f0e0; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1a681d30; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='<IDEProvisioningBasicTeam 0x7ffb1a6c2cd0: teamID: 3H49MXS325, teamName: (null)>'>
+	<IDEDistributionContext: 0x7ffb1a5818b0; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='<IDEDistributionMethodDirectDistribution: 0x7ffb1a74f750>', team='(null)'>
+	<IDEDistributionContext: 0x7ffb1a57edf0; archive = '<IDEArchive: 0x7ffb1a5259c0>', distributionMethod='(null)', team='(null)'>
+</IDEDistributionProcessingPipelineContext: 0x7ffb1ab2d070>
+2018-03-21 15:08:59 +0000 [MT] Processing step: IDEDistributionCreateDestRootStep
+2018-03-21 15:08:59 +0000 [MT] Processing step: IDEDistributionCopyItemStep
+2018-03-21 15:08:59 +0000 [MT] Running /usr/bin/ditto '-V' '/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app'
+2018-03-21 15:08:59 +0000  >>> Copying /Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app 
+2018-03-21 15:08:59 +0000  copying file ./Contents/_CodeSignature/CodeResources ... 
+2018-03-21 15:08:59 +0000  8902 bytes for ./Contents/_CodeSignature/CodeResources
+2018-03-21 15:08:59 +0000  copying file ./Contents/MacOS/notifi ... 
+2018-03-21 15:08:59 +0000  191376 bytes for ./Contents/MacOS/notifi
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/bell.png ... 
+2018-03-21 15:08:59 +0000  21759 bytes for ./Contents/Resources/bell.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/sad.png ... 
+2018-03-21 15:08:59 +0000  32212 bytes for ./Contents/Resources/sad.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/link.png ... 
+2018-03-21 15:08:59 +0000  8678 bytes for ./Contents/Resources/link.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/AppIcon.icns ... 
+2018-03-21 15:08:59 +0000  162034 bytes for ./Contents/Resources/AppIcon.icns
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/cog.png ... 
+2018-03-21 15:08:59 +0000  2769 bytes for ./Contents/Resources/cog.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/menu_bellicon.png ... 
+2018-03-21 15:08:59 +0000  20632 bytes for ./Contents/Resources/menu_bellicon.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/Assets.car ... 
+2018-03-21 15:08:59 +0000  133816 bytes for ./Contents/Resources/Assets.car
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/menu_error_bellicon.png ... 
+2018-03-21 15:08:59 +0000  20507 bytes for ./Contents/Resources/menu_error_bellicon.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/alert_menu_bellicon.png ... 
+2018-03-21 15:08:59 +0000  20644 bytes for ./Contents/Resources/alert_menu_bellicon.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/up_arrow.png ... 
+2018-03-21 15:08:59 +0000  3171 bytes for ./Contents/Resources/up_arrow.png
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/Credits.html ... 
+2018-03-21 15:08:59 +0000  13123 bytes for ./Contents/Resources/Credits.html
+2018-03-21 15:08:59 +0000  copying file ./Contents/Resources/fonts/Montserrat-Light.ttf ... 
+2018-03-21 15:08:59 +0000  259416 bytes for ./Contents/Resources/fonts/Montserrat-Light.ttf
 copying file ./Contents/Resources/fonts/Montserrat-SemiBold.ttf ... 
-2018-02-20 16:06:58 +0000  260936 bytes for ./Contents/Resources/fonts/Montserrat-SemiBold.ttf
-2018-02-20 16:06:58 +0000  copying file ./Contents/Resources/fonts/Montserrat-Regular.ttf ... 
-2018-02-20 16:06:58 +0000  263192 bytes for ./Contents/Resources/fonts/Montserrat-Regular.ttf
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Resources ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/Sparkle.framework/Resources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  70385 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/_CodeSignature/CodeResources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8826 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12268 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18463 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21642 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/he.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  4872 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/he.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8070 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12352 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18423 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21701 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7332 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12392 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18553 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdatePermissionPrompt.nib
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21742 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7782 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12299 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUAutomaticUpdateAlert.nib
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18290 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21616 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12246 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18252 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21594 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUModelTranslation.plist ... 
-2018-02-20 16:06:58 +0000  11859 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUModelTranslation.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12412 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18546 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21831 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5484 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12190 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUAutomaticUpdateAlert.nib
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18107 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21514 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8998 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12268 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18444 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:08:59 +0000  260936 bytes for ./Contents/Resources/fonts/Montserrat-SemiBold.ttf
+copying file ./Contents/Resources/fonts/Montserrat-Regular.ttf ... 
+2018-03-21 15:08:59 +0000  263192 bytes for ./Contents/Resources/fonts/Montserrat-Regular.ttf
+2018-03-21 15:08:59 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Resources ... 
+2018-03-21 15:08:59 +0000  linked ./Contents/Frameworks/Sparkle.framework/Resources
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/_CodeSignature/CodeResources ... 
+2018-03-21 15:08:59 +0000  70385 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/_CodeSignature/CodeResources
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  8826 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  12268 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:08:59 +0000  18463 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  21642 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/de.lproj/SUUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/he.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  4872 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/he.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  8070 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  12352 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:08:59 +0000  18423 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  21701 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ar.lproj/SUUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  7332 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  12392 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:08:59 +0000  18553 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  21742 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/el.lproj/SUUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  7782 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  12299 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:08:59 +0000  18290 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  21616 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ja.lproj/SUUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  9118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  12246 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:08:59 +0000  18252 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdateAlert.nib ... 
+21594 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/en.lproj/SUUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUModelTranslation.plist ... 
+11859 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUModelTranslation.plist
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/Sparkle.strings ... 
+2018-03-21 15:08:59 +0000  7466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/Sparkle.strings
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  12412 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:08:59 +0000  18546 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:08:59 +0000  21831 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/uk.lproj/SUUpdateAlert.nib
+2018-03-21 15:08:59 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5484 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12190 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18107 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21514 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_CN.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8998 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12268 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18444 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdatePermissionPrompt.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21565 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7740 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12302 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18645 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21776 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5478 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12316 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18551 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21711 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7562 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12282 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUAutomaticUpdateAlert.nib
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18468 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21674 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9278 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12320 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18563 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21756 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7990 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12249 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18310 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21605 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7920 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12252 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18488 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  21565 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nb.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7740 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12302 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18645 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21776 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/es.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5478 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12316 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18551 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21711 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/is.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7562 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12282 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18468 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21674 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sl.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9278 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12320 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18563 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21756 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_BR.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7990 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12249 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18310 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21605 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/da.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7920 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12252 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18488 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdatePermissionPrompt.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21636 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7168 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12372 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  21636 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/it.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7168 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12372 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUAutomaticUpdateAlert.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18549 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21762 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12326 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUAutomaticUpdateAlert.nib
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18603 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  18549 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21762 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sk.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12326 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18603 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdatePermissionPrompt.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21776 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7406 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12331 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18464 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdatePermissionPrompt.nib
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21737 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12340 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18521 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21727 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5868 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12224 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  21776 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt_PT.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7406 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12331 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18464 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21737 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/sv.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12340 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18521 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21727 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/cs.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5868 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12224 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUAutomaticUpdateAlert.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18188 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21570 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9246 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12356 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18508 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21684 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8140 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12343 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18335 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21715 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5410 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12196 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18117 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21531 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop ... 
-2018-02-20 16:06:58 +0000  85836 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/Autoupdate ... 
-2018-02-20 16:06:58 +0000  188636 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/Autoupdate
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/de.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8826 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/de.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/he.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  4872 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/he.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ar.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8070 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ar.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/el.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7332 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/el.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ja.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7782 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ja.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/en.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/en.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/uk.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/uk.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_CN.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5484 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_CN.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nb.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8998 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nb.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/es.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7740 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/es.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/is.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5478 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/is.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sl.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7562 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sl.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_BR.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9278 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_BR.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/da.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7990 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/da.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/it.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7920 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/it.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sk.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7168 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sk.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_PT.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_PT.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sv.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7406 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sv.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/cs.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/cs.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/AppIcon.icns ... 
-2018-02-20 16:06:58 +0000  37132 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/AppIcon.icns
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ko.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5868 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ko.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/tr.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9246 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/tr.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pl.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8140 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pl.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_TW.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5410 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_TW.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ru.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7446 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ru.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/SUStatus.nib ... 
-2018-02-20 16:06:58 +0000  11654 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/SUStatus.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fr.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8182 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fr.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fi.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5614 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fi.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nl.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nl.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/th.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/th.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ro.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9412 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ro.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ca.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  6310 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ca.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Info.plist ... 
-2018-02-20 16:06:58 +0000  1543 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Info.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/PkgInfo ... 
-2018-02-20 16:06:58 +0000  8 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/PkgInfo
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  7446 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12394 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18637 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21811 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUStatus.nib ... 
-2018-02-20 16:06:58 +0000  11654 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUStatus.nib
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr_CA.lproj ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr_CA.lproj
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8182 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12305 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18631 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  18188 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21570 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ko.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9246 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12356 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18508 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21684 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/tr.lproj/SUUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8140 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12343 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18335 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21715 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pl.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5410 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12196 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18117 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21531 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/zh_TW.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop ... 
+2018-03-21 15:09:00 +0000  85836 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/Autoupdate ... 
+2018-03-21 15:09:00 +0000  188636 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/Autoupdate
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/de.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8826 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/de.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/he.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  4872 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/he.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ar.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8070 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ar.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/el.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7332 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/el.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ja.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7782 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ja.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/en.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/en.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/uk.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/uk.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_CN.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5484 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_CN.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nb.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8998 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nb.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/es.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7740 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/es.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/is.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5478 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/is.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sl.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7562 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sl.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_BR.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9278 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_BR.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/da.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7990 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/da.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/it.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7920 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/it.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sk.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7168 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sk.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_PT.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pt_PT.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sv.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7406 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/sv.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/cs.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7434 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/cs.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/AppIcon.icns ... 
+2018-03-21 15:09:00 +0000  37132 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/AppIcon.icns
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ko.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5868 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ko.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/tr.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9246 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/tr.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pl.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8140 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/pl.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_TW.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5410 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/zh_TW.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ru.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7446 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ru.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/SUStatus.nib ... 
+2018-03-21 15:09:00 +0000  11654 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/SUStatus.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fr.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8182 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fr.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fi.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5614 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/fi.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nl.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/nl.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/th.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/th.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ro.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9412 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ro.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ca.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  6310 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Resources/ca.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Info.plist ... 
+2018-03-21 15:09:00 +0000  1543 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/Info.plist
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/PkgInfo ... 
+2018-03-21 15:09:00 +0000  8 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/PkgInfo
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  7446 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12394 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18637 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21811 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ru.lproj/SUUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUStatus.nib ... 
+11654 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/SUStatus.nib
+copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr_CA.lproj ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr_CA.lproj
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8182 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12305 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18631 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdatePermissionPrompt.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21698 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fi.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  5614 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fi.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12264 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18268 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  21698 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fr.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fi.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  5614 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/fi.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8466 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12264 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18268 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdatePermissionPrompt.nib
 copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21609 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  8118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12318 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18383 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21679 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt.lproj ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt.lproj
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  9412 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/Sparkle.strings
-copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUAutomaticUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  12354 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUAutomaticUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdatePermissionPrompt.nib ... 
-2018-02-20 16:06:58 +0000  18321 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdatePermissionPrompt.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdateAlert.nib ... 
-2018-02-20 16:06:58 +0000  21760 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdateAlert.nib
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Info.plist ... 
-2018-02-20 16:06:58 +0000  1250 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Info.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ca.lproj/Sparkle.strings ... 
-2018-02-20 16:06:58 +0000  6310 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ca.lproj/Sparkle.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle ... 
-2018-02-20 16:06:58 +0000  536448 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/Current ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/Sparkle.framework/Versions/Current
+2018-03-21 15:09:00 +0000  21609 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/nl.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  8118 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/Sparkle.strings
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12318 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUAutomaticUpdateAlert.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18383 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdatePermissionPrompt.nib
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21679 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/th.lproj/SUUpdateAlert.nib
+copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt.lproj ... 
+linked ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/pt.lproj
+copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  9412 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUAutomaticUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  12354 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUAutomaticUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdatePermissionPrompt.nib ... 
+2018-03-21 15:09:00 +0000  18321 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdatePermissionPrompt.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdateAlert.nib ... 
+2018-03-21 15:09:00 +0000  21760 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ro.lproj/SUUpdateAlert.nib
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Info.plist ... 
+2018-03-21 15:09:00 +0000  1250 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Info.plist
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ca.lproj/Sparkle.strings ... 
+2018-03-21 15:09:00 +0000  6310 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Resources/ca.lproj/Sparkle.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle ... 
+2018-03-21 15:09:00 +0000  536448 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/Current ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/Sparkle.framework/Versions/Current
 copying symlink ./Contents/Frameworks/Sparkle.framework/Sparkle ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/Sparkle.framework/Sparkle
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/STHTTPRequest.framework/Resources ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/STHTTPRequest.framework/Resources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  2514 bytes for ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/_CodeSignature/CodeResources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/Resources/Info.plist ... 
-2018-02-20 16:06:58 +0000  1237 bytes for ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/Resources/Info.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/STHTTPRequest ... 
-2018-02-20 16:06:58 +0000  176480 bytes for ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/STHTTPRequest
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/STHTTPRequest.framework/Versions/Current ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/STHTTPRequest.framework/Versions/Current
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/Sparkle.framework/Sparkle
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/STHTTPRequest.framework/Resources ... 
+linked ./Contents/Frameworks/STHTTPRequest.framework/Resources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/_CodeSignature/CodeResources ... 
+2018-03-21 15:09:00 +0000  2514 bytes for ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/_CodeSignature/CodeResources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/Resources/Info.plist ... 
+2018-03-21 15:09:00 +0000  1237 bytes for ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/Resources/Info.plist
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/STHTTPRequest ... 
+2018-03-21 15:09:00 +0000  176480 bytes for ./Contents/Frameworks/STHTTPRequest.framework/Versions/A/STHTTPRequest
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/STHTTPRequest.framework/Versions/Current ... 
+linked ./Contents/Frameworks/STHTTPRequest.framework/Versions/Current
 copying symlink ./Contents/Frameworks/STHTTPRequest.framework/STHTTPRequest ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/STHTTPRequest.framework/STHTTPRequest
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/CocoaLumberjack.framework/Resources ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/CocoaLumberjack.framework/Resources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  2514 bytes for ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/_CodeSignature/CodeResources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/Resources/Info.plist ... 
-2018-02-20 16:06:58 +0000  1243 bytes for ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/Resources/Info.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/CocoaLumberjack ... 
-2018-02-20 16:06:58 +0000  359424 bytes for ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/CocoaLumberjack
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/CocoaLumberjack.framework/Versions/Current ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/CocoaLumberjack.framework/Versions/Current
-copying symlink ./Contents/Frameworks/CocoaLumberjack.framework/CocoaLumberjack ... 
-linked ./Contents/Frameworks/CocoaLumberjack.framework/CocoaLumberjack
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SDWebImage.framework/Resources ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SDWebImage.framework/Resources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SDWebImage.framework/Versions/A/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  2514 bytes for ./Contents/Frameworks/SDWebImage.framework/Versions/A/_CodeSignature/CodeResources
-copying file ./Contents/Frameworks/SDWebImage.framework/Versions/A/Resources/Info.plist ... 
-2018-02-20 16:06:58 +0000  1228 bytes for ./Contents/Frameworks/SDWebImage.framework/Versions/A/Resources/Info.plist
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/STHTTPRequest.framework/STHTTPRequest
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/CocoaLumberjack.framework/Resources ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/CocoaLumberjack.framework/Resources
+copying file ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/_CodeSignature/CodeResources ... 
+2018-03-21 15:09:00 +0000  2514 bytes for ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/_CodeSignature/CodeResources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/Resources/Info.plist ... 
+2018-03-21 15:09:00 +0000  1243 bytes for ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/Resources/Info.plist
+copying file ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/CocoaLumberjack ... 
+2018-03-21 15:09:00 +0000  359424 bytes for ./Contents/Frameworks/CocoaLumberjack.framework/Versions/A/CocoaLumberjack
+copying symlink ./Contents/Frameworks/CocoaLumberjack.framework/Versions/Current ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/CocoaLumberjack.framework/Versions/Current
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/CocoaLumberjack.framework/CocoaLumberjack ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/CocoaLumberjack.framework/CocoaLumberjack
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/SDWebImage.framework/Resources ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SDWebImage.framework/Resources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SDWebImage.framework/Versions/A/_CodeSignature/CodeResources ... 
+2018-03-21 15:09:00 +0000  2514 bytes for ./Contents/Frameworks/SDWebImage.framework/Versions/A/_CodeSignature/CodeResources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SDWebImage.framework/Versions/A/Resources/Info.plist ... 
+2018-03-21 15:09:00 +0000  1228 bytes for ./Contents/Frameworks/SDWebImage.framework/Versions/A/Resources/Info.plist
 copying file ./Contents/Frameworks/SDWebImage.framework/Versions/A/SDWebImage ... 
-2018-02-20 16:06:58 +0000  349680 bytes for ./Contents/Frameworks/SDWebImage.framework/Versions/A/SDWebImage
+2018-03-21 15:09:00 +0000  349680 bytes for ./Contents/Frameworks/SDWebImage.framework/Versions/A/SDWebImage
 copying symlink ./Contents/Frameworks/SDWebImage.framework/Versions/Current ... 
-linked ./Contents/Frameworks/SDWebImage.framework/Versions/Current
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SDWebImage.framework/SDWebImage ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SDWebImage.framework/SDWebImage
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SocketRocket.framework/Resources ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SocketRocket.framework/Resources
-copying symlink ./Contents/Frameworks/SocketRocket.framework/SocketRocket ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SocketRocket.framework/SocketRocket
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SocketRocket.framework/Versions/A/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  2514 bytes for ./Contents/Frameworks/SocketRocket.framework/Versions/A/_CodeSignature/CodeResources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SocketRocket.framework/Versions/A/Resources/Info.plist ... 
-2018-02-20 16:06:58 +0000  1234 bytes for ./Contents/Frameworks/SocketRocket.framework/Versions/A/Resources/Info.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SocketRocket.framework/Versions/A/SocketRocket ... 
-2018-02-20 16:06:58 +0000  162736 bytes for ./Contents/Frameworks/SocketRocket.framework/Versions/A/SocketRocket
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SocketRocket.framework/Versions/Current ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SocketRocket.framework/Versions/Current
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SAMKeychain.framework/Resources ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SAMKeychain.framework/Resources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/_CodeSignature/CodeResources ... 
-2018-02-20 16:06:58 +0000  2995 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/_CodeSignature/CodeResources
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/SAMKeychain.bundle/en.lproj/SAMKeychain.strings ... 
-2018-02-20 16:06:58 +0000  1580 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/SAMKeychain.bundle/en.lproj/SAMKeychain.strings
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/Info.plist ... 
-2018-02-20 16:06:58 +0000  1231 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/Info.plist
-2018-02-20 16:06:58 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/SAMKeychain ... 
-2018-02-20 16:06:58 +0000  81840 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/SAMKeychain
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SAMKeychain.framework/Versions/Current ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SAMKeychain.framework/Versions/Current
-2018-02-20 16:06:58 +0000  copying symlink ./Contents/Frameworks/SAMKeychain.framework/SAMKeychain ... 
-2018-02-20 16:06:58 +0000  linked ./Contents/Frameworks/SAMKeychain.framework/SAMKeychain
-2018-02-20 16:06:58 +0000  copying file ./Contents/Info.plist ... 
-2018-02-20 16:06:58 +0000  1840 bytes for ./Contents/Info.plist
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SDWebImage.framework/Versions/Current
+copying symlink ./Contents/Frameworks/SDWebImage.framework/SDWebImage ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SDWebImage.framework/SDWebImage
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/SocketRocket.framework/Resources ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SocketRocket.framework/Resources
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/SocketRocket.framework/SocketRocket ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SocketRocket.framework/SocketRocket
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SocketRocket.framework/Versions/A/_CodeSignature/CodeResources ... 
+2018-03-21 15:09:00 +0000  2514 bytes for ./Contents/Frameworks/SocketRocket.framework/Versions/A/_CodeSignature/CodeResources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SocketRocket.framework/Versions/A/Resources/Info.plist ... 
+2018-03-21 15:09:00 +0000  1234 bytes for ./Contents/Frameworks/SocketRocket.framework/Versions/A/Resources/Info.plist
+copying file ./Contents/Frameworks/SocketRocket.framework/Versions/A/SocketRocket ... 
+2018-03-21 15:09:00 +0000  162736 bytes for ./Contents/Frameworks/SocketRocket.framework/Versions/A/SocketRocket
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/SocketRocket.framework/Versions/Current ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SocketRocket.framework/Versions/Current
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/SAMKeychain.framework/Resources ... 
+linked ./Contents/Frameworks/SAMKeychain.framework/Resources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/_CodeSignature/CodeResources ... 
+2018-03-21 15:09:00 +0000  2995 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/_CodeSignature/CodeResources
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/SAMKeychain.bundle/en.lproj/SAMKeychain.strings ... 
+2018-03-21 15:09:00 +0000  1580 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/SAMKeychain.bundle/en.lproj/SAMKeychain.strings
+2018-03-21 15:09:00 +0000  copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/Info.plist ... 
+2018-03-21 15:09:00 +0000  1231 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/Resources/Info.plist
+copying file ./Contents/Frameworks/SAMKeychain.framework/Versions/A/SAMKeychain ... 
+2018-03-21 15:09:00 +0000  81840 bytes for ./Contents/Frameworks/SAMKeychain.framework/Versions/A/SAMKeychain
+2018-03-21 15:09:00 +0000  copying symlink ./Contents/Frameworks/SAMKeychain.framework/Versions/Current ... 
+2018-03-21 15:09:00 +0000  linked ./Contents/Frameworks/SAMKeychain.framework/Versions/Current
+copying symlink ./Contents/Frameworks/SAMKeychain.framework/SAMKeychain ... 
+linked ./Contents/Frameworks/SAMKeychain.framework/SAMKeychain
+copying file ./Contents/Info.plist ... 
+2018-03-21 15:09:00 +0000  1840 bytes for ./Contents/Info.plist
 copying file ./Contents/PkgInfo ... 
-2018-02-20 16:06:58 +0000  8 bytes for ./Contents/PkgInfo
-2018-02-20 16:06:58 +0000  
-2018-02-20 16:06:58 +0000  
-2018-02-20 16:06:58 +0000  2018-02-20 16:06:58 +0000 [MT] /usr/bin/ditto exited with 0
-2018-02-20 16:06:58 +0000  
+2018-03-21 15:09:00 +0000  8 bytes for ./Contents/PkgInfo
+2018-03-21 15:09:00 +0000  2018-03-21 15:09:00 +0000  
 
-2018-02-20 16:06:58 +0000  
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionEmbedProfileStep
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27d142510 '(null)' '<DVTFilePath:0x7fa27cf6c3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27d145850 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7fa27cf6a3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27cf90ef0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7fa27d133fa0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27d148720 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7fa27d230920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27cfbde30 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7fa27d13c680:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27cfa9fc0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7fa27d12b920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27cfa4490 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7fa27d2288d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27cfbc980 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7fa27a7a7ff0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7fa27cfac830 'co.m4x.notifi' '<DVTFilePath:0x7fa27cf0d700:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'>
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionAppThinningPlistStep
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionCompileBitcodeStep
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCompileBitcodeStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionCodeSlimmingStep
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionCopyBCSymbolMapsStep
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionSymbolsStep
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionAppThinningStep
-2018-02-20 16:06:58 +0000 [MT] Skipping step: IDEDistributionAppThinningStep because it said so
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionODRStep
-2018-02-20 16:06:58 +0000 [MT] Processing step: IDEDistributionStripXattrsStep
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27d142510 '(null)' '<DVTFilePath:0x7fa27cf6c3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27d145850 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7fa27cf6a3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27cf90ef0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7fa27d133fa0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27d148720 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7fa27d230920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27cfbde30 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7fa27d13c680:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27cfa9fc0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7fa27d12b920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27cfa4490 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7fa27d2288d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7fa27cfbc980 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7fa27a7a7ff0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'>
-2018-02-20 16:06:58 +0000 [MT] Running /usr/bin/xattr '-crs' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app'
-2018-02-20 16:06:59 +0000  
-2018-02-20 16:06:59 +0000  2018-02-20 16:06:59 +0000 [MT] /usr/bin/xattr exited with 0
+2018-03-21 15:09:00 +0000 [MT] /usr/bin/ditto exited with 0
+2018-03-21 15:09:00 +0000  
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionEmbedProfileStep
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1ab337e0 '(null)' '<DVTFilePath:0x7ffb1a6c1de0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1ab37b70 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7ffb1a6bf4d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1a839ed0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7ffb1a9116c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1a845120 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7ffb1a6f8480:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1ab094f0 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7ffb1a6edc50:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1a904af0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7ffb1a6e0200:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1ab0a9d0 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7ffb1a6f0500:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1a696ac0 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7ffb1a7a2e10:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x7ffb1a6c3dd0 'co.m4x.notifi' '<DVTFilePath:0x7ffb1a663c60:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'>
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionAppThinningPlistStep
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionCompileBitcodeStep
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCompileBitcodeStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionCodeSlimmingStep
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionCopyBCSymbolMapsStep
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionCopyBCSymbolMapsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionSymbolsStep
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionAppThinningStep
+2018-03-21 15:09:00 +0000 [MT] Skipping step: IDEDistributionAppThinningStep because it said so
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionODRStep
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionStripXattrsStep
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1ab337e0 '(null)' '<DVTFilePath:0x7ffb1a6c1de0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1ab37b70 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7ffb1a6bf4d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1a839ed0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7ffb1a9116c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1a845120 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7ffb1a6f8480:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1ab094f0 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7ffb1a6edc50:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1a904af0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7ffb1a6e0200:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1ab0a9d0 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7ffb1a6f0500:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x7ffb1a696ac0 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7ffb1a7a2e10:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'>
+2018-03-21 15:09:00 +0000 [MT] Running /usr/bin/xattr '-crs' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app'
+2018-03-21 15:09:00 +0000  2018-03-21 15:09:00 +0000  
 
-2018-02-20 16:06:59 +0000  2018-02-20 16:06:59 +0000  
+2018-03-21 15:09:00 +0000 [MT] /usr/bin/xattr exited with 02018-03-21 15:09:00 +0000  
 
-2018-02-20 16:06:59 +0000 [MT] Processing step: IDEDistributionCodesignStep
-2018-02-20 16:06:59 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27d142510 '(null)' '<DVTFilePath:0x7fa27cf6c3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf92130>: {
+2018-03-21 15:09:00 +0000  
+2018-03-21 15:09:00 +0000 [MT] Processing step: IDEDistributionCodesignStep
+2018-03-21 15:09:00 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1ab337e0 '(null)' '<DVTFilePath:0x7ffb1a6c1de0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab0b430>: {
 }
-2018-02-20 16:06:59 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27d142510 '(null)' '<DVTFilePath:0x7fa27cf6c3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'>: {
+2018-03-21 15:09:00 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1ab337e0 '(null)' '<DVTFilePath:0x7ffb1a6c1de0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'>: {
 }
-2018-02-20 16:06:59 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27d142510 '(null)' '<DVTFilePath:0x7fa27cf6c3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsmGxoBC
-2018-02-20 16:06:59 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsmGxoBC' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'
-2018-02-20 16:07:00 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop: signed Mach-O thin (x86_64) [fileop]
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:00 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1ab337e0 '(null)' '<DVTFilePath:0x7ffb1a6c1de0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlements5mh5pm
+2018-03-21 15:09:00 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlements5mh5pm' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop'
+2018-03-21 15:09:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app/Contents/MacOS/fileop: signed Mach-O thin (x86_64) [fileop]
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000  
 
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000  
 
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000  
 
-2018-02-20 16:07:00 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27d145850 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7fa27cf6a3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf8d550>: {
+2018-03-21 15:09:01 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1ab37b70 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7ffb1a6bf4d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab10ef0>: {
 }
-2018-02-20 16:07:00 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27d145850 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7fa27cf6a3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'>: {
+2018-03-21 15:09:01 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1ab37b70 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7ffb1a6bf4d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'>: {
 }
-2018-02-20 16:07:00 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27d145850 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7fa27cf6a3c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementskU8uV2
-2018-02-20 16:07:00 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementskU8uV2' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'
-2018-02-20 16:07:00 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app: signed app bundle with Mach-O thin (x86_64) [org.sparkle-project.Sparkle.Autoupdate]
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:01 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1ab37b70 'org.sparkle-project.Sparkle.Autoupdate' '<DVTFilePath:0x7ffb1a6bf4d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsXr0ApI
+2018-03-21 15:09:01 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsXr0ApI' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app'
+2018-03-21 15:09:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app: signed app bundle with Mach-O thin (x86_64) [org.sparkle-project.Sparkle.Autoupdate]
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000  
 
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000 [MT] /usr/bin/codesign exited with 0
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000  
 
-2018-02-20 16:07:00 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27cf90ef0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7fa27d133fa0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cfa9310>: {
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000  
+
+2018-03-21 15:09:01 +0000  2018-03-21 15:09:01 +0000 [MT] /usr/bin/codesign exited with 0
+
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000  
+2018-03-21 15:09:01 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1a839ed0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7ffb1a9116c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab27360>: {
 }
-2018-02-20 16:07:00 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27cf90ef0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7fa27d133fa0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'>: {
+2018-03-21 15:09:01 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1a839ed0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7ffb1a9116c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'>: {
 }
-2018-02-20 16:07:00 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27cf90ef0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7fa27d133fa0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlements3Mjl9z
-2018-02-20 16:07:00 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlements3Mjl9z' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'
-2018-02-20 16:07:00 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A: replacing existing signature
-2018-02-20 16:07:00 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.CocoaLumberjack]
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:01 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1a839ed0 'org.cocoapods.CocoaLumberjack' '<DVTFilePath:0x7ffb1a9116c0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsd7QUQL
+2018-03-21 15:09:01 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsd7QUQL' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A'
+2018-03-21 15:09:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A: replacing existing signature
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/CocoaLumberjack.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.CocoaLumberjack]
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  2018-02-20 16:07:00 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:00 +0000 [MT] /usr/bin/codesign exited with 02018-02-20 16:07:00 +0000  
-2018-02-20 16:07:00 +0000  
-
-2018-02-20 16:07:00 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27d148720 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7fa27d230920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf8d3a0>: {
+2018-03-21 15:09:02 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1a845120 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7ffb1a6f8480:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab273e0>: {
 }
-2018-02-20 16:07:00 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27d148720 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7fa27d230920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'>: {
+2018-03-21 15:09:02 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1a845120 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7ffb1a6f8480:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'>: {
 }
-2018-02-20 16:07:00 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27d148720 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7fa27d230920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsoBviQG
-2018-02-20 16:07:00 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsoBviQG' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'
-2018-02-20 16:07:00 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A: replacing existing signature
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.SAMKeychain]
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1a845120 'org.cocoapods.SAMKeychain' '<DVTFilePath:0x7ffb1a6f8480:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsON4PNC
+2018-03-21 15:09:02 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsON4PNC' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A'
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A: replacing existing signature
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SAMKeychain.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.SAMKeychain]
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000 [MT] /usr/bin/codesign exited with 02018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
 
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000 [MT] /usr/bin/codesign exited with 0
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
-
-2018-02-20 16:07:01 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27cfbde30 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7fa27d13c680:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf8d440>: {
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1ab094f0 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7ffb1a6edc50:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab10de0>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27cfbde30 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7fa27d13c680:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'>: {
+2018-03-21 15:09:02 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1ab094f0 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7ffb1a6edc50:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27cfbde30 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7fa27d13c680:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsDcllNh
-2018-02-20 16:07:01 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsDcllNh' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A: replacing existing signature
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.SDWebImage]
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1ab094f0 'org.cocoapods.SDWebImage' '<DVTFilePath:0x7ffb1a6edc50:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsyn5NyK
+2018-03-21 15:09:02 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsyn5NyK' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A'
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A: replacing existing signature
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SDWebImage.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.SDWebImage]
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
-
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
-
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000 [MT] /usr/bin/codesign exited with 02018-02-20 16:07:01 +0000  
-
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27cfa9fc0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7fa27d12b920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf8d530>: {
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1a904af0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7ffb1a6e0200:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab10ed0>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27cfa9fc0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7fa27d12b920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'>: {
+2018-03-21 15:09:02 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1a904af0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7ffb1a6e0200:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27cfa9fc0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7fa27d12b920:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsjIHc6D
-2018-02-20 16:07:01 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsjIHc6D' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A: replacing existing signature
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.STHTTPRequest]
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1a904af0 'org.cocoapods.STHTTPRequest' '<DVTFilePath:0x7ffb1a6e0200:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlements4U2o0O
+2018-03-21 15:09:02 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlements4U2o0O' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A'
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A: replacing existing signature
+2018-03-21 15:09:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/STHTTPRequest.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.STHTTPRequest]
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000 [MT] /usr/bin/codesign exited with 02018-03-21 15:09:02 +0000  2018-03-21 15:09:02 +0000  
 
-2018-02-20 16:07:01 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27cfa4490 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7fa27d2288d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf8d5c0>: {
+
+2018-03-21 15:09:02 +0000  
+2018-03-21 15:09:02 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1ab0a9d0 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7ffb1a6f0500:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab10f60>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27cfa4490 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7fa27d2288d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'>: {
+2018-03-21 15:09:02 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1ab0a9d0 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7ffb1a6f0500:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27cfa4490 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7fa27d2288d0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlements2jeLaW
-2018-02-20 16:07:01 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlements2jeLaW' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A: replacing existing signature
-2018-02-20 16:07:01 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.SocketRocket]
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:02 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1ab0a9d0 'org.cocoapods.SocketRocket' '<DVTFilePath:0x7ffb1a6f0500:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsxMo0i6
+2018-03-21 15:09:02 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsxMo0i6' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A'
+2018-03-21 15:09:03 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A: replacing existing signature
+2018-03-21 15:09:03 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/SocketRocket.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.cocoapods.SocketRocket]
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000  
-2018-02-20 16:07:01 +0000 [MT] /usr/bin/codesign exited with 02018-02-20 16:07:01 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:01 +0000  2018-02-20 16:07:01 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000 [MT] /usr/bin/codesign exited with 02018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:01 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27cfbc980 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7fa27a7a7ff0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cf91f70>: {
+
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1a696ac0 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7ffb1a7a2e10:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab10fe0>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27cfbc980 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7fa27a7a7ff0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'>: {
+2018-03-21 15:09:03 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1a696ac0 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7ffb1a7a2e10:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'>: {
 }
-2018-02-20 16:07:01 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27cfbc980 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7fa27a7a7ff0:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlements1v3hYm
-2018-02-20 16:07:01 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlements1v3hYm' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'
-2018-02-20 16:07:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A: replacing existing signature
-2018-02-20 16:07:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.sparkle-project.Sparkle]
-2018-02-20 16:07:02 +0000  2018-02-20 16:07:02 +0000  
+2018-03-21 15:09:03 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1a696ac0 'org.sparkle-project.Sparkle' '<DVTFilePath:0x7ffb1a7a2e10:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsjp9ju8
+2018-03-21 15:09:03 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsjp9ju8' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A'
+2018-03-21 15:09:03 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A: replacing existing signature
+2018-03-21 15:09:03 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A: signed bundle with Mach-O thin (x86_64) [org.sparkle-project.Sparkle]
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:02 +0000  2018-02-20 16:07:02 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  2018-02-20 16:07:02 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  2018-02-20 16:07:02 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7fa27cfac830 'co.m4x.notifi' '<DVTFilePath:0x7fa27cf0d700:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'> from <IDEiCloudEntitlementsProcessor: 0x7fa27cfa91f0>: {
+2018-03-21 15:09:03 +0000 [MT] Applying entitlements delta for <IDEDistributionItem: 0x7ffb1a6c3dd0 'co.m4x.notifi' '<DVTFilePath:0x7ffb1a663c60:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'> from <IDEiCloudEntitlementsProcessor: 0x7ffb1ab10b20>: {
 }
-2018-02-20 16:07:02 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7fa27cfac830 'co.m4x.notifi' '<DVTFilePath:0x7fa27cf0d700:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'>: {
+2018-03-21 15:09:03 +0000 [MT] Entitlements for <IDEDistributionItem: 0x7ffb1a6c3dd0 'co.m4x.notifi' '<DVTFilePath:0x7ffb1a663c60:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'>: {
 }
-2018-02-20 16:07:02 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7fa27cfac830 'co.m4x.notifi' '<DVTFilePath:0x7fa27cf0d700:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsdt4fVy
-2018-02-20 16:07:02 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/entitlementsdt4fVy' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app'
-2018-02-20 16:07:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app: replacing existing signature
-2018-02-20 16:07:02 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.rhA/Root/Applications/notifi.app: signed app bundle with Mach-O thin (x86_64) [co.m4x.notifi]
-2018-02-20 16:07:02 +0000  2018-02-20 16:07:02 +0000  
+2018-03-21 15:09:03 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x7ffb1a6c3dd0 'co.m4x.notifi' '<DVTFilePath:0x7ffb1a663c60:'/Users/maxmitch/Documents/work/notifi/Mac App/tmp.xcarchive/Products/Applications/notifi.app'>'> to: /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsh9ezrv
+2018-03-21 15:09:03 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '10159E1698AC4DD1962680806398942BC86EA49D' '--preserve-metadata=identifier,flags' '--entitlements' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/entitlementsh9ezrv' '--requirements' '=designated => anchor apple generic  and identifier "$self.identifier" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = "3H49MXS325" ))' '/var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app'
+2018-03-21 15:09:03 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app: replacing existing signature
+2018-03-21 15:09:03 +0000  /var/folders/86/c9h8fjwn6svb1m7jj5qr1f9h0000gn/T/XcodeDistPipeline.EOy/Root/Applications/notifi.app: signed app bundle with Mach-O thin (x86_64) [co.m4x.notifi]
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  2018-02-20 16:07:02 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
 
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000  
-2018-02-20 16:07:02 +0000 [MT] Processing step: IDEDistributionStreamingZipItemStep
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
-2018-02-20 16:07:02 +0000 [MT] Processing step: IDEDistributionSkipPackagingStep
-2018-02-20 16:07:02 +0000 [MT] Processing step: IDEDistributionCreateManifestStep
-2018-02-20 16:07:02 +0000 [MT] Skipping step: IDEDistributionCreateManifestStep because it said so
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
+
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
+
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
+
+2018-03-21 15:09:03 +0000  
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
+
+2018-03-21 15:09:03 +0000 [MT] /usr/bin/codesign exited with 0
+2018-03-21 15:09:03 +0000  2018-03-21 15:09:03 +0000  
+
+2018-03-21 15:09:03 +0000 [MT] Processing step: IDEDistributionStreamingZipItemStep
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionStreamingZipItemStep because it said so
+2018-03-21 15:09:03 +0000 [MT] Processing step: IDEDistributionSkipPackagingStep
+2018-03-21 15:09:03 +0000 [MT] Processing step: IDEDistributionCreateManifestStep
+2018-03-21 15:09:03 +0000 [MT] Skipping step: IDEDistributionCreateManifestStep because it said so

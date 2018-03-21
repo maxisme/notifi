@@ -63,7 +63,7 @@
     int button_y = 7;
     int button_size = 12;
     int button_padding = 35;
-    float min_button_opacity = 0.7;
+    float min_button_opacity = 0.5;
     
     int table_padding = 16;
     // ----------------- top bar -----------------
@@ -405,7 +405,7 @@
     
     NSUInteger start = range.location;
     if(start > 1) start -= 1;
-    NSUInteger end = start + range.length - 1;
+    NSUInteger end = start + range.length + 1;
     if(end >= num_notifications) end = num_notifications; // end is the last notification
 //    NSLog(@"%lu - %lu", (unsigned long)start, (unsigned long)end);
     if(num_notifications > 0){ // there are notifications
