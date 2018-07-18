@@ -70,7 +70,7 @@
     
     //bell
     NSImage *icon = [CustomFunctions setImgOriginalSize:[NSImage imageNamed:@"bell.png"]];
-    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(icon_height/2), window_height - top_bar_height + 15, icon_height, icon_height)];
+    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(icon_height/2), window_height - top_bar_height + 12, icon_height, icon_height)];
     [iconView setImage:icon];
     [iconView setImageScaling:NSImageScaleProportionallyUpOrDown];
     [self.view addSubview:iconView];
@@ -136,7 +136,7 @@
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
         [_notification_table setDelegate:(id)self];
         [_notification_table setDataSource:(id)self];
-        [_notification_table setBackgroundColor:[CustomVars offwhite]];
+        [_notification_table setBackgroundColor:[NSColor clearColor]];
         
         _scroll_view.documentView = _notification_table;
     }
@@ -149,11 +149,10 @@
     [markAllAsReadBtn setWantsLayer:YES];
     [markAllAsReadBtn setOpacity_min:min_button_opacity];
     [markAllAsReadBtn setButtonType:NSMomentaryChangeButton];
-    [markAllAsReadBtn setAlignment:NSTextAlignmentCenter];
-    [markAllAsReadBtn setFont:[NSFont fontWithName:@"Montserrat-SemiBold" size:button_size]];
     markAllAsReadBtn.bordered = false;
     [markAllAsReadBtn setFocusRingType:NSFocusRingTypeNone];
-    [markAllAsReadBtn setTitle:@"MARK ALL AS READ"];
+    [markAllAsReadBtn setImage:[NSImage imageNamed:@"mark-all-read.png"]];
+    [markAllAsReadBtn setImageScaling:NSImageScaleProportionallyUpOrDown];
     [markAllAsReadBtn setAction:@selector(markAllAsRead)];
     [markAllAsReadBtn updateTrackingAreas];
     [self.view addSubview:markAllAsReadBtn];
@@ -175,19 +174,8 @@
     [deleteNotifications setWantsLayer:YES];
     [deleteNotifications setOpacity_min:min_button_opacity];
     [deleteNotifications setButtonType:NSMomentaryChangeButton];
-    
-    NSMutableParagraphStyle *centredStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [centredStyle setAlignment:NSCenterTextAlignment];
-    
-    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:centredStyle,
-                           NSParagraphStyleAttributeName,
-                           [NSFont fontWithName:@"Montserrat-SemiBold" size:button_size],
-                           NSFontAttributeName,
-                           [CustomVars red],
-                           NSForegroundColorAttributeName,
-                           nil];
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"DELETE ALL" attributes:attrs];
-    [deleteNotifications setAttributedTitle:attributedString];
+    [deleteNotifications setImage:[NSImage imageNamed:@"delete-all.png"]];
+    [deleteNotifications setImageScaling:NSImageScaleProportionallyUpOrDown];
     [deleteNotifications setFocusRingType:NSFocusRingTypeNone];
     deleteNotifications.bordered = false;
     [deleteNotifications setAction:@selector(deleteAll)];

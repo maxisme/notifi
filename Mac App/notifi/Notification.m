@@ -111,7 +111,7 @@ float one_row_info_height;
     [_title_label setFrame:CGRectMake(side_padding + link_hw, self.frame.size.height - (title_height + 4), text_width, title_height)]; // 4 is dynamic to font
     [_title_label setFont:_title_font];
     [_title_label setDelegate:(id)self];
-    [_title_label setBackgroundColor: [CustomVars offwhite]];
+//    [_title_label setBackgroundColor: [CustomVars offwhite]];
     [_title_label setStringValue:title];
     [self addSubview:_title_label];
     
@@ -124,7 +124,7 @@ float one_row_info_height;
                                     time_height
                                     )
     ];
-    [_time_label setBackgroundColor: [CustomVars offwhite]];
+//    [_time_label setBackgroundColor: [CustomVars offwhite]];
     [_time_label setFont:time_font];
     [_time_label setTextColor: [CustomVars grey]];
     
@@ -149,7 +149,7 @@ float one_row_info_height;
     //-- add info
     if(![message isEqual: EMPTY]){
         _info_label = [[NotificationLabel alloc] init];
-        [_info_label setBackgroundColor:[CustomVars offwhite]];
+//        [_info_label setBackgroundColor:[CustomVars offwhite]];
         [_info_label setFrame:CGRectMake(side_padding, _time_label.frame.origin.y - info_height, text_width, info_height)];
         [_info_label setFont:_info_font];
         [_info_label setTextColor: [CustomVars black]];
@@ -317,12 +317,14 @@ float one_row_info_height;
     } else if (ti < 86400) {
         int diff = round(ti / 60 / 60);
         if(diff == 1){
-            return[NSString stringWithFormat:@"- %d hour ago", diff];
-        }else{
-            return[NSString stringWithFormat:@"- %d hours ago", diff];
+            return @"- 1 hour ago";
         }
+        return[NSString stringWithFormat:@"- %d hours ago", diff];
     } else if (ti < 2629743) {
         int diff = round(ti / 60 / 60 / 24);
+        if (diff == 1){
+            return @"- 1 day ago";
+        }
         return[NSString stringWithFormat:@"- %d days ago", diff];
     }
     
@@ -346,17 +348,21 @@ float one_row_info_height;
 }
 
 - (void)markRead {
-    [self.layer setBackgroundColor:[[CustomVars offwhite] CGColor]];
-    _title_label.textColor = [CustomVars grey];
-    _read = true;
-    [self storeRead:true];
+    if(!_read){
+        [self.layer setBackgroundColor:[[NSColor clearColor] CGColor]];
+        _title_label.textColor = [CustomVars grey];
+        _read = true;
+        [self storeRead:true];
+    }
 }
 
 - (void)markUnread {
-    [self.layer setBackgroundColor:[[CustomVars white] CGColor]];
-    _title_label.textColor = [CustomVars black];
-    _read = false;
-    [self storeRead:false];
+    if(_read){
+        [self.layer setBackgroundColor:[[CustomVars white] CGColor]];
+        _title_label.textColor = [CustomVars black];
+        _read = false;
+        [self storeRead:false];
+    }
 }
 
 - (void)openLink{

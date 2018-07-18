@@ -42,6 +42,8 @@
 		48D4C20A203E20A1002AA814 /* cog.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C209203E20A0002AA814 /* cog.png */; };
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
 		48E49A901E1D9DFF00DE3DBE /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 48E49A8F1E1D9DFF00DE3DBE /* fonts */; };
+		D6320E1C2068074A00E9327A /* mark-all-read.png in Resources */ = {isa = PBXBuildFile; fileRef = D6320E1A2068074900E9327A /* mark-all-read.png */; };
+		D6320E1D2068074A00E9327A /* delete-all.png in Resources */ = {isa = PBXBuildFile; fileRef = D6320E1B2068074A00E9327A /* delete-all.png */; };
 		D65EE08420376D6700CD589D /* MenuBarClass.m in Sources */ = {isa = PBXBuildFile; fileRef = D65EE08320376D6700CD589D /* MenuBarClass.m */; };
 		D6C0F86A20371C39008673E3 /* LOOCryptString.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C0F86920371C39008673E3 /* LOOCryptString.m */; };
 		D6C0F8712037261D008673E3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C0F8702037261D008673E3 /* User.m */; };
@@ -108,6 +110,8 @@
 		AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"; sourceTree = "<group>"; };
 		C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.debug.xcconfig"; sourceTree = "<group>"; };
 		CB203359588D007975D84CFB /* Pods_notifi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_notifi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6320E1A2068074900E9327A /* mark-all-read.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark-all-read.png"; sourceTree = "<group>"; };
+		D6320E1B2068074A00E9327A /* delete-all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete-all.png"; sourceTree = "<group>"; };
 		D65EE08220376D6700CD589D /* MenuBarClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuBarClass.h; sourceTree = "<group>"; };
 		D65EE08320376D6700CD589D /* MenuBarClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuBarClass.m; sourceTree = "<group>"; };
 		D6C0F86820371C39008673E3 /* LOOCryptString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOOCryptString.h; sourceTree = "<group>"; };
@@ -271,6 +275,8 @@
 				486FA2CC1F2FA2FA008E7492 /* sad.png */,
 				48D4C207203E1F23002AA814 /* link.png */,
 				48D4C209203E20A0002AA814 /* cog.png */,
+				D6320E1B2068074A00E9327A /* delete-all.png */,
+				D6320E1A2068074900E9327A /* mark-all-read.png */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -364,9 +370,11 @@
 				48D4C208203E1F24002AA814 /* link.png in Resources */,
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
+				D6320E1C2068074A00E9327A /* mark-all-read.png in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
+				D6320E1D2068074A00E9327A /* delete-all.png in Resources */,
 				481695741F046523003D6023 /* Credits.html in Resources */,
 				48D4C20A203E20A1002AA814 /* cog.png in Resources */,
 			);
