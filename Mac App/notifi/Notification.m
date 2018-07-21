@@ -79,12 +79,11 @@ float one_row_info_height;
     //--      add image
     if(![image_url isEqual: EMPTY]){
         NSView* rounded_image_view = [[NSView alloc] initWithFrame:NSMakeRect(top_padding / 2, self.frame.size.height - image_hw - (top_padding / 2), image_hw, image_hw)];
-        [rounded_image_view setWantsLayer:YES];
-        rounded_image_view.layer.cornerRadius = 5; // circle
+        rounded_image_view.layer.cornerRadius = 5;
         rounded_image_view.layer.masksToBounds = YES;
         
         NotificationImage *image_view = [[NotificationImage alloc] initWithFrame:NSMakeRect(0, 0, image_hw, image_hw)];
-        [image_view setImageFromURL:image_url];
+        [image_view setImageFromURL:image_url hw:image_hw];
         [image_view setUrl:image_url];
         [rounded_image_view addSubview:image_view];
         
@@ -99,8 +98,11 @@ float one_row_info_height;
         
         NotificationLink *image_view = [[NotificationLink alloc] initWithFrame:NSMakeRect(side_padding, self.frame.size.height - link_hw - padding - 2, link_hw, link_hw)];
         [image_view setUrl:link];
-        [image_view setImageScaling:NSImageScaleProportionallyUpOrDown];
-        [image_view setImage:[NSImage imageNamed:@"link.png"]];
+        NSImage *image = [NSImage imageNamed:@"link.png"];
+        NSBitmapImageRep *rep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+        NSSize size = NSMakeSize([rep pixelsWide], [rep pixelsHigh]);
+        [image setSize: size];
+        [image_view setImage:image];
         [self addSubview:image_view];
         text_width = text_width - 15;
     }

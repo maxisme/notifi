@@ -10,7 +10,6 @@
 		3486AF5B90ADCF406A866D70 /* Pods_notifi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB203359588D007975D84CFB /* Pods_notifi.framework */; };
 		48110582201F731C004D2040 /* NSView+Animate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110581201F731C004D2040 /* NSView+Animate.m */; };
 		48110588201FEB2D004D2040 /* MainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 48110587201FEB2D004D2040 /* MainWindow.m */; };
-		48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */; };
 		481695741F046523003D6023 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 481695731F046523003D6023 /* Credits.html */; };
 		482C8A931E09742400E5C173 /* MyApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 482C8A921E09742400E5C173 /* MyApplication.m */; };
 		482C8A9D1E0B0D0700E5C173 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9C1E0B0D0700E5C173 /* CoreData.framework */; };
@@ -55,8 +54,6 @@
 		48110581201F731C004D2040 /* NSView+Animate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSView+Animate.m"; sourceTree = "<group>"; };
 		48110586201FEB2D004D2040 /* MainWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
 		48110587201FEB2D004D2040 /* MainWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainWindow.m; sourceTree = "<group>"; };
-		48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPCScaleToFillNSImageView.m; sourceTree = "<group>"; };
-		48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPCScaleToFillNSImageView.h; sourceTree = "<group>"; };
 		481695731F046523003D6023 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		482C8A921E09742400E5C173 /* MyApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyApplication.m; sourceTree = "<group>"; };
 		482C8A941E09743100E5C173 /* MyApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyApplication.h; sourceTree = "<group>"; };
@@ -256,8 +253,6 @@
 		D6C0F86B20371C3F008673E3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				48125A3C1EE8484600C3245B /* KPCScaleToFillNSImageView.m */,
-				48125A3D1EE8484600C3245B /* KPCScaleToFillNSImageView.h */,
 				D6C0F86820371C39008673E3 /* LOOCryptString.h */,
 				D6C0F86920371C39008673E3 /* LOOCryptString.m */,
 			);
@@ -486,7 +481,6 @@
 				4892A26A20153242003F56EC /* NotificationImage.m in Sources */,
 				D6C0F874203732F8008673E3 /* MenuWindow.m in Sources */,
 				48AD3F981DB9438600B47CA5 /* main.m in Sources */,
-				48125A3E1EE8484600C3245B /* KPCScaleToFillNSImageView.m in Sources */,
 				4892A26D20153271003F56EC /* Cog.m in Sources */,
 				D6C0F8712037261D008673E3 /* User.m in Sources */,
 				4892A27C20153BD8003F56EC /* CustomVars.m in Sources */,

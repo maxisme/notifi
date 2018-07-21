@@ -109,3 +109,9 @@ curl_close($chpush);</code>
 [request setHTTPBody:[@"credentials=<?php echo $credentials?>&title=<?php echo $title?>&message=<?php echo $message?>&link=<?php echo $link?>&image=<?php echo $image?>" dataUsingEncoding:NSUTF8StringEncoding]];
 [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];</code>
 </pre>
+
+<h3>Node.js</h3>
+<pre>
+    <code class="nodejs">const https = require('https');
+https.get('https://notifi.it/api?credentials=<?php echo $credentials?>&title=<?php echo $title?>&message=<?php echo $message?>&link=<?php echo $link?>&image=<?php echo $image?>"');</code>
+</pre>

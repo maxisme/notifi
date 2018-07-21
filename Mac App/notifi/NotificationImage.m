@@ -11,9 +11,41 @@
 
 @implementation NotificationImage
 
--(void)setImageFromURL:(NSString*)url{
+-(void)setImageFromURL:(NSString*)url hw:(int)hw{
     NSData* image_data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-    [self setImage:[[NSImage alloc] initWithData:image_data]];
+    NSImage* img = [self imageResize:[[NSImage alloc] initWithData:image_data] hw:hw];
+    [self setImage:img];
+}
+
+- (NSImage *)imageResize:(NSImage*)anImage hw:(int)hw {
+    NSImage *sourceImage = anImage;
+    
+    float imageWidth = [sourceImage size].width;
+    float imageHeight = [sourceImage size].height;
+    
+    if (imageWidth > imageHeight){
+        imageHeight = imageHeight * (hw / imageWidth);
+        imageWidth = hw;
+    }else{
+        imageWidth = imageWidth * (hw / imageHeight);
+        imageHeight = hw;
+    }
+    
+    NSSize newSize = NSMakeSize(imageWidth, imageHeight);
+    
+    // Report an error if the source isn't a valid image
+    if (![sourceImage isValid]){
+        NSLog(@"Invalid Image");
+    } else {
+        NSImage *smallImage = [[NSImage alloc] initWithSize: newSize];
+        [smallImage lockFocus];
+        [sourceImage setSize: newSize];
+        [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+        [sourceImage drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, newSize.width, newSize.height) operation:NSCompositeCopy fraction:1.0];
+        [smallImage unlockFocus];
+        return smallImage;
+    }
+    return nil;
 }
 
 - (void)mouseDown:(NSEvent *)event {

@@ -7,11 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "KPCScaleToFillNSImageView.h"
 
-@interface NotificationImage: KPCScaleToFillNSImageView
+@interface NotificationImage: NSImageView
 @property (strong) NSTrackingArea* trackingArea;
 @property (strong) NSString* url;
 
--(void)setImageFromURL:(NSString*)url;
+-(void)setImageFromURL:(NSString*)url hw:(int)hw;
 @end
