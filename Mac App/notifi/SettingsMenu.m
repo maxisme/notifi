@@ -39,7 +39,7 @@
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"sticky_notification"]) [_sticky_notifications setState:NSOnState];
     [self addItem:_sticky_notifications];
     
-    _show_on_startup = [[NSMenuItem alloc] initWithTitle:@"Open notifi At Login" action:@selector(openOnStartup) keyEquivalent:@""];
+    _show_on_startup = [[NSMenuItem alloc] initWithTitle:@"Open notifi at Login" action:@selector(openOnStartup) keyEquivalent:@""];
     [_show_on_startup setTarget:self];
     if([CustomFunctions doesAlreadyOpenOnStartup]){
         [_show_on_startup setState:NSOnState];
@@ -50,11 +50,11 @@
     
     [self addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem* rec = [[NSMenuItem alloc] initWithTitle:@"How Do I Receive Notifications?" action:@selector(howToRec) keyEquivalent:@""];
+    NSMenuItem* rec = [[NSMenuItem alloc] initWithTitle:@"How do I receive Notifications?" action:@selector(howToRec) keyEquivalent:@""];
     [rec setTarget:self];
     [self addItem:rec];
     
-    NSMenuItem* updates = [[NSMenuItem alloc] initWithTitle:@"Check For Updates..." action:@selector(checkUpdate) keyEquivalent:@""];
+    NSMenuItem* updates = [[NSMenuItem alloc] initWithTitle:@"Check for Updates..." action:@selector(checkUpdate) keyEquivalent:@""];
     [updates setTarget:self];
     [self addItem:updates];
     

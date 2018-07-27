@@ -79,7 +79,7 @@
 
 #pragma mark - socket
 -(void)createSocket{
-    _s = [[Socket alloc] initWithURL:@"wss://s.notifi.it"];
+    _s = [[Socket alloc] initWithURL:@"wss://s.notifi.it" key:[LOOCryptString serverKey]];
     
     __weak typeof(self) weakSelf = self;
     
@@ -101,8 +101,7 @@
                                               @"credentials":[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
                                               @"key": [_keychain getKey:@"credential_key"],
                                               @"UUID":[CustomFunctions getSystemUUID],
-                                              @"app_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-                                              @"server_key": [LOOCryptString serverKey]
+                                              @"app_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
                                               }];
 }
 

@@ -21,12 +21,10 @@
 //        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
     
     [CustomFunctions onlyOneInstanceOfApp];
-    NSLog(@"Started notifi");
     
     if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] || ![[[Keys alloc] init] getKey:@"credential_key"]){
+        // first time using app
         [User newCredentials];
-        
-        // default settings
         [CustomFunctions openOnStartup];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"sticky_notification"];
     }

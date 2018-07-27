@@ -13,9 +13,10 @@
 
 @implementation Socket
 
-- (id)initWithURL:(NSString*)url{
+- (id)initWithURL:(NSString*)url key:(NSString*)key{
     if (self != [super init]) return nil;
     _url = url;
+    _key = key;
     
     [self open];
     
@@ -29,7 +30,10 @@
     NSLog(@"opening socket");
     [self destroy];
     
-    _web_socket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:_url]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
+    [request setValue:_key forHTTPHeaderField:@"Sec-Key"];
+
+    _web_socket = [[SRWebSocket alloc] initWithURLRequest:request];
     [_web_socket setDelegate:(id)self];
     [_web_socket open];
 }

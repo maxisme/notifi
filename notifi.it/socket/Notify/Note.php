@@ -20,22 +20,27 @@ class Note implements MessageComponentInterface {
     protected $clients;
 	protected $credential;
     private $delete_str = "id:";
+    private $server_key;
 
     public function __construct() {
-        $this->clients = new \SplObjectStorage; 
+        $this->server_key = file_get_contents("/var/www/notifi.it/secret_server_code.pass");
+        $this->clients = new \SplObjectStorage;
     }
 
     public function onOpen(ConnectionInterface $conn) {
-        $this->clients->attach($conn);
-		echo "New client.";
+        if($conn->WebSocket->request->getHeader('Sec-Key') != $this->server_key){
+            $conn->close();
+        }else{
+            $this->clients->attach($conn);
+        }
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $con = connect();
 
 		if(substr($msg,0, strlen($this->delete_str)) == $this->delete_str){
+            //handle confirmation message from user to say they have received notification
             $msg = mysqli_real_escape_string($con, $msg);
-			//handle reply from user to say they have received notification
 			$decrypted_string = decrypt(base64_decode(substr($msg, strlen($this->delete_str), strlen($msg))));
 
 			$arr = explode("|", $decrypted_string);
@@ -53,9 +58,6 @@ class Note implements MessageComponentInterface {
             $key = $json->key;
             $UUID = $json->UUID;
             $app_version = $json->app_version;
-            $server_key = $json->server_key;
-
-            if($server_key != file_get_contents("/var/www/notifi.it/secret_server_code.pass")) $from->close();
 
             if(empty($app_version) || !preg_match("/^\d*\.\d*$/", $app_version)){
                 echo "invalid app version";

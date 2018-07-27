@@ -8,7 +8,7 @@ meta:
   description: Send simple push notifications to your Mac using HTTP.
 app:
   version:
-    num: 1.00
+    num: 0.001
     description: >
       <h2>New Features</h2>
 

@@ -212,7 +212,7 @@ float one_row_info_height;
 }
 
 - (void)shrink:(bool)animate{
-    if(self.expanded){
+    if(self.expanded && self.frame.size.height != self.shrink_height){
         [NSAnimationContext beginGrouping];
         if(animate) [[NSAnimationContext currentContext] setDuration:0.25];
         
