@@ -16,7 +16,7 @@ $db_pass = trim(file_get_contents(dirname(__DIR__)."/db.pass"));
 $db_user = trim(file_get_contents(dirname(__DIR__)."/db.user"));
 $key = trim(file_get_contents(dirname(__DIR__)."/encryption.key"));
 $char_limit = 20000;
-$img_size_limit = 10;
+$img_size_limit = 10; /*MB*/
 $con = connect();
 
 // get params (WARNING PHP 7+)

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 @interface CustomFunctions : NSObject
++ (bool)toggleOpenOnStartup;
 + (bool)openOnStartup;
 + (bool)doesAlreadyOpenOnStartup;
 

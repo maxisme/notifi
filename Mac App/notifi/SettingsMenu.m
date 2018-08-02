@@ -39,7 +39,7 @@
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"sticky_notification"]) [_sticky_notifications setState:NSOnState];
     [self addItem:_sticky_notifications];
     
-    _show_on_startup = [[NSMenuItem alloc] initWithTitle:@"Open notifi at Login" action:@selector(openOnStartup) keyEquivalent:@""];
+    _show_on_startup = [[NSMenuItem alloc] initWithTitle:@"Open notifi at Login" action:@selector(toggleOpenOnStartup) keyEquivalent:@""];
     [_show_on_startup setTarget:self];
     if([CustomFunctions doesAlreadyOpenOnStartup]){
         [_show_on_startup setState:NSOnState];
@@ -62,7 +62,9 @@
 //    [view_log setTarget:self];
 //    [self addItem:view_log];
     
-    [self addItemWithTitle:@"About..." action:@selector(showAbout) keyEquivalent:@""];
+    NSMenuItem* about = [[NSMenuItem alloc] initWithTitle:@"About..." action:@selector(showAbout) keyEquivalent:@""];
+    [about setTarget:self];
+    [self addItem:about];
     
     [self addItem:[NSMenuItem separatorItem]];
     
@@ -77,13 +79,16 @@
     return self;
 }
 
+
+
 #pragma mark - menu functions
 -(void)checkUpdate{
     [CustomFunctions checkForUpdate:true];
 }
 
--(void)openOnStartup{
-    [CustomFunctions openOnStartup];
+-(void)toggleOpenOnStartup{
+    [CustomFunctions toggleOpenOnStartup];
+    [self init];
 }
 
 -(void)createNewCredentials{
