@@ -246,7 +246,13 @@ float one_row_info_height;
                 str = [NSString stringWithFormat:@"%@%@", [_message_string substringToIndex:cnt], cat];
                 cnt++;
             }while([self calculateStringHeight:str font:_info_font width:_text_width] <= one_row_title_height);
-            [_info_label setStringValue:[NSString stringWithFormat:@"%@%@", [_message_string substringToIndex:cnt - [cat length]], cat]];
+            NSString* compressed_str = @"";
+            if(cnt >= [cat length]){
+                compressed_str = [_message_string substringToIndex:cnt - [cat length]];
+            }else{
+                compressed_str = [_message_string substringToIndex:cnt];
+            }
+            [_info_label setStringValue:[NSString stringWithFormat:@"%@%@", compressed_str, cat]];
         }
         
         for (NSView* subview in self.subviews) {
