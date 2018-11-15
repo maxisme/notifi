@@ -7,7 +7,11 @@
 //
 
 #import "MenuBarClass.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+
 #import "MainWindow.h"
+
 #import "NSImage+Rotate.h"
 
 @implementation MenuBarClass
@@ -16,7 +20,9 @@
     
     _window = window;
     _statusItem = statusItem;
-    _statusItem.image = [NSImage imageNamed:@"menu_bellicon.png"];
+    NSImage* im = [NSImage imageNamed:@"menu_bellicon.png"];
+    [im setTemplate:YES];
+    _statusItem.image = im;
     [_statusItem setAction:@selector(iconClick)];
     [_statusItem setTarget:self];
     
@@ -39,7 +45,7 @@
 #pragma mark - bell animation
 
 -(void)animateBell{
-    NSLog(@"animate");
+    DDLogDebug(@"animate");
     if(!_animate_bell_timer){
         _after_image = nil;
     }else{

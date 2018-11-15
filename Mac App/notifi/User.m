@@ -9,6 +9,8 @@
 #import "User.h"
 
 #import <STHTTPRequest/STHTTPRequest.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #import "CustomVars.h"
 #import "CustomFunctions.h"
@@ -194,7 +196,7 @@
                 }
             }
         }else if(![message isEqualToString:@"1"]){
-//            [Log log:[NSString stringWithFormat:@"Unrecognised message from socket: %@", message]];
+            DDLogVerbose(@"Unrecognised message from socket: %@", message);
         }
     }
 }
@@ -255,7 +257,7 @@
             [notification setContentImage:image];
         }
         @catch (NSException * e) {
-            //            [Log log:[NSString stringWithFormat:@"Problem loading image from URL: %@", imgURL]];
+            DDLogVerbose(@"Problem loading image from URL: %@", imgURL);
         }
     }
     
@@ -290,7 +292,7 @@
                 url = [NSURL URLWithString:url_string];
                 openWindow = false;
             } @catch (NSException *exception) {
-                //                [Log log:[NSString stringWithFormat:@"Not a valid link url - %@", url_string]];
+                DDLogVerbose(@"Not a valid link url - %@", url_string);
             }
         }
         

@@ -8,6 +8,8 @@
 
 #import "CustomFunctions.h"
 #import <Sparkle/Sparkle.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation CustomFunctions
 
@@ -89,7 +91,7 @@
 
 + (void)onlyOneInstanceOfApp {
     if ([[NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]] count] > 1) {
-        NSLog(@"already open app");
+        DDLogDebug(@"already open app");
         [self quit];
     }
 }

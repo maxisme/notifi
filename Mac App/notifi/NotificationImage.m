@@ -8,6 +8,8 @@
 
 #import "NotificationImage.h"
 #import <QuartzCore/QuartzCore.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation NotificationImage
 
@@ -35,7 +37,7 @@
     
     // Report an error if the source isn't a valid image
     if (![sourceImage isValid]){
-        NSLog(@"Invalid Image");
+        DDLogDebug(@"Invalid Image");
     } else {
         NSImage *smallImage = [[NSImage alloc] initWithSize: newSize];
         [smallImage lockFocus];

@@ -9,6 +9,8 @@
 #import "MainWindow.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #import "CustomVars.h"
 #import "CustomFunctions.h"
@@ -22,6 +24,8 @@
 
 #import "NSView+Animate.h"
 #import "NSImage+Rotate.h"
+
+
 
 @implementation MainWindow
 
@@ -395,15 +399,11 @@
     if(start > 1) start -= 1;
     NSUInteger end = start + range.length + 1;
     if(end >= num_notifications) end = num_notifications; // end is the last notification
-//    NSLog(@"%lu - %lu", (unsigned long)start, (unsigned long)end);
     if(num_notifications > 0){ // there are notifications
         for(NSUInteger x = start; x < end; x++){
-            NSLog(@"%lu", x);
             Notification* n = [_notifications objectAtIndex:x];
             NSNumber *num = [[NSNumber alloc] initWithUnsignedLongLong:n.ID];
-            NSLog(@"%@", num);
             if(![_notifications_animated containsObject:num]){ // not already animated
-//                NSLog(@"%lu", (unsigned long)[_notifications_animated count]);
                 [_notifications_animated addObject:num];
                 
                 //handle delay

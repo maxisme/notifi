@@ -58,13 +58,13 @@
     [updates setTarget:self];
     [self addItem:updates];
     
-//    NSMenuItem* view_log = [[NSMenuItem alloc] initWithTitle:@"View Log..." action:@selector(showLoggingFile) keyEquivalent:@""];
-//    [view_log setTarget:self];
-//    [self addItem:view_log];
-    
     NSMenuItem* about = [[NSMenuItem alloc] initWithTitle:@"About..." action:@selector(showAbout) keyEquivalent:@""];
     [about setTarget:self];
     [self addItem:about];
+    
+    NSMenuItem* view_log = [[NSMenuItem alloc] initWithTitle:@"Open Logs..." action:@selector(showLoggingFile) keyEquivalent:@""];
+    [view_log setTarget:self];
+    [self addItem:view_log];
     
     [self addItem:[NSMenuItem separatorItem]];
     
@@ -79,8 +79,6 @@
     return self;
 }
 
-
-
 #pragma mark - menu functions
 -(void)checkUpdate{
     [CustomFunctions checkForUpdate:true];
@@ -89,6 +87,10 @@
 -(void)toggleOpenOnStartup{
     [CustomFunctions toggleOpenOnStartup];
     [self init];
+}
+
+-(void)showLoggingFile{
+    [[NSWorkspace sharedWorkspace] openFile:[[NSUserDefaults standardUserDefaults] objectForKey:@"logging_path"]];
 }
 
 -(void)createNewCredentials{

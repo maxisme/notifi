@@ -16,7 +16,6 @@
 		482C8A9F1E0B0D4000E5C173 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 482C8A9E1E0B0D4000E5C173 /* AppKit.framework */; };
 		484935CE2018DB6700ED058A /* CustomFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935CD2018DB6700ED058A /* CustomFunctions.m */; };
 		484935D12018DFB400ED058A /* Socket.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D02018DFB400ED058A /* Socket.m */; };
-		484935D420194B9200ED058A /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D320194B9200ED058A /* Log.m */; };
 		486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CC1F2FA2FA008E7492 /* sad.png */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
 		48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DCB2018A1170078F388 /* SettingsMenu.m */; };
@@ -63,8 +62,6 @@
 		484935CD2018DB6700ED058A /* CustomFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomFunctions.m; sourceTree = "<group>"; };
 		484935CF2018DFB400ED058A /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		484935D02018DFB400ED058A /* Socket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Socket.m; sourceTree = "<group>"; };
-		484935D220194B9200ED058A /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
-		484935D320194B9200ED058A /* Log.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		486FA2CC1F2FA2FA008E7492 /* sad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sad.png; sourceTree = "<group>"; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
 		48785DCA2018A1170078F388 /* SettingsMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsMenu.h; sourceTree = "<group>"; };
@@ -285,8 +282,6 @@
 				48785DD02018B2710078F388 /* Keys.m */,
 				484935CF2018DFB400ED058A /* Socket.h */,
 				484935D02018DFB400ED058A /* Socket.m */,
-				484935D220194B9200ED058A /* Log.h */,
-				484935D320194B9200ED058A /* Log.m */,
 				48110580201F731C004D2040 /* NSView+Animate.h */,
 				48110581201F731C004D2040 /* NSView+Animate.m */,
 				4892A27420153559003F56EC /* NSImage+Rotate.h */,
@@ -409,7 +404,6 @@
 				"${BUILT_PRODUCTS_DIR}/STHTTPRequest/STHTTPRequest.framework",
 				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
 				"${PODS_ROOT}/Sparkle/Sparkle.framework",
-				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -419,7 +413,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/STHTTPRequest.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/Sparkle.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -489,7 +482,6 @@
 				484935D12018DFB400ED058A /* Socket.m in Sources */,
 				4892A2642015315F003F56EC /* NotificationTable.m in Sources */,
 				4892A26720153204003F56EC /* ControllButton.m in Sources */,
-				484935D420194B9200ED058A /* Log.m in Sources */,
 				48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */,
 				4892A27620153559003F56EC /* NSImage+Rotate.m in Sources */,
 				482C8A931E09742400E5C173 /* MyApplication.m in Sources */,

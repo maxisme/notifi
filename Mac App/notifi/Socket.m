@@ -11,6 +11,9 @@
 #import <SocketRocket/SRWebSocket.h>
 #import "CustomFunctions.h"
 
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+
 @implementation Socket
 
 - (id)initWithURL:(NSString*)url key:(NSString*)key{
@@ -27,7 +30,7 @@
 }
 
 -(void)open{
-    NSLog(@"opening socket");
+    DDLogDebug(@"opening socket");
     [self destroy];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
@@ -67,7 +70,7 @@
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
-    NSLog(@"socket open");
+    DDLogDebug(@"socket open");
     _connected = true;
     
     if(_reconnect_timer){
@@ -80,7 +83,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
-    NSLog(@"Socket failed with error: %@", error);
+    DDLogDebug(@"Socket failed with error: %@", error);
     [self close];
 }
 
@@ -91,7 +94,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    NSLog(@"Socket closed with reason: %@", reason);
+    DDLogDebug(@"Socket closed with reason: %@", reason);
     [self close];
 }
 

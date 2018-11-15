@@ -6,9 +6,12 @@
 //  Copyright © 2018 max mitchell. All rights reserved.
 //
 #import "Notification.h"
+
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+
 #import "CustomVars.h"
 #import "CustomFunctions.h"
-#import "Log.h"
 #import "NotificationImage.h"
 #import "NotificationLabel.h"
 #import "NotificationLink.h"
@@ -296,7 +299,7 @@ float one_row_info_height;
         [NSAnimationContext endGrouping];
         [self markRead];
     }
-    NSLog(@"%f",self.expand_height); //uncomment this when adding new fonts to test shrink height (with and without info)
+    DDLogDebug(@"%f", self.expand_height); //uncomment this when adding new fonts to test shrink height (with and without info)
     [self updateTrackingAreas];
 }
 
@@ -393,7 +396,6 @@ float one_row_info_height;
 
 #pragma mark - external events
 - (void)mouseUp:(NSEvent *)event {
-    [Log log:@"md"];
     [self expand];
 }
 
@@ -488,7 +490,6 @@ float one_row_info_height;
         if ([CustomFunctions stringToUL:[dic valueForKey:@"id"]] == self.ID) return index;
         index++;
     }
-    [Log log:@"failed"];
     return -1;
 }
 
