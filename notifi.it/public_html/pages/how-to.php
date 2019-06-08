@@ -34,14 +34,6 @@ to the url - <strong><?php echo $url?></strong>.
 <?php echo $url?>
 </code>
 </pre>
-<div class="row valign-wrapper">
-    <div class="col s12 l6 push-l6 valign" align="center">
-        <strong>Sending your first notification using Terminal.</strong>
-    </div>
-    <video class="col s12 pull-l6 l6" loop autoplay muted>
-        <source src="images/hello-world.mp4" type="video/mp4">
-    </video>
-</div>
 
 <h3>jQuery</h3>
 <pre>
