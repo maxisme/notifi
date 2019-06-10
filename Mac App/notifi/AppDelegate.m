@@ -55,7 +55,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString* exc = [exception reason];
     DDLogError(@"Crash Exception: %@", exc);
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://notifi.it/log.php"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost/log"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[[NSString stringWithFormat:@"error=%@&UUID=%@&app_version=%@", exc, [CustomFunctions getSystemUUID], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]] dataUsingEncoding:NSUTF8StringEncoding]];
     [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];

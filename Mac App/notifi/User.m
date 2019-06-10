@@ -34,7 +34,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     _menu_bar = mb;
     _window = mb.window;
     
-    _keychain = [[Keys alloc] init];
     _menu_bar.bell_image_cnt = 1;
     
     //update menu icon listener
@@ -46,7 +45,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 +(void)newCredentials{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://notifi.it/getCode.php"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost/code"];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{ @"UUID":[CustomFunctions getSystemUUID], @"server_key": [LOOCryptString serverKey]}];
     // tell server off the current credentials to be able to create new ones.
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
@@ -81,13 +80,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    _s = [[Socket alloc] initWithURL:@"wss://s.notifi.it" key:[LOOCryptString serverKey]];
+    _s = [[Socket alloc] initWithURL:@"ws://localhost:8123/ws" key:[LOOCryptString serverKey]];
     
     __weak typeof(self) weakSelf = self;
-    
-    [_s setOnConnectBlock:^{
-        [_s send:[weakSelf authMessage]];
-    }];
     
     [_s setOnCloseBlock:^{
         [weakSelf updateMenuBarIcon:false];
@@ -96,15 +91,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [_s setOnMessageBlock:^(NSString *message) {
         [weakSelf handleSocketMessage:message];
     }];
-}
-
--(NSString*)authMessage{
-    return [CustomFunctions dicToJsonString:@{
-                                              @"credentials":[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
-                                              @"key": [_keychain getKey:@"credential_key"],
-                                              @"UUID":[CustomFunctions getSystemUUID],
-                                              @"app_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
-                                              }];
 }
 
 -(void)handleSocketMessage:(NSString*)message{

@@ -34,7 +34,7 @@
 }
 
 +(NSString *)how_to:(NSString*)credentials{
-    return [NSString stringWithFormat:@"https://notifi.it/?c=%@#How-To", credentials];
+    return [NSString stringWithFormat:@"http://localhost/?c=%@#How-To", credentials];
 }
 
 +(NSString *)default_empty{

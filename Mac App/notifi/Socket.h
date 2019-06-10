@@ -8,8 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 @class SRWebSocket;
+@class Keys;
 
 @interface Socket : NSObject
+@property Keys *keychain;
 @property (nonatomic, strong) SRWebSocket *web_socket;
 @property (nonatomic, strong) NSTimer *reconnect_timer;
 @property (nonatomic) NSString *url;

@@ -5,28 +5,31 @@ $credential_length = 25;
 global $key_length;
 $key_length = 100;
 
-function clean($string) {
-   $string = str_replace(' ', '', $string); // removes all spaces
-   return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+function clean($string)
+{
+    $string = str_replace(' ', '', $string); // removes all spaces
+    return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
 }
 
-function connect(){
-	$db_pass = trim(file_get_contents("/var/www/notifi.it/db.pass"));
-	$db_user = trim(file_get_contents("/var/www/notifi.it/db.user"));
-	
-	$con = mysqli_connect("127.0.0.1", "$db_user", "$db_pass", 'notifi');
-	if (!$con) {
-		die("error connecting to database");
-	} 
-	return $con; 
+function connect()
+{
+    $con = mysqli_connect("db", "notifi", "notifi", 'notifi');
+    if (!$con) {
+        echo "Error: Unable to connect to MySQL." . PHP_EOL;
+        echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+        echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+        exit;
+    }
+    return $con;
 }
 
-function getNotifications($hashedCredentials){
-	$hashedCredentials = clean($hashedCredentials);
-	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
-	
-	$con = connect();
-	$query = mysqli_query($con, "SELECT
+function getNotifications($hashedCredentials)
+{
+    $hashedCredentials = clean($hashedCredentials);
+    $key = trim(file_get_contents("/encryption.key"));
+
+    $con = connect();
+    $query = mysqli_query($con, "SELECT
 	id,
 	DATE_FORMAT(time, '%Y-%m-%d %T') as time,
 	AES_DECRYPT(title, '$key') as title, 
@@ -39,29 +42,31 @@ function getNotifications($hashedCredentials){
 	ORDER BY time ASC
 	");
 
-	if(mysqli_num_rows($query) == 0){
-		return "";
-	}
-	
-	return $query;
+    if (mysqli_num_rows($query) == 0) {
+        return "";
+    }
+
+    return $query;
 }
 
-function deleteNotification($con, $id, $credentials){
-	$credentials = clean($credentials);
-	$id = mysqli_real_escape_string($con, $id);
+function deleteNotification($con, $id, $credentials)
+{
+    $credentials = clean($credentials);
+    $id = mysqli_real_escape_string($con, $id);
 
-	mysqli_query($con, "DELETE 
+    mysqli_query($con, "DELETE 
 	FROM `notifications`
 	WHERE `id` = $id 
 	AND `credentials`= '$credentials'");
 }
 
-function isBruteForce($con, $credentials = " "){
-	$ip = $_SERVER['REMOTE_ADDR'];
-	//limits per min
-	$ip_limit = 20; // max a specific IP is alowed to send
-	$cred_limit = 10; // max a user is allowed to receive
-	$ip_to_cred_limit = 5; // max a specific IP to specific credentials
+function isBruteForce($con, $credentials = " ")
+{
+    $ip = $_SERVER['REMOTE_ADDR'];
+    //limits per min
+    $ip_limit = 20; // max a specific IP is allowed to send
+    $cred_limit = 10; // max a user is allowed to receive
+    $ip_to_cred_limit = 5; // max a specific IP to specific credentials
 
     // validation - pointless MAYBE
     if (!filter_var($ip, FILTER_VALIDATE_IP)) {
@@ -69,13 +74,13 @@ function isBruteForce($con, $credentials = " "){
     }
 
     // ----- db admin ----
-	//STORE BRUTE FORCE IP
-	mysqli_query($con, "INSERT INTO `brute_force` 
+    //STORE BRUTE FORCE IP
+    mysqli_query($con, "INSERT INTO `brute_force` 
 	(`credentials`, `ip`) 
-	VALUES ('".myHash($credentials)."', '".myHash($ip)."')");
-	
-	//delete all requests that are over a minute old
-	mysqli_query($con, "DELETE
+	VALUES ('" . myHash($credentials) . "', '" . myHash($ip) . "')");
+
+    //delete all requests that are over a minute old
+    mysqli_query($con, "DELETE
 	FROM `brute_force`
 	WHERE `time` < date_sub(now(), interval 1 minute)
 	");
@@ -83,12 +88,12 @@ function isBruteForce($con, $credentials = " "){
     // ----- checks ----
 
     // check if ip is in whitelist
-    $whitelist_ip_query = mysqli_query($con,"SELECT ip_limit, cred_limit, ip_to_cred_limit
+    $whitelist_ip_query = mysqli_query($con, "SELECT ip_limit, cred_limit, ip_to_cred_limit
     FROM `allowed_ips`
     INNER JOIN `users`
     on `users`.UUID = `allowed_ips`.UUID
     WHERE `allowed_ips`.ip = '$ip'
-    AND `users`.credentials = '".myHash($credentials)."'");
+    AND `users`.credentials = '" . myHash($credentials) . "'");
 
     while ($row = mysqli_fetch_array($whitelist_ip_query)) {
         $ip_limit = $row['ip_limit'];
@@ -97,73 +102,75 @@ function isBruteForce($con, $credentials = " "){
         break;
     }
 
-	// $ip_limit
-	$limit_ip_query = mysqli_query($con, "SELECT id
+    // $ip_limit
+    $limit_ip_query = mysqli_query($con, "SELECT id
 	FROM `brute_force`
-	WHERE ip = '".myHash($ip)."'
+	WHERE ip = '" . myHash($ip) . "'
 	AND `time` >= date_sub(now(), interval 1 minute)
-	"); 
+	");
 
-	if(mysqli_num_rows($limit_ip_query) > $ip_limit){
-		return true;
-	}
+    if (mysqli_num_rows($limit_ip_query) > $ip_limit) {
+        return true;
+    }
 
-	if($credentials != " "){
-		// $cred_limit
-		$limit_cred_query = mysqli_query($con, "SELECT id
+    if ($credentials != " ") {
+        // $cred_limit
+        $limit_cred_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
-		WHERE credentials = '".myHash($credentials)."'
+		WHERE credentials = '" . myHash($credentials) . "'
 		AND `time` >= date_sub(now(), interval 1 minute)
 		");
 
-		if(mysqli_num_rows($limit_cred_query) > $cred_limit){
-			return true;
-		} 
+        if (mysqli_num_rows($limit_cred_query) > $cred_limit) {
+            return true;
+        }
 
-		// $ip_to_cred_limit
-		$limit_spec_query = mysqli_query($con, "SELECT id
+        // $ip_to_cred_limit
+        $limit_spec_query = mysqli_query($con, "SELECT id
 		FROM `brute_force`
-		WHERE credentials = '".myHash($credentials)."'
-		AND ip = '".myHash($ip)."'
+		WHERE credentials = '" . myHash($credentials) . "'
+		AND ip = '" . myHash($ip) . "'
 		AND `time` >= date_sub(now(), interval 1 minute)
 		");
 
-		if(mysqli_num_rows($limit_spec_query) > $ip_to_cred_limit){
-			return true;
-		}
-	}
+        if (mysqli_num_rows($limit_spec_query) > $ip_to_cred_limit) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
-function isValidUser($con, $credentials, $key, $UUID, $app_version){
+function isValidUser($con, $credentials, $key, $UUID, $app_version)
+{
     global $credential_length;
 
-    if(strlen($credentials) != $credential_length) return false;
+    if (strlen($credentials) != $credential_length) return false;
 
-	$where_statement = "WHERE `credentials` = '".myHash($credentials)."'
-	AND `key` = '".myHash($key)."'
-	AND `UUID` = '".myHash($UUID)."'";
+    $where_statement = "WHERE `credentials` = '" . myHash($credentials) . "'
+	AND `key` = '" . myHash($key) . "'
+	AND `UUID` = '" . myHash($UUID) . "'";
 
-	// MySQL statements
-	$users = mysqli_query($con, "SELECT id
+    // MySQL statements
+    $users = mysqli_query($con, "SELECT id
 	FROM `users` 
 	$where_statement
 	");
 
-	if(mysqli_num_rows($users) > 0){
-		//update login time
+    if (mysqli_num_rows($users) > 0) {
+        //update login time
         $query = mysqli_query($con, "UPDATE `users`
 		SET `last_login` = now(), `app_version` = '$app_version'
 		$where_statement
 		");
-		return $query;
-	}
-	return false;
+        return $query;
+    }
+    return false;
 }
 
-function userExists($con, $hashedCredentials){
-	$users = mysqli_query($con, "SELECT id
+function userExists($con, $hashedCredentials)
+{
+    $users = mysqli_query($con, "SELECT id
 	FROM `users`
 	WHERE `credentials` = '$hashedCredentials'
 	");
@@ -171,18 +178,20 @@ function userExists($con, $hashedCredentials){
     return mysqli_num_rows($users) > 0;
 }
 
-function userConnected($hashedCredentials, $isConnected){
+function userConnected($hashedCredentials, $isConnected)
+{
     $con = connect();
-	$isConnected = (int)$isConnected;
-	
-	return mysqli_query($con, "UPDATE `users`
+    $isConnected = (int)$isConnected;
+
+    return mysqli_query($con, "UPDATE `users`
 	SET isConnected = '$isConnected'
 	WHERE `credentials` = '$hashedCredentials'
-	"); 
+	");
 }
 
 //--------- extra functions
-function randomString($length) {
+function randomString($length)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -192,58 +201,63 @@ function randomString($length) {
     return $randomString;
 }
 
-function encrypt($string){
-	$tag_length = 16;
-	$algo = 'aes-256-gcm';
+function encrypt($string)
+{
+    $tag_length = 16;
+    $algo = 'aes-256-gcm';
 
-	$tag = random_bytes($tag_length);
-	$iv   = random_bytes(openssl_cipher_iv_length($algo));
-	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
+    $tag = random_bytes($tag_length);
+    $iv = random_bytes(openssl_cipher_iv_length($algo));
+    $key = trim(file_get_contents("/encryption.key"));
 
-	$encr = openssl_encrypt(
-		$string,
-		$algo,
-		$key,
-		OPENSSL_RAW_DATA,
-		$iv,
-		$tag
-	);
+    $encr = openssl_encrypt(
+        $string,
+        $algo,
+        $key,
+        OPENSSL_RAW_DATA,
+        $iv,
+        $tag
+    );
 
-	//echo "tag: $tag<br>iv:$iv<br>encr:$encr";
+    //echo "tag: $tag<br>iv:$iv<br>encr:$encr";
 
-	return utf8_encode($tag.$iv.$encr);
+    return utf8_encode($tag . $iv . $encr);
 }
 
-function decrypt($string){
-	$string = utf8_decode($string);
+function decrypt($string)
+{
+    $string = utf8_decode($string);
 
-	$tag_length = 16;
-	$algo = 'aes-256-gcm';
+    $tag_length = 16;
+    $algo = 'aes-256-gcm';
 
-	$key = trim(file_get_contents("/var/www/notifi.it/encryption.key"));
-	$iv_size = openssl_cipher_iv_length($algo);
+    $key = trim(file_get_contents("/encryption.key"));
+    $iv_size = openssl_cipher_iv_length($algo);
 
-	$tag = substr($string, 0, $tag_length);
-	$iv = substr($string, $tag_length, $iv_size);
-	$ciphertext = substr($string,$tag_length + $iv_size);
+    $tag = substr($string, 0, $tag_length);
+    $iv = substr($string, $tag_length, $iv_size);
+    $ciphertext = substr($string, $tag_length + $iv_size);
 
-	//echo "tag: $tag<br>iv:$iv<br>encr:$ciphertext";
+    //echo "tag: $tag<br>iv:$iv<br>encr:$ciphertext";
 
-	return openssl_decrypt(
-		$ciphertext,
-		$algo,
-		$key,
-		OPENSSL_RAW_DATA,
-		$iv,
-		$tag
-	);
+    return openssl_decrypt(
+        $ciphertext,
+        $algo,
+        $key,
+        OPENSSL_RAW_DATA,
+        $iv,
+        $tag
+    );
 }
 
-function myHash($str){
-	return hash("sha256",$str);
+function myHash($str)
+{
+    return hash("sha256", $str);
 }
 
-function validUUID($UUID){
+function validUUID($UUID)
+{
     return preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/', $UUID);
 }
+
 ?>

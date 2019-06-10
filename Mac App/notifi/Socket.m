@@ -10,6 +10,7 @@
 
 #import <SocketRocket/SRWebSocket.h>
 #import "CustomFunctions.h"
+#import "Keys.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -20,6 +21,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     if (self != [super init]) return nil;
     _url = url;
     _key = key;
+    
+    _keychain = [[Keys alloc] init];
     
     [self open];
     
@@ -35,6 +38,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
     [request setValue:_key forHTTPHeaderField:@"Sec-Key"];
+    [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] forHTTPHeaderField:@"credentials"];
+    [request setValue:[_keychain getKey:@"credential_key"] forHTTPHeaderField:@"credential_key"];
+    [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
+    [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
 
     _web_socket = [[SRWebSocket alloc] initWithURLRequest:request];
     [_web_socket setDelegate:(id)self];
