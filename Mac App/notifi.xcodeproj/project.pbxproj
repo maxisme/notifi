@@ -448,7 +448,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/secret_server_code/${CODE}/g\" {} +";
+			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/secret_server_code/${CODE}/g\" {} +\n";
 		};
 		D6C0F86D20371CC6008673E3 /* Remove Secret Server Code */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -462,7 +462,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +";
+			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

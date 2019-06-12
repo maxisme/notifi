@@ -46,14 +46,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost/code"];
-    NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{ @"UUID":[CustomFunctions getSystemUUID], @"server_key": [LOOCryptString serverKey]}];
+    NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     // tell server off the current credentials to be able to create new ones.
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
         [post addEntriesFromDictionary:@{
-                                        @"current_credentials": [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
-                                        @"current_key": [[[Keys alloc] init] getKey:@"credential_key"]
-                                        }];
+            @"current_credentials": [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
+            @"current_key": [[[Keys alloc] init] getKey:@"credential_key"]
+        }];
     }
+    r.requestHeaders = [[NSMutableDictionary alloc] initWithDictionary:@{@"Sec-Key":[LOOCryptString serverKey]}];
     r.POSTDictionary = post;
     NSError *error = nil;
     NSString *content = [r startSynchronousWithError:&error];
