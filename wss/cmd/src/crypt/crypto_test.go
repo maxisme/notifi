@@ -7,7 +7,7 @@ import (
 var key = []byte("M2nMpY6lowXfscMSyMhH5eyWeImEXzD8")
 var teststr = RandomString(10)
 
-func Test(t *testing.T) {
+func TestEncrypt(t *testing.T) {
 	encryptedstr := Encrypt(teststr, key)
 	decryptedstr, _ := Decrypt(encryptedstr, key)
 	if decryptedstr != teststr {

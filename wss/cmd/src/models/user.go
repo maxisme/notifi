@@ -97,7 +97,7 @@ func VerifyUser(db *sql.DB, u User) bool{
 // as well as the app version the client is using
 func SetLastLogin(db *sql.DB, u User) error {
 	_, err := db.Exec(`UPDATE users
-	SET last_login = NOW(), app_version = ?
+	SET last_login = NOW(), app_version = ?, is_connected = 1
 	WHERE credentials = ? AND credential_key = ? AND UUID = ?`, u.AppVersion, u.Credentials.Value, u.Credentials.Key, u.UUID)
 	return err
 }

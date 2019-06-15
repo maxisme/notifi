@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 	"validator"
 )
 
@@ -23,7 +24,7 @@ type Notification struct {
 
 var maxtitle = 1000
 var maxmessage = 10000
-var maximage = 100
+var maximage = 100000
 var key = []byte("YQeucLKeOk19iL9YQuitPoZKSp6luVJF")
 
 func StoreNotification(db *sql.DB, n Notification) error {
@@ -32,8 +33,24 @@ func StoreNotification(db *sql.DB, n Notification) error {
     (title, message, image, link, credentials) 
     VALUES(?, ?, ?, ?, ?)`,
 		crypt.Encrypt(n.Title, key), crypt.Encrypt(n.Message, key),
-		crypt.Encrypt(n.Image, key), crypt.Encrypt(n.Link, key), crypt.Encrypt(n.Credentials, key),
+		crypt.Encrypt(n.Image, key), crypt.Encrypt(n.Link, key), crypt.Hash(n.Credentials),
 	)
+	return err
+}
+
+func DeleteNotification(db *sql.DB, credentials string, ids string) error{
+	idarr := strings.Split(ids, ",")
+	for _, element := range idarr {
+		if _, err := strconv.Atoi(element); err != nil {
+			return errors.New(element+ " is not a number!")
+		}
+	}
+	query := `
+	DELETE FROM notifications
+	WHERE credentials = ?
+	AND id IN (?)
+	`
+	_, err := db.Exec(query, crypt.Hash(credentials), idarr)
 	return err
 }
 
@@ -47,10 +64,8 @@ func FetchAllNotifications(db *sql.DB, credentials string) ([]Notification, erro
 		image,
 		link
 	FROM notifications
-	WHERE credentials = ?
-	AND title != ''
-	`
-	rows, err := db.Query(query, credentials)
+	WHERE credentials = ?`
+	rows, err := db.Query(query, crypt.Hash(credentials))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,11 +74,14 @@ func FetchAllNotifications(db *sql.DB, credentials string) ([]Notification, erro
 	notifications := []Notification{}
 	for rows.Next() {
 		var n Notification
-		err := rows.Scan(&n.Time, &n.Title, &n.Message, &n.Image, &n.Link)
+		err := rows.Scan(&n.ID, &n.Time, &n.Title, &n.Message, &n.Image, &n.Link)
 		if err != nil {
 			return nil, err
 		}
-		notifications = append(notifications, n)
+		err = DecryptNotification(&n)
+		if err == nil {
+			notifications = append(notifications, n)
+		}
 	}
 	return notifications, nil
 }
@@ -96,12 +114,45 @@ func NotificationValidation(n *Notification) error {
 			return errors.New("Image URL must be https!")
 		}
 
-		resp, _ := http.Head(n.Image)
-		contentlen, _ := strconv.Atoi(resp.Header.Get("Content-Length"))
+		timeout := time.Duration(300 * time.Millisecond)
+		client := http.Client{
+			Timeout: timeout,
+		}
+		resp, _ := client.Head(n.Image)
+		contentlen, err := strconv.Atoi(resp.Header.Get("Content-Length"))
+		if err != nil {
+			println(err.Error())
+			n.Image = ""
+		}
 		if contentlen > maximage {
-			return errors.New("Image from URL too large!")
+			return errors.New("Image from URL too large!" + string(contentlen))
 		}
 	}
 
 	return nil
+}
+
+func DecryptNotification(notification *Notification) error{
+	title, err := crypt.Decrypt(notification.Title, key)
+	if err != nil{
+		return err
+	}else{
+		notification.Title = title
+	}
+
+	message, err := crypt.Decrypt(notification.Message, key)
+	if err == nil{
+		notification.Message = message
+	}
+
+	image, err := crypt.Decrypt(notification.Image, key)
+	if err == nil{
+		notification.Image = image
+	}
+
+	link, err := crypt.Decrypt(notification.Link, key)
+	if err == nil{
+		notification.Link = link
+	}
+	return err
 }

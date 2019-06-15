@@ -123,18 +123,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             // get all the notifications from json_dic and tell the server
             // that they have been received.
             // each notification comes with an encrypted unique "id:" tag
+            NSString* ids = @"";
             for (NSDictionary* notification in json_dic) {
-                NSString* firstval = [NSString stringWithFormat:@"%@", notification];
-                if([[firstval substringToIndex:3]  isEqual: @"id:"]){
-                    // TELL SERVER TO REMOVE STORED MESSAGE
-                    if(_s.authed){
-                        [_s send:firstval];
-                    }
-                }else{
-                    [Notification storeNotificationDic:notification];
-                    [incoming_notifications addObject:notification];
-                    shouldRefresh = true;
-                }
+                [NSString stringWithFormat:@"%@, %@", ids, [notification objectForKey:@"id"]];
+                [Notification storeNotificationDic:notification];
+                [incoming_notifications addObject:notification];
+                shouldRefresh = true;
+            }
+            
+            // send ids to be deleted from server
+            if(_s.authed){
+                [_s send:[ids substringFromIndex:1]]; // removes initial ','
             }
             
             if(shouldRefresh){
