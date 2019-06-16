@@ -12,6 +12,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -191,7 +192,6 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 	wsheader.Add("Version", "1.0.1")
 	s := httptest.NewServer(http.HandlerFunc(WSHandler))
 	defer s.Close()
-
 	u := "ws" + strings.TrimPrefix(s.URL, "http")
 	ws, _, err := websocket.DefaultDialer.Dial(u, wsheader)
 	if err != nil {
@@ -207,15 +207,71 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 		}
 		var notifications []models.Notification
 		_ = json.Unmarshal(mess, &notifications)
-		notification := notifications[0]
 
-		if notification.Title != TITLE {
+		if notifications[0].Title != TITLE {
 			t.Error("Incorrect title returned!")
 		}
-		if notification.Message != MESSAGE {
+		if notifications[0].Message != MESSAGE {
 			t.Error("Incorrect message returned!")
 		}
 		break
 	}
+}
 
+// send notification while offline, connect to websocket to receive said notification
+// tell server to delete notification, reconnect to websocket and service should not recieve a message
+func TestDeleteNotification(t *testing.T) {
+	var creds, _ = GenUser() // generate user
+
+	// send notification to not connected user
+	form := url.Values{}
+	form.Add("credentials", creds.Value)
+	form.Add("title", crypt.RandomString(100))
+	req, _ := http.NewRequest("GET", "/api?"+form.Encode(), nil)
+	rr := httptest.NewRecorder()
+	http.HandlerFunc(APIHandler).ServeHTTP(rr, req)
+
+	// connect to wss
+	wsheader := http.Header{}
+	wsheader.Add("Sec-Key", os.Getenv("server_key"))
+	wsheader.Add("Credentials", creds.Value)
+	wsheader.Add("Credential_key", creds.Key)
+	wsheader.Add("Uuid", form.Get("UUID"))
+	wsheader.Add("Version", "1.0.1")
+	s := httptest.NewServer(http.HandlerFunc(WSHandler))
+	u := "ws" + strings.TrimPrefix(s.URL, "http")
+	ws, _, err := websocket.DefaultDialer.Dial(u, wsheader)
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	// delete notification
+	_, mess, err := ws.ReadMessage()
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+	var notifications []models.Notification
+	_ = json.Unmarshal(mess, &notifications)
+	_ = ws.WriteMessage(websocket.TextMessage, []byte(strconv.Itoa(notifications[0].ID)))
+
+	// disconnect from ws
+	s.Close()
+	ws.Close()
+
+	// reconnect to ws
+	s2 := httptest.NewServer(http.HandlerFunc(WSHandler))
+	defer s2.Close()
+	u2 := "ws" + strings.TrimPrefix(s2.URL, "http")
+	ws2, _, err := websocket.DefaultDialer.Dial(u2, wsheader)
+	defer ws2.Close()
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	// expect timeout on read notification
+	_ = ws2.SetReadDeadline(time.Now().Add(50 * time.Millisecond))
+	_, _, err = ws2.ReadMessage()
+	if err == nil {
+		t.Fatalf("Should have had i/o timeout and received nothing")
+	}
 }

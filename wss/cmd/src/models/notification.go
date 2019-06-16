@@ -41,8 +41,10 @@ func StoreNotification(db *sql.DB, n Notification) error {
 func DeleteNotification(db *sql.DB, credentials string, ids string) error{
 	idarr := strings.Split(ids, ",")
 	for _, element := range idarr {
-		if _, err := strconv.Atoi(element); err != nil {
-			return errors.New(element+ " is not a number!")
+		if element != " "{
+			if _, err := strconv.Atoi(element); err != nil {
+				return errors.New(element+ " is not a number!")
+			}
 		}
 	}
 	query := `
@@ -50,7 +52,7 @@ func DeleteNotification(db *sql.DB, credentials string, ids string) error{
 	WHERE credentials = ?
 	AND id IN (?)
 	`
-	_, err := db.Exec(query, crypt.Hash(credentials), idarr)
+	_, err := db.Exec(query, crypt.Hash(credentials), ids)
 	return err
 }
 

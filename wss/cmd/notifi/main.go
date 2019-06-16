@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/gorilla/schema"
 	"github.com/gorilla/websocket"
-	"log"
 	"models"
 	"net/http"
 	"os"
@@ -22,7 +21,6 @@ var server_key = os.Getenv("server_key")
 var clients = make(map[string]*websocket.Conn)
 
 func WSHandler(w http.ResponseWriter, r *http.Request) {
-
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
 		return
@@ -57,18 +55,24 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 	clients[u.Credentials.Value] = wsconn // add conn to clients
 
 	notifications, _ := models.FetchAllNotifications(db, u.Credentials.Value)
-	bytes, _ := json.Marshal(notifications)
+	if len(notifications) > 0 {
+		bytes, _ := json.Marshal(notifications)
+		_ = wsconn.WriteMessage(websocket.TextMessage, bytes)
+	}
 
 	db.Close()
-	
-	_ = wsconn.WriteMessage(websocket.TextMessage, bytes)
+
 	for {
 		_, message, err := wsconn.ReadMessage()
 		if err != nil {
-			log.Println("read:", err)
+			fmt.Println("read:", err)
 			break
 		}
-		println(message)
+		db, err := models.DBConn(os.Getenv("db"))
+		if err := models.DeleteNotification(db, u.Credentials.Value, string(message)); err != nil {
+			fmt.Println(err)
+		}
+		_ = db.Close()
 	}
 }
 
