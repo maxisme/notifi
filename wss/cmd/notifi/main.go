@@ -33,12 +33,19 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 
 	c := models.Credentials{
 		Value: r.Header.Get("Credentials"),
-		Key: r.Header.Get("Credential_key"),
+		Key:   r.Header.Get("Credential_key"),
 	}
 	u := models.User{
 		Credentials: c,
-		UUID: r.Header.Get("Uuid"),
-		AppVersion: r.Header.Get("Version"),
+		UUID:        r.Header.Get("Uuid"),
+		AppVersion:  r.Header.Get("Version"),
+	}
+
+	// validate inputs
+	if !validator.IsValidUUID(r.Header.Get("Uuid")) {
+		http.Error(w, "Invalid UUID", 408)
+	} else if !validator.IsValidVersion(r.Header.Get("Version")) {
+		http.Error(w, "Invalid Version", 409)
 	}
 
 	db, err := models.DBConn(os.Getenv("db"))
@@ -153,11 +160,14 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 	err = models.StoreNotification(db, n)
 	if err == nil {
 		// send notification to client
-		//err = clients[n.Credentials].WriteMessage(websocket.TextMessage, []byte(""))
-		//if err != nil {
-		//	println(err.Error())
-		//}
-	}else{
+		bytes, _ := json.Marshal(n)
+		if val, ok := clients[n.Credentials]; ok {
+			err = val.WriteMessage(websocket.TextMessage, bytes)
+			if err != nil {
+				println(err.Error())
+			}
+		}
+	} else {
 		println(err)
 	}
 }

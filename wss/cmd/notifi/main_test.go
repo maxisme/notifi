@@ -17,6 +17,7 @@ import (
 	"testing"
 	"time"
 )
+
 /////////////
 // helpers //
 /////////////
@@ -40,9 +41,8 @@ func GenUser() (models.Credentials, url.Values) {
 	return creds, form
 }
 
-func ConnectWSS(creds models.Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error){
+func ConnectWSS(creds models.Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error) {
 	s := httptest.NewServer(http.HandlerFunc(WSHandler))
-	u := "ws" + strings.TrimPrefix(s.URL, "http")
 
 	// socket connection header values based on generated user
 	wsheader := http.Header{}
@@ -50,11 +50,20 @@ func ConnectWSS(creds models.Credentials, form url.Values) (*httptest.Server, *w
 	wsheader.Add("Credentials", creds.Value)
 	wsheader.Add("Credential_key", creds.Key)
 	wsheader.Add("Uuid", form.Get("UUID"))
-	wsheader.Add("Version", "1.0.1")
+	wsheader.Add("Version", "1.0")
 
-	ws, req, err := websocket.DefaultDialer.Dial(u, wsheader)
+	ws, req, err := websocket.DefaultDialer.Dial("ws"+strings.TrimPrefix(s.URL, "http"), wsheader)
 	println(req.StatusCode)
 	return s, ws, err
+}
+
+func SendNotification(credentials string, title string) {
+	nform := url.Values{}
+	nform.Add("credentials", credentials)
+	nform.Add("title", title)
+	req, _ := http.NewRequest("GET", "/api?"+nform.Encode(), nil)
+	rr := httptest.NewRecorder()
+	http.HandlerFunc(APIHandler).ServeHTTP(rr, req)
 }
 
 ////////////////////
@@ -169,26 +178,19 @@ func TestWSHandler(t *testing.T) {
 }
 
 func TestStoredNotificationsOnWSConnect(t *testing.T) {
-	var creds, _ = GenUser() // generate user
+	var creds, uform = GenUser() // generate user
 
 	TITLE := crypt.RandomString(100)
-	MESSAGE := crypt.RandomString(	1000)
 
 	// send notification to not connected user
-	form := url.Values{}
-	form.Add("credentials", creds.Value)
-	form.Add("title", TITLE)
-	form.Add("message", MESSAGE)
-	req, _ := http.NewRequest("GET", "/api?"+form.Encode(), nil)
-	rr := httptest.NewRecorder()
-	http.HandlerFunc(APIHandler).ServeHTTP(rr, req)
+	SendNotification(creds.Value, TITLE)
 
 	// connect to ws
 	wsheader := http.Header{}
 	wsheader.Add("Sec-Key", os.Getenv("server_key"))
 	wsheader.Add("Credentials", creds.Value)
 	wsheader.Add("Credential_key", creds.Key)
-	wsheader.Add("Uuid", form.Get("UUID"))
+	wsheader.Add("Uuid", uform.Get("UUID"))
 	wsheader.Add("Version", "1.0.1")
 	s := httptest.NewServer(http.HandlerFunc(WSHandler))
 	defer s.Close()
@@ -211,9 +213,6 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 		if notifications[0].Title != TITLE {
 			t.Error("Incorrect title returned!")
 		}
-		if notifications[0].Message != MESSAGE {
-			t.Error("Incorrect message returned!")
-		}
 		break
 	}
 }
@@ -221,35 +220,16 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 // send notification while offline, connect to websocket to receive said notification
 // tell server to delete notification, reconnect to websocket and service should not recieve a message
 func TestDeleteNotification(t *testing.T) {
-	var creds, _ = GenUser() // generate user
+	var creds, uform = GenUser() // generate user
 
 	// send notification to not connected user
-	form := url.Values{}
-	form.Add("credentials", creds.Value)
-	form.Add("title", crypt.RandomString(100))
-	req, _ := http.NewRequest("GET", "/api?"+form.Encode(), nil)
-	rr := httptest.NewRecorder()
-	http.HandlerFunc(APIHandler).ServeHTTP(rr, req)
+	SendNotification(creds.Value, crypt.RandomString(10))
 
 	// connect to wss
-	wsheader := http.Header{}
-	wsheader.Add("Sec-Key", os.Getenv("server_key"))
-	wsheader.Add("Credentials", creds.Value)
-	wsheader.Add("Credential_key", creds.Key)
-	wsheader.Add("Uuid", form.Get("UUID"))
-	wsheader.Add("Version", "1.0.1")
-	s := httptest.NewServer(http.HandlerFunc(WSHandler))
-	u := "ws" + strings.TrimPrefix(s.URL, "http")
-	ws, _, err := websocket.DefaultDialer.Dial(u, wsheader)
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
+	s, ws, _ := ConnectWSS(creds, uform)
 
 	// delete notification
-	_, mess, err := ws.ReadMessage()
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
+	_, mess, _ := ws.ReadMessage()
 	var notifications []models.Notification
 	_ = json.Unmarshal(mess, &notifications)
 	_ = ws.WriteMessage(websocket.TextMessage, []byte(strconv.Itoa(notifications[0].ID)))
@@ -259,19 +239,34 @@ func TestDeleteNotification(t *testing.T) {
 	ws.Close()
 
 	// reconnect to ws
-	s2 := httptest.NewServer(http.HandlerFunc(WSHandler))
-	defer s2.Close()
-	u2 := "ws" + strings.TrimPrefix(s2.URL, "http")
-	ws2, _, err := websocket.DefaultDialer.Dial(u2, wsheader)
-	defer ws2.Close()
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
+	s, ws, _ = ConnectWSS(creds, uform)
 
 	// expect timeout on read notification
-	_ = ws2.SetReadDeadline(time.Now().Add(50 * time.Millisecond))
-	_, _, err = ws2.ReadMessage()
+	_ = ws.SetReadDeadline(time.Now().Add(100 * time.Millisecond))
+	_, _, err := ws.ReadMessage()
 	if err == nil {
-		t.Fatalf("Should have had i/o timeout and received nothing")
+		t.Errorf("Should have had i/o timeout and received nothing")
+	}
+}
+
+func TestReceivingNotificationOnline(t *testing.T) {
+	var creds, form = GenUser() // generate user
+
+	// connect to ws
+	s, ws, _ := ConnectWSS(creds, form)
+	defer s.Close()
+	defer ws.Close()
+
+	// send notification over http
+	TITLE := crypt.RandomString(10)
+	SendNotification(creds.Value, TITLE)
+
+	// read notification over ws
+	_, mess, _ := ws.ReadMessage()
+	var notification models.Notification
+	_ = json.Unmarshal(mess, &notification)
+
+	if notification.Title != TITLE {
+		t.Errorf("Titles do not match!")
 	}
 }

@@ -23,10 +23,9 @@ type Credentials struct {
 
 // create user or update user with new credentials depending on whether the user passes current credentials
 // in the User struct.
-//
 func CreateUser(db *sql.DB, u User) (Credentials, error) {
 	// create new credentials
-	creds := Credentials {
+	creds := Credentials{
 		crypt.RandomString(25),
 		crypt.RandomString(100),
 	}
@@ -38,7 +37,7 @@ func CreateUser(db *sql.DB, u User) (Credentials, error) {
 		if len(u.Credentials.Key) > 0 && len(u.Credentials.Value) > 0 {
 			// if client passes current details they are asking for new credentials
 
-			// verify the credentials passed
+			// verify the credentials passed are valid
 			if VerifyUser(db, u) {
 				isnewuser = false
 			}
@@ -51,7 +50,7 @@ func CreateUser(db *sql.DB, u User) (Credentials, error) {
 		query = `
 		INSERT INTO users (credentials, credential_key, UUID) 
 		VALUES (?, ?, ?)`
-	}else{
+	} else {
 		// update users credentials
 		query = `
 		UPDATE users SET credentials = ?, credential_key = ?
@@ -83,7 +82,7 @@ func FetchUserWithUUID(db *sql.DB, UUID string) User {
 	return u
 }
 
-func VerifyUser(db *sql.DB, u User) bool{
+func VerifyUser(db *sql.DB, u User) bool {
 	storeduser := FetchUser(db, u.Credentials.Value)
 	valid_key := crypt.VerifyPassHash(storeduser.Credentials.Key, u.Credentials.Key)
 	valid_UUID := crypt.VerifyPassHash(storeduser.UUID, u.UUID)
