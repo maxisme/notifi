@@ -13,13 +13,13 @@ import (
 )
 
 type Notification struct {
-	ID          int
-	Credentials string
-	Time        string
-	Title       string
-	Message     string
-	Image       string
-	Link        string
+	ID          int    `json:"id"`
+	Credentials string `json:"-"`
+	Time        string `json:"time"`
+	Title       string `json:"title"`
+	Message     string `json:"message"`
+	Image       string `json:"image"`
+	Link        string `json:"link"`
 }
 
 var maxtitle = 1000
@@ -38,21 +38,22 @@ func StoreNotification(db *sql.DB, n Notification) error {
 	return err
 }
 
-func DeleteNotification(db *sql.DB, credentials string, ids string) error{
-	idarr := strings.Split(ids, ",")
-	for _, element := range idarr {
-		if element != " "{
-			if _, err := strconv.Atoi(element); err != nil {
-				return errors.New(element+ " is not a number!")
-			}
+func DeleteNotifications(db *sql.DB, credentials string, ids string) error {
+	idarr := []interface{}{crypt.Hash(credentials)}
+
+	for _, element := range strings.Split(ids, ",") {
+		if val, err := strconv.Atoi(element); err != nil {
+			return errors.New(element + " is not a number!")
+		} else {
+			idarr = append(idarr, val)
 		}
 	}
+
 	query := `
 	DELETE FROM notifications
 	WHERE credentials = ?
-	AND id IN (?)
-	`
-	_, err := db.Exec(query, crypt.Hash(credentials), ids)
+	AND id IN (?` + strings.Repeat(",?", len(idarr)-2) + `)`
+	_, err := db.Exec(query, idarr...)
 	return err
 }
 
@@ -99,7 +100,7 @@ func NotificationValidation(n *Notification) error {
 
 	if len(n.Title) == 0 {
 		return errors.New("You must enter a title!")
-	}else if len(n.Title) > maxtitle {
+	} else if len(n.Title) > maxtitle {
 		return errors.New("You must enter a shorter title!")
 	}
 
@@ -134,26 +135,26 @@ func NotificationValidation(n *Notification) error {
 	return nil
 }
 
-func DecryptNotification(notification *Notification) error{
+func DecryptNotification(notification *Notification) error {
 	title, err := crypt.Decrypt(notification.Title, key)
-	if err != nil{
+	if err != nil {
 		return err
-	}else{
+	} else {
 		notification.Title = title
 	}
 
 	message, err := crypt.Decrypt(notification.Message, key)
-	if err == nil{
+	if err == nil {
 		notification.Message = message
 	}
 
 	image, err := crypt.Decrypt(notification.Image, key)
-	if err == nil{
+	if err == nil {
 		notification.Image = image
 	}
 
 	link, err := crypt.Decrypt(notification.Link, key)
-	if err == nil{
+	if err == nil {
 		notification.Link = link
 	}
 	return err

@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/schema"
 	"github.com/gorilla/websocket"
+	"log"
 	"models"
 	"net/http"
 	"os"
@@ -44,42 +44,58 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 	// validate inputs
 	if !validator.IsValidUUID(r.Header.Get("Uuid")) {
 		http.Error(w, "Invalid UUID", 408)
+		return
 	} else if !validator.IsValidVersion(r.Header.Get("Version")) {
 		http.Error(w, "Invalid Version", 409)
+		return
 	}
 
 	db, err := models.DBConn(os.Getenv("db"))
 	if err != nil {
-		panic(err.Error())
+		log.Panicln(err.Error())
+	}
+	defer db.Close()
+
+	if !models.VerifyUser(db, u) {
+		http.Error(w, "Invalid key", 406)
+		return
 	}
 
-	err = models.SetLastLogin(db, u)
-	if err != nil {
+	if err := models.SetLastLogin(db, u); err != nil {
 		http.Error(w, "Invalid key", 406)
 	}
 
 	wsconn, _ := upgrader.Upgrade(w, r, nil)
 	clients[u.Credentials.Value] = wsconn // add conn to clients
 
+	log.Println("connected: ", u.Credentials.Value)
+
 	notifications, _ := models.FetchAllNotifications(db, u.Credentials.Value)
 	if len(notifications) > 0 {
 		bytes, _ := json.Marshal(notifications)
-		_ = wsconn.WriteMessage(websocket.TextMessage, bytes)
+		if err := wsconn.WriteMessage(websocket.TextMessage, bytes); err != nil {
+			log.Println(err.Error())
+		}
 	}
-
-	db.Close()
 
 	for {
 		_, message, err := wsconn.ReadMessage()
 		if err != nil {
-			fmt.Println("read:", err)
+			log.Println(err.Error())
 			break
 		}
-		db, err := models.DBConn(os.Getenv("db"))
-		if err := models.DeleteNotification(db, u.Credentials.Value, string(message)); err != nil {
-			fmt.Println(err)
+
+		if err = models.DeleteNotifications(db, u.Credentials.Value, string(message)); err != nil {
+			log.Println(err.Error())
 		}
-		_ = db.Close()
+	}
+
+	delete(clients, u.Credentials.Value)
+	log.Println("disconnected: ", u.Credentials.Value)
+
+	// close connection
+	if err := models.Logout(db, u); err != nil {
+		log.Println(err.Error())
 	}
 }
 
@@ -90,7 +106,7 @@ func CredentialHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Header.Get("Sec-Key") != server_key {
-		fmt.Println("Invalid key ?", r.Header.Get("Sec-Key"))
+		log.Println("Invalid key ?", r.Header.Get("Sec-Key"))
 		http.Error(w, "Invalid form data", 406)
 		return
 	}
@@ -123,7 +139,7 @@ func CredentialHandler(w http.ResponseWriter, r *http.Request) {
 
 	creds, err := models.CreateUser(db, PostUser)
 	if err != nil {
-		println(err)
+		println(err.Error())
 	}
 
 	c, err := json.Marshal(creds)
@@ -133,20 +149,17 @@ func CredentialHandler(w http.ResponseWriter, r *http.Request) {
 func APIHandler(w http.ResponseWriter, r *http.Request) {
 	var n models.Notification
 
-	err := r.ParseForm()
-	if err != nil {
+	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid form data", 406)
 		return
 	}
 
-	err = decoder.Decode(&n, r.Form)
-	if err != nil {
+	if err := decoder.Decode(&n, r.Form); err != nil {
 		http.Error(w, "Invalid form data", 406)
 		return
 	}
 
-	err = models.NotificationValidation(&n)
-	if err != nil {
+	if err := models.NotificationValidation(&n); err != nil {
 		http.Error(w, err.Error(), 407)
 		return
 	}
@@ -157,18 +170,20 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	err = models.StoreNotification(db, n)
-	if err == nil {
-		// send notification to client
-		bytes, _ := json.Marshal(n)
-		if val, ok := clients[n.Credentials]; ok {
-			err = val.WriteMessage(websocket.TextMessage, bytes)
-			if err != nil {
-				println(err.Error())
-			}
+	// send notification to client
+	if val, ok := clients[n.Credentials]; ok {
+		n.Credentials = ""
+		bytes, _ := json.Marshal([]models.Notification{n}) // pass as array
+
+		if err = val.WriteMessage(websocket.TextMessage, bytes); err != nil {
+			log.Println(err.Error())
+		} else {
+			return // skip storing the notification
 		}
-	} else {
-		println(err)
+	}
+
+	if err = models.StoreNotification(db, n); err != nil {
+		log.Println(err.Error())
 	}
 }
 

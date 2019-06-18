@@ -7,7 +7,7 @@ func TestIsValidUUID(t *testing.T) {
 		t.Errorf("Should be invalid UUID")
 	}
 
-	if !IsValidUUID("62b5873e-71bf-4659-af9d-796581f126f8") {
+	if !IsValidUUID("BB8C9950-286C-5462-885C-0CFED585423B") {
 		t.Errorf("Should be valid UUID")
 	}
 }

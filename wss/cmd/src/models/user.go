@@ -85,7 +85,7 @@ func FetchUserWithUUID(db *sql.DB, UUID string) User {
 func VerifyUser(db *sql.DB, u User) bool {
 	storeduser := FetchUser(db, u.Credentials.Value)
 	valid_key := crypt.VerifyPassHash(storeduser.Credentials.Key, u.Credentials.Key)
-	valid_UUID := crypt.VerifyPassHash(storeduser.UUID, u.UUID)
+	valid_UUID := storeduser.UUID == crypt.Hash(u.UUID)
 	if valid_key && valid_UUID {
 		return true
 	}
@@ -97,6 +97,19 @@ func VerifyUser(db *sql.DB, u User) bool {
 func SetLastLogin(db *sql.DB, u User) error {
 	_, err := db.Exec(`UPDATE users
 	SET last_login = NOW(), app_version = ?, is_connected = 1
-	WHERE credentials = ? AND credential_key = ? AND UUID = ?`, u.AppVersion, u.Credentials.Value, u.Credentials.Key, u.UUID)
+	WHERE credentials = ? AND UUID = ?`, u.AppVersion, crypt.Hash(u.Credentials.Value), crypt.Hash(u.UUID))
+	return err
+}
+
+func Logout(db *sql.DB, u User) error {
+	_, err := db.Exec(`UPDATE users
+	SET is_connected = 0
+	WHERE credentials = ? AND UUID = ?`, crypt.Hash(u.Credentials.Value), crypt.Hash(u.UUID))
+	return err
+}
+
+func LogoutAll(db *sql.DB) error {
+	_, err := db.Exec(`UPDATE users
+	SET is_connected = 0`)
 	return err
 }

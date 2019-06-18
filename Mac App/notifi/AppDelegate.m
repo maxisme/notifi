@@ -10,7 +10,6 @@
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-
 #import "MainWindow.h"
 #import "MenuBarClass.h"
 #import "CustomFunctions.h"
@@ -36,9 +35,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [CustomFunctions onlyOneInstanceOfApp];
     
     DDLogDebug(@"\n----- started -----\n");
-    
     if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] || ![[[Keys alloc] init] getKey:@"credential_key"]){
         // first time using app
+        DDLogDebug(@"Creating new credentials");
         [User newCredentials];
         [CustomFunctions openOnStartup];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"sticky_notification"];
@@ -55,7 +54,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString* exc = [exception reason];
     DDLogError(@"Crash Exception: %@", exc);
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost/log"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://notifi.it/log"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[[NSString stringWithFormat:@"error=%@&UUID=%@&app_version=%@", exc, [CustomFunctions getSystemUUID], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]] dataUsingEncoding:NSUTF8StringEncoding]];
     [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];

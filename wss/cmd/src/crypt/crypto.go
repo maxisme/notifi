@@ -8,11 +8,10 @@ import (
 	b64 "encoding/base64"
 	"golang.org/x/crypto/bcrypt"
 	"io"
-	"log"
 	"math/rand"
 )
 
-func Encrypt(str string, key []byte) string{
+func Encrypt(str string, key []byte) string {
 	if len(str) == 0 {
 		return ""
 	}
@@ -38,7 +37,7 @@ func Encrypt(str string, key []byte) string{
 	return b64.StdEncoding.EncodeToString(gcm.Seal(nonce, nonce, []byte(str), nil))
 }
 
-func Decrypt(encryptedstr string, key []byte) (string, error){
+func Decrypt(encryptedstr string, key []byte) (string, error) {
 	if len(encryptedstr) == 0 {
 		return "", nil
 	}
@@ -68,7 +67,6 @@ func Decrypt(encryptedstr string, key []byte) (string, error){
 	return string(plaintext), nil
 }
 
-
 func RandomString(n int) string {
 	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
@@ -91,9 +89,5 @@ func PassHash(str string) string {
 
 func VerifyPassHash(str string, expectedstr string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(str), []byte(expectedstr))
-	if err != nil {
-		log.Println(err)
-		return false
-	}
-	return true
+	return err == nil
 }

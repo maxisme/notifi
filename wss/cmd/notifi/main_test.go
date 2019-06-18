@@ -42,9 +42,6 @@ func GenUser() (models.Credentials, url.Values) {
 }
 
 func ConnectWSS(creds models.Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error) {
-	s := httptest.NewServer(http.HandlerFunc(WSHandler))
-
-	// socket connection header values based on generated user
 	wsheader := http.Header{}
 	wsheader.Add("Sec-Key", os.Getenv("server_key"))
 	wsheader.Add("Credentials", creds.Value)
@@ -52,8 +49,12 @@ func ConnectWSS(creds models.Credentials, form url.Values) (*httptest.Server, *w
 	wsheader.Add("Uuid", form.Get("UUID"))
 	wsheader.Add("Version", "1.0")
 
-	ws, req, err := websocket.DefaultDialer.Dial("ws"+strings.TrimPrefix(s.URL, "http"), wsheader)
-	println(req.StatusCode)
+	return ConnectWSSHeader(wsheader)
+}
+
+func ConnectWSSHeader(wsheader http.Header) (*httptest.Server, *websocket.Conn, error) {
+	s := httptest.NewServer(http.HandlerFunc(WSHandler))
+	ws, _, err := websocket.DefaultDialer.Dial("ws"+strings.TrimPrefix(s.URL, "http"), wsheader)
 	return s, ws, err
 }
 
@@ -153,27 +154,27 @@ func TestAddNotificationWithInvalidCredentials(t *testing.T) {
 func TestWSHandler(t *testing.T) {
 	creds, form := GenUser() // generate user
 
-	// socket connection header values based on generated user
 	wsheader := http.Header{}
-	wsheader.Add("Sec-Key", os.Getenv("server_key"))
-	wsheader.Add("Credentials", creds.Value)
-	wsheader.Add("Credential_key", creds.Key)
-	wsheader.Add("Uuid", form.Get("UUID"))
-	wsheader.Add("Version", "1.0.1")
-
-	// Connect to wss without headers
-	s := httptest.NewServer(http.HandlerFunc(WSHandler))
-	defer s.Close()
-	u := "ws" + strings.TrimPrefix(s.URL, "http")
-	_, _, err := websocket.DefaultDialer.Dial(u, nil)
-	if err == nil {
-		t.Fatalf("Should have returned error connecting to wss without valid credentials!")
+	var headers = []struct {
+		key   string
+		value string
+		out   bool
+	}{
+		{"", "", false},
+		{"Sec-Key", os.Getenv("server_key"), false},
+		{"Credentials", creds.Value, false},
+		{"Credential_key", creds.Key, false},
+		{"Uuid", form.Get("UUID"), false},
+		{"Version", "1.0.1", true},
 	}
 
-	// Connect to wss with headers
-	_, _, err = websocket.DefaultDialer.Dial(u, wsheader)
-	if err != nil {
-		t.Fatalf("Should have connected to wss!")
+	for _, tt := range headers {
+		wsheader.Add(tt.key, tt.value)
+		_, _, err := ConnectWSSHeader(wsheader)
+		if err == nil != tt.out {
+			println(tt.key + " " + tt.value)
+			t.Errorf("got %v, wanted %v", err == nil, tt.out)
+		}
 	}
 }
 
@@ -186,19 +187,8 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 	SendNotification(creds.Value, TITLE)
 
 	// connect to ws
-	wsheader := http.Header{}
-	wsheader.Add("Sec-Key", os.Getenv("server_key"))
-	wsheader.Add("Credentials", creds.Value)
-	wsheader.Add("Credential_key", creds.Key)
-	wsheader.Add("Uuid", uform.Get("UUID"))
-	wsheader.Add("Version", "1.0.1")
-	s := httptest.NewServer(http.HandlerFunc(WSHandler))
+	s, ws, _ := ConnectWSS(creds, uform)
 	defer s.Close()
-	u := "ws" + strings.TrimPrefix(s.URL, "http")
-	ws, _, err := websocket.DefaultDialer.Dial(u, wsheader)
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
 	defer ws.Close()
 
 	// fetch stored notifications on server that were sent when not connected
@@ -249,7 +239,7 @@ func TestDeleteNotification(t *testing.T) {
 	}
 }
 
-func TestReceivingNotificationOnline(t *testing.T) {
+func TestReceivingNotificationWSOnline(t *testing.T) {
 	var creds, form = GenUser() // generate user
 
 	// connect to ws

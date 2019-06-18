@@ -34,11 +34,7 @@
 }
 
 +(NSString *)how_to:(NSString*)credentials{
-    return [NSString stringWithFormat:@"http://localhost/?c=%@#How-To", credentials];
-}
-
-+(NSString *)default_empty{
-    return @" ";
+    return [NSString stringWithFormat:@"http://notifi.it/?c=%@#How-To", credentials];
 }
 
 +(NSString *)notificationStorageKey{

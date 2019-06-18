@@ -52,7 +52,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [_web_socket close];
     _web_socket.delegate = nil;
     _web_socket = nil;
-    _authed = false;
     _connected = false;
 }
 
@@ -84,12 +83,25 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [_reconnect_timer invalidate];
         _reconnect_timer = nil;
     }
-    
-    if (self.onConnectBlock) _onConnectBlock();
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
+    if ([error.localizedDescription rangeOfString:@"406"].location != NSNotFound){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert addButtonWithTitle:@"Okay"];
+        [alert setMessageText:@"Major Error. Please reopen app. Credentials will change."];
+        [alert setInformativeText:[NSString stringWithFormat:@"Crash Message: %@", error]];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert runModal];
+        
+        // delete credentials
+        [_keychain deleteItem:nil];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"credentials"];
+        
+        // quit app
+        [CustomFunctions quit];
+    }
     DDLogDebug(@"Socket failed with error: %@", error);
     [self close];
 }

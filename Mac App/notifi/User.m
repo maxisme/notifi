@@ -45,7 +45,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 +(void)newCredentials{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost/code"];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost:8123/code"];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     // tell server off the current credentials to be able to create new ones.
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
@@ -83,14 +83,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 -(void)createSocket{
     _s = [[Socket alloc] initWithURL:@"ws://localhost:8123/ws" key:[LOOCryptString serverKey]];
     
-    __weak typeof(self) weakSelf = self;
-    
     [_s setOnCloseBlock:^{
-        [weakSelf updateMenuBarIcon:false];
+        [self updateMenuBarIcon:false];
     }];
     
     [_s setOnMessageBlock:^(NSString *message) {
-        [weakSelf handleSocketMessage:message];
+        [self handleSocketMessage:message];
     }];
 }
 
@@ -107,7 +105,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             if (button == NSAlertFirstButtonReturn) [User newCredentials];
         });
     }else{
-        _s.authed = true;
         [self updateMenuBarIcon:false];
         
         NSError* error = nil;
@@ -125,14 +122,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             // each notification comes with an encrypted unique "id:" tag
             NSString* ids = @"";
             for (NSDictionary* notification in json_dic) {
-                [NSString stringWithFormat:@"%@, %@", ids, [notification objectForKey:@"id"]];
+                NSString* notification_id = [notification objectForKey:@"id"];
+                if ([notification_id intValue] > 0){
+                    ids = [NSString stringWithFormat:@"%@,%@", ids, notification_id];
+                }
                 [Notification storeNotificationDic:notification];
                 [incoming_notifications addObject:notification];
                 shouldRefresh = true;
             }
             
             // send ids to be deleted from server
-            if(_s.authed){
+            if(_s.connected && [ids length] > 0){
                 [_s send:[ids substringFromIndex:1]]; // removes initial ','
             }
             
@@ -181,7 +181,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                     [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
                 }
             }
-        }else if(![message isEqualToString:@"1"]){
+        }else{
             DDLogVerbose(@"Unrecognised message from socket: %@", message);
         }
     }
@@ -200,7 +200,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         
         [_window.error_label setHidden:true];
         
-        if(!_s.authed){
+        if(!_s.connected){
             if([_menu_bar getImage] != error_icon){
                 _menu_bar.image = error_icon;
                 _menu_bar.after_image = error_icon;
@@ -234,9 +234,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     [notification setTitle:title];
     
-    if(![mes isEqual: [CustomVars default_empty]]) [notification setInformativeText:mes];
+    if([mes length] != 0) [notification setInformativeText:mes];
     
-    if(![imgURL isEqual: [CustomVars default_empty]]){
+    if([imgURL length] != 0){
         NSImage* image;
         @try {
             image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:imgURL]];
@@ -248,7 +248,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
     
     [notification setActionButtonTitle:@"Open Link"];
-    if(![url  isEqual: [CustomVars default_empty]]){
+    if([url length] != 0){
         [notification setHasActionButton:true];
     }else{
         [notification setHasActionButton:false];
@@ -273,7 +273,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         NSString* url_string = notification.userInfo[@"url"];
         
         NSURL* url;
-        if(![url_string isEqual: [CustomVars default_empty]]){
+        if([url_string length] != 0){
             @try {
                 url = [NSURL URLWithString:url_string];
                 openWindow = false;
