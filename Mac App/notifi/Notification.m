@@ -485,7 +485,7 @@ float one_row_info_height;
     unsigned long index = 0;
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     for (NSMutableDictionary* dic in notifications) {
-        if ([CustomFunctions stringToUL:[dic valueForKey:@"id"]] == self.ID) return index;
+        if ([[dic valueForKey:@"id"] unsignedLongValue] == self.ID) return index;
         index++;
     }
     return -1;

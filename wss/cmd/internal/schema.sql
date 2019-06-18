@@ -17,34 +17,6 @@ CREATE TABLE `users`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = latin1;
 
-DROP TABLE IF EXISTS `allowed_ips`;
-
-CREATE TABLE `allowed_ips`
-(
-    `id`               int(11) NOT NULL AUTO_INCREMENT,
-    `UUID`             varchar(60)      DEFAULT NULL,
-    `ip`               varchar(100)     DEFAULT NULL,
-    `ip_limit`         int(11) NOT NULL DEFAULT '30',
-    `cred_limit`       int(11) NOT NULL DEFAULT '30',
-    `ip_to_cred_limit` int(11) NOT NULL DEFAULT '30',
-    PRIMARY KEY (`id`),
-    KEY `UUID` (`UUID`),
-    CONSTRAINT `allowed_ips_ibfk_UUID` FOREIGN KEY (`UUID`) REFERENCES `users` (`UUID`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-
-DROP TABLE IF EXISTS `brute_force`;
-
-CREATE TABLE `brute_force`
-(
-    `id`          int(11)      NOT NULL AUTO_INCREMENT,
-    `time`        timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `ip`          varchar(100) NOT NULL,
-    `credentials` varchar(60)  NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-
 DROP TABLE IF EXISTS `crash`;
 
 CREATE TABLE `crash`

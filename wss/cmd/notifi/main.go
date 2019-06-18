@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth/limiter"
 	"github.com/gorilla/schema"
 	"github.com/gorilla/websocket"
 	"log"
 	"models"
 	"net/http"
 	"os"
+	"time"
 	"validator"
 )
 
@@ -187,10 +190,14 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+var lmt = tollbooth.NewLimiter(1, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour}).SetIPLookups([]string{
+	"RemoteAddr", "X-Forwarded-For", "X-Real-IP",
+})
+
 func main() {
-	http.HandleFunc("/ws", WSHandler)
-	http.HandleFunc("/code", CredentialHandler)
-	http.HandleFunc("/api", APIHandler)
+	http.Handle("/ws", tollbooth.LimitFuncHandler(lmt, WSHandler))
+	http.Handle("/code", tollbooth.LimitFuncHandler(lmt, CredentialHandler))
+	http.Handle("/api", tollbooth.LimitFuncHandler(lmt, APIHandler))
 	err := http.ListenAndServe(":8123", nil)
 	if err != nil {
 		panic(err.Error())

@@ -253,10 +253,10 @@ func TestReceivingNotificationWSOnline(t *testing.T) {
 
 	// read notification over ws
 	_, mess, _ := ws.ReadMessage()
-	var notification models.Notification
-	_ = json.Unmarshal(mess, &notification)
+	var notifications []models.Notification
+	_ = json.Unmarshal(mess, &notifications)
 
-	if notification.Title != TITLE {
-		t.Errorf("Titles do not match!")
+	if notifications[0].Title != TITLE {
+		t.Error("Titles do not match! ? - ?", notifications[0].Title, TITLE)
 	}
 }
