@@ -30,9 +30,8 @@ var key = []byte("YQeucLKeOk19iL9YQuitPoZKSp6luVJF")
 func StoreNotification(db *sql.DB, n Notification) error {
 	_, err := db.Exec(`
 	INSERT INTO notifications 
-    (title, message, image, link, credentials) 
-    VALUES(?, ?, ?, ?, ?)`,
-		crypt.Encrypt(n.Title, key), crypt.Encrypt(n.Message, key),
+    (id, title, message, image, link, credentials) 
+    VALUES(?, ?, ?, ?, ?, ?)`, n.ID, crypt.Encrypt(n.Title, key), crypt.Encrypt(n.Message, key),
 		crypt.Encrypt(n.Image, key), crypt.Encrypt(n.Link, key), crypt.Hash(n.Credentials),
 	)
 	return err
@@ -158,4 +157,19 @@ func DecryptNotification(notification *Notification) error {
 		notification.Link = link
 	}
 	return err
+}
+
+func IncreaseNotificationCnt(db *sql.DB, credentials string) error {
+	_, err := db.Exec(`UPDATE users 
+	SET notification_cnt = notification_cnt + 1 WHERE credentials = ?`, crypt.Hash(credentials))
+	return err
+}
+
+func FetchTotalNumNotifications(db *sql.DB) int {
+	id := 0
+	rows, _ := db.Query("SELECT SUM(notification_cnt) from users;")
+	if rows.Next() {
+		_ = rows.Scan(&id)
+	}
+	return id
 }

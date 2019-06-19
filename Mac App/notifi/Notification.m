@@ -449,7 +449,7 @@ float one_row_info_height;
     // make sure no duplicate notifications
     bool duplicate = false;
     for (id object in notifications) {
-        if ([[dic valueForKey:@"id"] integerValue] > 0 && [[object valueForKey:@"id"] isEqual:[dic valueForKey:@"id"]]) {
+        if ([[object valueForKey:@"id"] isEqual:[dic valueForKey:@"id"]]) {
             // already have a stored notification with this id
             duplicate = true;
             break;

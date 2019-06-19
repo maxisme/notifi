@@ -173,15 +173,22 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
+	// increase notification count
+	if err = model.IncreaseNotificationCnt(db, n.Credentials); err != nil {
+		log.Println(err.Error())
+	}
+
+	// set ID
+	n.ID = model.FetchTotalNumNotifications(db)
+
 	// send notification to client
 	if val, ok := clients[n.Credentials]; ok {
+		// set time
 		t := time.Now()
 		ts := t.Format("2006-01-02 15:04:05") // arbitrary values
 		n.Time = ts
-		n.Credentials = ""
 
 		bytes, _ := json.Marshal([]model.Notification{n}) // pass as array
-
 		if err = val.WriteMessage(websocket.TextMessage, bytes); err != nil {
 			log.Println(err.Error())
 		} else {

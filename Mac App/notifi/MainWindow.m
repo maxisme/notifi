@@ -284,7 +284,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                      image_url:[dic objectForKey:@"image"]
                                    time_string:[dic objectForKey:@"time"]
                                           read:[[dic objectForKey:@"read"] boolValue]
-                                            ID:[[dic objectForKey:@"id"] intValue]];
+                                            ID:[[dic objectForKey:@"id"] integerValue]];
 }
 
 // get all data stored in NSUserDefaults and create notifications

@@ -192,18 +192,16 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 	defer ws.Close()
 
 	// fetch stored notifications on server that were sent when not connected
-	for {
-		_, mess, err := ws.ReadMessage()
-		if err != nil {
-			t.Fatalf(err.Error())
-		}
-		var notifications []model.Notification
-		_ = json.Unmarshal(mess, &notifications)
+	_ = ws.SetReadDeadline(time.Now().Add(100 * time.Millisecond))
+	_, mess, err := ws.ReadMessage()
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+	var notifications []model.Notification
+	_ = json.Unmarshal(mess, &notifications)
 
-		if notifications[0].Title != TITLE {
-			t.Error("Incorrect title returned!")
-		}
-		break
+	if notifications[0].Title != TITLE {
+		t.Error("Incorrect title returned!")
 	}
 }
 

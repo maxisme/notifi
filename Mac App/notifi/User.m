@@ -67,9 +67,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"]; // store credentials in normal storage
     }else{
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText:@"Please try again."];
+        [alert setInformativeText:@"Error Fetching credentials!"];
         [alert addButtonWithTitle:@"Ok"];
-        [alert setMessageText:@"Error Fetching credentials!"];
+        [alert setMessageText:@"Please contact max@max.me.uk"];
         if(error){
             [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
         }else{
