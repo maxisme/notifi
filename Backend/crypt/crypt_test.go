@@ -36,11 +36,11 @@ func TestHash(t *testing.T) {
 	if len(Hash(RandomString(10))) != 44 {
 		t.Errorf("Hash algo not working as expected")
 	}
-	if Hash(RandomString(10)) == Hash(RandomString(10)){
+	if Hash(RandomString(10)) == Hash(RandomString(10)) {
 		t.Errorf("Hash is not hashing properly")
 	}
 	str := RandomString(10)
-	if Hash(str) != Hash(str){
+	if Hash(str) != Hash(str) {
 		t.Errorf("Hash is not hashing properly 2")
 	}
 }

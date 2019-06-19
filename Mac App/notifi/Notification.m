@@ -356,12 +356,16 @@ float one_row_info_height;
     [self addTrackingArea:self.trackingArea];
 }
 
-- (void)markRead {
+- (void)markRead{
+    [self markRead:false];
+}
+
+- (void)markRead:(bool)isall{
     if(!_read){
         [self.layer setBackgroundColor:[[NSColor clearColor] CGColor]];
         _title_label.textColor = [CustomVars grey];
         _read = true;
-        [self storeRead:true];
+        [self storeRead:true isall:isall];
     }
 }
 
@@ -445,7 +449,7 @@ float one_row_info_height;
     // make sure no duplicate notifications
     bool duplicate = false;
     for (id object in notifications) {
-        if ([[object valueForKey:@"id"] isEqual:[dic valueForKey:@"id"]]) {
+        if ([[dic valueForKey:@"id"] integerValue] > 0 && [[object valueForKey:@"id"] isEqual:[dic valueForKey:@"id"]]) {
             // already have a stored notification with this id
             duplicate = true;
             break;
@@ -471,13 +475,17 @@ float one_row_info_height;
 }
 
 - (void)storeRead:(bool)read{
+    [self storeRead:read isall:false];
+    
+}
+- (void)storeRead:(bool)read isall:(bool)isall{
     unsigned long dic_index = [self defaultsIndex];
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     NSMutableDictionary* dic = [[notifications objectAtIndex:dic_index] mutableCopy];
     [dic setObject:[NSNumber numberWithBool:read] forKey:@"read"];
     [notifications replaceObjectAtIndex:dic_index withObject:dic];
     [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if(!isall) [[NSUserDefaults standardUserDefaults] synchronize];
     [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
 }
 

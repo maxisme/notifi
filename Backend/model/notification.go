@@ -1,7 +1,8 @@
-package models
+package model
 
 import (
-	"crypt"
+	"../crypt"
+	"../validator"
 	"database/sql"
 	"errors"
 	"log"
@@ -9,7 +10,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"validator"
 )
 
 type Notification struct {

@@ -39,6 +39,7 @@
 
 - (id) initWithTitle:(NSString *)title message:(NSString *)message link:(NSString*)link image_url:(NSString*)image_url time_string:(NSString*)time_string read:(bool)read ID:(unsigned long)ID;
 - (void) markRead;
+- (void) markRead:(bool)isall;
 - (void) markUnread;
 - (void) reloadTime;
 - (void) shrink:(bool)animate;

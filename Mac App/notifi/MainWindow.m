@@ -313,7 +313,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 -(void)markAllAsRead{
-    for(Notification* n in _notifications) [n markRead];
+    for(Notification* n in _notifications) [n markRead:true];
 }
 
 -(void)updateAllNotificationTimes{

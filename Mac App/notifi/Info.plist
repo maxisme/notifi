@@ -35,6 +35,11 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://notifi.it/sparkle/updates.php</string>
+	<string>https://localhost/sparkle/updates.php</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+	    <key>NSAllowsArbitraryLoads</key>
+	    <true/>
+	</dict>
 </dict>
 </plist>

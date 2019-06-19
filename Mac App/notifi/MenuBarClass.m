@@ -45,7 +45,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #pragma mark - bell animation
 
 -(void)animateBell{
-    DDLogDebug(@"animate");
     if(!_animate_bell_timer){
         _after_image = nil;
     }else{

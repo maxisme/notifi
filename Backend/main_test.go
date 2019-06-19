@@ -1,13 +1,13 @@
 package main
 
 import (
-	"crypt"
+	"./crypt"
+	"./model"
 	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"io/ioutil"
 	"math/rand"
-	"models"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -31,17 +31,17 @@ func PostRequest(url string, form url.Values, handler http.HandlerFunc) *httptes
 	return rr
 }
 
-func GenUser() (models.Credentials, url.Values) {
+func GenUser() (model.Credentials, url.Values) {
 	UUID, _ := uuid.NewRandom()
 	form := url.Values{}
 	form.Add("UUID", UUID.String())
 	rr := PostRequest("/code", form, http.HandlerFunc(CredentialHandler))
-	var creds models.Credentials
+	var creds model.Credentials
 	_ = json.Unmarshal(rr.Body.Bytes(), &creds)
 	return creds, form
 }
 
-func ConnectWSS(creds models.Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error) {
+func ConnectWSS(creds model.Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error) {
 	wsheader := http.Header{}
 	wsheader.Add("Sec-Key", os.Getenv("server_key"))
 	wsheader.Add("Credentials", creds.Value)
@@ -72,13 +72,13 @@ func SendNotification(credentials string, title string) {
 ////////////////////
 func init() {
 	// initialise db
-	db, err := models.DBConn("root:@tcp(127.0.0.1:3306)/?multiStatements=True")
+	db, err := model.DBConn("root:@tcp(127.0.0.1:3306)/?multiStatements=True")
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
 
-	schema, _ := ioutil.ReadFile("../internal/schema.sql")
+	schema, _ := ioutil.ReadFile("internal/schema.sql")
 	_, err = db.Exec("DROP DATABASE notifi_test; CREATE DATABASE notifi_test; USE notifi_test;" + string(schema))
 
 	if err != nil {
@@ -97,7 +97,7 @@ func TestCreateNewUser(t *testing.T) {
 
 	// update user credentials
 	r := PostRequest("", form, http.HandlerFunc(CredentialHandler))
-	var creds2 models.Credentials
+	var creds2 model.Credentials
 	_ = json.Unmarshal(r.Body.Bytes(), &creds2)
 	if len(creds2.Key) == 0 && creds.Value == creds2.Value {
 		t.Errorf("Error fetching new credentials")
@@ -197,7 +197,7 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		var notifications []models.Notification
+		var notifications []model.Notification
 		_ = json.Unmarshal(mess, &notifications)
 
 		if notifications[0].Title != TITLE {
@@ -220,7 +220,7 @@ func TestDeleteNotification(t *testing.T) {
 
 	// delete notification
 	_, mess, _ := ws.ReadMessage()
-	var notifications []models.Notification
+	var notifications []model.Notification
 	_ = json.Unmarshal(mess, &notifications)
 	_ = ws.WriteMessage(websocket.TextMessage, []byte(strconv.Itoa(notifications[0].ID)))
 
@@ -253,7 +253,7 @@ func TestReceivingNotificationWSOnline(t *testing.T) {
 
 	// read notification over ws
 	_, mess, _ := ws.ReadMessage()
-	var notifications []models.Notification
+	var notifications []model.Notification
 	_ = json.Unmarshal(mess, &notifications)
 
 	if notifications[0].Title != TITLE {

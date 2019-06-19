@@ -1,7 +1,7 @@
-package models
+package model
 
 import (
-	"crypt"
+	"../crypt"
 	"database/sql"
 )
 
