@@ -1,4 +1,4 @@
-package validator
+package main
 
 import "testing"
 

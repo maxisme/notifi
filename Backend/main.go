@@ -1,8 +1,6 @@
 package main
 
 import (
-	"./model"
-	"./validator"
 	"encoding/json"
 	"github.com/didip/tollbooth"
 	"github.com/didip/tollbooth/limiter"
@@ -34,37 +32,37 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := model.Credentials{
+	c := Credentials{
 		Value: r.Header.Get("Credentials"),
 		Key:   r.Header.Get("Credential_key"),
 	}
-	u := model.User{
+	u := User{
 		Credentials: c,
 		UUID:        r.Header.Get("Uuid"),
 		AppVersion:  r.Header.Get("Version"),
 	}
 
 	// validate inputs
-	if !validator.IsValidUUID(r.Header.Get("Uuid")) {
+	if !IsValidUUID(r.Header.Get("Uuid")) {
 		http.Error(w, "Invalid UUID", 408)
 		return
-	} else if !validator.IsValidVersion(r.Header.Get("Version")) {
+	} else if !IsValidVersion(r.Header.Get("Version")) {
 		http.Error(w, "Invalid Version", 409)
 		return
 	}
 
-	db, err := model.DBConn(os.Getenv("db"))
+	db, err := DBConn(os.Getenv("db"))
 	if err != nil {
 		log.Panicln(err.Error())
 	}
 	defer db.Close()
 
-	if !model.VerifyUser(db, u) {
+	if !VerifyUser(db, u) {
 		http.Error(w, "Invalid key", 406)
 		return
 	}
 
-	if err := model.SetLastLogin(db, u); err != nil {
+	if err := SetLastLogin(db, u); err != nil {
 		http.Error(w, "Invalid key", 406)
 	}
 
@@ -73,7 +71,7 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("connected: ", u.Credentials.Value)
 
-	notifications, _ := model.FetchAllNotifications(db, u.Credentials.Value)
+	notifications, _ := FetchAllNotifications(db, u.Credentials.Value)
 	if len(notifications) > 0 {
 		bytes, _ := json.Marshal(notifications)
 		if err := wsconn.WriteMessage(websocket.TextMessage, bytes); err != nil {
@@ -88,7 +86,7 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		if err = model.DeleteNotifications(db, u.Credentials.Value, string(message)); err != nil {
+		if err = DeleteNotifications(db, u.Credentials.Value, string(message)); err != nil {
 			log.Println(err.Error())
 		}
 	}
@@ -97,7 +95,7 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("disconnected: ", u.Credentials.Value)
 
 	// close connection
-	if err := model.Logout(db, u); err != nil {
+	if err := Logout(db, u); err != nil {
 		log.Println(err.Error())
 	}
 }
@@ -121,26 +119,26 @@ func CredentialHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// store POST data in struct
-	PostUser := model.User{
-		Credentials: model.Credentials{
+	PostUser := User{
+		Credentials: Credentials{
 			Value: r.Form.Get("current_credentials"),
 			Key:   r.Form.Get("current_key"),
 		},
 		UUID: r.Form.Get("UUID"),
 	}
 
-	if !validator.IsValidUUID(PostUser.UUID) {
+	if !IsValidUUID(PostUser.UUID) {
 		http.Error(w, "Invalid form data", 406)
 		return
 	}
 
-	db, err := model.DBConn(os.Getenv("db"))
+	db, err := DBConn(os.Getenv("db"))
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
 
-	creds, err := model.CreateUser(db, PostUser)
+	creds, err := CreateUser(db, PostUser)
 	if err != nil {
 		println(err.Error())
 	}
@@ -150,7 +148,7 @@ func CredentialHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func APIHandler(w http.ResponseWriter, r *http.Request) {
-	var n model.Notification
+	var n Notification
 
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid form data", 406)
@@ -162,24 +160,24 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := model.NotificationValidation(&n); err != nil {
+	if err := NotificationValidation(&n); err != nil {
 		http.Error(w, err.Error(), 407)
 		return
 	}
 
-	db, err := model.DBConn(os.Getenv("db"))
+	db, err := DBConn(os.Getenv("db"))
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
 
 	// increase notification count
-	if err = model.IncreaseNotificationCnt(db, n.Credentials); err != nil {
+	if err = IncreaseNotificationCnt(db, n.Credentials); err != nil {
 		log.Println(err.Error())
 	}
 
 	// set ID
-	n.ID = model.FetchTotalNumNotifications(db)
+	n.ID = FetchTotalNumNotifications(db)
 
 	// send notification to client
 	if val, ok := clients[n.Credentials]; ok {
@@ -188,7 +186,7 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 		ts := t.Format("2006-01-02 15:04:05") // arbitrary values
 		n.Time = ts
 
-		bytes, _ := json.Marshal([]model.Notification{n}) // pass as array
+		bytes, _ := json.Marshal([]Notification{n}) // pass as array
 		if err = val.WriteMessage(websocket.TextMessage, bytes); err != nil {
 			log.Println(err.Error())
 		} else {
@@ -196,7 +194,7 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if err = model.StoreNotification(db, n); err != nil {
+	if err = StoreNotification(db, n); err != nil {
 		log.Println(err.Error())
 	}
 }

@@ -1,7 +1,6 @@
-package model
+package main
 
 import (
-	"../crypt"
 	"database/sql"
 )
 
@@ -26,8 +25,8 @@ type Credentials struct {
 func CreateUser(db *sql.DB, u User) (Credentials, error) {
 	// create new credentials
 	creds := Credentials{
-		crypt.RandomString(25),
-		crypt.RandomString(100),
+		RandomString(25),
+		RandomString(100),
 	}
 
 	dbu := FetchUserWithUUID(db, u.UUID)
@@ -57,7 +56,7 @@ func CreateUser(db *sql.DB, u User) (Credentials, error) {
 		WHERE UUID = ?`
 	}
 
-	_, err := db.Exec(query, crypt.Hash(creds.Value), crypt.PassHash(creds.Key), crypt.Hash(u.UUID))
+	_, err := db.Exec(query, Hash(creds.Value), PassHash(creds.Key), Hash(u.UUID))
 	if err != nil {
 		return Credentials{}, err
 	}
@@ -69,7 +68,7 @@ func FetchUser(db *sql.DB, credentials string) User {
 	_ = db.QueryRow(`
 	SELECT credential_key, UUID
 	FROM users 
-	WHERE credentials = ?`, crypt.Hash(credentials)).Scan(&u.Credentials.Key, &u.UUID)
+	WHERE credentials = ?`, Hash(credentials)).Scan(&u.Credentials.Key, &u.UUID)
 	return u
 }
 
@@ -78,14 +77,14 @@ func FetchUserWithUUID(db *sql.DB, UUID string) User {
 	_ = db.QueryRow(`
 	SELECT credential_key, credentials
 	FROM users 
-	WHERE UUID = ?`, crypt.Hash(UUID)).Scan(&u.Credentials.Key, &u.Credentials.Value)
+	WHERE UUID = ?`, Hash(UUID)).Scan(&u.Credentials.Key, &u.Credentials.Value)
 	return u
 }
 
 func VerifyUser(db *sql.DB, u User) bool {
 	storeduser := FetchUser(db, u.Credentials.Value)
-	valid_key := crypt.VerifyPassHash(storeduser.Credentials.Key, u.Credentials.Key)
-	valid_UUID := storeduser.UUID == crypt.Hash(u.UUID)
+	valid_key := VerifyPassHash(storeduser.Credentials.Key, u.Credentials.Key)
+	valid_UUID := storeduser.UUID == Hash(u.UUID)
 	if valid_key && valid_UUID {
 		return true
 	}
@@ -97,14 +96,14 @@ func VerifyUser(db *sql.DB, u User) bool {
 func SetLastLogin(db *sql.DB, u User) error {
 	_, err := db.Exec(`UPDATE users
 	SET last_login = NOW(), app_version = ?, is_connected = 1
-	WHERE credentials = ? AND UUID = ?`, u.AppVersion, crypt.Hash(u.Credentials.Value), crypt.Hash(u.UUID))
+	WHERE credentials = ? AND UUID = ?`, u.AppVersion, Hash(u.Credentials.Value), Hash(u.UUID))
 	return err
 }
 
 func Logout(db *sql.DB, u User) error {
 	_, err := db.Exec(`UPDATE users
 	SET is_connected = 0
-	WHERE credentials = ? AND UUID = ?`, crypt.Hash(u.Credentials.Value), crypt.Hash(u.UUID))
+	WHERE credentials = ? AND UUID = ?`, Hash(u.Credentials.Value), Hash(u.UUID))
 	return err
 }
 

@@ -1,8 +1,6 @@
-package model
+package main
 
 import (
-	"../crypt"
-	"../validator"
 	"database/sql"
 	"errors"
 	"log"
@@ -31,14 +29,14 @@ func StoreNotification(db *sql.DB, n Notification) error {
 	_, err := db.Exec(`
 	INSERT INTO notifications 
     (id, title, message, image, link, credentials) 
-    VALUES(?, ?, ?, ?, ?, ?)`, n.ID, crypt.Encrypt(n.Title, key), crypt.Encrypt(n.Message, key),
-		crypt.Encrypt(n.Image, key), crypt.Encrypt(n.Link, key), crypt.Hash(n.Credentials),
+    VALUES(?, ?, ?, ?, ?, ?)`, n.ID, Encrypt(n.Title, key), Encrypt(n.Message, key),
+		Encrypt(n.Image, key), Encrypt(n.Link, key), Hash(n.Credentials),
 	)
 	return err
 }
 
 func DeleteNotifications(db *sql.DB, credentials string, ids string) error {
-	idarr := []interface{}{crypt.Hash(credentials)}
+	idarr := []interface{}{Hash(credentials)}
 
 	for _, element := range strings.Split(ids, ",") {
 		if val, err := strconv.Atoi(element); err != nil {
@@ -67,7 +65,7 @@ func FetchAllNotifications(db *sql.DB, credentials string) ([]Notification, erro
 		link
 	FROM notifications
 	WHERE credentials = ?`
-	rows, err := db.Query(query, crypt.Hash(credentials))
+	rows, err := db.Query(query, Hash(credentials))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -107,7 +105,7 @@ func NotificationValidation(n *Notification) error {
 		return errors.New("You must enter a shorter message!")
 	}
 
-	if validator.IsValidURL(n.Link) != nil || validator.IsValidURL(n.Image) != nil {
+	if IsValidURL(n.Link) != nil || IsValidURL(n.Image) != nil {
 		return errors.New("Invalid URL!")
 	}
 
@@ -135,24 +133,24 @@ func NotificationValidation(n *Notification) error {
 }
 
 func DecryptNotification(notification *Notification) error {
-	title, err := crypt.Decrypt(notification.Title, key)
+	title, err := Decrypt(notification.Title, key)
 	if err != nil {
 		return err
 	} else {
 		notification.Title = title
 	}
 
-	message, err := crypt.Decrypt(notification.Message, key)
+	message, err := Decrypt(notification.Message, key)
 	if err == nil {
 		notification.Message = message
 	}
 
-	image, err := crypt.Decrypt(notification.Image, key)
+	image, err := Decrypt(notification.Image, key)
 	if err == nil {
 		notification.Image = image
 	}
 
-	link, err := crypt.Decrypt(notification.Link, key)
+	link, err := Decrypt(notification.Link, key)
 	if err == nil {
 		notification.Link = link
 	}
@@ -161,7 +159,7 @@ func DecryptNotification(notification *Notification) error {
 
 func IncreaseNotificationCnt(db *sql.DB, credentials string) error {
 	_, err := db.Exec(`UPDATE users 
-	SET notification_cnt = notification_cnt + 1 WHERE credentials = ?`, crypt.Hash(credentials))
+	SET notification_cnt = notification_cnt + 1 WHERE credentials = ?`, Hash(credentials))
 	return err
 }
 

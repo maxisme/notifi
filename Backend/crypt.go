@@ -1,4 +1,4 @@
-package crypt
+package main
 
 import (
 	"crypto/aes"
@@ -83,11 +83,11 @@ func Hash(str string) string {
 }
 
 func PassHash(str string) string {
-	hash, _ := bcrypt.GenerateFromPassword([]byte(str), bcrypt.MinCost)
+	hash, _ := bGenerateFromPassword([]byte(str), bMinCost)
 	return string(hash)
 }
 
 func VerifyPassHash(str string, expectedstr string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(str), []byte(expectedstr))
+	err := bCompareHashAndPassword([]byte(str), []byte(expectedstr))
 	return err == nil
 }

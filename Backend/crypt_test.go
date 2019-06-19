@@ -1,4 +1,4 @@
-package crypt
+package main
 
 import (
 	"testing"

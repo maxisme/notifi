@@ -1,8 +1,6 @@
 package main
 
 import (
-	"./crypt"
-	"./model"
 	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -31,17 +29,17 @@ func PostRequest(url string, form url.Values, handler http.HandlerFunc) *httptes
 	return rr
 }
 
-func GenUser() (model.Credentials, url.Values) {
+func GenUser() (Credentials, url.Values) {
 	UUID, _ := uuid.NewRandom()
 	form := url.Values{}
 	form.Add("UUID", UUID.String())
 	rr := PostRequest("/code", form, http.HandlerFunc(CredentialHandler))
-	var creds model.Credentials
+	var creds Credentials
 	_ = json.Unmarshal(rr.Body.Bytes(), &creds)
 	return creds, form
 }
 
-func ConnectWSS(creds model.Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error) {
+func ConnectWSS(creds Credentials, form url.Values) (*httptest.Server, *websocket.Conn, error) {
 	wsheader := http.Header{}
 	wsheader.Add("Sec-Key", os.Getenv("server_key"))
 	wsheader.Add("Credentials", creds.Value)
@@ -72,7 +70,7 @@ func SendNotification(credentials string, title string) {
 ////////////////////
 func init() {
 	// initialise db
-	db, err := model.DBConn("root:@tcp(127.0.0.1:3306)/?multiStatements=True")
+	db, err := DBConn("root:@tcp(127.0.0.1:3306)/?multiStatements=True")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -97,7 +95,7 @@ func TestCreateNewUser(t *testing.T) {
 
 	// update user credentials
 	r := PostRequest("", form, http.HandlerFunc(CredentialHandler))
-	var creds2 model.Credentials
+	var creds2 Credentials
 	_ = json.Unmarshal(r.Body.Bytes(), &creds2)
 	if len(creds2.Key) == 0 && creds.Value == creds2.Value {
 		t.Errorf("Error fetching new credentials")
@@ -109,7 +107,7 @@ func TestAddNotification(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("credentials", creds.Value)
-	form.Add("title", crypt.RandomString(10))
+	form.Add("title", RandomString(10))
 
 	// POST test
 	r := PostRequest("", form, http.HandlerFunc(APIHandler))
@@ -143,7 +141,7 @@ func TestAddNotificationWithoutTitle(t *testing.T) {
 
 func TestAddNotificationWithInvalidCredentials(t *testing.T) {
 	form := url.Values{}
-	form.Add("credentials", crypt.RandomString(25))
+	form.Add("credentials", RandomString(25))
 
 	r := PostRequest("", form, http.HandlerFunc(APIHandler))
 	if status := r.Code; status != 407 {
@@ -181,7 +179,7 @@ func TestWSHandler(t *testing.T) {
 func TestStoredNotificationsOnWSConnect(t *testing.T) {
 	var creds, uform = GenUser() // generate user
 
-	TITLE := crypt.RandomString(100)
+	TITLE := RandomString(100)
 
 	// send notification to not connected user
 	SendNotification(creds.Value, TITLE)
@@ -197,7 +195,7 @@ func TestStoredNotificationsOnWSConnect(t *testing.T) {
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
-	var notifications []model.Notification
+	var notifications []Notification
 	_ = json.Unmarshal(mess, &notifications)
 
 	if notifications[0].Title != TITLE {
@@ -211,14 +209,14 @@ func TestDeleteNotification(t *testing.T) {
 	var creds, uform = GenUser() // generate user
 
 	// send notification to not connected user
-	SendNotification(creds.Value, crypt.RandomString(10))
+	SendNotification(creds.Value, RandomString(10))
 
 	// connect to wss
 	s, ws, _ := ConnectWSS(creds, uform)
 
 	// delete notification
 	_, mess, _ := ws.ReadMessage()
-	var notifications []model.Notification
+	var notifications []Notification
 	_ = json.Unmarshal(mess, &notifications)
 	_ = ws.WriteMessage(websocket.TextMessage, []byte(strconv.Itoa(notifications[0].ID)))
 
@@ -246,12 +244,12 @@ func TestReceivingNotificationWSOnline(t *testing.T) {
 	defer ws.Close()
 
 	// send notification over http
-	TITLE := crypt.RandomString(10)
+	TITLE := RandomString(10)
 	SendNotification(creds.Value, TITLE)
 
 	// read notification over ws
 	_, mess, _ := ws.ReadMessage()
-	var notifications []model.Notification
+	var notifications []Notification
 	_ = json.Unmarshal(mess, &notifications)
 
 	if notifications[0].Title != TITLE {
