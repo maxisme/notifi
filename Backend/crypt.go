@@ -83,11 +83,11 @@ func Hash(str string) string {
 }
 
 func PassHash(str string) string {
-	hash, _ := bGenerateFromPassword([]byte(str), bMinCost)
+	hash, _ := bcrypt.GenerateFromPassword([]byte(str), bMinCost)
 	return string(hash)
 }
 
 func VerifyPassHash(str string, expectedstr string) bool {
-	err := bCompareHashAndPassword([]byte(str), []byte(expectedstr))
+	err := bcrypt.CompareHashAndPassword([]byte(str), []byte(expectedstr))
 	return err == nil
 }

@@ -1,13 +1,11 @@
 pipeline {
     agent {
-        docker { image 'node:7-alpine' }
+        docker { image 'golang:1.7.3-alpine' }
     }
     stages {
         stage('Pre Test'){
             sh 'go version'
-            sh 'go get -u github.com/golang/dep/cmd/dep'
-            sh 'go get -u github.com/golang/lint/golint'
-            sh 'go get github.com/tebeka/go2xunit'
+            sh 'go get -t ...'
             sh 'cd $GOPATH/src/cmd/project && dep ensure'
         }
         stage('Test'){
