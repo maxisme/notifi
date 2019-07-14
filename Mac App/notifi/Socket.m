@@ -49,7 +49,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
         [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
 
-        NSLog(@"%@", [request allHTTPHeaderFields]);
         _web_socket = [[SRWebSocket alloc] initWithURLRequest:request];
         [_web_socket setDelegate:(id)self];
         [_web_socket open];
