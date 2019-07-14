@@ -42,6 +42,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [CustomFunctions onlyOneInstanceOfApp];
     
     DDLogDebug(@"\n----- started -----\n");
+   
     if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] || ![[[Keys alloc] init] getKey:@"credential_key"]){
         // first time using app
         DDLogDebug(@"Creating new credentials");

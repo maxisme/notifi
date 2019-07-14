@@ -8,7 +8,7 @@ meta:
   description: Send simple push notifications to your Mac using HTTP.
 app:
   version:
-    num: 0.002
+    num: 0.03
     description: >
       <h1>New Features</h1>
       Moved infrastructure to Go.
