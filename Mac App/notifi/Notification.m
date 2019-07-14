@@ -23,7 +23,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     return YES;
 }
 
-NSString* EMPTY;
 float one_row_title_height;
 float one_row_info_height;
 -(id)initWithTitle:(NSString *)title message:(NSString *)message link:(NSString*)link image_url:(NSString*)image_url time_string:(NSString*)time_string read:(bool)read ID:(unsigned long)ID {
@@ -35,7 +34,6 @@ float one_row_info_height;
     int time_height = 18;
     int image_hw = [CustomVars shrinkHeight:true] - top_padding;
     int width = [CustomVars windowWidth];
-    EMPTY = [CustomVars default_empty];
     
     [self setWantsLayer:YES];
     
@@ -44,7 +42,7 @@ float one_row_info_height;
     _info_font = [NSFont fontWithName:@"Montserrat-Regular" size:12];
     NSFont* time_font = [NSFont fontWithName:@"Montserrat-Light" size:10];
     
-    if(![image_url isEqual: EMPTY]){
+    if([image_url length] != 0){
         side_padding = image_hw + top_padding;
     }
     
@@ -55,14 +53,14 @@ float one_row_info_height;
     
     //------- height of info
     float info_height = info_padding; // no info padding
-    if(![message isEqual: EMPTY]){
+    if([message length] != 0){
         info_height = [self calculateStringHeight:message font:_info_font width:text_width];
     }
     
     //calculate total height of notification
     int notification_height = title_height + time_height + info_height + (top_padding * 2.4);
     
-    if(![image_url isEqual: EMPTY]){ // handle extra heightNSColor if image
+    if([image_url length] != 0){ // handle extra heightNSColor if image
         int min_height = image_hw + top_padding * 4;
         if(notification_height < min_height){
             notification_height = min_height;
@@ -80,7 +78,7 @@ float one_row_info_height;
     
     //body of notification
     //--      add image
-    if(![image_url isEqual: EMPTY]){
+    if([image_url length] != 0){
         NSView* rounded_image_view = [[NSView alloc] initWithFrame:NSMakeRect(top_padding / 2, self.frame.size.height - image_hw - (top_padding / 2), image_hw, image_hw)];
         rounded_image_view.layer.cornerRadius = 5;
         rounded_image_view.layer.masksToBounds = YES;
@@ -94,7 +92,7 @@ float one_row_info_height;
     }
     
     int link_hw = 0;
-    if(![link isEqual: EMPTY]){
+    if([link length] != 0){
         //add link image
         link_hw = 15;
         int padding = 8;
@@ -152,7 +150,7 @@ float one_row_info_height;
     [self addSubview:_time_label];
     
     //-- add info
-    if(![message isEqual: EMPTY]){
+    if([message length] != 0){
         _info_label = [[NotificationLabel alloc] init];
 //        [_info_label setBackgroundColor:[CustomVars offwhite]];
         [_info_label setFrame:CGRectMake(side_padding, _time_label.frame.origin.y - info_height, text_width, info_height)];
@@ -358,12 +356,16 @@ float one_row_info_height;
     [self addTrackingArea:self.trackingArea];
 }
 
-- (void)markRead {
+- (void)markRead{
+    [self markRead:false];
+}
+
+- (void)markRead:(bool)isall{
     if(!_read){
         [self.layer setBackgroundColor:[[NSColor clearColor] CGColor]];
         _title_label.textColor = [CustomVars grey];
         _read = true;
-        [self storeRead:true];
+        [self storeRead:true isall:isall];
     }
 }
 
@@ -377,14 +379,14 @@ float one_row_info_height;
 }
 
 - (void)openLink{
-    if(![_link  isEqual: EMPTY]){
+    if([_link length] != 0){
         [self markRead];
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_link]];
     }
 }
 
 - (void)openImage{
-    if(![_image_url  isEqual: EMPTY]){
+    if([_image_url length] != 0){
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:_image_url]];
     }
 }
@@ -473,13 +475,17 @@ float one_row_info_height;
 }
 
 - (void)storeRead:(bool)read{
+    [self storeRead:read isall:false];
+    
+}
+- (void)storeRead:(bool)read isall:(bool)isall{
     unsigned long dic_index = [self defaultsIndex];
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     NSMutableDictionary* dic = [[notifications objectAtIndex:dic_index] mutableCopy];
     [dic setObject:[NSNumber numberWithBool:read] forKey:@"read"];
     [notifications replaceObjectAtIndex:dic_index withObject:dic];
     [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if(!isall) [[NSUserDefaults standardUserDefaults] synchronize];
     [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
 }
 
@@ -487,7 +493,7 @@ float one_row_info_height;
     unsigned long index = 0;
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
     for (NSMutableDictionary* dic in notifications) {
-        if ([CustomFunctions stringToUL:[dic valueForKey:@"id"]] == self.ID) return index;
+        if ([[dic valueForKey:@"id"] unsignedLongValue] == self.ID) return index;
         index++;
     }
     return -1;

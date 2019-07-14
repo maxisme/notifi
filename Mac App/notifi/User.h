@@ -14,7 +14,6 @@
 
 @interface User : NSObject
 @property (nonatomic, strong) Socket* s;
-@property Keys *keychain;
 @property MainWindow *window;
 @property MenuBarClass *menu_bar;
 

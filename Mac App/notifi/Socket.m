@@ -10,6 +10,7 @@
 
 #import <SocketRocket/SRWebSocket.h>
 #import "CustomFunctions.h"
+#import "Keys.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -21,10 +22,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     _url = url;
     _key = key;
     
+    _keychain = [[Keys alloc] init];
+    
     [self open];
     
     // send ping every 10 seconds to make sure still connected to server
     [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restart) name:@"restart-socket" object:nil];
     
     return self;
 }
@@ -35,6 +40,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
     [request setValue:_key forHTTPHeaderField:@"Sec-Key"];
+    [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] forHTTPHeaderField:@"credentials"];
+    [request setValue:[_keychain getKey:@"credential_key"] forHTTPHeaderField:@"credential_key"];
+    [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
+    [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
 
     _web_socket = [[SRWebSocket alloc] initWithURLRequest:request];
     [_web_socket setDelegate:(id)self];
@@ -45,7 +54,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [_web_socket close];
     _web_socket.delegate = nil;
     _web_socket = nil;
-    _authed = false;
     _connected = false;
 }
 
@@ -61,7 +69,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             }
         });
     }
-    
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
@@ -72,17 +79,31 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 {
     DDLogDebug(@"socket open");
     _connected = true;
+    [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
     
     if(_reconnect_timer){
         [_reconnect_timer invalidate];
         _reconnect_timer = nil;
     }
-    
-    if (self.onConnectBlock) _onConnectBlock();
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
+    if ([error.localizedDescription rangeOfString:@"406"].location != NSNotFound){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert addButtonWithTitle:@"Okay"];
+        [alert setMessageText:@"Major Error. Please reopen app. Credentials will change."];
+        [alert setInformativeText:[NSString stringWithFormat:@"Crash Message: %@", error]];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert runModal];
+        
+        // delete credentials
+        [_keychain deleteItem:nil];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"credentials"];
+        
+        // quit app
+        [CustomFunctions quit];
+    }
     DDLogDebug(@"Socket failed with error: %@", error);
     [self close];
 }
@@ -110,6 +131,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         // attempt to open socket again every 5 seconds
         _reconnect_timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(open) userInfo:nil repeats:YES];
     }
+}
+
+-(void)restart{
+    [self close];
+    [self open];
 }
 
 @end

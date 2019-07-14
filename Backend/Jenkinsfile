@@ -1,0 +1,15 @@
+pipeline {
+    agent {
+        docker { image 'golang:1.7.3-alpine' }
+    }
+    stages {
+        stage('Pre Test'){
+            sh 'go version'
+            sh 'go get -t ...'
+            sh 'cd $GOPATH/src/cmd/project && dep ensure'
+        }
+        stage('Test'){
+            sh """cd $GOPATH && go test"""
+        }
+    }
+}

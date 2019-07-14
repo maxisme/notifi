@@ -8,13 +8,8 @@ meta:
   description: Send simple push notifications to your Mac using HTTP.
 app:
   version:
-    num: 0.001
+    num: 0.002
     description: >
-      <h2>New Features</h2>
-
-      <h2>Bugs</h2>
-
-      <h4>Untested Release</h4>
-      Thank you for testing!<br><br>
-      Maximilian Mitchell
+      <h1>New Features</h1>
+      Moved infrastructure to Go.
   dmg: notifi.dmg

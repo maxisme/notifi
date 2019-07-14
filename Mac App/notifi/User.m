@@ -34,7 +34,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     _menu_bar = mb;
     _window = mb.window;
     
-    _keychain = [[Keys alloc] init];
     _menu_bar.bell_image_cnt = 1;
     
     //update menu icon listener
@@ -46,15 +45,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 +(void)newCredentials{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"https://notifi.it/getCode.php"];
-    NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{ @"UUID":[CustomFunctions getSystemUUID], @"server_key": [LOOCryptString serverKey]}];
+    NSString* url = [NSString stringWithFormat:@"http://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
+    NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     // tell server off the current credentials to be able to create new ones.
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
         [post addEntriesFromDictionary:@{
-                                        @"current_credentials": [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
-                                        @"current_key": [[[Keys alloc] init] getKey:@"credential_key"]
-                                        }];
+            @"current_credentials": [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
+            @"current_key": [[[Keys alloc] init] getKey:@"credential_key"]
+        }];
     }
+    r.requestHeaders = [[NSMutableDictionary alloc] initWithDictionary:@{@"Sec-Key":[LOOCryptString serverKey]}];
     r.POSTDictionary = post;
     NSError *error = nil;
     NSString *content = [r startSynchronousWithError:&error];
@@ -65,11 +66,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     if(![key isEqual: @""] && ![credentials isEqual: @""]){
         [[[Keys alloc] init] setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
         [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"]; // store credentials in normal storage
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }else{
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText:@"Please try again."];
+        [alert setInformativeText:@"Error Fetching credentials!"];
         [alert addButtonWithTitle:@"Ok"];
-        [alert setMessageText:@"Error Fetching credentials!"];
+        [alert setMessageText:@"Please contact max@max.me.uk"];
         if(error){
             [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
         }else{
@@ -81,30 +83,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    _s = [[Socket alloc] initWithURL:@"wss://s.notifi.it" key:[LOOCryptString serverKey]];
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [_s setOnConnectBlock:^{
-        [_s send:[weakSelf authMessage]];
-    }];
+    NSString* url = [NSString stringWithFormat:@"ws://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{
-        [weakSelf updateMenuBarIcon:false];
+        [self updateMenuBarIcon:false];
     }];
     
     [_s setOnMessageBlock:^(NSString *message) {
-        [weakSelf handleSocketMessage:message];
+        [self handleSocketMessage:message];
     }];
-}
-
--(NSString*)authMessage{
-    return [CustomFunctions dicToJsonString:@{
-                                              @"credentials":[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
-                                              @"key": [_keychain getKey:@"credential_key"],
-                                              @"UUID":[CustomFunctions getSystemUUID],
-                                              @"app_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
-                                              }];
 }
 
 -(void)handleSocketMessage:(NSString*)message{
@@ -120,7 +108,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             if (button == NSAlertFirstButtonReturn) [User newCredentials];
         });
     }else{
-        _s.authed = true;
         [self updateMenuBarIcon:false];
         
         NSError* error = nil;
@@ -136,18 +123,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             // get all the notifications from json_dic and tell the server
             // that they have been received.
             // each notification comes with an encrypted unique "id:" tag
+            NSString* ids = @"";
             for (NSDictionary* notification in json_dic) {
-                NSString* firstval = [NSString stringWithFormat:@"%@", notification];
-                if([[firstval substringToIndex:3]  isEqual: @"id:"]){
-                    // TELL SERVER TO REMOVE STORED MESSAGE
-                    if(_s.authed){
-                        [_s send:firstval];
-                    }
-                }else{
-                    [Notification storeNotificationDic:notification];
-                    [incoming_notifications addObject:notification];
-                    shouldRefresh = true;
+                NSString* notification_id = [notification objectForKey:@"id"];
+                if ([notification_id intValue] > 0){
+                    ids = [NSString stringWithFormat:@"%@,%@", ids, notification_id];
                 }
+                [Notification storeNotificationDic:notification];
+                [incoming_notifications addObject:notification];
+                shouldRefresh = true;
+            }
+            
+            // send ids to be deleted from server
+            if(_s.connected && [ids length] > 0){
+                [_s send:[ids substringFromIndex:1]]; // removes initial ','
             }
             
             if(shouldRefresh){
@@ -195,7 +184,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                     [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
                 }
             }
-        }else if(![message isEqualToString:@"1"]){
+        }else{
             DDLogVerbose(@"Unrecognised message from socket: %@", message);
         }
     }
@@ -214,7 +203,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         
         [_window.error_label setHidden:true];
         
-        if(!_s.authed){
+        if(!_s.connected){
             if([_menu_bar getImage] != error_icon){
                 _menu_bar.image = error_icon;
                 _menu_bar.after_image = error_icon;
@@ -242,15 +231,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     //pass variables through notification
     notification.userInfo = @{
-                              @"ID" : [NSString stringWithFormat:@"%lu", ID],
-                              @"url" : url
-                              };
+        @"ID" : [NSString stringWithFormat:@"%lu", ID],
+        @"url" : url
+    };
     
     [notification setTitle:title];
     
-    if(![mes isEqual: [CustomVars default_empty]]) [notification setInformativeText:mes];
+    if([mes length] != 0) [notification setInformativeText:mes];
     
-    if(![imgURL isEqual: [CustomVars default_empty]]){
+    if([imgURL length] != 0){
         NSImage* image;
         @try {
             image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:imgURL]];
@@ -262,7 +251,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
     
     [notification setActionButtonTitle:@"Open Link"];
-    if(![url  isEqual: [CustomVars default_empty]]){
+    if([url length] != 0){
         [notification setHasActionButton:true];
     }else{
         [notification setHasActionButton:false];
@@ -287,7 +276,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         NSString* url_string = notification.userInfo[@"url"];
         
         NSURL* url;
-        if(![url_string isEqual: [CustomVars default_empty]]){
+        if([url_string length] != 0){
             @try {
                 url = [NSURL URLWithString:url_string];
                 openWindow = false;

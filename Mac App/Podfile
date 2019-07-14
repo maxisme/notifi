@@ -1,3 +1,4 @@
+platform :osx, '10.12'
 target 'notifi' do
   pod 'SocketRocket'
   pod 'SDWebImage'
@@ -5,5 +6,6 @@ target 'notifi' do
   pod 'Sparkle'
   pod 'STHTTPRequest'
   pod 'CocoaLumberjack'
+  pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git'
   use_frameworks!
 end
