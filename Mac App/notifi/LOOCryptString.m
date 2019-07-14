@@ -32,7 +32,7 @@ NSString *LOODecrypStrN(const unsigned char encStr[], size_t n) {
 }
 
 /* edited by max */
-/* as my build phase replaces this string ("secret_server_code") it ruins save history so need to put it here where
+/* as my build phase replaces this string ("") it ruins save history so need to put it here where
  there is little to no activity */
 /* TODO: not make the above comment the weirdest phrased comment on the planet */
 @implementation LOOCryptString

@@ -8,16 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 @class SRWebSocket;
+@class Keys;
 
 @interface Socket : NSObject
+@property Keys *keychain;
 @property (nonatomic, strong) SRWebSocket *web_socket;
 @property (nonatomic, strong) NSTimer *reconnect_timer;
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *key;
 @property (nonatomic) bool received_pong;
 @property (nonatomic) bool connected;
-@property (nonatomic) bool authed;
-@property (copy, nonatomic) void (^onConnectBlock)(void);
 @property (copy, nonatomic) void (^onCloseBlock)(void);
 @property (copy, nonatomic) void (^onMessageBlock)(NSString*);
 

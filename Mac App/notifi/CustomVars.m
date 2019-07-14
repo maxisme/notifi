@@ -37,10 +37,6 @@
     return [NSString stringWithFormat:@"https://notifi.it/?c=%@#How-To", credentials];
 }
 
-+(NSString *)default_empty{
-    return @" ";
-}
-
 +(NSString *)notificationStorageKey{
     return @"notifications";
 }

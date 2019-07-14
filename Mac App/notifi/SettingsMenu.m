@@ -50,7 +50,7 @@
     
     [self addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem* rec = [[NSMenuItem alloc] initWithTitle:@"How do I receive Notifications?" action:@selector(howToRec) keyEquivalent:@""];
+    NSMenuItem* rec = [[NSMenuItem alloc] initWithTitle:@"How do I receive notifications?" action:@selector(howToRec) keyEquivalent:@""];
     [rec setTarget:self];
     [self addItem:rec];
     
@@ -95,14 +95,16 @@
 
 -(void)createNewCredentials{
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:@"Are you sure?"];
-    [alert setInformativeText:@"You won't be able to receive messages using the previous credentials ever again."];
+    [alert setMessageText:@"⚠️ Are you sure?"];
+    [alert setInformativeText:@"All your notifications will be deleted and you won't be able to receive messages using the previous credentials ever again! 😳"];
     [alert addButtonWithTitle:@"Ok"];
     [alert addButtonWithTitle:@"Cancel"];
     
     NSInteger button = [alert runModal];
     if (button == NSAlertFirstButtonReturn) {
         [User newCredentials];
+        [CustomFunctions sendNotificationCenter:@"" name:@"delete-all-notifications"];
+        [CustomFunctions sendNotificationCenter:@"" name:@"restart-socket"];
     }
 }
 
