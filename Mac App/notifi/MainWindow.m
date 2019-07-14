@@ -44,7 +44,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     // scroll listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onScroll) name:NSViewBoundsDidChangeNotification object:[_scroll_view contentView]];
     
-    //delete notification listener
+    // delete all notifications listener
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllNotifications) name:@"delete-all-notifications" object:nil];
+    
+    // delete notification listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteNote:) name:@"delete-notification" object:nil];
     
     // update notification times
@@ -241,17 +244,22 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSMutableAttributedString *sendCurlString =
     [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use HTTP requests\nalong with your personal credentials: %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]] attributes:sendCurlAttrs];
     [sendCurlString addAttribute:NSLinkAttributeName value:[CustomVars how_to:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]] range:NSMakeRange(29,13)];
-    [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
     
-    NotificationLabel* curl_field = [[NotificationLabel alloc] init];
-    [curl_field setBackgroundColor:[CustomVars offwhite]];
-    [curl_field setFrame:CGRectMake(10, title_field.frame.origin.y - 60, scroll_width - top_padding, 70)];
-    curl_field.tag = 2;
-    [curl_field setAllowsEditingTextAttributes:true];
-    [curl_field setAttributedStringValue:sendCurlString];
-    NSTextView* textEditor2 = (NSTextView *)[[[NSApplication sharedApplication] keyWindow] fieldEditor:YES forObject:curl_field];
-    [textEditor2 setSelectedTextAttributes:sendCurlAttrs];
-    [view addSubview:curl_field];
+    @try {
+        [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
+    } @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    } @finally {
+        NotificationLabel* curl_field = [[NotificationLabel alloc] init];
+        [curl_field setBackgroundColor:[CustomVars offwhite]];
+        [curl_field setFrame:CGRectMake(10, title_field.frame.origin.y - 60, scroll_width - top_padding, 70)];
+        curl_field.tag = 2;
+        [curl_field setAllowsEditingTextAttributes:true];
+        [curl_field setAttributedStringValue:sendCurlString];
+        NSTextView* textEditor2 = (NSTextView *)[[[NSApplication sharedApplication] keyWindow] fieldEditor:YES forObject:curl_field];
+        [textEditor2 setSelectedTextAttributes:sendCurlAttrs];
+        [view addSubview:curl_field];
+    }
     
     return view;
 }
@@ -363,20 +371,24 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         NSAlert *alert = [[NSAlert alloc] init];
         [alert addButtonWithTitle:@"OK"];
         [alert addButtonWithTitle:@"Cancel"];
-        [alert setMessageText:[NSString stringWithFormat:@"Delete %d Notifications?", (int)[notifications count]]];
+        [alert setMessageText:[NSString stringWithFormat:@"Delete %d notifications?", (int)[notifications count]]];
         [alert setInformativeText:@"Warning: Notifications cannot be restored without some sort of wizardry."];
         [alert setAlertStyle:NSWarningAlertStyle];
         
         if ([alert runModal] == NSAlertFirstButtonReturn) { // user agreed
-            //delete the stored notifications
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            _notifications = nil;
-            
-            [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
-            [self setWindowBody];
+            [self deleteAllNotifications];
         }
     }
+}
+
+- (void)deleteAllNotifications{
+    //delete the stored notifications
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    _notifications = nil;
+    
+    [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
+    [self setWindowBody];
 }
 
 -(void)onScroll{

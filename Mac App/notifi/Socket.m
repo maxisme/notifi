@@ -29,6 +29,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     // send ping every 10 seconds to make sure still connected to server
     [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(sendPing) userInfo:nil repeats:YES];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restart) name:@"restart-socket" object:nil];
+    
     return self;
 }
 
@@ -67,7 +69,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             }
         });
     }
-    
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload{
@@ -78,6 +79,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 {
     DDLogDebug(@"socket open");
     _connected = true;
+    [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
     
     if(_reconnect_timer){
         [_reconnect_timer invalidate];
@@ -129,6 +131,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         // attempt to open socket again every 5 seconds
         _reconnect_timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(open) userInfo:nil repeats:YES];
     }
+}
+
+-(void)restart{
+    [self close];
+    [self open];
 }
 
 @end

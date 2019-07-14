@@ -34,7 +34,7 @@
 }
 
 +(NSString *)how_to:(NSString*)credentials{
-    return [NSString stringWithFormat:@"http://notifi.it/?c=%@#How-To", credentials];
+    return [NSString stringWithFormat:@"https://%@/?c=%@#How-To", [[NSBundle mainBundle] infoDictionary][@"host"], credentials];
 }
 
 +(NSString *)notificationStorageKey{

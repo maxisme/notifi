@@ -45,7 +45,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 +(void)newCredentials{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:@"http://localhost:8123/code"];
+    NSString* url = [NSString stringWithFormat:@"http://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     // tell server off the current credentials to be able to create new ones.
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
@@ -65,6 +66,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     if(![key isEqual: @""] && ![credentials isEqual: @""]){
         [[[Keys alloc] init] setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
         [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"]; // store credentials in normal storage
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }else{
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setInformativeText:@"Error Fetching credentials!"];
@@ -81,7 +83,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    _s = [[Socket alloc] initWithURL:@"ws://localhost:8123/ws" key:[LOOCryptString serverKey]];
+    NSString* url = [NSString stringWithFormat:@"ws://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{
         [self updateMenuBarIcon:false];
@@ -228,9 +231,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     //pass variables through notification
     notification.userInfo = @{
-                              @"ID" : [NSString stringWithFormat:@"%lu", ID],
-                              @"url" : url
-                              };
+        @"ID" : [NSString stringWithFormat:@"%lu", ID],
+        @"url" : url
+    };
     
     [notification setTitle:title];
     

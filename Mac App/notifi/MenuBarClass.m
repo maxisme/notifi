@@ -36,6 +36,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [_window orderOut:self];
     }else{
         [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
+        
         _window.notifications_animated = [NSMutableArray array];
         [_window animate:true];
         [_window showWindowAtMenuBarRect:[[_statusItem valueForKey:@"window"] frame] afterAnimation:nil];
