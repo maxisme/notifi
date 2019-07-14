@@ -38,16 +38,23 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     DDLogDebug(@"opening socket");
     [self destroy];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
-    [request setValue:_key forHTTPHeaderField:@"Sec-Key"];
-    [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] forHTTPHeaderField:@"credentials"];
-    [request setValue:[_keychain getKey:@"credential_key"] forHTTPHeaderField:@"credential_key"];
-    [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
-    [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
+    NSString* key = [_keychain getKey:@"credential_key"];
+    
+    if([key length] > 0 && [credentials length] > 0){
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
+        [request setValue:_key forHTTPHeaderField:@"Sec-Key"];
+        [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] forHTTPHeaderField:@"credentials"];
+        [request setValue:[_keychain getKey:@"credential_key"] forHTTPHeaderField:@"credentialkey"];
+        [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
+        [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
 
-    _web_socket = [[SRWebSocket alloc] initWithURLRequest:request];
-    [_web_socket setDelegate:(id)self];
-    [_web_socket open];
+        _web_socket = [[SRWebSocket alloc] initWithURLRequest:request];
+        [_web_socket setDelegate:(id)self];
+        [_web_socket open];
+    }else{
+        NSLog(@"No valid key and credentials for notifi!");
+    }
 }
 
 -(void)destroy{
@@ -96,10 +103,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [alert setInformativeText:[NSString stringWithFormat:@"Crash Message: %@", error]];
         [alert setAlertStyle:NSCriticalAlertStyle];
         [alert runModal];
-        
-        // delete credentials
-        [_keychain deleteItem:nil];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"credentials"];
         
         // quit app
         [CustomFunctions quit];

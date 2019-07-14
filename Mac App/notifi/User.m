@@ -45,7 +45,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 +(void)newCredentials{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
     
-    NSString* url = [NSString stringWithFormat:@"http://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = [NSString stringWithFormat:@"https://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     // tell server off the current credentials to be able to create new ones.
@@ -83,7 +83,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    NSString* url = [NSString stringWithFormat:@"ws://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = [NSString stringWithFormat:@"wss://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
     _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{

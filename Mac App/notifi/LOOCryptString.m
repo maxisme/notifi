@@ -37,6 +37,6 @@ NSString *LOODecrypStrN(const unsigned char encStr[], size_t n) {
 /* TODO: not make the above comment the weirdest phrased comment on the planet */
 @implementation LOOCryptString
 +(NSString*)serverKey{
-    return LOO_CRYPT_STR_N("", 100);
+    return LOO_CRYPT_STR_N("secret_server_code", 100);
 }
 @end
