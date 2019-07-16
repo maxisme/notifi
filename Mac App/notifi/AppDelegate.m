@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 
-@import Sentry;
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
