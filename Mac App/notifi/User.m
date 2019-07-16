@@ -43,9 +43,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 +(void)newCredentials{
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"]; // delete all stored notifications
-    
-    NSString* url = [NSString stringWithFormat:@"https://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = [NSString stringWithFormat:@"http://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     // tell server off the current credentials to be able to create new ones.
@@ -63,27 +61,32 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString* key = [CustomFunctions jsonToVal:content key:@"key"]; // password to credentials so no one else can use credentials
     NSString* credentials = [CustomFunctions jsonToVal:content key:@"credentials"];
     
-    if(![key isEqual: @""] && ![credentials isEqual: @""]){
+    if(![key isEqual: @""]){
         [[[Keys alloc] init] setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
-        [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"]; // store credentials in normal storage
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        if (![credentials isEqual: @""]){
+            // store credentials in normal storage
+            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }else{
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText:@"Error Fetching credentials!"];
+        [alert setInformativeText:@"Error fetching new credentials!"];
         [alert addButtonWithTitle:@"Ok"];
         [alert setMessageText:@"Please contact max@max.me.uk"];
         if(error){
-            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",error]];
+            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@", error]];
         }else{
-            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@",content]];
+            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@", content]];
         }
         [alert runModal];
+        
+        [CustomFunctions quit];
     }
 }
 
 #pragma mark - socket
 -(void)createSocket{
-    NSString* url = [NSString stringWithFormat:@"wss://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = [NSString stringWithFormat:@"ws://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
     _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{

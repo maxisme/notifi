@@ -11,6 +11,7 @@
 #import <SocketRocket/SRWebSocket.h>
 #import "CustomFunctions.h"
 #import "Keys.h"
+#import "User.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -109,6 +110,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
     DDLogDebug(@"Socket failed with error: %@", error);
     [self close];
+    int error_code = [error.userInfo[@"HTTPResponseStatusCode"] intValue];
+    if(error_code == 402 || error_code == 401){
+        // there is no matching UUID on the server so will need to create a new account
+        [User newCredentials];
+        [CustomFunctions sendNotificationCenter:@"" name:@"restart-socket"];
+        [CustomFunctions sendNotificationCenter:@"" name:@"refresh-gui"];
+    }
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(nonnull NSString *)string

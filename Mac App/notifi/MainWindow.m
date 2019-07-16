@@ -44,11 +44,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     // scroll listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onScroll) name:NSViewBoundsDidChangeNotification object:[_scroll_view contentView]];
     
-    // delete all notifications listener
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllNotifications) name:@"delete-all-notifications" object:nil];
-    
     // delete notification listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteNote:) name:@"delete-notification" object:nil];
+    
+    // refresh GUI
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGUI) name:@"refresh-gui" object:nil];
     
     // update notification times
     [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateAllNotificationTimes) userInfo:nil repeats:YES];
@@ -377,8 +377,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         
         if ([alert runModal] == NSAlertFirstButtonReturn) { // user agreed
             [self deleteAllNotifications];
+            
         }
     }
+}
+
+- (void)refreshGUI{
+    [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
+    [self setWindowBody];
 }
 
 - (void)deleteAllNotifications{
@@ -386,9 +392,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     _notifications = nil;
-    
-    [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
-    [self setWindowBody];
 }
 
 -(void)onScroll{

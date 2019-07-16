@@ -103,8 +103,8 @@
     NSInteger button = [alert runModal];
     if (button == NSAlertFirstButtonReturn) {
         [User newCredentials];
-        [CustomFunctions sendNotificationCenter:@"" name:@"delete-all-notifications"];
         [CustomFunctions sendNotificationCenter:@"" name:@"restart-socket"];
+        [CustomFunctions sendNotificationCenter:@"" name:@"refresh-gui"];
     }
 }
 
