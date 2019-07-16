@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 
+//@import sentry
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -59,4 +60,26 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     [CustomFunctions checkForUpdate:false];
 }
+
+- (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldLogException:(NSException *)exception mask:(NSUInteger)aMask{
+    NSString* exc = [exception reason];
+    DDLogError(@"Crash Exception: %@", exc);
+//
+//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://notifi.it/log.php"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
+//    [request setHTTPMethod:@"POST"];
+//    [request setHTTPBody:[[NSString stringWithFormat:@"error=%@&UUID=%@&app_version=%@", exc, [CustomFunctions getSystemUUID], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
+    
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert addButtonWithTitle:@"Okay"];
+    [alert setMessageText:@"App Crashed! We have been notified."];
+    [alert setInformativeText:[NSString stringWithFormat:@"Crash Message: %@", exc]];
+    [alert setAlertStyle:NSAlertStyleCritical];
+    [alert runModal];
+    
+    [NSApp terminate:self]; // force close app
+    
+    return true;
+}
+
 @end

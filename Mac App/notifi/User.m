@@ -43,16 +43,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 +(void)newCredentials{
-    NSString* url = [NSString stringWithFormat:@"http://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = [NSString stringWithFormat:@"https://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
-    // tell server off the current credentials to be able to create new ones.
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]){
+    
+    // give server current credentials if it has them
+    NSString* current_credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
+    NSString* current_key = [[[Keys alloc] init] getKey:@"credential_key"];
+    if(current_credentials && current_key){
         [post addEntriesFromDictionary:@{
-            @"current_credentials": [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"],
-            @"current_key": [[[Keys alloc] init] getKey:@"credential_key"]
+            @"current_credentials": current_credentials,
+            @"current_key": current_key
         }];
     }
+    
     r.requestHeaders = [[NSMutableDictionary alloc] initWithDictionary:@{@"Sec-Key":[LOOCryptString serverKey]}];
     r.POSTDictionary = post;
     NSError *error = nil;
@@ -86,7 +90,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    NSString* url = [NSString stringWithFormat:@"ws://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = [NSString stringWithFormat:@"wss://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
     _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{
