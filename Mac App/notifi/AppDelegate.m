@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-//@import sentry
+@import Sentry;
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -24,15 +24,19 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 //        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
     
-//    SentryClient *client = [[SentryClient alloc] initWithDsn:[[NSBundle mainBundle] infoDictionary][@"sentry_dsn"] didFailWithError:nil];
-//    SentryClient.sharedClient = client;
-//    [SentryClient.sharedClient startCrashHandlerWithError:nil];
+    NSError *error = nil;
+    SentryClient *client = [[SentryClient alloc] initWithDsn:[[NSBundle mainBundle] infoDictionary][@"sentry_dsn"] didFailWithError:&error];
+    SentryClient.sharedClient = client;
+    [SentryClient.sharedClient startCrashHandlerWithError:&error];
+    if (nil != error) {
+        DDLogError(@"Sentry error: %@", error);
+    }
     
     DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
     fileLogger.rollingFrequency = 60 * 60 * 24 * 7;
     [DDLog addLogger:fileLogger];
     [DDLog addLogger:[DDTTYLogger sharedInstance]]; // log to xcode output
-    [DDLog addLogger:[DDASLLogger sharedInstance]]; // log apple stuff
+    [DDLog addLogger:[DDOSLogger sharedInstance]]; // log apple stuff
     [[NSUserDefaults standardUserDefaults] setObject:[[fileLogger currentLogFileInfo] filePath] forKey:@"logging_path"]; // store log path
     
     // handle crashing logs
@@ -64,12 +68,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldLogException:(NSException *)exception mask:(NSUInteger)aMask{
     NSString* exc = [exception reason];
     DDLogError(@"Crash Exception: %@", exc);
-//
-//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://notifi.it/log.php"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
-//    [request setHTTPMethod:@"POST"];
-//    [request setHTTPBody:[[NSString stringWithFormat:@"error=%@&UUID=%@&app_version=%@", exc, [CustomFunctions getSystemUUID], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]] dataUsingEncoding:NSUTF8StringEncoding]];
-//    [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
-    
+
     NSAlert *alert = [[NSAlert alloc] init];
     [alert addButtonWithTitle:@"Okay"];
     [alert setMessageText:@"App Crashed! We have been notified."];

@@ -10,8 +10,8 @@
 
 @implementation MyApplication
 - (void) sendEvent:(NSEvent *)event {
-    if ([event type] == NSKeyDown) {
-        if (([event modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask) {
+    if ([event type] == NSEventTypeKeyDown) {
+        if (([event modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask) == NSEventModifierFlagCommand) {
             if ([[event charactersIgnoringModifiers] isEqualToString:@"x"]) {
                 if ([self sendAction:@selector(cut:) to:nil from:self])
                     return;

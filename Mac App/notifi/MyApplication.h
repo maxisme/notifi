@@ -6,7 +6,8 @@
 //  Copyright © 2016 max mitchell. All rights reserved.
 //
 
+@import Sentry;
 #import <Cocoa/Cocoa.h>
 
-@interface MyApplication:NSApplication
+@interface MyApplication:SentryCrashExceptionApplication
 @end
