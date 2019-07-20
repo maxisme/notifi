@@ -8,8 +8,8 @@ meta:
   description: Send simple push notifications to your Mac using HTTP.
 app:
   version:
-    num: 0.05
+    num: 0.06
     description: >
       <h1>New Features</h1>
-      <li>Added sentry.</li>
+      <li>Fix bug with delete all and read all buttons</li>
   dmg: notifi.dmg
