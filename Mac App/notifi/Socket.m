@@ -54,7 +54,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [_web_socket setDelegate:(id)self];
         [_web_socket open];
     }else{
-        NSLog(@"No valid key and credentials for notifi!");
+        DDLogError(@"No valid key and credentials for notifi!");
     }
 }
 

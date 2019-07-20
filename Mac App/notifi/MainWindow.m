@@ -248,7 +248,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     @try {
         [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
     } @catch (NSException *exception) {
-        NSLog(@"%@", exception);
+        DDLogError(@"%@", exception);
     } @finally {
         NotificationLabel* curl_field = [[NotificationLabel alloc] init];
         [curl_field setBackgroundColor:[CustomVars offwhite]];
@@ -373,11 +373,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [alert addButtonWithTitle:@"Cancel"];
         [alert setMessageText:[NSString stringWithFormat:@"Delete %d notifications?", (int)[notifications count]]];
         [alert setInformativeText:@"Warning: Notifications cannot be restored without some sort of wizardry."];
-        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert setAlertStyle:NSAlertStyleWarning];
         
         if ([alert runModal] == NSAlertFirstButtonReturn) { // user agreed
             [self deleteAllNotifications];
-            
+            [CustomFunctions sendNotificationCenter:false name:@"refresh-gui"];
         }
     }
 }
