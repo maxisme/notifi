@@ -449,6 +449,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 

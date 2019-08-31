@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.06</string>
+	<string>0.07</string>
 	<key>CFBundleVersion</key>
-	<string>0.06</string>
+	<string>0.07</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
@@ -34,13 +34,13 @@
 	<string>MyApplication</string>
 	<key>NSUserNotificationAlertStyle</key>
 	<string>alert</string>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://notifi.it/version</string>
 	<key>SUShowReleaseNotes</key>
-	<true/>
-	<key>SUAutomaticallyUpdate</key>
 	<true/>
 </dict>
 </plist>
