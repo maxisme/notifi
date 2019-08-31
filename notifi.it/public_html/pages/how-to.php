@@ -50,11 +50,11 @@ to the url - <strong><?php echo $url?></strong>.
     <script>
 		function runJquery(){
 			$.post( "<?php echo $url?>", {
-				'c': '<?php echo $credentials?>',
-				't': '<?php echo $title?>',
-				'm': '<?php echo $message?>',
-				'l': '<?php echo $link?>',
-				'i': '<?php echo $image?>'
+				'credentials': '<?php echo $credentials?>',
+				'title': '<?php echo $title?>',
+				'message': '<?php echo $message?>',
+				'link': '<?php echo $link?>',
+				'image': '<?php echo $image?>'
 			}, function(data){
 			    if(data) alert(data);
             });
