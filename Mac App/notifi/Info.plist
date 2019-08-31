@@ -38,9 +38,9 @@
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://notifi.it/version</string>
-	<key>host</key>
-	<string>s.notifi.it</string>
-	<key>sentry_dsn</key>
-	<string>https://28f4f3d1516748f0a4a94587d91fab86@sentry.io/1504473</string>
+	<key>SUShowReleaseNotes</key>
+	<true/>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
 </dict>
 </plist>

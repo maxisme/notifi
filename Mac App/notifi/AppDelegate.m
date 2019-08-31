@@ -25,7 +25,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 //        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
     
     NSError *error = nil;
-    SentryClient *client = [[SentryClient alloc] initWithDsn:[[NSBundle mainBundle] infoDictionary][@"sentry_dsn"] didFailWithError:&error];
+    SentryClient *client = [[SentryClient alloc] initWithDsn:@"https://28f4f3d1516748f0a4a94587d91fab86@sentry.io/1504473" didFailWithError:&error];
     SentryClient.sharedClient = client;
     [SentryClient.sharedClient startCrashHandlerWithError:&error];
     if (nil != error) {
@@ -45,7 +45,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     [CustomFunctions onlyOneInstanceOfApp];
     
-    DDLogDebug(@"\n----- started -----\n");
+    DDLogDebug(@"----- started -----");
+    DDLogDebug(@"%@", [[[NSBundle mainBundle] bundleURL] URLByDeletingLastPathComponent]);
    
     if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] || ![[[Keys alloc] init] getKey:@"credential_key"]){
         // first time using app
@@ -71,13 +72,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
     NSAlert *alert = [[NSAlert alloc] init];
     [alert addButtonWithTitle:@"Okay"];
-    [alert setMessageText:@"App Crashed! We have been notified."];
+    [alert setMessageText:@"App unexpectedly closed! We have been notified."];
     [alert setInformativeText:[NSString stringWithFormat:@"Crash Message: %@", exc]];
     [alert setAlertStyle:NSAlertStyleCritical];
     [alert runModal];
-    
+
     [NSApp terminate:self]; // force close app
-    
+
     return true;
 }
 

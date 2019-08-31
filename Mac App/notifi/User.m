@@ -11,6 +11,7 @@
 #import <STHTTPRequest/STHTTPRequest.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#import "LOOCryptString.h"
 
 #import "CustomVars.h"
 #import "CustomFunctions.h"
@@ -43,7 +44,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 +(void)newCredentials{
-    NSString* url = [NSString stringWithFormat:@"https://%@/code", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = @"https://s.notifi.it/code";
     STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     
@@ -90,7 +91,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    NSString* url = [NSString stringWithFormat:@"wss://%@/ws", [[NSBundle mainBundle] infoDictionary][@"host"]];
+    NSString* url = @"wss://s.notifi.it/ws";
     _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{
