@@ -57,21 +57,6 @@ curl_exec($chpush);
 curl_close($chpush);
 ```
 
-## Screen Shots
-
-#### Window
-<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Window.png">
-
-#### Right Click
-<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/RightClick.png">
-
-#### Read message
-<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Read.png">
-
-#### Settings
-<img width='300' src="https://github.com/maxisme/notifi/raw/master/Screen%20Shots/Settings.png">
-
-____
 
 [notifi-backend](https://github.com/maxisme/notifi-backend)
 
