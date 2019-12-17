@@ -1,4 +1,4 @@
-<p align="center"><img height="150px" src="https://github.com/maxisme/notifi/raw/master/Mac%20App/notifi/bell.png"></p>
+<p align="center"><img height="150px" src="https://github.com/maxisme/notifi/raw/master/notifi/bell.png"></p>
 
 # [notifi](https://notifi.it/)
 
