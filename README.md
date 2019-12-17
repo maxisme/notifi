@@ -1,6 +1,8 @@
 <p align="center"><img height="150px" src="https://github.com/maxisme/notifi/raw/master/notifi/images/bell.png"></p>
 
-# [notifi](https://notifi.it/)
+# [notifi.it](https://notifi.it/)
+
+## [Mac App](https://github.com/maxisme/notifi) | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
 
 ## Usage
 - First download [notifi](https://notifi.it/download)
