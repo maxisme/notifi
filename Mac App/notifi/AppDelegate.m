@@ -68,6 +68,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldLogException:(NSException *)exception mask:(NSUInteger)aMask{
     NSString* exc = [exception reason];
+    
+    DDLogError(@"Stack: %@", [NSThread callStackSymbols]);
     DDLogError(@"Crash Exception: %@", exc);
 
     NSAlert *alert = [[NSAlert alloc] init];
