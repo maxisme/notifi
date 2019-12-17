@@ -66,7 +66,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString* key = [CustomFunctions jsonToVal:content key:@"key"]; // password to credentials so no one else can use credentials
     NSString* credentials = [CustomFunctions jsonToVal:content key:@"credentials"];
     
-    if(![key isEqual: @""]){
+    if([key length] > 0){
         [[[Keys alloc] init] setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
         if (![credentials isEqual: @""]){
             // store credentials in normal storage

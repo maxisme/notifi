@@ -69,7 +69,7 @@ float one_row_info_height;
     
     //create view
     [self setFrame:CGRectMake(0, 0, 0, notification_height - (top_padding * 2))];
-    [self.layer setBackgroundColor:[[CustomVars white] CGColor]];
+    self.layer.backgroundColor = [[CustomVars white] CGColor];
     self.layer.borderColor = [[CustomVars boarder] CGColor];
     self.layer.borderWidth = 1;
     self.layer.cornerRadius = 7.0f;
@@ -114,7 +114,8 @@ float one_row_info_height;
     [_title_label setFrame:CGRectMake(side_padding + link_hw, self.frame.size.height - (title_height + 4), text_width, title_height)]; // 4 is dynamic to font
     [_title_label setFont:_title_font];
     [_title_label setDelegate:(id)self];
-//    [_title_label setBackgroundColor: [CustomVars offwhite]];
+    [_title_label setBackgroundColor: [CustomVars offwhite]];
+    [_title_label setTextColor: [CustomVars black]];
     [_title_label setStringValue:title];
     [self addSubview:_title_label];
     
@@ -152,12 +153,13 @@ float one_row_info_height;
     //-- add info
     if([message length] != 0){
         _info_label = [[NotificationLabel alloc] init];
-//        [_info_label setBackgroundColor:[CustomVars offwhite]];
+        [_info_label setBackgroundColor:[CustomVars offwhite]];
         [_info_label setFrame:CGRectMake(side_padding, _time_label.frame.origin.y - info_height, text_width, info_height)];
         [_info_label setFont:_info_font];
         [_info_label setTextColor: [CustomVars black]];
         [_info_label setPreferredMaxLayoutWidth:text_width];
         [_info_label setStringValue:message];
+        [_info_label setWantsLayer:TRUE];
         [_info_label setDelegate:(id)self];
         [self addSubview:_info_label];
     }
