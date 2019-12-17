@@ -2,7 +2,7 @@
 
 # [notifi.it](https://notifi.it/)
 
-## [Mac App](https://github.com/maxisme/notifi) | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
+## Mac App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
 
 ## TODO
 
