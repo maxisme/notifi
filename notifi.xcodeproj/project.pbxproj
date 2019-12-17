@@ -147,14 +147,14 @@
 				4892A25A2015304B003F56EC /* Notification.m */,
 				4892A26820153242003F56EC /* NotificationImage.h */,
 				4892A26920153242003F56EC /* NotificationImage.m */,
-				4892A26E201532B0003F56EC /* NotificationLink.h */,
-				4892A26F201532B0003F56EC /* NotificationLink.m */,
 				4892A271201532E5003F56EC /* NotificationLabel.h */,
 				4892A272201532E5003F56EC /* NotificationLabel.m */,
+				4892A26E201532B0003F56EC /* NotificationLink.h */,
+				4892A26F201532B0003F56EC /* NotificationLink.m */,
 				4892A27920153677003F56EC /* NotificationTable.h */,
 				4892A2632015315F003F56EC /* NotificationTable.m */,
 			);
-			name = Notification;
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		48785DCE2018B2390078F388 /* GUI */ = {
@@ -165,38 +165,38 @@
 				4892A26C20153271003F56EC /* Cog.m */,
 				4892A26520153204003F56EC /* ControllButton.h */,
 				4892A26620153204003F56EC /* ControllButton.m */,
-				48785DCA2018A1170078F388 /* SettingsMenu.h */,
-				48785DCB2018A1170078F388 /* SettingsMenu.m */,
 				48110586201FEB2D004D2040 /* MainWindow.h */,
 				48110587201FEB2D004D2040 /* MainWindow.m */,
 				D65EE08220376D6700CD589D /* MenuBarClass.h */,
 				D65EE08320376D6700CD589D /* MenuBarClass.m */,
+				48785DCA2018A1170078F388 /* SettingsMenu.h */,
+				48785DCB2018A1170078F388 /* SettingsMenu.m */,
 			);
-			name = GUI;
+			path = GUI;
 			sourceTree = "<group>";
 		};
 		4892A27720153581003F56EC /* Custom Classes */ = {
 			isa = PBXGroup;
 			children = (
-				48785DCE2018B2390078F388 /* GUI */,
 				D6C0F875203737E3008673E3 /* Frameworks */,
-				D6C0F86F2037261D008673E3 /* User.h */,
-				D6C0F8702037261D008673E3 /* User.m */,
-				4892A27A2015385A003F56EC /* CustomVars.h */,
-				4892A27B20153BD8003F56EC /* CustomVars.m */,
+				48785DCE2018B2390078F388 /* GUI */,
 				484935CC2018DB6700ED058A /* CustomFunctions.h */,
 				484935CD2018DB6700ED058A /* CustomFunctions.m */,
+				4892A27A2015385A003F56EC /* CustomVars.h */,
+				4892A27B20153BD8003F56EC /* CustomVars.m */,
+				D6C0F86F2037261D008673E3 /* User.h */,
+				D6C0F8702037261D008673E3 /* User.m */,
 			);
-			name = "Custom Classes";
+			path = "Custom Classes";
 			sourceTree = "<group>";
 		};
 		48AD3F871DB9438600B47CA5 = {
 			isa = PBXGroup;
 			children = (
-				48AD3F921DB9438600B47CA5 /* notifi */,
-				48AD3F911DB9438600B47CA5 /* Products */,
 				48AD3FA71DBA500100B47CA5 /* Frameworks */,
 				0A355C312C783A79B37DE92A /* Pods */,
+				48AD3F911DB9438600B47CA5 /* Products */,
+				48AD3F921DB9438600B47CA5 /* notifi */,
 			);
 			sourceTree = "<group>";
 		};
@@ -211,18 +211,18 @@
 		48AD3F921DB9438600B47CA5 /* notifi */ = {
 			isa = PBXGroup;
 			children = (
+				D6C0F86B20371C3F008673E3 /* Classes */,
+				4892A27720153581003F56EC /* Custom Classes */,
+				48AD3F961DB9438600B47CA5 /* Supporting Files */,
+				D6C0F86E20372122008673E3 /* images */,
 				48AD3F931DB9438600B47CA5 /* AppDelegate.h */,
 				48AD3F941DB9438600B47CA5 /* AppDelegate.m */,
 				48DD0F051E1BC57D00773859 /* Assets.xcassets */,
+				481695731F046523003D6023 /* Credits.html */,
 				48AD3FA11DB9438600B47CA5 /* Info.plist */,
-				D6C0F86E20372122008673E3 /* images */,
-				48E49A8F1E1D9DFF00DE3DBE /* fonts */,
-				48AD3F961DB9438600B47CA5 /* Supporting Files */,
 				482C8A941E09743100E5C173 /* MyApplication.h */,
 				482C8A921E09742400E5C173 /* MyApplication.m */,
-				481695731F046523003D6023 /* Credits.html */,
-				D6C0F86B20371C3F008673E3 /* Classes */,
-				4892A27720153581003F56EC /* Custom Classes */,
+				48E49A8F1E1D9DFF00DE3DBE /* fonts */,
 			);
 			path = notifi;
 			sourceTree = "<group>";
@@ -232,7 +232,7 @@
 			children = (
 				48AD3F971DB9438600B47CA5 /* main.m */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		48AD3FA71DBA500100B47CA5 /* Frameworks */ = {
@@ -253,41 +253,41 @@
 				D6C0F86820371C39008673E3 /* LOOCryptString.h */,
 				D6C0F86920371C39008673E3 /* LOOCryptString.m */,
 			);
-			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		D6C0F86E20372122008673E3 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				48AE54B51E04480800E8777F /* up_arrow.png */,
-				487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */,
-				48B028301DBBAC51007D2462 /* menu_bellicon.png */,
 				48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */,
 				48AE54B71E0451EA00E8777F /* bell.png */,
-				486FA2CC1F2FA2FA008E7492 /* sad.png */,
-				48D4C207203E1F23002AA814 /* link.png */,
 				48D4C209203E20A0002AA814 /* cog.png */,
 				D6320E1B2068074A00E9327A /* delete-all.png */,
+				48D4C207203E1F23002AA814 /* link.png */,
 				D6320E1A2068074900E9327A /* mark-all-read.png */,
+				48B028301DBBAC51007D2462 /* menu_bellicon.png */,
+				487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */,
+				486FA2CC1F2FA2FA008E7492 /* sad.png */,
+				48AE54B51E04480800E8777F /* up_arrow.png */,
 			);
-			name = images;
+			path = images;
 			sourceTree = "<group>";
 		};
 		D6C0F875203737E3008673E3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D6C0F872203732F8008673E3 /* MenuWindow.h */,
-				D6C0F873203732F8008673E3 /* MenuWindow.m */,
 				48785DCF2018B2710078F388 /* Keys.h */,
 				48785DD02018B2710078F388 /* Keys.m */,
-				484935CF2018DFB400ED058A /* Socket.h */,
-				484935D02018DFB400ED058A /* Socket.m */,
-				48110580201F731C004D2040 /* NSView+Animate.h */,
-				48110581201F731C004D2040 /* NSView+Animate.m */,
+				D6C0F872203732F8008673E3 /* MenuWindow.h */,
+				D6C0F873203732F8008673E3 /* MenuWindow.m */,
 				4892A27420153559003F56EC /* NSImage+Rotate.h */,
 				4892A27520153559003F56EC /* NSImage+Rotate.m */,
+				48110580201F731C004D2040 /* NSView+Animate.h */,
+				48110581201F731C004D2040 /* NSView+Animate.m */,
+				484935CF2018DFB400ED058A /* Socket.h */,
+				484935D02018DFB400ED058A /* Socket.m */,
 			);
-			name = Frameworks;
+			path = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -434,7 +434,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/secret_server_code/${CODE}/g\" {} +\n";
+			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/Classes/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/secret_server_code/${CODE}/g\" {} +\n";
 		};
 		D6C0F86D20371CC6008673E3 /* Remove Secret Server Code */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -448,7 +448,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +\n";
+			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/Classes/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
