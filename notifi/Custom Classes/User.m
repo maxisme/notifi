@@ -264,6 +264,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }else{
         [notification setHasActionButton:false];
     }
+    [notification setSoundName:@"Pop"];
     
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
     [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:(id)self];
