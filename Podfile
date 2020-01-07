@@ -6,6 +6,5 @@ target 'notifi' do
   pod 'Sparkle'
   pod 'STHTTPRequest'
   pod 'CocoaLumberjack'
-  pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git'
-  use_frameworks!
+  pod 'MIHCrypto'
 end
