@@ -21,6 +21,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "ControllButton.h"
 #import "Cog.h"
 #import "SettingsMenu.h"
+#import "Constants.h"
 
 #import "NSView+Animate.h"
 #import "NSImage+Rotate.h"
@@ -242,8 +243,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                    NSForegroundColorAttributeName,
                                    nil];
     NSMutableAttributedString *sendCurlString =
-    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use HTTP requests\nalong with your personal credentials: %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]] attributes:sendCurlAttrs];
-    [sendCurlString addAttribute:NSLinkAttributeName value:[CustomVars how_to:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]] range:NSMakeRange(29,13)];
+    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use HTTP requests\nalong with your personal credentials: %@",[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]] attributes:sendCurlAttrs];
+    [sendCurlString addAttribute:NSLinkAttributeName value:[CustomVars how_to:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]] range:NSMakeRange(29,13)];
     
     @try {
         [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];

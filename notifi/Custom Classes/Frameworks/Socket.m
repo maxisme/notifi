@@ -12,16 +12,17 @@
 #import "CustomFunctions.h"
 #import "Keys.h"
 #import "User.h"
+#import "Constants.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation Socket
 
-- (id)initWithURL:(NSString*)url key:(NSString*)key{
+- (id)initWithURL:(NSString*)url server_key:(NSString*)server_key{
     if (self != [super init]) return nil;
     _url = url;
-    _key = key;
+    _server_key = server_key;
     
     _keychain = [[Keys alloc] init];
     
@@ -37,16 +38,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 -(void)open{
     DDLogDebug(@"opening socket");
-    [self destroy];
+    [self _destroy];
     
-    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
-    NSString* key = [_keychain getKey:@"credential_key"];
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef];
+    NSString* key = [_keychain getKey:CredentialKeyRef];
     
     if([key length] > 0 && [credentials length] > 0){
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
-        [request setValue:_key forHTTPHeaderField:@"Sec-Key"];
-        [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] forHTTPHeaderField:@"credentials"];
-        [request setValue:[_keychain getKey:@"credential_key"] forHTTPHeaderField:@"credentialkey"];
+        [request setValue:_server_key forHTTPHeaderField:@"Sec-Key"];
+        [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef] forHTTPHeaderField:@"credentials"];
+        [request setValue:[_keychain getKey:CredentialKeyRef] forHTTPHeaderField:@"credentialkey"];
         [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
         [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
 
@@ -55,10 +56,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [_web_socket open];
     }else{
         DDLogError(@"No valid key and credentials for notifi!");
+        [User newCredentials];
+        [self close];
     }
 }
 
--(void)destroy{
+-(void)_destroy{
     [_web_socket close];
     _web_socket.delegate = nil;
     _web_socket = nil;
@@ -97,26 +100,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
-    if ([error.localizedDescription rangeOfString:@"406"].location != NSNotFound){
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert addButtonWithTitle:@"Okay"];
-        [alert setMessageText:@"Major Error. Please reopen app. Credentials will change."];
-        [alert setInformativeText:[NSString stringWithFormat:@"Crash Message: %@", error]];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert runModal];
-        
-        // quit app
-        [CustomFunctions quit];
-    }
-    DDLogDebug(@"Socket failed with error: %@", error);
-    [self close];
     int error_code = [error.userInfo[@"HTTPResponseStatusCode"] intValue];
+    DDLogError(@"Socket issue: %@", error);
+    
     if(error_code == 402 || error_code == 401){
         // there is no matching UUID on the server so will need to create a new account
         [User newCredentials];
         [CustomFunctions sendNotificationCenter:@"" name:@"restart-socket"];
         [CustomFunctions sendNotificationCenter:@"" name:@"refresh-gui"];
     }
+    [self close];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(nonnull NSString *)string
@@ -136,12 +129,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 -(void)close{
     if(!_reconnect_timer){
-        if (self.onCloseBlock) _onCloseBlock();
-        [self destroy];
+        [self _destroy];
         
         // attempt to open socket again every 5 seconds
         _reconnect_timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(open) userInfo:nil repeats:YES];
     }
+    [CustomFunctions sendNotificationCenter:false name:@"update-menu-icon"];
 }
 
 -(void)restart{

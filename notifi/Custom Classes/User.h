@@ -17,7 +17,7 @@
 @property MainWindow *window;
 @property MenuBarClass *menu_bar;
 
-+(void)newCredentials;
++(bool)newCredentials;
 
 -(id)initWithMenuBar:(MenuBarClass*)mb;
 -(void)createSocket;

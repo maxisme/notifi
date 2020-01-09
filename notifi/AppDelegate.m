@@ -17,19 +17,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "CustomFunctions.h"
 #import "User.h"
 #import "Keys.h"
+#import "Constants.h"
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-//        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
-    
-    NSError *error = nil;
-    SentryClient *client = [[SentryClient alloc] initWithDsn:@"https://28f4f3d1516748f0a4a94587d91fab86@sentry.io/1504473" didFailWithError:&error];
-    SentryClient.sharedClient = client;
-    [SentryClient.sharedClient startCrashHandlerWithError:&error];
-    if (nil != error) {
-        DDLogError(@"Sentry error: %@", error);
-    }
     
     DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
     fileLogger.rollingFrequency = 60 * 60 * 24 * 7;
@@ -47,7 +39,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     DDLogDebug(@"----- started -----");
     DDLogDebug(@"%@", [[[NSBundle mainBundle] bundleURL] URLByDeletingLastPathComponent]);
    
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] || ![[[Keys alloc] init] getKey:@"credential_key"]){
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef] || ![[[Keys alloc] init] getKey:CredentialKeyRef]){
         // first time using app
         DDLogDebug(@"Creating new credentials");
         [User newCredentials];

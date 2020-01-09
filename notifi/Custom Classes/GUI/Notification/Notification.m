@@ -42,8 +42,15 @@ float one_row_info_height;
     _info_font = [NSFont fontWithName:@"Montserrat-Regular" size:12];
     NSFont* time_font = [NSFont fontWithName:@"Montserrat-Light" size:10];
     
+    NotificationImage *image_view;
     if([image_url length] != 0){
-        side_padding = image_hw + top_padding;
+        image_view = [[NotificationImage alloc] initWithFrame:NSMakeRect(0, 0, image_hw, image_hw)];
+        [image_view setImageFromURL:image_url hw:image_hw];
+        if (image_view.image != nil){
+            side_padding = image_hw + top_padding;
+        }else{
+            image_url = @"";
+        }
     }
     
     float text_width = width * 0.95 - side_padding;
@@ -83,8 +90,6 @@ float one_row_info_height;
         rounded_image_view.layer.cornerRadius = 5;
         rounded_image_view.layer.masksToBounds = YES;
         
-        NotificationImage *image_view = [[NotificationImage alloc] initWithFrame:NSMakeRect(0, 0, image_hw, image_hw)];
-        [image_view setImageFromURL:image_url hw:image_hw];
         [image_view setUrl:image_url];
         [rounded_image_view addSubview:image_view];
         

@@ -24,6 +24,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "Keys.h"
 #import "Notification.h"
 #import "NotificationTable.h"
+#import "Constants.h"
 
 #import "SettingsMenu.h" //two classes in - _window.settings_menu.credentials
 
@@ -43,14 +44,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     return self;
 }
 
-+(void)newCredentials{
-    NSString* url = @"https://s.notifi.it/code";
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:url];
++(bool)newCredentials{
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:[NSString stringWithFormat:@"%@/code", BackendURL]];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     
     // give server current credentials if it has them
-    NSString* current_credentials = [[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"];
-    NSString* current_key = [[[Keys alloc] init] getKey:@"credential_key"];
+    NSString* current_credentials = [[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef];
+    NSString* current_key = [[[Keys alloc] init] getKey:CredentialKeyRef];
     if(current_credentials && current_key){
         [post addEntriesFromDictionary:@{
             @"current_credentials": current_credentials,
@@ -64,35 +64,28 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString *content = [r startSynchronousWithError:&error];
     
     NSString* key = [CustomFunctions jsonToVal:content key:@"key"]; // password to credentials so no one else can use credentials
-    NSString* credentials = [CustomFunctions jsonToVal:content key:@"credentials"];
+    NSString* credentials = [CustomFunctions jsonToVal:content key: @"credentials"];
     
     if([key length] > 0){
-        [[[Keys alloc] init] setKey:@"credential_key" withPassword:key]; // store key to credentials in keychain
+        [[[Keys alloc] init] setKey:CredentialKeyRef withPassword:key]; // store key to credentials in keychain
         if (![credentials isEqual: @""]){
             // store credentials in normal storage
-            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:@"credentials"];
+            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:CredentialsRef];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }else{
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText:@"Error fetching new credentials!"];
-        [alert addButtonWithTitle:@"Ok"];
-        [alert setMessageText:@"Please contact max@max.me.uk"];
-        if(error){
-            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@", error]];
-        }else{
-            [alert setInformativeText:[NSString stringWithFormat:@"Error message: %@", content]];
+        if (error){
+            DDLogError(@"Error creating new credentials %@", [error localizedDescription]);
         }
-        [alert runModal];
-        
-        [CustomFunctions quit];
+        DDLogError(@"Error content: %@", content);
+        return false;
     }
+    return true;
 }
 
 #pragma mark - socket
 -(void)createSocket{
-    NSString* url = @"wss://s.notifi.it/ws";
-    _s = [[Socket alloc] initWithURL:url key:[LOOCryptString serverKey]];
+    _s = [[Socket alloc] initWithURL:[NSString stringWithFormat:@"%@/ws", BackendURL] server_key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{
         [self updateMenuBarIcon:false];

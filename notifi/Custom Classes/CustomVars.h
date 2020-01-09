@@ -16,9 +16,6 @@
 +(NSColor *)offwhite;
 
 +(NSString *)how_to:(NSString*)credentials;
-+(NSString *)default_empty;
-+(NSString *)notificationStorageKey;
-+(NSString *)credentialStorageKey;
 
 +(int)windowWidth;
 +(int)shrinkHeight:(bool)hasInfo;

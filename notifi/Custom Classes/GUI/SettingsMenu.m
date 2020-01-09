@@ -10,15 +10,16 @@
 #import "CustomVars.h"
 #import "CustomFunctions.h"
 #import "User.h"
+#import "Constants.h"
 
 @implementation SettingsMenu
 
 -(id)init {
     if (self != [super init]) return nil;
     
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]) return self;
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]) return self;
     
-    _credentials = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"] action:nil keyEquivalent:@""];
+    _credentials = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef] action:nil keyEquivalent:@""];
     [_credentials setTarget:self];
     [_credentials setEnabled:false];
     [self addItem:_credentials];
@@ -71,7 +72,7 @@
     NSMenuItem* quit = [[NSMenuItem alloc] initWithTitle:@"Quit notifi" action:@selector(quit) keyEquivalent:@"q"];
     [quit setTarget:self];
     [self addItem:quit];
-//
+    
     // Disable auto enable
     [self setAutoenablesItems:NO];
     [self setDelegate:(id)self];
@@ -113,7 +114,7 @@
 }
 
 -(void)copyCredentials{
-    [CustomFunctions copyText:[[NSUserDefaults standardUserDefaults] objectForKey:@"credentials"]];
+    [CustomFunctions copyText:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]];
 }
 
 - (void)shouldMakeSticky{

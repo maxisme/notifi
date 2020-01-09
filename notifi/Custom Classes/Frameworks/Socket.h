@@ -15,13 +15,13 @@
 @property (nonatomic, strong) SRWebSocket *web_socket;
 @property (nonatomic, strong) NSTimer *reconnect_timer;
 @property (nonatomic) NSString *url;
-@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *server_key;
 @property (nonatomic) bool received_pong;
 @property (nonatomic) bool connected;
 @property (copy, nonatomic) void (^onCloseBlock)(void);
 @property (copy, nonatomic) void (^onMessageBlock)(NSString*);
 
-- (id)initWithURL:(NSString*)url key:(NSString*)key;
+- (id)initWithURL:(NSString*)url server_key:(NSString*)server_key;
 - (void)send:(NSString*)m;
 - (void)open;
 @end

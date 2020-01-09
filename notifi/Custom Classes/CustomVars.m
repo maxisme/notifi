@@ -37,14 +37,6 @@
     return [NSString stringWithFormat:@"https://notifi.it/?c=%@#How-To", credentials];
 }
 
-+(NSString *)notificationStorageKey{
-    return @"notifications";
-}
-
-+(NSString *)credentialStorageKey{
-    return @"credentials";
-}
-
 +(int)windowWidth{
     return 350;
 }
