@@ -133,7 +133,6 @@ float one_row_info_height;
                                     time_height
                                     )
     ];
-//    [_time_label setBackgroundColor: [CustomVars offwhite]];
     [_time_label setFont:time_font];
     [_time_label setTextColor: [CustomVars grey]];
     
@@ -195,7 +194,6 @@ float one_row_info_height;
     self.expanded = true;
     [self shrink:false];
     
-    
     return self;
 }
 
@@ -241,9 +239,15 @@ float one_row_info_height;
             [_title_label setStringValue:[NSString stringWithFormat:@"%@%@", [_title_string substringToIndex:cnt - [cat length]], cat]]; //modify title label to concatted one.
             
             //move time and info relative to new height
-            self.title_height_change = title_height - one_row_title_height;
-            [self.time_label setFrame:NSMakeRect(self.time_label.frame.origin.x, self.time_label.frame.origin.y + self.title_height_change, self.time_label.frame.size.width, self.time_label.frame.size.height)];
-            [self.info_label setFrame:NSMakeRect(self.info_label.frame.origin.x, self.info_label.frame.origin.y + self.title_height_change, self.info_label.frame.size.width, self.info_label.frame.size.height)];
+            self.title_height_change = title_height - (one_row_title_height*2);
+            
+            if (self.time_frame_shrink_y == 0 || self.info_frame_shrink_y == 0){
+                self.time_frame_shrink_y = self.time_label.frame.origin.y + self.title_height_change;
+                self.info_frame_shrink_y = self.info_label.frame.origin.y + self.title_height_change;
+            }
+            
+            [self.time_label setFrame:NSMakeRect(self.time_label.frame.origin.x, self.time_frame_shrink_y, self.time_label.frame.size.width, self.time_label.frame.size.height)];
+            [self.info_label setFrame:NSMakeRect(self.info_label.frame.origin.x, self.info_frame_shrink_y, self.info_label.frame.size.width, self.info_label.frame.size.height)];
         }
         
         // change the info of the notification to one row if it is not already

@@ -34,6 +34,10 @@
 @property float shrink_height;
 @property float text_width;
 @property float title_height_change;
+
+@property float time_frame_shrink_y;
+@property float info_frame_shrink_y;
+
 @property NSFont* title_font;
 @property NSFont* info_font;
 

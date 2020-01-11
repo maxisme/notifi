@@ -14,5 +14,5 @@
 - [x] time not updating automatically.
 - [x] fix horizontal scrolling in window
 - [x] Getting weird `Uncommitted CATransaction` errors.
-- [ ] Fix bug where date text appears at top of notification:
+- [x] Fix bug where date text appears at top of notification:
     - usually happens when the title text has been shrunk

@@ -37,6 +37,7 @@
 		48AE54B81E0451EA00E8777F /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54B71E0451EA00E8777F /* bell.png */; };
 		48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */; };
 		48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B028301DBBAC51007D2462 /* menu_bellicon.png */; };
+		48B2C1F323CA039400326F3E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 48B2C1F223CA039400326F3E /* README.md */; };
 		48D4C208203E1F24002AA814 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C207203E1F23002AA814 /* link.png */; };
 		48D4C20A203E20A1002AA814 /* cog.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C209203E20A0002AA814 /* cog.png */; };
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
@@ -108,6 +109,7 @@
 		48AE54B71E0451EA00E8777F /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		48AE54C31E05E65B00E8777F /* alert_menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_menu_bellicon.png; sourceTree = "<group>"; };
 		48B028301DBBAC51007D2462 /* menu_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_bellicon.png; sourceTree = "<group>"; };
+		48B2C1F223CA039400326F3E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		48D4C207203E1F23002AA814 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
 		48D4C209203E20A0002AA814 /* cog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cog.png; sourceTree = "<group>"; };
 		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 		48AD3F921DB9438600B47CA5 /* notifi */ = {
 			isa = PBXGroup;
 			children = (
+				48B2C1F223CA039400326F3E /* README.md */,
 				4883A40623C75AC500EDA245 /* notifi.m */,
 				D6C0F86B20371C3F008673E3 /* Classes */,
 				4892A27720153581003F56EC /* Custom Classes */,
@@ -433,6 +436,7 @@
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
+				48B2C1F323CA039400326F3E /* README.md in Resources */,
 				D6320E1D2068074A00E9327A /* delete-all.png in Resources */,
 				481695741F046523003D6023 /* Credits.html in Resources */,
 				48D4C20A203E20A1002AA814 /* cog.png in Resources */,
@@ -573,7 +577,6 @@
 				4892A26D20153271003F56EC /* Cog.m in Sources */,
 				D6C0F8712037261D008673E3 /* User.m in Sources */,
 				4892A27C20153BD8003F56EC /* CustomVars.m in Sources */,
-				4897783F23C22D4A0072F139 /* RSAClass.m in Sources */,
 				4892A25B2015304B003F56EC /* Notification.m in Sources */,
 				4892A270201532B0003F56EC /* NotificationLink.m in Sources */,
 				484935D12018DFB400ED058A /* Socket.m in Sources */,
@@ -755,7 +758,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0.09;
+				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_UNUSED_LABEL = NO;
@@ -765,7 +768,7 @@
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.09;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = notifi.it;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -778,7 +781,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0.09;
+				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_UNUSED_LABEL = NO;
@@ -788,7 +791,7 @@
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 0.09;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = notifi.it;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
