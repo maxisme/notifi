@@ -101,15 +101,33 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
     int error_code = [error.userInfo[@"HTTPResponseStatusCode"] intValue];
-    DDLogError(@"Socket issue: %@", error);
+    DDLogError(@"Socket issue (%d): %@", error_code, error);
     
-    if(error_code == 402 || error_code == 401){
+    if (error_code == 403 && _last_error_code != 403){
+        
+        // invalid credentials and key
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Invalid credentials!"];
+        [alert setInformativeText:[NSString stringWithFormat:@"Please contact max@max.me.uk quoting:\n\nUUID: %@\nCredentials: %@\n\nThank you!", [CustomFunctions getSystemUUID], [[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]]];
+        [alert addButtonWithTitle:@"Ok"];
+        [alert runModal];
+        
+        // remove credential key
+        [[[Keys alloc] init] setKey:CredentialKeyRef withPassword:@""];
+        
+        // remove credentials
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:CredentialsRef];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    if(error_code == 401 || error_code == 402){
         // there is no matching UUID on the server so will need to create a new account
         [User newCredentials];
         [CustomFunctions sendNotificationCenter:@"" name:@"restart-socket"];
         [CustomFunctions sendNotificationCenter:@"" name:@"refresh-gui"];
     }
     [self close];
+    _last_error_code = error_code;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(nonnull NSString *)string

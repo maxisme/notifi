@@ -18,6 +18,7 @@
 @property (nonatomic) NSString *server_key;
 @property (nonatomic) bool received_pong;
 @property (nonatomic) bool connected;
+@property (nonatomic) int last_error_code;
 @property (copy, nonatomic) void (^onCloseBlock)(void);
 @property (copy, nonatomic) void (^onMessageBlock)(NSString*);
 

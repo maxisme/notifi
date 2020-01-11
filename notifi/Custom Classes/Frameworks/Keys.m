@@ -7,6 +7,10 @@
 //
 
 #import "Keys.h"
+
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+
 @implementation Keys
 
 -(id)init{
@@ -23,8 +27,11 @@
     [self setPassword:pass];
     [self save:&error];
     
-    if(!error) return TRUE;
-    return FALSE;
+    if(error){
+        DDLogError(@"Error setting key: %@", [error localizedDescription]);
+        return FALSE;
+    }
+    return TRUE;
 }
 
 -(NSString*)getKey:(NSString*)service{
@@ -38,6 +45,7 @@
         [alert setMessageText:@"Error fetching your Key!"];
         [alert setInformativeText:[NSString stringWithFormat:@"There was an error fetching your key.\r %@",error]];
         [alert addButtonWithTitle:@"Ok"];
+        [alert runModal];
         return nil;
     }
     

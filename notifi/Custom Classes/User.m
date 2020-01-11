@@ -72,7 +72,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             // store credentials in normal storage
             [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:CredentialsRef];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            DDLogInfo(@"Updating credentials");
         }
+        DDLogInfo(@"Succesfully set new credentials!");
     }else{
         if (error){
             DDLogError(@"Error creating new credentials %@", [error localizedDescription]);
