@@ -7,4 +7,5 @@ target 'notifi' do
   pod 'STHTTPRequest'
   pod 'CocoaLumberjack'
   pod 'MIHCrypto'
+  pod 'Sentry'
 end

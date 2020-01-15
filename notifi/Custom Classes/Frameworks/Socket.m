@@ -12,7 +12,6 @@
 #import "CustomFunctions.h"
 #import "Keys.h"
 #import "User.h"
-#import "Constants.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -40,14 +39,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     DDLogDebug(@"opening socket");
     [self _destroy];
     
-    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef];
-    NSString* key = [_keychain getKey:CredentialKeyRef];
+    NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
+    NSString* credential_key_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Key Ref"];
+    
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:credential_ref];
+    NSString* key = [_keychain getKey:credential_key_ref];
     
     if([key length] > 0 && [credentials length] > 0){
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_url]];
         [request setValue:_server_key forHTTPHeaderField:@"Sec-Key"];
-        [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef] forHTTPHeaderField:@"credentials"];
-        [request setValue:[_keychain getKey:CredentialKeyRef] forHTTPHeaderField:@"credentialkey"];
+        [request setValue:[[NSUserDefaults standardUserDefaults] objectForKey:credential_ref] forHTTPHeaderField:@"credentials"];
+        [request setValue:[_keychain getKey:credential_key_ref] forHTTPHeaderField:@"credentialkey"];
         [request setValue:[CustomFunctions getSystemUUID] forHTTPHeaderField:@"UUID"];
         [request setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forHTTPHeaderField:@"version"];
 
@@ -104,19 +106,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     DDLogError(@"Socket issue (%d): %@", error_code, error);
     
     if (error_code == 403 && _last_error_code != 403){
-        
         // invalid credentials and key
+        NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
+        NSString* credential_key_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Key Ref"];
+        
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:@"Invalid credentials!"];
-        [alert setInformativeText:[NSString stringWithFormat:@"Please contact max@max.me.uk quoting:\n\nUUID: %@\nCredentials: %@\n\nThank you!", [CustomFunctions getSystemUUID], [[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]]];
+        [alert setInformativeText:[NSString stringWithFormat:@"Please contact max@max.me.uk quoting:\n\nUUID: %@\nCredentials: %@\n\nThank you!", [CustomFunctions getSystemUUID], [[NSUserDefaults standardUserDefaults] objectForKey:credential_ref]]];
         [alert addButtonWithTitle:@"Ok"];
         [alert runModal];
         
         // remove credential key
-        [[[Keys alloc] init] setKey:CredentialKeyRef withPassword:@""];
+        [[[Keys alloc] init] setKey:credential_key_ref withPassword:@""];
         
         // remove credentials
-        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:CredentialsRef];
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:credential_ref];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     

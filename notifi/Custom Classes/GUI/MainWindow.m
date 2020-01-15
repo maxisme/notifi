@@ -21,7 +21,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "ControllButton.h"
 #import "Cog.h"
 #import "SettingsMenu.h"
-#import "Constants.h"
 
 #import "NSView+Animate.h"
 #import "NSImage+Rotate.h"
@@ -242,25 +241,24 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                    [CustomVars grey],
                                    NSForegroundColorAttributeName,
                                    nil];
-    NSMutableAttributedString *sendCurlString =
-    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use HTTP requests\nalong with your personal credentials: %@",[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]] attributes:sendCurlAttrs];
-    [sendCurlString addAttribute:NSLinkAttributeName value:[CustomVars how_to:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]] range:NSMakeRange(29,13)];
     
-    @try {
-        [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
-    } @catch (NSException *exception) {
-        DDLogError(@"%@", exception);
-    } @finally {
-        NotificationLabel* curl_field = [[NotificationLabel alloc] init];
-        [curl_field setBackgroundColor:[CustomVars offwhite]];
-        [curl_field setFrame:CGRectMake(10, title_field.frame.origin.y - 60, scroll_width - top_padding, 70)];
-        curl_field.tag = 2;
-        [curl_field setAllowsEditingTextAttributes:true];
-        [curl_field setAttributedStringValue:sendCurlString];
-        NSTextView* textEditor2 = (NSTextView *)[[[NSApplication sharedApplication] keyWindow] fieldEditor:YES forObject:curl_field];
-        [textEditor2 setSelectedTextAttributes:sendCurlAttrs];
-        [view addSubview:curl_field];
-    }
+    NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:credential_ref];
+    
+    NSMutableAttributedString *sendCurlString =
+    [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use HTTP requests\nalong with your personal credentials: %@", credentials] attributes:sendCurlAttrs];
+    [sendCurlString addAttribute:NSLinkAttributeName value:[CustomVars how_to:credentials] range:NSMakeRange(29,13)];
+    [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
+    
+    NotificationLabel* curl_field = [[NotificationLabel alloc] init];
+    [curl_field setBackgroundColor:[CustomVars offwhite]];
+    [curl_field setFrame:CGRectMake(10, title_field.frame.origin.y - 60, scroll_width - top_padding, 70)];
+    curl_field.tag = 2;
+    [curl_field setAllowsEditingTextAttributes:true];
+    [curl_field setAttributedStringValue:sendCurlString];
+    NSTextView* textEditor2 = (NSTextView *)[[[NSApplication sharedApplication] keyWindow] fieldEditor:YES forObject:curl_field];
+    [textEditor2 setSelectedTextAttributes:sendCurlAttrs];
+    [view addSubview:curl_field];
     
     return view;
 }

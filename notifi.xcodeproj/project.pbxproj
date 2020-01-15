@@ -16,6 +16,9 @@
 		484935CE2018DB6700ED058A /* CustomFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935CD2018DB6700ED058A /* CustomFunctions.m */; };
 		484935D12018DFB400ED058A /* Socket.m in Sources */ = {isa = PBXBuildFile; fileRef = 484935D02018DFB400ED058A /* Socket.m */; };
 		486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = 486FA2CC1F2FA2FA008E7492 /* sad.png */; };
+		4873531A23CF5A80002339CA /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 4873531923CF5A80002339CA /* Debug.xcconfig */; };
+		4873531C23CF5AA1002339CA /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 4873531B23CF5AA1002339CA /* Release.xcconfig */; };
+		4873532423CF6AC2002339CA /* example.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 4873532323CF6AC2002339CA /* example.xcconfig */; };
 		487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */; };
 		48785DCC2018A1170078F388 /* SettingsMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DCB2018A1170078F388 /* SettingsMenu.m */; };
 		48785DD12018B2710078F388 /* Keys.m in Sources */ = {isa = PBXBuildFile; fileRef = 48785DD02018B2710078F388 /* Keys.m */; };
@@ -29,7 +32,6 @@
 		4892A273201532E5003F56EC /* NotificationLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A272201532E5003F56EC /* NotificationLabel.m */; };
 		4892A27620153559003F56EC /* NSImage+Rotate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27520153559003F56EC /* NSImage+Rotate.m */; };
 		4892A27C20153BD8003F56EC /* CustomVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27B20153BD8003F56EC /* CustomVars.m */; };
-		4897783C23C217220072F139 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4897783B23C217220072F139 /* Constants.m */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
 		48AD3FA91DBA500100B47CA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48AD3FA81DBA500100B47CA5 /* Security.framework */; };
@@ -43,7 +45,6 @@
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
 		48E49A901E1D9DFF00DE3DBE /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 48E49A8F1E1D9DFF00DE3DBE /* fonts */; };
 		51D50D69FB93F8683C7FFE0F /* libPods-notifi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47EBA8E9250DCF827F79FCC5 /* libPods-notifi.a */; };
-		90D967B051AF983CEDC0601A /* libPods-notifiTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC133C3C0881A82A159BA7D /* libPods-notifiTests.a */; };
 		D6320E1C2068074A00E9327A /* mark-all-read.png in Resources */ = {isa = PBXBuildFile; fileRef = D6320E1A2068074900E9327A /* mark-all-read.png */; };
 		D6320E1D2068074A00E9327A /* delete-all.png in Resources */ = {isa = PBXBuildFile; fileRef = D6320E1B2068074A00E9327A /* delete-all.png */; };
 		D65EE08420376D6700CD589D /* MenuBarClass.m in Sources */ = {isa = PBXBuildFile; fileRef = D65EE08320376D6700CD589D /* MenuBarClass.m */; };
@@ -53,7 +54,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2FC133C3C0881A82A159BA7D /* libPods-notifiTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-notifiTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47EBA8E9250DCF827F79FCC5 /* libPods-notifi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-notifi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48110580201F731C004D2040 /* NSView+Animate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSView+Animate.h"; sourceTree = "<group>"; };
 		48110581201F731C004D2040 /* NSView+Animate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSView+Animate.m"; sourceTree = "<group>"; };
@@ -69,6 +69,9 @@
 		484935CF2018DFB400ED058A /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		484935D02018DFB400ED058A /* Socket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Socket.m; sourceTree = "<group>"; };
 		486FA2CC1F2FA2FA008E7492 /* sad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sad.png; sourceTree = "<group>"; };
+		4873531923CF5A80002339CA /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		4873531B23CF5AA1002339CA /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		4873532323CF6AC2002339CA /* example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = example.xcconfig; sourceTree = "<group>"; };
 		487652DD1E01BFD900D0CE3B /* menu_error_bellicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_error_bellicon.png; sourceTree = "<group>"; };
 		48785DCA2018A1170078F388 /* SettingsMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsMenu.h; sourceTree = "<group>"; };
 		48785DCB2018A1170078F388 /* SettingsMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsMenu.m; sourceTree = "<group>"; };
@@ -97,8 +100,6 @@
 		4892A27920153677003F56EC /* NotificationTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationTable.h; sourceTree = "<group>"; };
 		4892A27A2015385A003F56EC /* CustomVars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomVars.h; sourceTree = "<group>"; };
 		4892A27B20153BD8003F56EC /* CustomVars.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomVars.m; sourceTree = "<group>"; };
-		4897783A23C217220072F139 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
-		4897783B23C217220072F139 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		48AD3F901DB9438600B47CA5 /* notifi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notifi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AD3F931DB9438600B47CA5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		48AD3F941DB9438600B47CA5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -114,8 +115,6 @@
 		48D4C209203E20A0002AA814 /* cog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cog.png; sourceTree = "<group>"; };
 		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48E49A8F1E1D9DFF00DE3DBE /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
-		5BBEF2CDE4FCEEA74B842482 /* Pods-notifiTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifiTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifiTests/Pods-notifiTests.debug.xcconfig"; sourceTree = "<group>"; };
-		757C4C5731A72FEB3A8F74FF /* Pods-notifiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifiTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifiTests/Pods-notifiTests.release.xcconfig"; sourceTree = "<group>"; };
 		AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"; sourceTree = "<group>"; };
 		C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.debug.xcconfig"; sourceTree = "<group>"; };
 		D6320E1A2068074900E9327A /* mark-all-read.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark-all-read.png"; sourceTree = "<group>"; };
@@ -135,7 +134,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90D967B051AF983CEDC0601A /* libPods-notifiTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,8 +156,6 @@
 			children = (
 				C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */,
 				AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */,
-				5BBEF2CDE4FCEEA74B842482 /* Pods-notifiTests.debug.xcconfig */,
-				757C4C5731A72FEB3A8F74FF /* Pods-notifiTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -219,8 +215,6 @@
 				4892A27B20153BD8003F56EC /* CustomVars.m */,
 				D6C0F86F2037261D008673E3 /* User.h */,
 				D6C0F8702037261D008673E3 /* User.m */,
-				4897783A23C217220072F139 /* Constants.h */,
-				4897783B23C217220072F139 /* Constants.m */,
 			);
 			path = "Custom Classes";
 			sourceTree = "<group>";
@@ -228,6 +222,9 @@
 		48AD3F871DB9438600B47CA5 = {
 			isa = PBXGroup;
 			children = (
+				4873532323CF6AC2002339CA /* example.xcconfig */,
+				4873531B23CF5AA1002339CA /* Release.xcconfig */,
+				4873531923CF5A80002339CA /* Debug.xcconfig */,
 				4883A41023C75CAF00EDA245 /* notifiTests */,
 				48AD3FA71DBA500100B47CA5 /* Frameworks */,
 				0A355C312C783A79B37DE92A /* Pods */,
@@ -282,7 +279,6 @@
 				482C8A9C1E0B0D0700E5C173 /* CoreData.framework */,
 				48AD3FA81DBA500100B47CA5 /* Security.framework */,
 				47EBA8E9250DCF827F79FCC5 /* libPods-notifi.a */,
-				2FC133C3C0881A82A159BA7D /* libPods-notifiTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -337,7 +333,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4883A41623C75CAF00EDA245 /* Build configuration list for PBXNativeTarget "notifiTests" */;
 			buildPhases = (
-				E0CDD0FE383F68026A0269C5 /* [CP] Check Pods Manifest.lock */,
 				4883A40B23C75CAF00EDA245 /* Sources */,
 				4883A40C23C75CAF00EDA245 /* Frameworks */,
 				4883A40D23C75CAF00EDA245 /* Resources */,
@@ -426,11 +421,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4873531C23CF5AA1002339CA /* Release.xcconfig in Resources */,
+				4873531A23CF5A80002339CA /* Debug.xcconfig in Resources */,
 				48AE54C41E05E65B00E8777F /* alert_menu_bellicon.png in Resources */,
 				48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */,
 				486FA2CD1F2FA2FA008E7492 /* sad.png in Resources */,
 				48D4C208203E1F24002AA814 /* link.png in Resources */,
 				487652DE1E01BFD900D0CE3B /* menu_error_bellicon.png in Resources */,
+				4873532423CF6AC2002339CA /* example.xcconfig in Resources */,
 				48AE54B81E0451EA00E8777F /* bell.png in Resources */,
 				D6320E1C2068074A00E9327A /* mark-all-read.png in Resources */,
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
@@ -531,28 +529,6 @@
 			shellScript = "CODE=$(cat \"$SRCROOT/../notifi.it/secret_server_code.pass\")\nfind \"$SRCROOT/notifi/Classes/LOOCryptString.m\" -type f -exec sed -i '' -e \"s/${CODE}/secret_server_code/g\" {} +\n";
 			showEnvVarsInLog = 0;
 		};
-		E0CDD0FE383F68026A0269C5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-notifiTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -573,7 +549,6 @@
 				4892A26A20153242003F56EC /* NotificationImage.m in Sources */,
 				D6C0F874203732F8008673E3 /* MenuWindow.m in Sources */,
 				48AD3F981DB9438600B47CA5 /* main.m in Sources */,
-				4897783C23C217220072F139 /* Constants.m in Sources */,
 				4892A26D20153271003F56EC /* Cog.m in Sources */,
 				D6C0F8712037261D008673E3 /* User.m in Sources */,
 				4892A27C20153BD8003F56EC /* CustomVars.m in Sources */,
@@ -599,7 +574,6 @@
 /* Begin XCBuildConfiguration section */
 		4883A41423C75CAF00EDA245 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5BBEF2CDE4FCEEA74B842482 /* Pods-notifiTests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -624,7 +598,6 @@
 		};
 		4883A41523C75CAF00EDA245 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 757C4C5731A72FEB3A8F74FF /* Pods-notifiTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -753,12 +726,12 @@
 		};
 		48AD3FA51DB9438600B47CA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */;
+			baseConfigurationReference = 4873531923CF5A80002339CA /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_UNUSED_LABEL = NO;
@@ -768,7 +741,7 @@
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 10;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = notifi.it;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -776,12 +749,12 @@
 		};
 		48AD3FA61DB9438600B47CA5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */;
+			baseConfigurationReference = 4873531B23CF5AA1002339CA /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_UNUSED_LABEL = NO;
@@ -791,7 +764,7 @@
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 10;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = notifi.it;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

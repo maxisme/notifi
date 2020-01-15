@@ -41,11 +41,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self fetch:&error];
     
     if(error){
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Error fetching your Key!"];
-        [alert setInformativeText:[NSString stringWithFormat:@"There was an error fetching your key.\r %@",error]];
-        [alert addButtonWithTitle:@"Ok"];
-        [alert runModal];
+        DDLogError(@"Error fetching key: %@", error);
         return nil;
     }
     

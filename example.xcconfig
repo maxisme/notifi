@@ -1,0 +1,5 @@
+#include "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"
+DSN =
+BACKEND_URL =
+CREDENTIAL_REF =
+CREDENTIAL_KEY_REF =

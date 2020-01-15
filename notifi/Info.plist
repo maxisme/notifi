@@ -42,5 +42,13 @@
 	<string>https://notifi.it/version</string>
 	<key>SUShowReleaseNotes</key>
 	<true/>
+	<key>Dsn</key>
+	<string>$(DSN)</string>
+	<key>Backend URL</key>
+	<string>$(BACKEND_URL)</string>
+	<key>Credential Ref</key>
+	<string>$(CREDENTIAL_REF)</string>
+	<key>Credential Key Ref</key>
+	<string>$(CREDENTIAL_KEY_REF)</string>
 </dict>
 </plist>

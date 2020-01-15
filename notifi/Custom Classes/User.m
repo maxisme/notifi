@@ -24,7 +24,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "Keys.h"
 #import "Notification.h"
 #import "NotificationTable.h"
-#import "Constants.h"
 
 #import "SettingsMenu.h" //two classes in - _window.settings_menu.credentials
 
@@ -45,12 +44,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 +(bool)newCredentials{
-    STHTTPRequest *r = [STHTTPRequest requestWithURLString:[NSString stringWithFormat:@"%@/code", BackendURL]];
+    NSString* backend_url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Backend URL"];
+    NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
+    NSString* credential_key_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Key Ref"];
+    
+    STHTTPRequest *r = [STHTTPRequest requestWithURLString:[NSString stringWithFormat:@"%@/code", backend_url]];
     NSMutableDictionary* post = [[NSMutableDictionary alloc] initWithDictionary:@{@"UUID":[CustomFunctions getSystemUUID]}];
     
     // give server current credentials if it has them
-    NSString* current_credentials = [[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef];
-    NSString* current_key = [[[Keys alloc] init] getKey:CredentialKeyRef];
+    NSString* current_credentials = [[NSUserDefaults standardUserDefaults] objectForKey:credential_ref];
+    NSString* current_key = [[[Keys alloc] init] getKey:credential_key_ref];
     if(current_credentials && current_key){
         [post addEntriesFromDictionary:@{
             @"current_credentials": current_credentials,
@@ -67,10 +70,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSString* credentials = [CustomFunctions jsonToVal:content key: @"credentials"];
     
     if([key length] > 0){
-        [[[Keys alloc] init] setKey:CredentialKeyRef withPassword:key]; // store key to credentials in keychain
+        [[[Keys alloc] init] setKey:credential_key_ref withPassword:key]; // store key to credentials in keychain
         if (![credentials isEqual: @""]){
             // store credentials in normal storage
-            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:CredentialsRef];
+            [[NSUserDefaults standardUserDefaults] setObject:credentials forKey:credential_ref];
             [[NSUserDefaults standardUserDefaults] synchronize];
             DDLogInfo(@"Updating credentials");
         }
@@ -87,7 +90,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - socket
 -(void)createSocket{
-    _s = [[Socket alloc] initWithURL:[NSString stringWithFormat:@"%@/ws", BackendURL] server_key:[LOOCryptString serverKey]];
+    NSString* backend_url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Backend URL"];
+    _s = [[Socket alloc] initWithURL:[NSString stringWithFormat:@"%@/ws", backend_url] server_key:[LOOCryptString serverKey]];
     
     [_s setOnCloseBlock:^{
         [self updateMenuBarIcon:false];

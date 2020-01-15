@@ -10,16 +10,16 @@
 #import "CustomVars.h"
 #import "CustomFunctions.h"
 #import "User.h"
-#import "Constants.h"
 
 @implementation SettingsMenu
 
 -(id)init {
     if (self != [super init]) return nil;
     
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]) return self;
+    NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:credential_ref]) return self;
     
-    _credentials = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef] action:nil keyEquivalent:@""];
+    _credentials = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:credential_ref] action:nil keyEquivalent:@""];
     [_credentials setTarget:self];
     [_credentials setEnabled:false];
     [self addItem:_credentials];
@@ -114,7 +114,8 @@
 }
 
 -(void)copyCredentials{
-    [CustomFunctions copyText:[[NSUserDefaults standardUserDefaults] objectForKey:CredentialsRef]];
+    NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
+    [CustomFunctions copyText:[[NSUserDefaults standardUserDefaults] objectForKey:credential_ref]];
 }
 
 - (void)shouldMakeSticky{
