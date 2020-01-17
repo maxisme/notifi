@@ -82,7 +82,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         if (error){
             DDLogError(@"Error creating new credentials %@", [error localizedDescription]);
         }
-        DDLogError(@"Error content: %@", content);
+        if ([content length] > 0){
+            DDLogError(@"Error content: %@", content);
+            // TODO handle with http error code.
+            if ([content rangeOfString:@"Error 1062"].location != NSNotFound) {
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert addButtonWithTitle:@"Okay"];
+                [alert setMessageText:@"Error fetching credentials. Please contact max@max.me.uk quoting your UUID:"];
+                [alert setInformativeText:[CustomFunctions getSystemUUID]];
+                [alert setAlertStyle:NSAlertStyleCritical];
+                [alert runModal];
+
+                [NSApp terminate:self];
+            }
+        }
         return false;
     }
     return true;

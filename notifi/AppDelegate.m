@@ -67,18 +67,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     if(![[NSUserDefaults standardUserDefaults] objectForKey:credential_ref] || ![[[Keys alloc] init] getKey:credential_key_ref]){
         // first time using app
         DDLogDebug(@"Creating new credentials");
-        if(![User newCredentials]){
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert addButtonWithTitle:@"Okay"];
-            [alert setMessageText:@"Error fetching credentials. Please contact max@max.me.uk quoting your UUID:"];
-            [alert setInformativeText:[CustomFunctions getSystemUUID]];
-            [alert setAlertStyle:NSAlertStyleCritical];
-            [alert runModal];
-            
-//            [self sendEmail:[[fileLogger currentLogFileInfo] filePath]];
-
-            [NSApp terminate:self];
-        }
+        [User newCredentials];
         [CustomFunctions openOnStartup];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"sticky_notification"];
     }
@@ -118,16 +107,5 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
     return true;
 }
-
-//-(void)sendEmail:(NSString*)file_path{
-//    NSURL* url = [[NSURL alloc] initFileURLWithPath:file_path];
-//    NSArray* items = [NSArray arrayWithObject:url];
-//    NSSharingService *service = [NSSharingService sharingServiceNamed:NSSharingServiceNameComposeEmail];
-//    service.recipients=@[@"max@max.me.uk"];
-//    service.subject= [NSString stringWithFormat:@"%@",NSLocalizedString(@"Error fetching credentials.",nil)];
-//    service.delegate = self;
-//    NSLog(@"canPerform %@", [service canPerformWithItems:items] ? @"YES" : @"NO");
-//    [service performWithItems:items];
-//}
 
 @end

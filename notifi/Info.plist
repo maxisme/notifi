@@ -4,6 +4,8 @@
 <dict>
 	<key>ATSApplicationFontsPath</key>
 	<string>fonts/</string>
+	<key>Backend URL</key>
+	<string>$(BACKEND_URL)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -20,6 +22,12 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>Credential Key Ref</key>
+	<string>$(CREDENTIAL_KEY_REF)</string>
+	<key>Credential Ref</key>
+	<string>$(CREDENTIAL_REF)</string>
+	<key>Dsn</key>
+	<string>$(DSN)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
@@ -42,13 +50,5 @@
 	<string>https://notifi.it/version</string>
 	<key>SUShowReleaseNotes</key>
 	<true/>
-	<key>Dsn</key>
-	<string>$(DSN)</string>
-	<key>Backend URL</key>
-	<string>$(BACKEND_URL)</string>
-	<key>Credential Ref</key>
-	<string>$(CREDENTIAL_REF)</string>
-	<key>Credential Key Ref</key>
-	<string>$(CREDENTIAL_KEY_REF)</string>
 </dict>
 </plist>

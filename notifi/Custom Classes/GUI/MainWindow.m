@@ -25,8 +25,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "NSView+Animate.h"
 #import "NSImage+Rotate.h"
 
-
-
 @implementation MainWindow
 
 #define HEIGHTPERC 0.7
@@ -248,7 +246,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSMutableAttributedString *sendCurlString =
     [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"To receive notifications use HTTP requests\nalong with your personal credentials: %@", credentials] attributes:sendCurlAttrs];
     [sendCurlString addAttribute:NSLinkAttributeName value:[CustomVars how_to:credentials] range:NSMakeRange(29,13)];
-    [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
+    if (credentials != nil){
+        [sendCurlString applyFontTraits:NSBoldFontMask range:NSMakeRange(81, 25)];
+    }
     
     NotificationLabel* curl_field = [[NotificationLabel alloc] init];
     [curl_field setBackgroundColor:[CustomVars offwhite]];

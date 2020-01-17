@@ -17,17 +17,18 @@
     if (self != [super init]) return nil;
     
     NSString* credential_ref = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Credential Ref"];
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:credential_ref]) return self;
+    NSString* credentials = [[NSUserDefaults standardUserDefaults] objectForKey:credential_ref];
+    if ([credentials length] > 0){
+        _credentials = [[NSMenuItem alloc] initWithTitle:credentials action:nil keyEquivalent:@""];
+        [_credentials setTarget:self];
+        [_credentials setEnabled:false];
+        [self addItem:_credentials];
     
-    _credentials = [[NSMenuItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:credential_ref] action:nil keyEquivalent:@""];
-    [_credentials setTarget:self];
-    [_credentials setEnabled:false];
-    [self addItem:_credentials];
-    
-    NSMenuItem* copy = [[NSMenuItem alloc] initWithTitle:@"Copy Credentials" action:@selector(copyCredentials) keyEquivalent:@"c"];
-    [copy setTarget:self];
-    [copy setEnabled:true];
-    [self addItem:copy];
+        NSMenuItem* copy = [[NSMenuItem alloc] initWithTitle:@"Copy Credentials" action:@selector(copyCredentials) keyEquivalent:@"c"];
+        [copy setTarget:self];
+        [copy setEnabled:true];
+        [self addItem:copy];
+    }
     
     NSMenuItem* newCredentials = [[NSMenuItem alloc] initWithTitle:@"Create New Credentials" action:@selector(createNewCredentials) keyEquivalent:@""];
     [newCredentials setTarget:self];
