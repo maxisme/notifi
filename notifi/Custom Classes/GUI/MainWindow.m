@@ -29,6 +29,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #define HEIGHTPERC 0.7
 
+#define BUTTONSHEIGHT 40
+#define TOPBARHEIGHT 90
+#define ICONHEIGHT 50
+
+#define COGHEIGHT 20
+#define COGPADDING 10
+
+#define BUTTONY 7
+#define BUTTONSIZE 12
+#define BUTTONPADDING 35
+#define BUTTONHOVEROPAC 0.5
+
+#define TABLEPADDING 10
+#define TABLEPADDINGSIDES 30
+
 -(id)init{
     if (self != [super init]) return nil;
     
@@ -39,16 +54,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     // create content of window
     [self setWindowBody];
     
-    // scroll listener
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onScroll) name:NSViewBoundsDidChangeNotification object:[_scroll_view contentView]];
-    
     // delete notification listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteNote:) name:@"delete-notification" object:nil];
     
-    // refresh GUI
+    // refresh GUI listener
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGUI) name:@"refresh-gui" object:nil];
     
-    // update notification times
+    // update notification times 60 second cron
     [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateAllNotificationTimes) userInfo:nil repeats:YES];
     
     return self;
@@ -58,24 +70,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     // ----------------- positioning variables -----------------
     int window_width = self.frame.size.width;
     int window_height = self.frame.size.height;
-    int bottom_buttons_height = 40;
-    int top_bar_height = 90;
-    int icon_height = 50;
-    int cog_height = 20;
-    int cog_padding = 10;
-    int scroll_height = (window_height - top_bar_height) - bottom_buttons_height;
     
-    int button_y = 7;
-    int button_size = 12;
-    int button_padding = 35;
-    float min_button_opacity = 0.5;
-    
-    int table_padding = 16;
+    int scroll_height = (window_height - TOPBARHEIGHT) - BUTTONSHEIGHT;
     // ----------------- top bar -----------------
     
     //bell
     NSImage *icon = [CustomFunctions setImgOriginalSize:[NSImage imageNamed:@"bell.png"]];
-    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(icon_height/2), window_height - top_bar_height + 12, icon_height, icon_height)];
+    NSImageView *iconView = [[NSImageView alloc] initWithFrame:NSMakeRect(window_width/2 -(ICONHEIGHT/2), window_height - TOPBARHEIGHT + 12, ICONHEIGHT, ICONHEIGHT)];
     [iconView setImage:icon];
     [iconView setImageScaling:NSImageScaleProportionallyUpOrDown];
     [self.view addSubview:iconView];
@@ -83,7 +84,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     //cog
     _settings_menu = [[SettingsMenu alloc] init];
     NSImage *cog = [CustomFunctions setImgOriginalSize:[NSImage imageNamed:@"cog.png"]];
-    Cog *cogView = [[Cog alloc] initWithFrame:NSMakeRect(window_width - (cog_height + cog_padding), window_height-(self.WINDOWTOMENUHEIGHT+ cog_height + cog_padding), cog_height, cog_height)];
+    Cog *cogView = [[Cog alloc] initWithFrame:NSMakeRect(window_width - (COGHEIGHT + COGPADDING), window_height-((COGHEIGHT * 2) + COGPADDING), COGHEIGHT, COGHEIGHT)];
     [cogView setCustomMenu:_settings_menu];
     [cogView setImage:cog];
     [cogView setImageScaling:NSImageScaleProportionallyUpOrDown];
@@ -92,7 +93,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     // network error message
     _error_label = [[NSTextField alloc] init];
-    [_error_label setFrame:CGRectMake(0, iconView.frame.origin.y - self.WINDOWTOMENUHEIGHT, window_width, self.WINDOWTOMENUHEIGHT)];
+    [_error_label setFrame:CGRectMake(0, iconView.frame.origin.y - [CustomVars windowToMenuBar], window_width, [CustomVars windowToMenuBar])];
     [_error_label setWantsLayer:true];
     [_error_label setRefusesFirstResponder:true];
     [_error_label setEditable:false];
@@ -108,16 +109,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self.view addSubview:_error_label];
     
     //top line boarder
-    NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - top_bar_height, window_width, 1)];
+    NSView *hor_bor_top = [[NSView alloc] initWithFrame:CGRectMake(0, window_height - TOPBARHEIGHT, window_width, 1)];
     hor_bor_top.wantsLayer = TRUE;
     [hor_bor_top.layer setBackgroundColor:[[CustomVars boarder] CGColor]];
     [self.view addSubview:hor_bor_top];
     
-    
     //----------------- body -----------------
     
     //scroll view
-    _scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, bottom_buttons_height, window_width, scroll_height)];
+    _scroll_view = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, BUTTONSHEIGHT, window_width, scroll_height)];
     [_scroll_view setNeedsLayout:YES];
     [_scroll_view setBackgroundColor:[CustomVars offwhite]];
     [_scroll_view setBorderType:NSNoBorder];
@@ -126,16 +126,18 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [[_scroll_view contentView] setPostsBoundsChangedNotifications:YES];
     [[_scroll_view contentView] setCopiesOnScroll:NO];
     
-    if((int)[[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"]  count] == 0){
+    NSArray *notifications = [[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"];
+    
+    if((int)[notifications count] == 0){
         _scroll_view.documentView = [self noNotificationsScrollView:_scroll_view.frame];
     }else{
         //INITIATE NSTABLE
-        [self fillTable];
+        [self fillTable:notifications];
         
         _notification_table = [[NotificationTable alloc] init];
-        [_notification_table setIntercellSpacing:NSMakeSize(table_padding, table_padding / 2)];
+        [_notification_table setIntercellSpacing:NSMakeSize(TABLEPADDINGSIDES, TABLEPADDING)];
         NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:@"1"];
-        [column setWidth:_scroll_view.frame.size.width - table_padding]; //I swear me needing to do this is a bug
+        [column setWidth:_scroll_view.frame.size.width - TABLEPADDINGSIDES]; // TODO I swear me needing to do this is a bug
         [_notification_table addTableColumn:column];
         [_notification_table setHeaderView:nil];
         [_notification_table setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
@@ -147,12 +149,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
     [self.view addSubview:_scroll_view];
     
-    //----------------- bottom bar -----------------
+    //----------------- bottom buttons -----------------
     
     //mark all as read button
-    ControlButton* markAllAsReadBtn = [[ControlButton alloc] initWithFrame:CGRectMake(button_padding / 2, button_y, (window_width / 2) - button_padding, 25)];
+    ControlButton* markAllAsReadBtn = [[ControlButton alloc] initWithFrame:CGRectMake(BUTTONPADDING / 2, BUTTONY, (window_width / 2) - BUTTONPADDING, 25)];
     [markAllAsReadBtn setWantsLayer:YES];
-    [markAllAsReadBtn setOpacity_min:min_button_opacity];
+    [markAllAsReadBtn setOpacity_min:BUTTONHOVEROPAC];
     [markAllAsReadBtn setButtonType:NSMomentaryChangeButton];
     markAllAsReadBtn.bordered = false;
     [markAllAsReadBtn setFocusRingType:NSFocusRingTypeNone];
@@ -163,21 +165,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self.view addSubview:markAllAsReadBtn];
     
     //horizontal border bottom
-    NSView *hor_bor_bot = [[NSView alloc] initWithFrame:CGRectMake(0, bottom_buttons_height, window_width, 1)];
+    NSView *hor_bor_bot = [[NSView alloc] initWithFrame:CGRectMake(0, BUTTONSHEIGHT, window_width, 1)];
     hor_bor_bot.wantsLayer = TRUE;
     [hor_bor_bot.layer setBackgroundColor:[[CustomVars boarder] CGColor]];
     [self.view addSubview:hor_bor_bot];
     
     //vertical button splitter boarder
-    NSView *vert_bor_top = [[NSView alloc] initWithFrame:CGRectMake((window_width / 2) -  1, 0, 1, bottom_buttons_height)];
+    NSView *vert_bor_top = [[NSView alloc] initWithFrame:CGRectMake((window_width / 2) -  1, 0, 1, BUTTONSHEIGHT)];
     vert_bor_top.wantsLayer = TRUE;
     [vert_bor_top.layer setBackgroundColor:[[CustomVars boarder] CGColor]];
     [self.view addSubview:vert_bor_top];
     
     //delete all button
-    ControlButton *deleteNotifications = [[ControlButton alloc] initWithFrame:CGRectMake(window_width / 2 + (button_padding /2), button_y, window_width /2 - button_padding, 25)];
+    ControlButton *deleteNotifications = [[ControlButton alloc] initWithFrame:CGRectMake(window_width / 2 + (BUTTONPADDING / 2), BUTTONY, window_width /2 - BUTTONPADDING, 25)];
     [deleteNotifications setWantsLayer:YES];
-    [deleteNotifications setOpacity_min:min_button_opacity];
+    [deleteNotifications setOpacity_min:BUTTONHOVEROPAC];
     [deleteNotifications setButtonType:NSMomentaryChangeButton];
     [deleteNotifications setImage:[NSImage imageNamed:@"delete-all.png"]];
     [deleteNotifications setImageScaling:NSImageScaleProportionallyUpOrDown];
@@ -295,10 +297,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 // get all data stored in NSUserDefaults and create notifications
--(void) fillTable{
+-(void)fillTable:(NSArray*)notifications{
     _notifications = [[NSMutableArray alloc] init];
-    for(NSMutableDictionary* dic in [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy]){
-        [_notifications insertObject:[self createNotificationFromDic:dic] atIndex:0];
+    for(NSMutableDictionary* notification in notifications){
+        [_notifications insertObject:[self createNotificationFromDic:notification] atIndex:0];
     }
     
     [_notification_table reloadData];
@@ -320,7 +322,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 -(void)markAllAsRead{
-    for(Notification* n in _notifications) [n markRead:true];
+    for(Notification* n in _notifications) [n markRead];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)updateAllNotificationTimes{
@@ -338,12 +341,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     Notification* n = [self notificationFromID:ID];
     
-    //remove notification from stored notifications
-    [notifications removeObjectAtIndex:[n defaultsIndex]];
+    // remove notification from stored notifications
+    [notifications removeObjectAtIndex:[n defaultsIndex:notifications]];
     [[NSUserDefaults standardUserDefaults] setObject:notifications forKey:@"notifications"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    //update GUI
+    // update GUI
     [_notifications removeObject:n];
     [_notification_table removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:[_notification_table rowForView:n]] withAnimation:NSTableViewAnimationEffectFade];
     
@@ -391,10 +394,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notifications"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     _notifications = nil;
-}
-
--(void)onScroll{
-//    if([[_scroll_view.documentView className] isEqual: @"NotificationTable"]) [self animate:false];
 }
 
 -(void)animate:(bool)should_delay{

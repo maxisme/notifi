@@ -7,15 +7,13 @@
 //
 
 #import "MenuWindow.h"
+#import "CustomVars.h"
 
-#define animationduration 0.4
+
 @implementation MenuWindow
 
 -(id)initWithWidth:(int)width height:(int)height colour:(NSColor*)colour{
     if (self != [super init]) return nil;
-    
-    //init var
-    self.WINDOWTOMENUHEIGHT = 20;
     
     NSRect view_frame = NSMakeRect(0, 0, width, height);
     
@@ -35,7 +33,6 @@
     _view.layer.backgroundColor = [NSColor clearColor].CGColor;
     
     // add 'window to menu' image
-    
     NSBezierPath *path = [NSBezierPath bezierPath];
     [path moveToPoint:NSMakePoint(0, 0)];
     [path lineToPoint:NSMakePoint(50, 100)];
@@ -44,8 +41,9 @@
     [[NSColor redColor] set];
     [path fill];
     
+    // up arrow
     NSImage *up = [NSImage imageNamed:@"up_arrow.png"];
-    _window_to_menu_img = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, self.WINDOWTOMENUHEIGHT, self.WINDOWTOMENUHEIGHT)];
+    _window_to_menu_img = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, [CustomVars windowToMenuBar], [CustomVars windowToMenuBar])];
     [_window_to_menu_img setImage:up];
     [_view addSubview:_window_to_menu_img];
     
@@ -58,11 +56,13 @@
     bg.layer.cornerRadius = 10.0f;
     [_view addSubview:bg];
     
+    // send notification that window has closed
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeWindow) name:NSWindowDidResignKeyNotification object:nil];
+    
     return self;
 }
 
--(void)showWindowAtMenuBarRect:(NSRect)pos afterAnimation:(void(^)(void))afterAnimation{
+-(void)showWindowAtMenuBarRect:(NSRect)pos{
     self.alphaValue = 0;
     
     [self setPosition:pos];
@@ -72,14 +72,13 @@
     [NSApp activateIgnoringOtherApps:YES];
     
     [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-        context.duration = 0.4;
+        context.duration = [CustomVars notificationAnimationDuration];
         self.animator.alphaValue = 1.0f;
     }completionHandler:^{
         [_view setNeedsDisplay:YES];
         [_view setNeedsLayout:YES];
         [_view setNeedsUpdateConstraints:YES];
         [_view layoutSubtreeIfNeeded];
-        if(afterAnimation) afterAnimation();
     }];
 }
 
@@ -98,13 +97,13 @@
     float menu_icon_y = menu_bar_rect.origin.y;
     
     // position calculations
-    float arrow_x = window_width / 2 - (self.WINDOWTOMENUHEIGHT / 2);
-    float arrow_y = window_height - self.WINDOWTOMENUHEIGHT;
+    float arrow_x = window_width / 2 - ([CustomVars windowToMenuBar] / 2);
+    float arrow_y = window_height - [CustomVars windowToMenuBar];
     float window_x = (menu_icon_x + menu_icon_width/2) - window_width / 2;
     float window_y = menu_icon_y - window_height;
     
     // set positions
-    [_window_to_menu_img setFrame:NSMakeRect(arrow_x, arrow_y, self.WINDOWTOMENUHEIGHT, self.WINDOWTOMENUHEIGHT)];
+    [_window_to_menu_img setFrame:NSMakeRect(arrow_x, arrow_y, [CustomVars windowToMenuBar], [CustomVars windowToMenuBar])];
     [self setFrame:NSMakeRect(window_x, window_y, window_width, window_height) display:true];
 }
 

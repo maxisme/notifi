@@ -132,7 +132,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         
         NSError* error = nil;
         NSData* data = [message dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary* json_dic = [NSJSONSerialization
+        NSMutableDictionary* json_dic = [NSJSONSerialization
                                   JSONObjectWithData:data
                                   options:kNilOptions
                                   error:&error];
@@ -311,7 +311,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
     
     if(notification.activationType == NSUserNotificationActivationTypeContentsClicked){
-        [_window showWindowAtMenuBarRect:[[_menu_bar.statusItem valueForKey:@"window"] frame] afterAnimation:nil];
+        [_window showWindowAtMenuBarRect:[[_menu_bar.statusItem valueForKey:@"window"] frame]];
     }else{
         [_window closeWindow];
     }

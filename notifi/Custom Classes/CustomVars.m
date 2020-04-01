@@ -37,12 +37,20 @@
     return [NSString stringWithFormat:@"https://notifi.it/?c=%@#How-To", credentials];
 }
 
++(int)windowToMenuBar{
+    return 20;
+}
+
++(float)notificationAnimationDuration{
+    return 0.25;
+}
+
 +(int)windowWidth{
     return 350;
 }
 
-+(int)shrinkHeight:(bool)hasInfo{
-    if(hasInfo) return 70;
++(int)shrinkHeight:(bool)hasMessage{
+    if(hasMessage) return 70;
     return 55;
 }
 @end

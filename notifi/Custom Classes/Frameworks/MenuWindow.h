@@ -9,11 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 @interface MenuWindow : NSWindow
-@property int WINDOWTOMENUHEIGHT;
 @property NSView* view;
 @property NSImageView *window_to_menu_img;
 
 - (id)initWithWidth:(int)width height:(int)height colour:(NSColor*)colour;
-- (void)showWindowAtMenuBarRect:(NSRect)pos afterAnimation:(void(^)(void))afterAnimation;
+- (void)showWindowAtMenuBarRect:(NSRect)pos;
 - (void)closeWindow;
 @end

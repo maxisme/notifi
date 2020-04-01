@@ -32,6 +32,7 @@
 		4892A273201532E5003F56EC /* NotificationLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A272201532E5003F56EC /* NotificationLabel.m */; };
 		4892A27620153559003F56EC /* NSImage+Rotate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27520153559003F56EC /* NSImage+Rotate.m */; };
 		4892A27C20153BD8003F56EC /* CustomVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892A27B20153BD8003F56EC /* CustomVars.m */; };
+		48AC420D242A47D800804168 /* test-notifications.sh in Resources */ = {isa = PBXBuildFile; fileRef = 48AC420C242A47D800804168 /* test-notifications.sh */; };
 		48AD3F951DB9438600B47CA5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F941DB9438600B47CA5 /* AppDelegate.m */; };
 		48AD3F981DB9438600B47CA5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 48AD3F971DB9438600B47CA5 /* main.m */; };
 		48AD3FA91DBA500100B47CA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48AD3FA81DBA500100B47CA5 /* Security.framework */; };
@@ -43,6 +44,7 @@
 		48D4C208203E1F24002AA814 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C207203E1F23002AA814 /* link.png */; };
 		48D4C20A203E20A1002AA814 /* cog.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C209203E20A0002AA814 /* cog.png */; };
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
+		48E38E852434A3FC007CB801 /* NotificationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48E38E842434A3FC007CB801 /* NotificationView.xib */; };
 		48E49A901E1D9DFF00DE3DBE /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 48E49A8F1E1D9DFF00DE3DBE /* fonts */; };
 		51D50D69FB93F8683C7FFE0F /* libPods-notifi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47EBA8E9250DCF827F79FCC5 /* libPods-notifi.a */; };
 		D6320E1C2068074A00E9327A /* mark-all-read.png in Resources */ = {isa = PBXBuildFile; fileRef = D6320E1A2068074900E9327A /* mark-all-read.png */; };
@@ -100,6 +102,7 @@
 		4892A27920153677003F56EC /* NotificationTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationTable.h; sourceTree = "<group>"; };
 		4892A27A2015385A003F56EC /* CustomVars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomVars.h; sourceTree = "<group>"; };
 		4892A27B20153BD8003F56EC /* CustomVars.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomVars.m; sourceTree = "<group>"; };
+		48AC420C242A47D800804168 /* test-notifications.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-notifications.sh"; sourceTree = "<group>"; };
 		48AD3F901DB9438600B47CA5 /* notifi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notifi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AD3F931DB9438600B47CA5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		48AD3F941DB9438600B47CA5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -114,6 +117,7 @@
 		48D4C207203E1F23002AA814 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
 		48D4C209203E20A0002AA814 /* cog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cog.png; sourceTree = "<group>"; };
 		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		48E38E842434A3FC007CB801 /* NotificationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationView.xib; sourceTree = "<group>"; };
 		48E49A8F1E1D9DFF00DE3DBE /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"; sourceTree = "<group>"; };
 		C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.debug.xcconfig"; sourceTree = "<group>"; };
@@ -173,6 +177,7 @@
 				4892A26F201532B0003F56EC /* NotificationLink.m */,
 				4892A27920153677003F56EC /* NotificationTable.h */,
 				4892A2632015315F003F56EC /* NotificationTable.m */,
+				48E38E842434A3FC007CB801 /* NotificationView.xib */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -222,6 +227,7 @@
 		48AD3F871DB9438600B47CA5 = {
 			isa = PBXGroup;
 			children = (
+				48AC420C242A47D800804168 /* test-notifications.sh */,
 				4873532323CF6AC2002339CA /* example.xcconfig */,
 				4873531B23CF5AA1002339CA /* Release.xcconfig */,
 				4873531923CF5A80002339CA /* Debug.xcconfig */,
@@ -434,6 +440,8 @@
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
+				48E38E852434A3FC007CB801 /* NotificationView.xib in Resources */,
+				48AC420D242A47D800804168 /* test-notifications.sh in Resources */,
 				48B2C1F323CA039400326F3E /* README.md in Resources */,
 				D6320E1D2068074A00E9327A /* delete-all.png in Resources */,
 				481695741F046523003D6023 /* Credits.html in Resources */,
@@ -731,7 +739,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_UNUSED_LABEL = NO;
@@ -741,7 +749,7 @@
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 11;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = notifi.it;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -754,7 +762,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 3H49MXS325;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_UNUSED_LABEL = NO;
@@ -764,7 +772,7 @@
 				INFOPLIST_FILE = notifi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 11;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = notifi.it;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

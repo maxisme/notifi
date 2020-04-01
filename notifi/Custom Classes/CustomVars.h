@@ -18,5 +18,7 @@
 +(NSString *)how_to:(NSString*)credentials;
 
 +(int)windowWidth;
++(float)notificationAnimationDuration;
++(int)windowToMenuBar;
 +(int)shrinkHeight:(bool)hasInfo;
 @end

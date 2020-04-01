@@ -14,4 +14,6 @@
 
 @interface NotificationLabel: NSTextField
 @property (nonatomic, assign) id<Notification> delegate;
+@property float expand_y;
+@property float shrink_y;
 @end

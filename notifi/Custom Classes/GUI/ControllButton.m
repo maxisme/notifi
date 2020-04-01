@@ -14,7 +14,7 @@
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
     
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    if((int)[notifications count] != 0){ // if there are notifications
+    if((int)[notifications count] != 0){ // there are notifications
         flash.fromValue = [NSNumber numberWithFloat:1];
         
         [super resetCursorRects];
@@ -36,7 +36,7 @@
     CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
     
     NSMutableArray *notifications = [[[NSUserDefaults standardUserDefaults] objectForKey:@"notifications"] mutableCopy];
-    if((int)[notifications count] != 0){ // if there are notifications
+    if((int)[notifications count] != 0){ // there are notifications
         flash.fromValue = [NSNumber numberWithFloat:self.opacity_min];
         flash.toValue = [NSNumber numberWithFloat:1];
     }
