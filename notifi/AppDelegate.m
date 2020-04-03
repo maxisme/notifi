@@ -11,6 +11,7 @@
 
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import <FMDB/FMDatabase.h>
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #import "MainWindow.h"
@@ -46,6 +47,22 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }else{
         NSLog(@"SENTRY NOT RUNNING");
     }
+    
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tmp.db"];
+    FMDatabase *db = [FMDatabase databaseWithPath:path];
+    NSLog(@"%@", path);
+    [db open];
+    [db executeUpdate:@"CREATE TABLE 'notifications' ( \
+        'id'    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \
+        'title'    TEXT NOT NULL, \
+        'time'    TEXT NOT NULL, \
+        'message'    TEXT, \
+        'image'    TEXT, \
+        'link'    TEXT, \
+        'read'    NUMERIC DEFAULT 0 \
+    )"];
+    [db executeUpdate:@"insert into notifications (title, time) values ('foo', 'bar');"];
+    
     
     // logging
     DDFileLogger *fileLogger = [[DDFileLogger alloc] init];

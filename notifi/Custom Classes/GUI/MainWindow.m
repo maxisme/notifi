@@ -413,7 +413,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSUInteger start_notification_index = range.location;
     if(start_notification_index > 1) start_notification_index -= 1;
     NSUInteger end_notification_index = start_notification_index + range.length + 1;
-    if(end_notification_index >= num_notifications) end_notification_index = num_notifications; // end is the last notification
+    if(end_notification_index >= num_notifications) end_notification_index = num_notifications;
     if(num_notifications > 0){
         // animates notifications into view
         for(NSUInteger x = start_notification_index; x < end_notification_index; x++){

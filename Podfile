@@ -8,4 +8,5 @@ target 'notifi' do
   pod 'CocoaLumberjack'
   pod 'MIHCrypto'
   pod 'Sentry'
+  pod 'FMDB'
 end
