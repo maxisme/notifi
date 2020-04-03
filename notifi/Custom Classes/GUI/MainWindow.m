@@ -44,6 +44,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #define TABLEPADDING 10
 #define TABLEPADDINGSIDES 30
 
+#define NOTIFICATION_DELAY 0.07
+
 -(id)init{
     if (self != [super init]) return nil;
     
@@ -408,31 +410,32 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     
     NSUInteger num_notifications = [_notifications count];
     
-    NSUInteger start = range.location;
-    if(start > 1) start -= 1;
-    NSUInteger end = start + range.length + 1;
-    if(end >= num_notifications) end = num_notifications; // end is the last notification
-    if(num_notifications > 0){ // there are notifications
-        for(NSUInteger x = start; x < end; x++){
+    NSUInteger start_notification_index = range.location;
+    if(start_notification_index > 1) start_notification_index -= 1;
+    NSUInteger end_notification_index = start_notification_index + range.length + 1;
+    if(end_notification_index >= num_notifications) end_notification_index = num_notifications; // end is the last notification
+    if(num_notifications > 0){
+        // animates notifications into view
+        for(NSUInteger x = start_notification_index; x < end_notification_index; x++){
             Notification* n = [_notifications objectAtIndex:x];
-            NSNumber *num = [[NSNumber alloc] initWithUnsignedLongLong:n.ID];
-            if(![_notifications_animated containsObject:num]){ // not already animated
-                [_notifications_animated addObject:num];
+            NSNumber *table_num = [[NSNumber alloc] initWithUnsignedLongLong:n.ID];
+            if(![self.animated_notifications containsObject:table_num]){ // not already animated
+                [self.animated_notifications addObject:table_num];
                 
                 //handle delay
                 float delay = 0;
-                if (should_delay) delay = (x - start) * 0.07; // on first show
+                if (should_delay) delay = (x - start_notification_index) * NOTIFICATION_DELAY; // on first show
                 
                 //original positions
-                int or_x = n.frame.origin.x;
-                int or_y = n.frame.origin.y;
+                int original_x = TABLEPADDINGSIDES / 2;
+                int original_y = TABLEPADDING / 2;
                 
                 [n animateWithDuration:delay animation:^{
-                    NSPoint startPoint = NSMakePoint(or_x + right, or_y);
+                    NSPoint startPoint = NSMakePoint(original_x + right, original_y);
                     [n setFrameOrigin:startPoint];
                 } completion:^{
                     [n animateWithDuration:1 animation:^{
-                        NSPoint endPoint = NSMakePoint(or_x, or_y);
+                        NSPoint endPoint = NSMakePoint(original_x, original_y);
                         [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.5 :0.5 :0 :1]];
                         [[n animator] setFrameOrigin:endPoint];
                     }];
@@ -449,6 +452,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             }
         }
     }else if(![[_scroll_view.documentView className] isEqual: @"NotificationTable"]){
+        
         //animate no notifications label
         NotificationLabel* no_notifications = (NotificationLabel*)[_scroll_view.documentView viewWithTag:1];
         int nn_or_x = no_notifications.frame.origin.x;

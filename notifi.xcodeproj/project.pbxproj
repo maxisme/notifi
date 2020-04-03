@@ -44,7 +44,6 @@
 		48D4C208203E1F24002AA814 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C207203E1F23002AA814 /* link.png */; };
 		48D4C20A203E20A1002AA814 /* cog.png in Resources */ = {isa = PBXBuildFile; fileRef = 48D4C209203E20A0002AA814 /* cog.png */; };
 		48DD0F061E1BC57D00773859 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48DD0F051E1BC57D00773859 /* Assets.xcassets */; };
-		48E38E852434A3FC007CB801 /* NotificationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48E38E842434A3FC007CB801 /* NotificationView.xib */; };
 		48E49A901E1D9DFF00DE3DBE /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 48E49A8F1E1D9DFF00DE3DBE /* fonts */; };
 		51D50D69FB93F8683C7FFE0F /* libPods-notifi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47EBA8E9250DCF827F79FCC5 /* libPods-notifi.a */; };
 		D6320E1C2068074A00E9327A /* mark-all-read.png in Resources */ = {isa = PBXBuildFile; fileRef = D6320E1A2068074900E9327A /* mark-all-read.png */; };
@@ -117,7 +116,6 @@
 		48D4C207203E1F23002AA814 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
 		48D4C209203E20A0002AA814 /* cog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cog.png; sourceTree = "<group>"; };
 		48DD0F051E1BC57D00773859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		48E38E842434A3FC007CB801 /* NotificationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationView.xib; sourceTree = "<group>"; };
 		48E49A8F1E1D9DFF00DE3DBE /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		AAEBB28D4838A0B7433B417E /* Pods-notifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.release.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.release.xcconfig"; sourceTree = "<group>"; };
 		C6C13AC51C186348B3AE43D0 /* Pods-notifi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-notifi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-notifi/Pods-notifi.debug.xcconfig"; sourceTree = "<group>"; };
@@ -177,7 +175,6 @@
 				4892A26F201532B0003F56EC /* NotificationLink.m */,
 				4892A27920153677003F56EC /* NotificationTable.h */,
 				4892A2632015315F003F56EC /* NotificationTable.m */,
-				48E38E842434A3FC007CB801 /* NotificationView.xib */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -440,7 +437,6 @@
 				48AE54B61E04480800E8777F /* up_arrow.png in Resources */,
 				48B028311DBBAC51007D2462 /* menu_bellicon.png in Resources */,
 				48E49A901E1D9DFF00DE3DBE /* fonts in Resources */,
-				48E38E852434A3FC007CB801 /* NotificationView.xib in Resources */,
 				48AC420D242A47D800804168 /* test-notifications.sh in Resources */,
 				48B2C1F323CA039400326F3E /* README.md in Resources */,
 				D6320E1D2068074A00E9327A /* delete-all.png in Resources */,

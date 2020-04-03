@@ -22,8 +22,7 @@ curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=hey&link=https:
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=hi&image=https://notifi.it/images/logo.png&link=https://google.com"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}&link=https://google.com"
 
-#for i in {1..1000}
-#do
-#    maxlen=$(( ( RANDOM % 1000 )  + 1 ))
-#    curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=$i%20${LOREM::maxlen}"
-#done
+for i in {1..1000}
+do
+    curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=$i%20${LOREM}&link=https://google.com"
+done

@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NotificationTable* notification_table;
 @property (strong) NSScrollView *scroll_view;
 @property NSMutableArray* notifications;
-@property NSMutableArray *notifications_animated;
+@property NSMutableArray *animated_notifications;
 
 -(void)setWindowBody;
 -(void)animate:(bool)should_delay;
