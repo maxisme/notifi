@@ -43,3 +43,8 @@ Pods
 .!84369!LOOCryptString.m
 Debug.xcconfig
 Release.xcconfig
+buildOptions.plist
+DistributionSummary.plist
+ExportOptions.plist
+tmp.xcarchive
+notifi.app
