@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b1197943-7de2-4972-8388-8097e4447388" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_128.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_128@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_16@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_256.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_256@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_32@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets.xcassets/AppIcon.appiconset/icon_512@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Podfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/Raleway-ExtraBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/Raleway-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/Raleway-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/AppDelegate.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/AppDelegate.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_128.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_128@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_16@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_256.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_256@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_32@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Assets.xcassets/AppIcon.appiconset/icon_512@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Classes/.!24558!LOOCryptString.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Classes/LOOCryptString.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Classes/LOOCryptString.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Credits.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/CustomFunctions.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/CustomFunctions.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/CustomVars.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/CustomVars.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/Keys.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/Keys.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/MenuWindow.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/MenuWindow.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/NSImage+Rotate.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/NSImage+Rotate.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/NSView+Animate.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/NSView+Animate.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/Socket.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/Frameworks/Socket.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Cog.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Cog.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/ControllButton.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/ControllButton.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/MainWindow.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/MainWindow.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/MenuBarClass.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/MenuBarClass.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/Notification.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/Notification.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationImage.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationImage.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationLabel.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationLabel.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationLink.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationLink.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationTable.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/Notification/NotificationTable.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/SettingsMenu.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/GUI/SettingsMenu.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/User.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Custom Classes/User.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/MyApplication.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/MyApplication.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/Supporting Files/main.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/fonts/Montserrat-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/fonts/Montserrat-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/fonts/Montserrat-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/alert_menu_bellicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/bell.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/cog.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/delete-all.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/link.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/mark-all-read.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/menu_bellicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/menu_error_bellicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/sad.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifi/images/up_arrow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifiTests/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notifiTests/notifiTests.m" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.14.4/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1eaq4ugxC5QbmInlM7Jqzdbqdkk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.jetbrains" />
+    <property name="settings.editor.selected.configurable" value="goland.project.structure" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.jetbrains" />
+      <recent name="$PROJECT_DIR$/lib/screens" />
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/screens" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter" singleton="false">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

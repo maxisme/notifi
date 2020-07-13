@@ -1,18 +1,16 @@
-<p align="center"><img height="150px" src="https://github.com/maxisme/notifi/raw/master/notifi/images/bell.png"></p>
+# notifi
 
-# [notifi.it](https://notifi.it/)
+A new Flutter project.
 
-## Mac App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
+## Getting Started
 
-## TODO
+This project is a starting point for a Flutter application.
 
-- [x] More efficient way to sort notification views in window.
-- [x] When clicking on notification popup does not always open notifi Mac app.
-- [x] Links not clickable
-- [x] Fix icon to show error even when has notifications.
-- [x] For some reason after deleting notifications in the window if you follow the mouse around you can see the cursor for text and links and also if you right click it throws an error because of it thinking there is an object there. I believe this may have something todo with wantsLayer
-- [x] time not updating automatically.
-- [x] fix horizontal scrolling in window
-- [x] Getting weird `Uncommitted CATransaction` errors.
-- [x] Fix bug where date text appears at top of notification:
-    - usually happens when the title text has been shrunk
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

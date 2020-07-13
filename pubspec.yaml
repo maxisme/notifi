@@ -1,0 +1,78 @@
+name: notifi
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  provider: ^3.0.0
+  cached_network_image: ^2.2.0+1
+  url_launcher: ^5.4.11
+  flutter_dotenv: ^2.1.0
+  web_socket_channel: ^1.1.0
+  flutter_secure_storage:
+    git:
+      url: git://github.com/openresearch/flutter_secure_storage.git
+      ref: feature/macos_support
+  package_info: ^0.4.1
+  uuid: ^2.1.0
+  flutter_local_notifications: ^1.5.0-beta.1
+  sprintf: ^4.0.0
+  dio: ^3.0.9
+  json_serializable: ^3.3.0
+  sqflite: ^1.3.1
+  flutter_slidable: ^0.5.4
+  launch_at_login: ^0.0.3
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - images/bell.png
+    - images/sad.png
+    - .env
+
+  fonts:
+    - family: Inconsolata
+      fonts:
+        - asset: fonts/Inconsolata.ttf
+        - asset: fonts/Inconsolata-Bold.ttf
+          weight: 700
+        - asset: fonts/Inconsolata-Black.ttf
+          weight: 900
