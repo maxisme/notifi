@@ -13,20 +13,12 @@ class NotificationUI extends StatefulWidget {
   String image;
   String link;
   int id;
-  bool read;
-  bool _isExpanded;
+  bool isRead;
+  bool isExpanded;
 
   NotificationUI(this.title, this.time,
       {Key key, this.message, this.image, this.link})
       : super(key: key);
-
-  launchLink() async {
-    if (await canLaunch(this.link)) {
-      await launch(this.link);
-    } else {
-      throw 'Could not launch ' + this.link;
-    }
-  }
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
       _$NotificationFromJson(json);
@@ -57,25 +49,23 @@ Map<String, dynamic> _$NotificationToJson(NotificationUI instance) =>
     };
 
 class NotificationUIState extends State<NotificationUI> {
-  refreshState() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
+    if (widget.isExpanded == null) widget.isExpanded = false;
+    if (widget.isRead == null) widget.isRead = false;
     // if expanded notification
     var messageMaxLines = 2;
     var titleMaxLines = 1;
-    if (widget._isExpanded != null && widget._isExpanded == true) {
+    if (widget.isExpanded) {
       // no limit on lines TODO must be a better way to handle this
-      titleMaxLines = 10000000000;
-      messageMaxLines = 10000000000;
+      titleMaxLines = null;
+      messageMaxLines = null;
     }
 
     // if read notification
     var backgroundColour = Colors.white;
     var titleColour = MyColour.black;
-    if (widget.read != null && widget.read == true) {
+    if (widget.isRead) {
       backgroundColour = MyColour.offWhite;
       titleColour = MyColour.black;
     }
@@ -83,10 +73,16 @@ class NotificationUIState extends State<NotificationUI> {
     // if link
     var linkBtn;
     if (widget.link.length > 0) {
-      linkBtn = GestureDetector(
-        onTap: widget.launchLink,
+      linkBtn = InkWell(
+        onTap: () async {
+          if (await canLaunch(widget.link)) {
+            await launch(widget.link);
+          } else {
+            print("can't open: " + widget.link);
+          }
+        },
         child: Container(
-            padding: const EdgeInsets.only(right: 3.0),
+            padding: const EdgeInsets.only(right: 5),
             child: Icon(
               Icons.link,
               color: MyColour.red,
@@ -108,6 +104,11 @@ class NotificationUIState extends State<NotificationUI> {
                   width: 50,
                   filterQuality: FilterQuality.high)));
     }
+
+    var titleStyle = TextStyle(
+        color: titleColour, fontSize: 20, fontWeight: FontWeight.w600);
+
+//    print(getLinesOfText(1, widget.title, titleStyle));
 
     return Container(
         color: Colors.transparent,
@@ -139,24 +140,22 @@ class NotificationUIState extends State<NotificationUI> {
                             // TITLE
                             Container(
                               padding: const EdgeInsets.only(bottom: 5.0),
-                              child: Row(children: <Widget>[
-                                linkBtn != null
-                                    ? linkBtn
-                                    : Container(width: 0, height: 0),
-                                // optional link
-                                Flexible(
-                                  fit: FlexFit.loose,
-                                  child: SelectableText(widget.title,
-                                      scrollPhysics:
-                                          NeverScrollableScrollPhysics(),
-                                      style: TextStyle(
-                                          color: titleColour,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600),
-                                      minLines: 1,
-                                      maxLines: titleMaxLines),
-                                )
-                              ]),
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    if (linkBtn != null) linkBtn,
+                                    // optional link
+                                    Flexible(
+                                      fit: FlexFit.loose,
+                                      child: SelectableText(widget.title,
+                                          scrollPhysics:
+                                              NeverScrollableScrollPhysics(),
+                                          style: titleStyle,
+                                          minLines: 1,
+                                          maxLines: titleMaxLines),
+                                    )
+                                  ]),
                             ),
 
                             // TIME
@@ -174,16 +173,35 @@ class NotificationUIState extends State<NotificationUI> {
                               Flexible(
                                   fit: FlexFit.loose,
                                   child: SelectableText(widget.message ?? "",
-                                      style: TextStyle(
-                                          color: MyColour.black, fontSize: 15),
                                       scrollPhysics:
                                           NeverScrollableScrollPhysics(),
+                                      style: TextStyle(
+                                          color: MyColour.black, fontSize: 15),
                                       minLines: 1,
                                       maxLines: messageMaxLines)),
                             ])
                           ]))
                     ]))));
   }
+
+//  getLinesOfText(int maxLines, String text, TextStyle style) {
+//    assert(maxLines > 0);
+//    while (true) {
+//      final tp = TextPainter(text: TextSpan(text: text, style: style));
+//      tp.layout(maxWidth: size.maxWidth);
+//      final numLines = tp.computeLineMetrics().length;
+//      if (numLines <= maxLines) {
+//        break;
+//      }
+//      var textArr = text.split(" ");
+//      int valuesToRemove =
+//          (textArr.length * ((numLines - maxLines) / numLines)).floor() - 1;
+//      var newArr = textArr.sublist(0, valuesToRemove);
+//      print(newArr.length);
+//      text = newArr.join(" ") + "...";
+//    }
+//    return text;
+//  }
 
   _launchImageLink() async {
     if (await canLaunch(widget.image)) {

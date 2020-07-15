@@ -31,12 +31,12 @@ class _BaseLayoutState extends State<BaseLayout> {
       },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.check, color: MyColour.darkGrey),
+          icon: Icon(Icons.done_all, color: MyColour.darkGrey),
           title: Text('Mark All Read',
               style: TextStyle(color: MyColour.grey, fontSize: 12)),
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.delete, color: MyColour.darkGrey),
+            icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
             title: Text('Delete All',
                 style: TextStyle(color: MyColour.grey, fontSize: 12))),
       ],
@@ -73,7 +73,7 @@ class _BaseLayoutState extends State<BaseLayout> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Notifications'),
+          title: Text('Delete All'),
           content: Text('All notifications will be irretrievable'),
           actions: <Widget>[
             FlatButton(

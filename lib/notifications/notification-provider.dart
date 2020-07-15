@@ -65,9 +65,9 @@ class NotificationProvider {
         var notification = NotificationUI.fromJson(
             json.decode(dbNotifications[i]["notification"]));
 
-        notification.read = false;
+        notification.isRead = false;
         if (dbNotifications[i]["read"] == 1) {
-          notification.read = true;
+          notification.isRead = true;
         }
         notification.id = dbNotifications[i]["_id"];
         notifications.add(notification);

@@ -31,7 +31,8 @@ class NotificationTable extends StatefulWidget {
   NotificationTableState createState() => notificationTableState;
 }
 
-class NotificationTableState extends State<NotificationTable> {
+class NotificationTableState extends State<NotificationTable>
+    with TickerProviderStateMixin {
   List<Widget> notifications;
   final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey();
 
@@ -41,58 +42,62 @@ class NotificationTableState extends State<NotificationTable> {
 
       final NotificationUI notification = this.notifications[index];
 
-      var linkSlider;
-      if (notification.link.length > 0) {
-        linkSlider = IconSlideAction(
-          color: MyColour.offWhite,
-          icon: Icons.link,
-          onTap: () {
-            notification.launchLink();
-          },
-        );
-      }
-      return Slidable(
-          key: Key(notification.id.toString()),
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: 0.2,
-          dismissal: SlidableDismissal(
-            dismissThresholds: <SlideActionType, double>{
-              SlideActionType.primary: 1.0
-            },
-            child: SlidableDrawerDismissal(),
-            onDismissed: (actionType) {
-              setState(() {
-                widget.notificationDB.delete(notification.id);
-                this.notifications.removeAt(index);
-              });
-            },
-          ),
-          actions: <Widget>[
-            IconSlideAction(
-              color: MyColour.offWhite,
-              icon: Icons.remove_red_eye,
-              onTap: () {
-                bool read = false;
-                if (notification.read != null && notification.read) read = true;
-                widget.notificationDB.toggleRead(notification.id, read);
-                notification.read = !read;
-              },
-            ),
-            if (linkSlider != null) linkSlider
-          ],
-          secondaryActions: <Widget>[
-            IconSlideAction(
-              color: MyColour.offWhite,
-              icon: Icons.delete,
-              onTap: () {
-                setState(() {
-                  widget.notificationDB.delete(notification.id);
-                  this.notifications.removeAt(index);
-                });
-              },
-            ),
-          ],
-          child: notification);
+      return AnimatedSize(
+          vsync: this,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+          child: Slidable(
+              key: Key(notification.id.toString()),
+              actionPane: SlidableDrawerActionPane(),
+              actionExtentRatio: 0.2,
+              dismissal: SlidableDismissal(
+                dismissThresholds: <SlideActionType, double>{
+                  SlideActionType.primary: 1.0
+                },
+                child: SlidableDrawerDismissal(),
+                onDismissed: (actionType) {
+                  setState(() {
+                    widget.notificationDB.delete(notification.id);
+                    this.notifications.removeAt(index);
+                  });
+                },
+              ),
+              actions: <Widget>[
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Icons.remove_red_eye,
+                  onTap: () {
+                    bool read = false;
+                    if (notification.isRead) read = true;
+                    widget.notificationDB.toggleRead(notification.id, read);
+                    notification.isRead = !read;
+                  },
+                ),
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Icons.zoom_out_map,
+                  onTap: () {
+                    bool isExpanded = false;
+                    if (notification.isExpanded) isExpanded = true;
+                    notification.isExpanded = !isExpanded;
+                    print(!isExpanded);
+                    Scrollable.ensureVisible(this.context);
+                  },
+                ),
+              ],
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Icons.delete,
+                  onTap: () {
+                    setState(() {
+                      widget.notificationDB.delete(notification.id);
+                      this.notifications.removeAt(index);
+                    });
+                  },
+                ),
+              ],
+              child: notification));
     }
   }
 
