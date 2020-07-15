@@ -10,7 +10,7 @@ import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/base.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const howToURL = "https://notifi.it#how-to";
+import '../user.dart';
 
 class SettingsScreen extends StatefulWidget {
   NotificationTable table;
@@ -22,52 +22,81 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
+  bool _stickyEnabled = false;
+
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-        widget.table,
-        SliverFillRemaining(
-          fillOverscroll: false,
-          child: Column(children: [
-            SettingOption('Copy My Credentials', () {
-              Clipboard.setData(
-                  new ClipboardData(text: widget.table.user.credentials));
-            }),
-            SettingOption('Reset Credentials', _newCredentialsDialogue),
-            Container(
-              padding: EdgeInsets.only(top: 15),
-            ),
-            if (!Platform.isAndroid && !Platform.isIOS)
-              SettingOption('Sticky Notifications', () {
-                print('Terms of Service');
+      widget.table,
+      Column(children: [
+        SettingOption('How do I receive notifications?', onTapCallback: () {
+          launch("https://notifi.it?c=" +
+              widget.table.user.credentials +
+              "#how-to");
+        }),
+        SettingOption('Copy Credentials - ' + widget.table.user.credentials,
+            onTapCallback: () {
+          Clipboard.setData(
+              new ClipboardData(text: widget.table.user.credentials));
+        }),
+        SettingOption('Create New Credentials',
+            onTapCallback: _newCredentialsDialogue),
+        Container(
+          padding: EdgeInsets.only(top: 15),
+        ),
+        if (!Platform.isAndroid && !Platform.isIOS)
+          SettingOption('Sticky Notifications', switchValue: _stickyEnabled,
+              switchCallback: (isEnabled) async {
+            setState(() {
+              _stickyEnabled = isEnabled;
+            });
+          }),
+        if (!Platform.isAndroid && !Platform.isIOS)
+          FutureBuilder(
+              future: LaunchAtLogin.isEnabled,
+              builder: (context, f) {
+                if (f.connectionState == ConnectionState.none &&
+                    f.hasData == null) {
+                  return CircularProgressIndicator();
+                }
+
+                return SettingOption(
+                  'Open notifi at Login',
+                  switchValue: f.data,
+                  switchCallback: (_) async {
+                    var enabled = await LaunchAtLogin.isEnabled;
+                    if (enabled) {
+                      await LaunchAtLogin.disable;
+                    } else {
+                      await LaunchAtLogin.enable;
+                    }
+                    setState(() {});
+                  },
+                );
               }),
-            if (!Platform.isAndroid && !Platform.isIOS)
-              SettingOption('Open notifi at Login', () async {
-                await LaunchAtLogin.enable;
-              }),
-            if (!Platform.isAndroid && !Platform.isIOS)
-              Container(
-                padding: EdgeInsets.only(top: 15),
-              ),
-            SettingOption('How do I receive notifications?', () {
-              launch(howToURL);
-            }),
-            SettingOption('About...', () {
-              print('Terms of Service');
-            }),
-            SettingOption('Open Logs...', () {
-              print('Terms of Service');
-            }),
-            if (!Platform.isIOS)
-              Container(
-                padding: EdgeInsets.only(top: 15),
-              ),
-            if (!Platform.isIOS)
-              SettingOption('Quit notifi', () {
-                SystemNavigator.pop();
-              }),
-          ]),
-        ));
+        if (!Platform.isAndroid && !Platform.isIOS)
+          Container(
+            padding: EdgeInsets.only(top: 15),
+          ),
+        SettingOption('About...', onTapCallback: () {
+          print('Terms of Service');
+        }),
+        SettingOption('Open Logs...', onTapCallback: () {
+          print('Terms of Service');
+        }),
+        if (!Platform.isIOS)
+          Container(
+            padding: EdgeInsets.only(top: 15),
+          ),
+        if (!Platform.isIOS)
+          SettingOption(
+            'Quit notifi',
+            onTapCallback: () {
+              SystemNavigator.pop();
+            },
+          ),
+      ]),
+    );
   }
 
   Future<void> _newCredentialsDialogue() async {
@@ -83,12 +112,25 @@ class SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('No'),
+              child: Text(
+                'No',
+                style: TextStyle(color: MyColour.grey),
+              ),
             ),
             FlatButton(
-                child: Text('Yes'),
-                onPressed: () {
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: MyColour.black),
+                ),
+                onPressed: () async {
+                  var user = await RequestNewUser(widget.table.user);
+                  if (user == null) {
+                    // TODO return error
+                  }
                   Navigator.pop(context);
+                  setState(() {
+                    widget.table.user = user;
+                  });
                 })
           ],
         );
@@ -99,9 +141,13 @@ class SettingsScreenState extends State<SettingsScreen> {
 
 class SettingOption extends StatefulWidget {
   final text;
-  GestureTapCallback onTap;
+  GestureTapCallback onTapCallback;
+  ValueChanged<bool> switchCallback;
+  bool switchValue;
 
-  SettingOption(this.text, this.onTap, {Key key}) : super(key: key);
+  SettingOption(this.text,
+      {Key key, this.onTapCallback, this.switchCallback, this.switchValue})
+      : super(key: key);
 
   @override
   SettingOptionState createState() => new SettingOptionState();
@@ -116,50 +162,38 @@ class SettingOptionState extends State<SettingOption> {
         color: MyColour.black,
         fontWeight: FontWeight.w600);
 
-    return Container(
-        padding: EdgeInsets.only(left: 15, right: 15),
-        child: RaisedButton(
-            elevation: 0,
-            color: MyColour.offWhite,
-            onPressed: widget.onTap,
-            child: Row(children: <Widget>[
-              Flexible(
-                  fit: FlexFit.tight,
-                  flex: 70,
-                  child: Container(child: Text(widget.text, style: style))),
-              Flexible(
-                  fit: FlexFit.tight,
-                  flex: 5,
-                  child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      child:
-                          Icon(Icons.arrow_forward_ios, color: MyColour.grey))),
-            ])));
-  }
-
-  Future<void> _newCredentialsDialogue() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('New Credentials'),
-          content: Text(
-              'Are you sure? You will never be able to use your current credentials again!'),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('No'),
-            ),
-            FlatButton(
-                child: Text('Yes'),
-                onPressed: () {
-                  Navigator.pop(context);
-                })
-          ],
-        );
-      },
-    );
+    // switch or link
+    var setting;
+    if (widget.switchCallback == null) {
+      setting = Container(
+          padding: EdgeInsets.only(left: 15, right: 15),
+          child: RaisedButton(
+              elevation: 0,
+              color: MyColour.offWhite,
+              onPressed: widget.onTapCallback,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(child: Text(widget.text, style: style)),
+                    Container(
+                        child: Icon(Icons.arrow_forward_ios,
+                            size: 12, color: MyColour.grey)),
+                  ])));
+    } else {
+      if (widget.switchValue == null) widget.switchValue = false;
+      setting = Container(
+          padding: EdgeInsets.only(left: 30, right: 7),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(child: Text(widget.text, style: style)),
+                Container(
+                  child: Switch(
+                      value: widget.switchValue,
+                      onChanged: widget.switchCallback),
+                )
+              ]));
+    }
+    return setting;
   }
 }

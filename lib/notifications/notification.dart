@@ -77,7 +77,7 @@ class NotificationUIState extends State<NotificationUI> {
     var titleColour = MyColour.black;
     if (widget.read != null && widget.read == true) {
       backgroundColour = MyColour.offWhite;
-      titleColour = MyColour.grey;
+      titleColour = MyColour.black;
     }
 
     // if link
@@ -147,10 +147,12 @@ class NotificationUIState extends State<NotificationUI> {
                                 Flexible(
                                   fit: FlexFit.loose,
                                   child: SelectableText(widget.title,
+                                      scrollPhysics:
+                                          NeverScrollableScrollPhysics(),
                                       style: TextStyle(
                                           color: titleColour,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w900),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
                                       minLines: 1,
                                       maxLines: titleMaxLines),
                                 )
@@ -173,7 +175,9 @@ class NotificationUIState extends State<NotificationUI> {
                                   fit: FlexFit.loose,
                                   child: SelectableText(widget.message ?? "",
                                       style: TextStyle(
-                                          color: MyColour.black, fontSize: 20),
+                                          color: MyColour.black, fontSize: 15),
+                                      scrollPhysics:
+                                          NeverScrollableScrollPhysics(),
                                       minLines: 1,
                                       maxLines: messageMaxLines)),
                             ])

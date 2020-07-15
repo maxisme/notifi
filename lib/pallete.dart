@@ -8,6 +8,7 @@ class MyColour {
 
   /// Completely invisible.
   static const Color offWhite = Color(0xfff5f5f5);
+  static const Color white = Color(0xffffffff);
   static const Color offGrey = Color(0xffeae8e8);
   static const Color black = Color(0xff212121);
   static const Color darkGrey = Color(0xff333333);

@@ -1,5 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'notifications/notification.dart';
+
 Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
   final localNotifications = FlutterLocalNotificationsPlugin();
 
@@ -30,18 +32,12 @@ Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
   return localNotifications;
 }
 
-sendLocalNotification(
-  FlutterLocalNotificationsPlugin localNotification,
-  int id,
-  String title,
-  String body, {
-  String payload,
-}) {
+sendLocalNotification(FlutterLocalNotificationsPlugin localNotification, int id,
+    NotificationUI notification) {
   var iOS = IOSNotificationDetails();
   var macOS = MacOSNotificationDetails();
-  var platformChannelSpecifics =
-      NotificationDetails(iOS: iOS, macOS: macOS);
+  var platformChannelSpecifics = NotificationDetails(iOS: iOS, macOS: macOS);
 
-  localNotification.show(id, title, body, platformChannelSpecifics,
-      payload: payload);
+  localNotification.show(
+      id, notification.title, notification.message, platformChannelSpecifics);
 }

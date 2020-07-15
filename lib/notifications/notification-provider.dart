@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,19 +10,23 @@ class NotificationProvider {
   Database db;
 
   Future open(String path) async {
-    String dbPath = await getDatabasesPath() + "/" + path;
-
+    String dbFolder = await getDatabasesPath();
+    String dbPath = dbFolder + "/" + path;
     print(dbPath);
+
+    try {
+      await Directory(dbFolder).create(recursive: true);
+    } catch (_) {}
 
     db = await openDatabase(dbPath, version: 1,
         onCreate: (Database db, int version) async {
-          await db.execute('''
+      await db.execute('''
         create table if not exists Notifications ( 
         _id integer primary key autoincrement,       
         notification text not null,
         read int default 0)
       ''');
-        });
+    });
   }
 
   Future<int> store(NotificationUI notification) async {
@@ -40,8 +45,8 @@ class NotificationProvider {
   Future toggleRead(int id, bool isRead) async {
     int read = 1;
     if (isRead) read = 0;
-    await db.update(
-        "Notifications", {"read": read}, where: '_id = ?', whereArgs: [id]);
+    await db.update("Notifications", {"read": read},
+        where: '_id = ?', whereArgs: [id]);
   }
 
   Future markAllRead() async {
@@ -61,7 +66,7 @@ class NotificationProvider {
             json.decode(dbNotifications[i]["notification"]));
 
         notification.read = false;
-        if (dbNotifications[i]["read"] == 1){
+        if (dbNotifications[i]["read"] == 1) {
           notification.read = true;
         }
         notification.id = dbNotifications[i]["_id"];

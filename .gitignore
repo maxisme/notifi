@@ -49,3 +49,4 @@ ExportOptions.plist
 tmp.xcarchive
 notifi.app
 .idea
+/.dart_tool/

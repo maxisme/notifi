@@ -9,16 +9,17 @@ import 'notification-provider.dart';
 
 class NotificationTable extends StatefulWidget {
   final NotificationProvider notificationDB;
-  final User user;
+  User user;
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
   NotificationTable(this.user, this.notificationDB, {Key key})
       : super(key: key);
 
-  Future add(NotificationUI notification) async {
+  Future<int> add(NotificationUI notification) async {
     notification.id = await this.notificationDB.store(notification);
     notificationTableState.insert(notification);
+    return notification.id;
   }
 
   Future deleteAll() async {
@@ -34,8 +35,7 @@ class NotificationTableState extends State<NotificationTable> {
   List<Widget> notifications;
   final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey();
 
-  Widget _buildNotification(
-      BuildContext context, int index, Animation<double> animation) {
+  Widget _buildNotification(BuildContext context, int index) {
     if (this.notifications.length > index) {
       // TODO this check is hacky find out actual problem
 
@@ -45,7 +45,6 @@ class NotificationTableState extends State<NotificationTable> {
       if (notification.link.length > 0) {
         linkSlider = IconSlideAction(
           color: MyColour.offWhite,
-          caption: 'Open Link',
           icon: Icons.link,
           onTap: () {
             notification.launchLink();
@@ -71,7 +70,6 @@ class NotificationTableState extends State<NotificationTable> {
           actions: <Widget>[
             IconSlideAction(
               color: MyColour.offWhite,
-              caption: 'Toggle Read',
               icon: Icons.remove_red_eye,
               onTap: () {
                 bool read = false;
@@ -80,12 +78,11 @@ class NotificationTableState extends State<NotificationTable> {
                 notification.read = !read;
               },
             ),
-            linkSlider
+            if (linkSlider != null) linkSlider
           ],
           secondaryActions: <Widget>[
             IconSlideAction(
               color: MyColour.offWhite,
-              caption: 'Delete',
               icon: Icons.delete,
               onTap: () {
                 setState(() {
@@ -123,47 +120,44 @@ class NotificationTableState extends State<NotificationTable> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: widget.notificationDB.getAll(),
-        builder: (context, f) {
-          if (f.connectionState == ConnectionState.none && f.hasData == null) {
-            return SliverFillRemaining(child: CircularProgressIndicator());
-          }
-
+      future: widget.notificationDB.getAll(),
+      builder: (context, f) {
+        if (f.hasData != null && f.data != null && f.data.length > 0) {
           List<Widget> notifications = f.data;
-          if (notifications != null && notifications.length > 0) {
-            this.notifications = notifications;
-            return SliverAnimatedList(
-                key: _listKey,
-                itemBuilder: _buildNotification,
-                initialItemCount: this.notifications.length);
-          } else {
-            // NO notifications
-            return SliverFillRemaining(
-              child: Column(children: [
-                Container(padding: const EdgeInsets.only(top: 20.0)),
-                Image.asset('images/sad.png',
-                    height: 150, filterQuality: FilterQuality.high),
-                Container(padding: const EdgeInsets.only(top: 20.0)),
-                SelectableText("No Notifications!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColour.black,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 35)),
-                Container(padding: const EdgeInsets.only(top: 20.0)),
-                SelectableText(
-                    "To receive notifications use HTTP Requests with your credentials...",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColour.grey, fontWeight: FontWeight.w500)),
-                Container(padding: const EdgeInsets.only(top: 20.0)),
-                SelectableText(widget.user.credentials,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColour.red, fontWeight: FontWeight.w900)),
-              ]),
-            );
-          }
-        });
+          this.notifications = notifications;
+          return new ListView.builder(
+              key: _listKey,
+              itemBuilder: _buildNotification,
+              itemCount: this.notifications.length);
+        } else {
+          // NO notifications
+          return Container(
+            child: Column(children: [
+              Container(padding: const EdgeInsets.only(top: 20.0)),
+              Image.asset('images/sad.png',
+                  height: 150, filterQuality: FilterQuality.high),
+              Container(padding: const EdgeInsets.only(top: 20.0)),
+              SelectableText("No Notifications!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: MyColour.black,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 35)),
+              Container(padding: const EdgeInsets.only(top: 20.0)),
+              SelectableText(
+                  "To receive notifications use HTTP Requests with your credentials...",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: MyColour.grey, fontWeight: FontWeight.w500)),
+              Container(padding: const EdgeInsets.only(top: 20.0)),
+              SelectableText(widget.user.credentials,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: MyColour.red, fontWeight: FontWeight.w900)),
+            ]),
+          );
+        }
+      },
+    );
   }
 }

@@ -10,31 +10,34 @@ const RequestNewUserCode = 551;
 
 class User {
   final String UUID;
-  final String UUIDKey;
+  final String credentialKey;
   final String credentials;
-
-  const User(this.UUID, this.UUIDKey, this.credentials);
+  const User(this.UUID, this.credentialKey, this.credentials);
 }
 
 Future<User> fetchUser() async {
   final storage = new FlutterSecureStorage();
 
   String UUID = await storage.read(key: "UUID");
-  String UUIDKey = await storage.read(key: "UUIDKey");
   String credentials = await storage.read(key: "credentials");
-  var user = new User(UUID, UUIDKey, credentials);
+  String credentialKey = await storage.read(key: "credential_key");
+  var user = new User(UUID, credentialKey, credentials);
 
-  if (user.UUID == null || user.UUIDKey == null || user.credentials == null) {
+  if (user.UUID == null ||
+      user.credentialKey == null ||
+      user.credentials == null) {
     // CREATE NEW USER
     var alreadyHadCredentials = false;
-    if (user.UUID != null || user.UUIDKey != null || user.credentials != null) {
+    if (user.UUID != null ||
+        user.credentialKey != null ||
+        user.credentials != null) {
       alreadyHadCredentials = true;
     }
 
     // Create new credentials as the user does not have any. it is completely
     // vital that this is successful so need to retry until it is.
     while (true) {
-      user = await requestNewUser(user);
+      user = await RequestNewUser(user);
       if (user != null) {
         break;
       }
@@ -49,10 +52,10 @@ Future<User> fetchUser() async {
   return user;
 }
 
-Future<User> requestNewUser(User user) {
+Future<User> RequestNewUser(User user) {
   var data = {"UUID": Uuid().v4()};
-  if (user.UUIDKey != null) {
-    data["current_UUIDKey"] = user.UUIDKey;
+  if (user.credentialKey != null) {
+    data["current_credential_key"] = user.credentialKey;
   }
   if (user.credentials != null) {
     data["current_credentials"] = user.credentials;
@@ -83,13 +86,13 @@ Future<User> _newUserReq(Map<String, dynamic> data) async {
     return null;
   }
 
-  var user = new User(
-      data["UUID"], credentialsMap["UUIDKey"], credentialsMap["credentials"]);
+  var user = new User(data["UUID"], credentialsMap["credential_key"],
+      credentialsMap["credentials"]);
 
   var storage = FlutterSecureStorage();
   await storage.write(key: "UUID", value: user.UUID);
-  await storage.write(key: "UUIDKey", value: user.UUIDKey);
-  await storage.write(key: "credentials", value: user.credentials);
+  await storage.write(key: "UUIDKey", value: user.credentialKey);
+  await storage.write(key: "credential_key", value: user.credentials);
 
   return user;
 }

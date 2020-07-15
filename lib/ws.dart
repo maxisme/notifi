@@ -24,7 +24,7 @@ Future<IOWebSocketChannel> initWS(
     "Sec-Key": DotEnv().env["SERVER_KEY"],
     "Credentials": user.credentials,
     "Uuid": user.UUID,
-    "UUIDKey": user.UUIDKey,
+    "Key": user.credentialKey,
     "Version": packageInfo.version,
   };
 
@@ -73,11 +73,10 @@ Future _handleWSMessage(FlutterLocalNotificationsPlugin localNotification,
   for (var i = 0; i < messages.length; i++) {
     var notification = NotificationUI.fromJson(messages[i]);
 
-    // send local notification
-    sendLocalNotification(
-        localNotification, 1, notification.title, notification.message);
+    // store notification
+    int id = await notificationTable.add(notification);
 
-    // TODO update GUI
-    notificationTable.add(notification);
+    // send local notification
+    sendLocalNotification(localNotification, id, notification);
   }
 }

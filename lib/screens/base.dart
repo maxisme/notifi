@@ -16,6 +16,32 @@ class BaseLayout extends StatefulWidget {
 class _BaseLayoutState extends State<BaseLayout> {
   @override
   Widget build(BuildContext context) {
+    var bottomNav;
+    bottomNav = BottomNavigationBar(
+      onTap: (int index) {
+        if (index == 0) {
+          // MARK ALL AS READ EVENT
+          widget.table.notificationDB.markAllRead();
+          setState(() {});
+        } else if (index == 1) {
+          // DELETE ALL EVENT
+          _deleteAllDialogue();
+          setState(() {});
+        }
+      },
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.check, color: MyColour.darkGrey),
+          title: Text('Mark All Read',
+              style: TextStyle(color: MyColour.grey, fontSize: 12)),
+        ),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.delete, color: MyColour.darkGrey),
+            title: Text('Delete All',
+                style: TextStyle(color: MyColour.grey, fontSize: 12))),
+      ],
+    );
+
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
@@ -27,7 +53,7 @@ class _BaseLayoutState extends State<BaseLayout> {
               height: 50, filterQuality: FilterQuality.high),
           leading: IconButton(
               icon: Icon(
-                Icons.settings,
+                Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,
                 color: MyColour.grey,
               ),
               onPressed: () {
@@ -38,35 +64,8 @@ class _BaseLayoutState extends State<BaseLayout> {
                 }
               }),
         ),
-        body: CustomScrollView(
-          slivers: <Widget>[
-            widget.child,
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (int index) {
-            if (index == 0) {
-              // MARK ALL AS READ EVENT
-              setState(() {
-                widget.table.notificationDB.markAllRead();
-              });
-            } else if (index == 1) {
-              // DELETE ALL EVENT
-              _deleteAllDialogue();
-            }
-          },
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.check, color: MyColour.darkGrey),
-              title: Text('Mark All Read',
-                  style: TextStyle(color: MyColour.grey, fontSize: 12)),
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.delete, color: MyColour.darkGrey),
-                title: Text('Delete All',
-                    style: TextStyle(color: MyColour.grey, fontSize: 12))),
-          ],
-        ));
+        body: widget.child,
+        bottomNavigationBar: bottomNav != null ? bottomNav : Container());
   }
 
   Future<void> _deleteAllDialogue() async {
@@ -74,17 +73,23 @@ class _BaseLayoutState extends State<BaseLayout> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete'),
-          content: Text('All notifications will be deleted'),
+          title: Text('Delete Notifications'),
+          content: Text('All notifications will be irretrievable'),
           actions: <Widget>[
             FlatButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: MyColour.grey),
+              ),
             ),
             FlatButton(
-                child: Text('Ok'),
+                child: Text(
+                  'Ok',
+                  style: TextStyle(color: MyColour.black),
+                ),
                 onPressed: () {
                   widget.table.deleteAll();
                   Navigator.pop(context);

@@ -42,7 +42,22 @@ class _MyAppState extends State<MyApp> {
             primaryColor: MyColour.offWhite,
             highlightColor: MyColour.transparent,
             hoverColor: MyColour.transparent,
-            splashColor: MyColour.transparent),
+            splashColor: MyColour.transparent,
+            accentColor: MyColour.black,
+            buttonColor: MyColour.red,
+            dialogTheme: DialogTheme(
+                elevation: 0,
+                shape: Border.all(width: 3),
+                contentTextStyle: TextStyle(
+                  fontFamily: 'Inconsolata',
+                  color: MyColour.black,
+                  fontWeight: FontWeight.w500,
+                ),
+                titleTextStyle: TextStyle(
+                    fontFamily: 'Inconsolata',
+                    color: MyColour.black,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 35))),
         routes: {
           '/': (context) => HomeScreen(widget.table),
           '/settings': (context) => SettingsScreen(widget.table),
