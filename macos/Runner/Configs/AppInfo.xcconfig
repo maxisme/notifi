@@ -8,7 +8,7 @@
 PRODUCT_NAME = notifi
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.notifi
+PRODUCT_BUNDLE_IDENTIFIER = uk.me.max.notifi
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2020 uk.me.max. All rights reserved.
