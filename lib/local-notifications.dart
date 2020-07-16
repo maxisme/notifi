@@ -34,8 +34,8 @@ Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
 
 sendLocalNotification(FlutterLocalNotificationsPlugin localNotification, int id,
     NotificationUI notification) {
-  var iOS = IOSNotificationDetails();
-  var macOS = MacOSNotificationDetails();
+  var iOS = IOSNotificationDetails(presentAlert: true);
+  var macOS = MacOSNotificationDetails(presentAlert: true);
   var platformChannelSpecifics = NotificationDetails(iOS: iOS, macOS: macOS);
 
   localNotification.show(

@@ -2,26 +2,46 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
+final storage = new FlutterSecureStorage();
+
 const RequestNewUserCode = 551;
 
 class User {
-  final String UUID;
-  final String credentialKey;
-  final String credentials;
-  const User(this.UUID, this.credentialKey, this.credentials);
+  String UUID;
+  String credentialKey;
+  String credentials;
+  String flutterToken;
+
+  User(this.UUID, this.credentialKey, this.credentials, {this.flutterToken});
 }
 
 Future<User> fetchUser() async {
-  final storage = new FlutterSecureStorage();
+  // init secure storage
+
+  String flutterToken;
+  if (!Platform.isWindows && !Platform.isMacOS && !Platform.isLinux) {
+    // initiate firebase
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    if (await storage.read(key: "firebase-token") == null) {
+      print("creating new firebase token");
+      _firebaseMessaging.getToken().then((token) async {
+        flutterToken = token;
+        print(flutterToken);
+        await storage.write(key: "firebase-token", value: token);
+      });
+    }
+  }
 
   String UUID = await storage.read(key: "UUID");
   String credentials = await storage.read(key: "credentials");
   String credentialKey = await storage.read(key: "credential_key");
-  var user = new User(UUID, credentialKey, credentials);
+  var user =
+      new User(UUID, credentialKey, credentials, flutterToken: flutterToken);
 
   if (user.UUID == null ||
       user.credentialKey == null ||
@@ -60,10 +80,10 @@ Future<User> RequestNewUser(User user) {
   if (user.credentials != null) {
     data["current_credentials"] = user.credentials;
   }
-  return _newUserReq(data);
+  return _newUserReq(user, data);
 }
 
-Future<User> _newUserReq(Map<String, dynamic> data) async {
+Future<User> _newUserReq(User user, Map<String, dynamic> data) async {
   print("creating brand new user");
   d.Dio dio = new d.Dio();
   var response = await dio.post(DotEnv().env['HOST'] + "code",
@@ -86,10 +106,10 @@ Future<User> _newUserReq(Map<String, dynamic> data) async {
     return null;
   }
 
-  var user = new User(data["UUID"], credentialsMap["credential_key"],
-      credentialsMap["credentials"]);
+  user.UUID = data["UUID"];
+  user.credentialKey = credentialsMap["credential_key"];
+  user.credentials = credentialsMap["credentials"];
 
-  var storage = FlutterSecureStorage();
   await storage.write(key: "UUID", value: user.UUID);
   await storage.write(key: "UUIDKey", value: user.credentialKey);
   await storage.write(key: "credential_key", value: user.credentials);
