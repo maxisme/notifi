@@ -8,9 +8,8 @@ import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/base.dart';
+import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../user.dart';
 
 class SettingsScreen extends StatefulWidget {
   NotificationTable table;
@@ -26,18 +25,26 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String credString = "";
+    if (widget.table != null && widget.table.user != null) {
+      credString = " - " + widget.table.user.credentials;
+    }
     return BaseLayout(
       widget.table,
       Column(children: [
-        SettingOption('How do I receive notifications?', onTapCallback: () {
-          launch("https://notifi.it?c=" +
-              widget.table.user.credentials +
-              "#how-to");
-        }),
-        SettingOption('Copy Credentials - ' + widget.table.user.credentials,
-            onTapCallback: () {
-          Clipboard.setData(
-              new ClipboardData(text: widget.table.user.credentials));
+        if (credString != "")
+          SettingOption('How do I receive notifications?', onTapCallback: () {
+            launch("https://notifi.it?c=" +
+                widget.table.user.credentials +
+                "#how-to");
+          }),
+        SettingOption('Copy Credentials' + credString, onTapCallback: () {
+          if (credString != "") {
+            Clipboard.setData(
+                new ClipboardData(text: widget.table.user.credentials));
+            showToast("Copied " + widget.table.user.credentials,
+                gravity: Toast.TOP);
+          }
         }),
         SettingOption('Create New Credentials',
             onTapCallback: _newCredentialsDialogue),
@@ -123,19 +130,18 @@ class SettingsScreenState extends State<SettingsScreen> {
                   style: TextStyle(color: MyColour.black),
                 ),
                 onPressed: () async {
-                  var user = await RequestNewUser(widget.table.user);
-                  if (user == null) {
-                    // TODO return error
-                  }
+                  widget.table.user.RequestNewUser();
                   Navigator.pop(context);
-                  setState(() {
-                    widget.table.user = user;
-                  });
+                  setState(() {});
                 })
           ],
         );
       },
     );
+  }
+
+  void showToast(String msg, {int duration, int gravity}) {
+    Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 }
 

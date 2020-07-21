@@ -1,33 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:notifi/local-notifications.dart';
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
-import 'package:notifi/user.dart';
-import 'package:notifi/ws.dart';
-
-import 'notifications/notification-provider.dart';
 
 void main() async {
   await DotEnv().load();
 
   WidgetsFlutterBinding.ensureInitialized();
-
-  final notificationDB = NotificationProvider();
-  notificationDB.open("notifications.db");
-
-  final user = await fetchUser();
-  var nt = new NotificationTable(user, notificationDB);
-  await initWS(user, await initLocalNotifications(), nt);
-  runApp(MyApp(nt));
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  NotificationTable table;
+  NotificationTable table = new NotificationTable();
 
-  MyApp(this.table, {Key key}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -36,6 +24,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    widget.table.newUserCallback = setStateCallback();
+
     return MaterialApp(
         theme: ThemeData(
             fontFamily: 'Inconsolata',
@@ -62,5 +52,9 @@ class _MyAppState extends State<MyApp> {
           '/': (context) => HomeScreen(widget.table),
           '/settings': (context) => SettingsScreen(widget.table),
         });
+  }
+
+  setStateCallback() {
+    setState(() {});
   }
 }

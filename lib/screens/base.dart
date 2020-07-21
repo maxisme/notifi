@@ -6,8 +6,10 @@ import 'package:notifi/pallete.dart';
 class BaseLayout extends StatefulWidget {
   NotificationTable table;
   Widget child;
+  void newUserCallback;
 
-  BaseLayout(this.table, this.child, {Key key}) : super(key: key);
+  BaseLayout(this.table, this.child, {Key key, this.newUserCallback})
+      : super(key: key);
 
   @override
   _BaseLayoutState createState() => _BaseLayoutState();
@@ -16,32 +18,6 @@ class BaseLayout extends StatefulWidget {
 class _BaseLayoutState extends State<BaseLayout> {
   @override
   Widget build(BuildContext context) {
-    var bottomNav;
-    bottomNav = BottomNavigationBar(
-      onTap: (int index) {
-        if (index == 0) {
-          // MARK ALL AS READ EVENT
-          widget.table.notificationDB.markAllRead();
-          setState(() {});
-        } else if (index == 1) {
-          // DELETE ALL EVENT
-          _deleteAllDialogue();
-          setState(() {});
-        }
-      },
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.done_all, color: MyColour.darkGrey),
-          title: Text('Mark All Read',
-              style: TextStyle(color: MyColour.grey, fontSize: 12)),
-        ),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
-            title: Text('Delete All',
-                style: TextStyle(color: MyColour.grey, fontSize: 12))),
-      ],
-    );
-
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
@@ -49,8 +25,10 @@ class _BaseLayoutState extends State<BaseLayout> {
           elevation: 0.0,
           toolbarHeight: 80,
           centerTitle: true,
-          title: Image.asset('images/bell.png',
-              height: 50, filterQuality: FilterQuality.high),
+          title: SizedBox(
+              height: 50,
+              child: Image.asset('images/bell.png',
+                  filterQuality: FilterQuality.high)),
           leading: IconButton(
               icon: Icon(
                 Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,
@@ -63,9 +41,38 @@ class _BaseLayoutState extends State<BaseLayout> {
                   Navigator.pushNamed(context, '/settings');
                 }
               }),
+          actions: [
+            widget.table == null || widget.table.user == null
+                ? RefreshProgressIndicator()
+                : Container()
+          ],
         ),
         body: widget.child,
-        bottomNavigationBar: bottomNav != null ? bottomNav : Container());
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (int index) {
+            if (index == 0) {
+              // MARK ALL AS READ EVENT
+              widget.table.notificationDB.markAllRead();
+              setState(() {});
+            } else if (index == 1) {
+              // DELETE ALL EVENT
+              _deleteAllDialogue();
+              setState(() {});
+            }
+          },
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.done_all, color: MyColour.darkGrey),
+              title: Text('Mark All Read',
+                  style: TextStyle(color: MyColour.grey, fontSize: 12)),
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
+                title: Text('Delete All',
+                    style: TextStyle(color: MyColour.grey, fontSize: 12))),
+          ],
+          currentIndex: 1,
+        ));
   }
 
   Future<void> _deleteAllDialogue() async {

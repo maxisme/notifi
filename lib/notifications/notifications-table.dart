@@ -4,17 +4,24 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
+import 'package:web_socket_channel/io.dart';
 
+import '../local-notifications.dart';
+import '../ws.dart';
 import 'notification-provider.dart';
 
 class NotificationTable extends StatefulWidget {
-  final NotificationProvider notificationDB;
+  NotificationProvider notificationDB;
   User user;
+  IOWebSocketChannel ws;
+  VoidCallback newUserCallback;
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
-  NotificationTable(this.user, this.notificationDB, {Key key})
-      : super(key: key);
+  NotificationTable() {
+    this.notificationDB = NotificationProvider();
+    this.notificationDB.open("notifications.db");
+  }
 
   Future<int> add(NotificationUI notification) async {
     notification.id = await this.notificationDB.store(notification);
@@ -38,8 +45,6 @@ class NotificationTableState extends State<NotificationTable>
 
   Widget _buildNotification(BuildContext context, int index) {
     if (this.notifications.length > index) {
-      // TODO this check is hacky find out actual problem
-
       final NotificationUI notification = this.notifications[index];
 
       return AnimatedSize(
@@ -125,7 +130,7 @@ class NotificationTableState extends State<NotificationTable>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: widget.notificationDB.getAll(),
+      future: initAccount(widget),
       builder: (context, f) {
         if (f.hasData != null && f.data != null && f.data.length > 0) {
           List<Widget> notifications = f.data;
@@ -137,32 +142,46 @@ class NotificationTableState extends State<NotificationTable>
         } else {
           // NO notifications
           return Container(
-            child: Column(children: [
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              Image.asset('images/sad.png',
-                  height: 150, filterQuality: FilterQuality.high),
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              SelectableText("No Notifications!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: MyColour.black,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 35)),
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              SelectableText(
-                  "To receive notifications use HTTP Requests with your credentials...",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: MyColour.grey, fontWeight: FontWeight.w500)),
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              SelectableText(widget.user.credentials,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: MyColour.red, fontWeight: FontWeight.w900)),
-            ]),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(padding: const EdgeInsets.only(top: 20.0)),
+                  Image.asset('images/sad.png',
+                      height: 150, filterQuality: FilterQuality.high),
+                  Container(padding: const EdgeInsets.only(top: 20.0)),
+                  SelectableText("No Notifications!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: MyColour.black,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 35)),
+                  Container(padding: const EdgeInsets.only(top: 20.0)),
+                  SelectableText(
+                      "To receive notifications use HTTP Requests with your credentials...",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: MyColour.grey, fontWeight: FontWeight.w500)),
+                  Container(padding: const EdgeInsets.only(top: 20.0)),
+                  if (widget.user != null && widget.user.credentials != null)
+                    SelectableText(widget.user.credentials,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: MyColour.red, fontWeight: FontWeight.w900)),
+                ]),
           );
         }
       },
     );
+  }
+
+  Future<List<Widget>> initAccount(NotificationTable widget) async {
+    widget.user = User();
+    // get user and websocket
+    widget.ws =
+        await initWS(widget.user, await initLocalNotifications(), widget);
+
+    // return all notifications
+    return widget.notificationDB.getAll();
   }
 }

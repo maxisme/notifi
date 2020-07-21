@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,6 +18,11 @@ Future<IOWebSocketChannel> initWS(
     User user,
     FlutterLocalNotificationsPlugin localNotification,
     NotificationTable nt) async {
+  if (user.isNull()) {
+    await new Future.delayed(Duration(seconds: 3));
+    return await initWS(user, localNotification, nt);
+  }
+
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   var headers = {
     "Sec-Key": DotEnv().env["SERVER_KEY"],
@@ -31,6 +35,7 @@ Future<IOWebSocketChannel> initWS(
   var ws = IOWebSocketChannel.connect(DotEnv().env['WS_HOST'],
       headers: headers, pingInterval: Duration(seconds: 15));
 
+  print("ws open");
   ws.stream.listen((msg) {
     // decode incoming ws message
     Map<String, dynamic> mapWS;
@@ -60,10 +65,10 @@ Future<IOWebSocketChannel> initWS(
     }
   }, onError: (error) {
     print(error);
-  }, onDone: () {
-    print("finished ws");
-    sleep(Duration(seconds: 5));
-    initWS(user, localNotification, nt);
+  }, onDone: () async {
+    print("ws closed");
+    await new Future.delayed(Duration(seconds: 3));
+    return await initWS(user, localNotification, nt);
   });
   return ws;
 }

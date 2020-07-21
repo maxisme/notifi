@@ -5,8 +5,9 @@ import 'package:notifi/screens/base.dart';
 
 class HomeScreen extends StatefulWidget {
   NotificationTable table;
+  void newUserCallback;
 
-  HomeScreen(this.table, {Key key}) : super(key: key);
+  HomeScreen(this.table, {Key key, this.newUserCallback}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

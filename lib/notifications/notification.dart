@@ -53,6 +53,7 @@ class NotificationUIState extends State<NotificationUI> {
   Widget build(BuildContext context) {
     if (widget.isExpanded == null) widget.isExpanded = false;
     if (widget.isRead == null) widget.isRead = false;
+
     // if expanded notification
     var messageMaxLines = 2;
     var titleMaxLines = 1;
@@ -96,10 +97,9 @@ class NotificationUIState extends State<NotificationUI> {
       image = GestureDetector(
           onTap: _launchImageLink,
           child: Container(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(top: 5.0),
               child: CachedNetworkImage(
                   fadeInDuration: new Duration(seconds: 1),
-                  placeholder: (context, url) => CircularProgressIndicator(),
                   imageUrl: widget.image,
                   width: 50,
                   filterQuality: FilterQuality.high)));
@@ -122,6 +122,7 @@ class NotificationUIState extends State<NotificationUI> {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       // IMAGE // TODO valign top
                       Flexible(

@@ -12,107 +12,123 @@ final storage = new FlutterSecureStorage();
 const RequestNewUserCode = 551;
 
 class User {
+  Future _doneFuture;
   String UUID;
   String credentialKey;
   String credentials;
   String flutterToken;
 
-  User(this.UUID, this.credentialKey, this.credentials, {this.flutterToken});
-}
-
-Future<User> fetchUser() async {
-  // init secure storage
-
-  String flutterToken;
-  if (!Platform.isWindows && !Platform.isMacOS && !Platform.isLinux) {
-    // initiate firebase
-    FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-    if (await storage.read(key: "firebase-token") == null) {
-      print("creating new firebase token");
-      _firebaseMessaging.getToken().then((token) async {
-        flutterToken = token;
-        print(flutterToken);
-        await storage.write(key: "firebase-token", value: token);
-      });
-    }
+  User() {
+    _doneFuture = _init();
   }
 
-  String UUID = await storage.read(key: "UUID");
-  String credentials = await storage.read(key: "credentials");
-  String credentialKey = await storage.read(key: "credential_key");
-  var user =
-      new User(UUID, credentialKey, credentials, flutterToken: flutterToken);
+  Future get initializationDone => _doneFuture;
 
-  if (user.UUID == null ||
-      user.credentialKey == null ||
-      user.credentials == null) {
-    // CREATE NEW USER
-    var alreadyHadCredentials = false;
-    if (user.UUID != null ||
-        user.credentialKey != null ||
-        user.credentials != null) {
-      alreadyHadCredentials = true;
-    }
+  bool isNull() {
+    return this.UUID == null ||
+        this.credentialKey == null ||
+        this.credentials == null;
+  }
 
-    // Create new credentials as the user does not have any. it is completely
-    // vital that this is successful so need to retry until it is.
-    while (true) {
-      user = await RequestNewUser(user);
-      if (user != null) {
-        break;
+  Future<User> _init() async {
+    // attempt to get key if exists
+    String userJsonString = await storage.read(key: "user");
+    if (userJsonString != null) {
+      try {
+        var userJson = jsonDecode(userJsonString);
+        this.UUID = userJson["UUID"];
+        this.credentialKey = userJson["credentialKey"];
+        this.credentials = userJson["credentials"];
+        this.flutterToken = userJson["flutterToken"];
+      } catch (error) {
+        print(error);
       }
-      sleep(Duration(seconds: 2));
-      print("Retrying request for a new code");
     }
 
-    if (alreadyHadCredentials) {
-      // TODO return message to user to tell them that there credentials have been replaced
+    // get flutter token if android
+    if (Platform.isAndroid) {
+      // initiate firebase
+      FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+      if (await storage.read(key: "firebase-token") == null) {
+        print("creating new firebase token");
+        _firebaseMessaging.getToken().then((token) async {
+          this.flutterToken = token;
+        });
+      }
+    }
+
+    // create new credentials if any are missing
+    if (this.isNull()) {
+      // CREATE NEW USER
+      var alreadyHadCredentials = false;
+      if (this.UUID != null ||
+          this.credentialKey != null ||
+          this.credentials != null) {
+        alreadyHadCredentials = true;
+      }
+
+      // Create new credentials as the user does not have any. it is completely
+      // vital that this is successful so need to retry until it is.
+      while (true) {
+        await this.RequestNewUser();
+        if (this.UUID != null) {
+          break;
+        }
+        await new Future.delayed(Duration(seconds: 2));
+        print("Retrying request for a new user");
+      }
+
+      if (alreadyHadCredentials) {
+        // TODO return message to user to tell them that there credentials have been replaced
+      }
     }
   }
-  return user;
-}
 
-Future<User> RequestNewUser(User user) {
-  var data = {"UUID": Uuid().v4()};
-  if (user.credentialKey != null) {
-    data["current_credential_key"] = user.credentialKey;
-  }
-  if (user.credentials != null) {
-    data["current_credentials"] = user.credentials;
-  }
-  return _newUserReq(user, data);
-}
-
-Future<User> _newUserReq(User user, Map<String, dynamic> data) async {
-  print("creating brand new user");
-  d.Dio dio = new d.Dio();
-  var response = await dio.post(DotEnv().env['HOST'] + "code",
-      data: data,
-      options: d.Options(headers: {
-        "Sec-Key": DotEnv().env["SERVER_KEY"],
-      }, contentType: d.Headers.formUrlEncodedContentType));
-
-  if (response.statusCode != HttpStatus.ok) {
-    print("Major problem creating new code: $response");
-    return null;
+  Future RequestNewUser() async {
+    var data = {"UUID": Uuid().v4()};
+    if (this.credentialKey != null) {
+      data["current_credential_key"] = this.credentialKey;
+    }
+    if (this.credentials != null) {
+      data["current_credentials"] = this.credentials;
+    }
+    await this._newUserReq(data);
   }
 
-  // decode response
-  Map credentialsMap;
-  try {
-    credentialsMap = jsonDecode(response.data);
-  } catch (e) {
-    print('Problem decoding new code message: $e - ' + response.data);
-    return null;
+  Future _newUserReq(Map<String, dynamic> data) async {
+    print("creating new user...");
+    d.Dio dio = new d.Dio();
+    var response = await dio.post(DotEnv().env['HOST'] + "code",
+        data: data,
+        options: d.Options(headers: {
+          "Sec-Key": DotEnv().env["SERVER_KEY"],
+        }, contentType: d.Headers.formUrlEncodedContentType));
+
+    if (response.statusCode != HttpStatus.ok) {
+      print("Major problem creating new code: $response");
+      return null;
+    }
+
+    // decode response
+    Map credentialsMap;
+    try {
+      credentialsMap = jsonDecode(response.data);
+    } catch (e) {
+      print('Problem decoding new code message: $e - ' + response.data);
+      return null;
+    }
+
+    this.UUID = data["UUID"];
+    this.credentialKey = credentialsMap["credential_key"];
+    this.credentials = credentialsMap["credentials"];
+
+    await storage.write(
+        key: "user",
+        value: jsonEncode({
+          'UUID': this.UUID,
+          'credentialKey': this.credentialKey,
+          'credentials': this.credentials,
+          'flutterToken': flutterToken,
+        }));
   }
-
-  user.UUID = data["UUID"];
-  user.credentialKey = credentialsMap["credential_key"];
-  user.credentials = credentialsMap["credentials"];
-
-  await storage.write(key: "UUID", value: user.UUID);
-  await storage.write(key: "UUIDKey", value: user.credentialKey);
-  await storage.write(key: "credential_key", value: user.credentials);
-
-  return user;
 }
