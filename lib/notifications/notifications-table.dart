@@ -47,6 +47,7 @@ class NotificationTableState extends State<NotificationTable>
     if (this.notifications.length > index) {
       final NotificationUI notification = this.notifications[index];
 
+      print(notification.id);
       return AnimatedSize(
           vsync: this,
           duration: const Duration(milliseconds: 500),
@@ -60,22 +61,18 @@ class NotificationTableState extends State<NotificationTable>
                   SlideActionType.primary: 1.0
                 },
                 child: SlidableDrawerDismissal(),
-                onDismissed: (actionType) {
-                  setState(() {
-                    widget.notificationDB.delete(notification.id);
-                    this.notifications.removeAt(index);
-                  });
+                onDismissed: (_) {
+                  deleteNotification(notification.id, index);
                 },
               ),
               actions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.remove_red_eye,
+                  icon: Icons.check,
                   onTap: () {
-                    bool read = false;
-                    if (notification.isRead) read = true;
-                    widget.notificationDB.toggleRead(notification.id, read);
-                    notification.isRead = !read;
+                    setState(() {
+                      readNotification(notification);
+                    });
                   },
                 ),
                 IconSlideAction(
@@ -95,15 +92,24 @@ class NotificationTableState extends State<NotificationTable>
                   color: MyColour.offWhite,
                   icon: Icons.delete,
                   onTap: () {
-                    setState(() {
-                      widget.notificationDB.delete(notification.id);
-                      this.notifications.removeAt(index);
-                    });
+                    deleteNotification(notification.id, index);
                   },
                 ),
               ],
               child: notification));
     }
+  }
+
+  readNotification(NotificationUI notification) {
+    bool read = false;
+    if (notification.isRead) read = true;
+    widget.notificationDB.toggleRead(notification.id, read);
+    notification.isRead = !read;
+  }
+
+  deleteNotification(int notificationID, int index) {
+    widget.notificationDB.delete(notificationID);
+    this.notifications.removeAt(index);
   }
 
   insert(NotificationUI notification) {
@@ -168,6 +174,26 @@ class NotificationTableState extends State<NotificationTable>
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: MyColour.red, fontWeight: FontWeight.w900)),
+                  if (widget.user == null || widget.user.credentials == null)
+                    Column(children: [
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                        child: Text("Problem connecting to server..."),
+                      ),
+                      Container(
+                          height: 40.0,
+                          width: 40.0,
+                          child: FittedBox(
+                              child: FloatingActionButton(
+                            child: Text(
+                              "Retry",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            onPressed: () {
+                              setState(() {});
+                            },
+                          ))),
+                    ])
                 ]),
           );
         }
@@ -176,8 +202,13 @@ class NotificationTableState extends State<NotificationTable>
   }
 
   Future<List<Widget>> initAccount(NotificationTable widget) async {
+    // init user
     widget.user = User();
-    // get user and websocket
+    if (widget.user == null) {
+      return null;
+    }
+
+    // connect to websocket
     widget.ws =
         await initWS(widget.user, await initLocalNotifications(), widget);
 

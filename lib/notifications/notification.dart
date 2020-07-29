@@ -55,7 +55,7 @@ class NotificationUIState extends State<NotificationUI> {
     if (widget.isRead == null) widget.isRead = false;
 
     // if expanded notification
-    var messageMaxLines = 2;
+    var messageMaxLines = 3;
     var titleMaxLines = 1;
     if (widget.isExpanded) {
       // no limit on lines TODO must be a better way to handle this
@@ -75,20 +75,20 @@ class NotificationUIState extends State<NotificationUI> {
     var linkBtn;
     if (widget.link.length > 0) {
       linkBtn = InkWell(
-        onTap: () async {
-          if (await canLaunch(widget.link)) {
-            await launch(widget.link);
-          } else {
-            print("can't open: " + widget.link);
-          }
-        },
-        child: Container(
-            padding: const EdgeInsets.only(right: 5),
-            child: Icon(
-              Icons.link,
-              color: MyColour.red,
-            )),
-      );
+          onTap: () async {
+            if (await canLaunch(widget.link)) {
+              await launch(widget.link);
+            } else {
+              print("can't open: " + widget.link);
+            }
+          },
+          child: Container(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Icon(
+                Icons.link,
+                size: 20,
+                color: MyColour.grey,
+              )));
     }
 
     // if image
@@ -108,8 +108,6 @@ class NotificationUIState extends State<NotificationUI> {
     var titleStyle = TextStyle(
         color: titleColour, fontSize: 20, fontWeight: FontWeight.w600);
 
-//    print(getLinesOfText(1, widget.title, titleStyle));
-
     return Container(
         color: Colors.transparent,
         padding: const EdgeInsets.all(10.0),
@@ -124,7 +122,57 @@ class NotificationUIState extends State<NotificationUI> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      // IMAGE // TODO valign top
+                      Flexible(
+                          fit: FlexFit.tight,
+                          flex: 4,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                // mark as read
+                                InkWell(
+                                    onTap: () async {
+                                      print("delete");
+                                    },
+                                    child: Container(
+                                        child: Icon(
+                                      Icons.close,
+                                      size: 20,
+                                      color: MyColour.grey,
+                                    ))),
+
+                                // mark as read
+                                InkWell(
+                                    onTap: () async {
+                                      print("mark read");
+                                    },
+                                    child: Container(
+                                        padding:
+                                            const EdgeInsets.only(top: 5.0),
+                                        child: Icon(
+                                          Icons.check,
+                                          size: 20,
+                                          color: MyColour.grey,
+                                        ))),
+
+                                // link
+                                if (linkBtn != null) linkBtn,
+
+                                // expand
+                                InkWell(
+                                    onTap: () async {
+                                      print("expand");
+                                    },
+                                    child: Container(
+                                        padding:
+                                            const EdgeInsets.only(top: 5.0),
+                                        child: Icon(
+                                          Icons.zoom_out_map,
+                                          size: 20,
+                                          color: MyColour.grey,
+                                        )))
+                              ])),
+                      // IMAGE
                       Flexible(
                         fit: FlexFit.tight,
                         flex: image != null ? 5 : 0,
@@ -135,28 +183,17 @@ class NotificationUIState extends State<NotificationUI> {
                       Spacer(),
                       // CONTENT
                       Flexible(
-                          fit: FlexFit.loose,
-                          flex: 35,
+                          fit: FlexFit.tight,
+                          flex: 60,
                           child: Column(children: <Widget>[
                             // TITLE
                             Container(
                               padding: const EdgeInsets.only(bottom: 5.0),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    if (linkBtn != null) linkBtn,
-                                    // optional link
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      child: SelectableText(widget.title,
-                                          scrollPhysics:
-                                              NeverScrollableScrollPhysics(),
-                                          style: titleStyle,
-                                          minLines: 1,
-                                          maxLines: titleMaxLines),
-                                    )
-                                  ]),
+                              child: SelectableText(widget.title,
+                                  scrollPhysics: NeverScrollableScrollPhysics(),
+                                  style: titleStyle,
+                                  minLines: 1,
+                                  maxLines: titleMaxLines),
                             ),
 
                             // TIME
@@ -184,25 +221,6 @@ class NotificationUIState extends State<NotificationUI> {
                           ]))
                     ]))));
   }
-
-//  getLinesOfText(int maxLines, String text, TextStyle style) {
-//    assert(maxLines > 0);
-//    while (true) {
-//      final tp = TextPainter(text: TextSpan(text: text, style: style));
-//      tp.layout(maxWidth: size.maxWidth);
-//      final numLines = tp.computeLineMetrics().length;
-//      if (numLines <= maxLines) {
-//        break;
-//      }
-//      var textArr = text.split(" ");
-//      int valuesToRemove =
-//          (textArr.length * ((numLines - maxLines) / numLines)).floor() - 1;
-//      var newArr = textArr.sublist(0, valuesToRemove);
-//      print(newArr.length);
-//      text = newArr.join(" ") + "...";
-//    }
-//    return text;
-//  }
 
   _launchImageLink() async {
     if (await canLaunch(widget.image)) {

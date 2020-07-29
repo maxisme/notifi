@@ -30,7 +30,7 @@ class User {
         this.credentials == null;
   }
 
-  Future<User> _init() async {
+  Future _init() async {
     // attempt to get key if exists
     String userJsonString = await storage.read(key: "user");
     if (userJsonString != null) {
@@ -69,14 +69,7 @@ class User {
 
       // Create new credentials as the user does not have any. it is completely
       // vital that this is successful so need to retry until it is.
-      while (true) {
-        await this.RequestNewUser();
-        if (this.UUID != null) {
-          break;
-        }
-        await new Future.delayed(Duration(seconds: 2));
-        print("Retrying request for a new user");
-      }
+      await this.RequestNewUser();
 
       if (alreadyHadCredentials) {
         // TODO return message to user to tell them that there credentials have been replaced

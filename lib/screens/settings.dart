@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
-import 'package:notifi/screens/base.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,9 +28,36 @@ class SettingsScreenState extends State<SettingsScreen> {
     if (widget.table != null && widget.table.user != null) {
       credString = " - " + widget.table.user.credentials;
     }
-    return BaseLayout(
-      widget.table,
-      Column(children: [
+    return Scaffold(
+      backgroundColor: MyColour.offWhite,
+      appBar: AppBar(
+        shape: Border(bottom: BorderSide(color: MyColour.offGrey)),
+        elevation: 0.0,
+        toolbarHeight: 80,
+        centerTitle: true,
+        title: SizedBox(
+            height: 50,
+            child: Image.asset('images/bell.png',
+                filterQuality: FilterQuality.high)),
+        leading: IconButton(
+            icon: Icon(
+              Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,
+              color: MyColour.grey,
+            ),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushNamed(context, '/settings');
+              }
+            }),
+        actions: [
+          widget.table == null || widget.table.user == null
+              ? RefreshProgressIndicator()
+              : Container()
+        ],
+      ),
+      body: Column(children: [
         if (credString != "")
           SettingOption('How do I receive notifications?', onTapCallback: () {
             launch("https://notifi.it?c=" +
@@ -43,7 +69,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             Clipboard.setData(
                 new ClipboardData(text: widget.table.user.credentials));
             showToast("Copied " + widget.table.user.credentials,
-                gravity: Toast.TOP);
+                gravity: Toast.CENTER);
           }
         }),
         SettingOption('Create New Credentials',
@@ -130,9 +156,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                   style: TextStyle(color: MyColour.black),
                 ),
                 onPressed: () async {
-                  widget.table.user.RequestNewUser();
                   Navigator.pop(context);
-                  setState(() {});
+                  setState(() {
+                    widget.table.user.RequestNewUser();
+                  });
                 })
           ],
         );
