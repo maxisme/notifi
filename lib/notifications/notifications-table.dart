@@ -20,7 +20,7 @@ class NotificationTable extends StatefulWidget {
 
   NotificationTable() {
     this.notificationDB = NotificationProvider();
-    this.notificationDB.open("notifications.db");
+    this.notificationDB.initDB("notifications.db");
   }
 
   Future<int> add(NotificationUI notification) async {

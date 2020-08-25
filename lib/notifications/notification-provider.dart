@@ -1,81 +1,73 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqlite3/open.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 import 'notification.dart';
 
 class NotificationProvider {
   Database db;
 
-  Future open(String path) async {
-    String dbFolder = await getDatabasesPath();
-    String dbPath = dbFolder + "/" + path;
-    print(dbPath);
+  Future initDB(String path) async {
+    open.overrideFor(OperatingSystem.linux, _openOnLinux);
 
-    try {
-      await Directory(dbFolder).create(recursive: true);
-    } catch (_) {}
+    String dbPath = "notifications.db";
+    db = sqlite3.open(dbPath);
 
-    db = await openDatabase(dbPath, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute('''
-        create table if not exists Notifications ( 
-        _id integer primary key autoincrement,       
-        notification text not null,
-        read int default 0)
-      ''');
-    });
+    db.execute('''
+    CREATE TABLE IF NOT EXISTS Notifications ( 
+      _id integer primary key autoincrement,       
+      notification text not null,
+      read int default 0
+    );
+    ''');
   }
 
   Future<int> store(NotificationUI notification) async {
-    return await db
-        .insert("Notifications", {'notification': json.encode(notification)});
+    final stmt = db.prepare('INSERT INTO Notifications (notification) VALUES (?)');
+    stmt.execute([json.encode(notification)]);
+    stmt.dispose();
+    return db.lastInsertRowId;
   }
 
   Future<int> delete(int id) async {
-    return await db.delete("Notifications", where: '_id = ?', whereArgs: [id]);
+    final stmt = db.prepare('DELETE FROM Notifications where _id = ?');
+    stmt.execute([id]);
+    stmt.dispose();
   }
 
   Future deleteAll() async {
-    await db.execute("DELETE FROM Notifications;");
+    db.execute("DELETE FROM Notifications");
   }
 
   Future toggleRead(int id, bool isRead) async {
     int read = 1;
     if (isRead) read = 0;
-    await db.update("Notifications", {"read": read},
-        where: '_id = ?', whereArgs: [id]);
+
+    final stmt = db.prepare('UPDATE Notifications set read=? WHERE _id=?');
+    stmt.execute([read, id]);
+    stmt.dispose();
   }
 
   Future markAllRead() async {
-    await db.update("Notifications", {"read": "1"});
+    db.execute("UPDATE Notifications set read=1");
   }
 
   Future<List<Widget>> getAll() async {
     List<Widget> notifications = [];
     if (db == null) return notifications;
 
-    List<Map> dbNotifications = await db.rawQuery(
+    ResultSet dbNotifications = db.select(
         'SELECT _id, notification, read FROM Notifications ORDER BY _id DESC');
-
-    for (var i = 0; i < dbNotifications.length; i++) {
-      try {
-        var notification = NotificationUI.fromJson(
-            json.decode(dbNotifications[i]["notification"]));
-
-        notification.isRead = false;
-        if (dbNotifications[i]["read"] == 1) {
-          notification.isRead = true;
-        }
-        notification.id = dbNotifications[i]["_id"];
-        notifications.add(notification);
-      } catch (e) {
-        print('Problem decoding notification in sql: $e - ' +
-            dbNotifications[i][0]);
-      }
-    }
+    print(dbNotifications);
     return notifications;
+  }
+
+  DynamicLibrary _openOnLinux() {
+    final libraryNextToScript = File('/home/maximilian/Documents/work/notifi/sqlite3.so');
+    return DynamicLibrary.open(libraryNextToScript.path);
   }
 }
