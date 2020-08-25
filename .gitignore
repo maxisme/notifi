@@ -50,3 +50,5 @@ tmp.xcarchive
 notifi.app
 .idea
 /.dart_tool/
+.dart_tool
+flutter_build
