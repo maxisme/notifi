@@ -144,7 +144,6 @@ class UserStore {
     String dir = (await getApplicationDocumentsDirectory())
         .path; // TODO use getLibraryDirectory
     String savePath = '$dir/.notifi/' + linuxFile;
-
     File file = File(savePath);
     file.create(recursive: true);
     return file;
