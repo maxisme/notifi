@@ -52,3 +52,4 @@ notifi.app
 /.dart_tool/
 .dart_tool
 flutter_build
+notifications.db

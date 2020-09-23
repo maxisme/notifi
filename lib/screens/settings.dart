@@ -51,11 +51,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pushNamed(context, '/settings');
               }
             }),
-        actions: [
-          widget.table == null || widget.table.user == null
-              ? RefreshProgressIndicator()
-              : Container()
-        ],
       ),
       body: Column(children: [
         if (credString != "")

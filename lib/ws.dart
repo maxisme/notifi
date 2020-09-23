@@ -6,9 +6,10 @@ import 'package:notifi/local-notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/user.dart';
-import 'package:package_info/package_info.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:yaml/yaml.dart';
+import 'dart:io';
 
 // values defined by backend
 const refKey = "ref";
@@ -23,45 +24,47 @@ Future<IOWebSocketChannel> initWS(
     return await initWS(user, localNotification, nt);
   }
 
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
   var headers = {
     "Sec-Key": DotEnv().env["SERVER_KEY"],
     "Credentials": user.credentials,
     "Uuid": user.UUID,
     "Key": user.credentialKey,
-    "Version": packageInfo.version,
+    "Version": await getVersion(),
   };
 
   var ws = IOWebSocketChannel.connect(DotEnv().env['WS_HOST'],
       headers: headers, pingInterval: Duration(seconds: 15));
 
-  print("ws open");
+  print("Opened Websocket");
+
   ws.stream.listen((msg) {
     // decode incoming ws message
-    Map<String, dynamic> mapWS;
+    List<dynamic> notifications;
     try {
-      mapWS = json.decode(msg);
+      notifications = json.decode(msg);
     } catch (e) {
-      print("ignoring un-parsable incoming ws message from server: $msg");
+      print(e);
+      print("ignoring un-parsable incoming WS message from server: $msg");
     }
 
-    if (mapWS != null && mapWS[refKey] != null && mapWS[messageKey] != null) {
-      // send acknowledgement back to server
-      ws.sink.add(sprintf('{"%s": "%s"}', [refKey, mapWS[refKey]]));
-
-      // decode base64 encoded message json to string
-      List<dynamic> jsonMessage;
+    for (var i=0; i<notifications.length; i++) {
+      Map<String, dynamic> jsonMessage;
+      var n = notifications[i];
       try {
-        jsonMessage =
-            json.decode(utf8.decode(base64Url.decode(mapWS[messageKey])));
+        jsonMessage = new Map<String, dynamic>.from(n);
       } catch (e) {
-        print("ignoring un-parsable ws message: $msg\n$e");
-      } finally {
-        // handle message
-        _handleWSMessage(localNotification, nt, jsonMessage);
+        print("ignoring un-parsable ws message: $msg\n$e\n$n");
       }
-    } else {
-      print("invalid json message from server: $msg");
+      if (jsonMessage != null) {
+        var notification = NotificationUI.fromJson(jsonMessage);
+
+        // store notification
+        int id = nt.add(notification);
+        print(notification.title);
+
+        // send local notification
+        sendLocalNotification(localNotification, id, notification);
+      }
     }
   }, onError: (error) {
     print(error);
@@ -70,18 +73,13 @@ Future<IOWebSocketChannel> initWS(
     await new Future.delayed(Duration(seconds: 3));
     return await initWS(user, localNotification, nt);
   });
+
   return ws;
 }
 
-Future _handleWSMessage(FlutterLocalNotificationsPlugin localNotification,
-    NotificationTable notificationTable, List<dynamic> messages) async {
-  for (var i = 0; i < messages.length; i++) {
-    var notification = NotificationUI.fromJson(messages[i]);
-
-    // store notification
-    int id = await notificationTable.add(notification);
-
-    // send local notification
-    sendLocalNotification(localNotification, id, notification);
-  }
+Future<String> getVersion() async{
+  File f = new File("pubspec.yaml");
+  var content = await f.readAsString();
+  Map yaml = loadYaml(content);
+  return yaml['version'];
 }

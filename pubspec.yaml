@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -33,14 +33,13 @@ dependencies:
     git:
       url: git://github.com/openresearch/flutter_secure_storage.git
       ref: feature/macos_support
-  package_info: ^0.4.3
-  uuid: ^2.2.0
+  uuid: ^2.2.2
   flutter_local_notifications: ^1.5.0-beta.1
   sprintf: ^4.1.0
   dio: ^3.0.10
-  json_serializable: ^3.4.0
+  json_serializable: ^3.4.1
   sqlite3: ^0.1.4
-  flutter_slidable: ^0.5.5
+  flutter_slidable: ^0.5.7
   launch_at_login: ^0.0.3
   toast: ^0.1.5
   firebase_messaging: ^7.0.0
@@ -52,6 +51,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -69,6 +69,7 @@ flutter:
     - images/sad.png
     - .env
     - sqlite3.so
+    - pubspec.yaml
 
   fonts:
     - family: Inconsolata
@@ -78,3 +79,9 @@ flutter:
           weight: 700
         - asset: fonts/Inconsolata-Black.ttf
           weight: 900
+
+flutter_icons:
+  image_path: 'images/bell.png'
+  android: true
+  ios: true
+  linux: true

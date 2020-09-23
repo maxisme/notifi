@@ -14,7 +14,6 @@ class NotificationTable extends StatefulWidget {
   NotificationProvider notificationDB;
   User user;
   IOWebSocketChannel ws;
-  VoidCallback newUserCallback;
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
@@ -23,8 +22,8 @@ class NotificationTable extends StatefulWidget {
     this.notificationDB.initDB("notifications.db");
   }
 
-  Future<int> add(NotificationUI notification) async {
-    notification.id = await this.notificationDB.store(notification);
+  int add(NotificationUI notification) {
+    notification.id = this.notificationDB.store(notification);
     notificationTableState.insert(notification);
     return notification.id;
   }
@@ -47,7 +46,6 @@ class NotificationTableState extends State<NotificationTable>
     if (this.notifications.length > index) {
       final NotificationUI notification = this.notifications[index];
 
-      print(notification.id);
       return AnimatedSize(
           vsync: this,
           duration: const Duration(milliseconds: 500),
@@ -138,6 +136,9 @@ class NotificationTableState extends State<NotificationTable>
     return FutureBuilder(
       future: initAccount(widget),
       builder: (context, f) {
+        if(f.hasError){
+          print(f.error);
+        }
         if (f.hasData != null && f.data != null && f.data.length > 0) {
           List<Widget> notifications = f.data;
           this.notifications = notifications;
@@ -174,26 +175,26 @@ class NotificationTableState extends State<NotificationTable>
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: MyColour.red, fontWeight: FontWeight.w900)),
-                  if (widget.user == null || widget.user.credentials == null)
-                    Column(children: [
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 20.0, top: 20),
-                        child: Text("Problem connecting to server..."),
-                      ),
-                      Container(
-                          height: 40.0,
-                          width: 40.0,
-                          child: FittedBox(
-                              child: FloatingActionButton(
-                            child: Text(
-                              "Retry",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            onPressed: () {
-                              setState(() {});
-                            },
-                          ))),
-                    ])
+                  // if (widget.user == null || widget.user.credentials == null)
+                  //   Column(children: [
+                  //     Container(
+                  //       padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                  //       child: Text("Problem connecting to server..."),
+                  //     ),
+                  //     Container(r
+                  //         height: 40.0,
+                  //         width: 40.0,
+                  //         child: FittedBox(
+                  //             child: FloatingActionButton(
+                  //           child: Text(
+                  //             "Retry",
+                  //             style: TextStyle(fontSize: 12),
+                  //           ),
+                  //           onPressed: () {
+                  //             setState(() {});
+                  //           },
+                  //         ))),
+                  //   ])
                 ]),
           );
         }

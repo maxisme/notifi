@@ -36,18 +36,6 @@ class User {
     // attempt to get key if exists
     await storage.set(this);
 
-    // get flutter token if android
-//    if (Platform.isAndroid) {
-//      // initiate firebase
-//      FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-//      if (await storage.read(key: "firebase-token") == null) {
-//        print("creating new firebase token");
-//        _firebaseMessaging.getToken().then((token) async {
-//          this.flutterToken = token;
-//        });
-//      }
-//    }
-
     // create new credentials if any are missing
     if (this.isNull()) {
       // CREATE NEW USER
@@ -154,8 +142,9 @@ class UserStore {
   }
 
   Future<File> getLinuxFile() async{
-    String dir = (await getApplicationDocumentsDirectory()).path;
+    String dir = (await getApplicationDocumentsDirectory()).path; // TODO use getLibraryDirectory
     String savePath = '$dir/'+linuxFile;
+    print(savePath);
 
     File file = File(savePath);
     if (!await file.exists()) {

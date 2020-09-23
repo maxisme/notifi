@@ -24,8 +24,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    widget.table.newUserCallback = setStateCallback();
-
     return MaterialApp(
         theme: ThemeData(
             fontFamily: 'Inconsolata',
@@ -52,9 +50,5 @@ class _MyAppState extends State<MyApp> {
           '/': (context) => HomeScreen(widget.table),
           '/settings': (context) => SettingsScreen(widget.table),
         });
-  }
-
-  setStateCallback() {
-    setState(() {});
   }
 }

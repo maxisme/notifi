@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -11,63 +10,92 @@ import 'notification.dart';
 class NotificationProvider {
   Database db;
 
-  Future initDB(String path) async {
+  Future<Database> initDB(String path) async {
     open.overrideFor(OperatingSystem.linux, _openOnLinux);
+    this.db = sqlite3.open("notifications.db");
 
-    String dbPath = "notifications.db";
-    db = sqlite3.open(dbPath);
-
-    db.execute('''
-    CREATE TABLE IF NOT EXISTS Notifications ( 
-      _id integer primary key autoincrement,       
-      notification text not null,
+    // language=SQLite
+    this.db.execute('''
+    CREATE TABLE IF NOT EXISTS notifications (
+      _id integer primary key autoincrement,  
+      UUID text unique not null,
+      title text not null,
+      time text not null,
+      message text,
+      image text,
+      link text,
       read int default 0
     );
     ''');
   }
 
-  Future<int> store(NotificationUI notification) async {
-    final stmt = db.prepare('INSERT INTO Notifications (notification) VALUES (?)');
-    stmt.execute([json.encode(notification)]);
+  int store(NotificationUI notification) {
+    // language=SQLite
+    final stmt = this.db.prepare('''
+    INSERT INTO notifications 
+      (UUID, title, time, message, image, link)
+    VALUES 
+      (?, ?, ?, ?, ?, ?)
+    ''');
+    stmt.execute([
+      notification.UUID,
+      notification.title,
+      notification.time,
+      notification.message,
+      notification.image,
+      notification.link,
+    ]);
     stmt.dispose();
-    return db.lastInsertRowId;
+    return this.db.lastInsertRowId;
   }
 
   Future<int> delete(int id) async {
-    final stmt = db.prepare('DELETE FROM Notifications where _id = ?');
+    // language=SQLite
+    final stmt = this.db.prepare('DELETE FROM notifications where _id = ?');
     stmt.execute([id]);
     stmt.dispose();
   }
 
   Future deleteAll() async {
-    db.execute("DELETE FROM Notifications");
+    // language=SQLite
+    this.db.execute("DELETE FROM notifications");
   }
 
   Future toggleRead(int id, bool isRead) async {
     int read = 1;
     if (isRead) read = 0;
 
-    final stmt = db.prepare('UPDATE Notifications set read=? WHERE _id=?');
+    // language=SQLite
+    final stmt = this.db.prepare('UPDATE notifications set read=? WHERE _id=?');
     stmt.execute([read, id]);
     stmt.dispose();
   }
 
   Future markAllRead() async {
-    db.execute("UPDATE Notifications set read=1");
+    // language=SQLite
+    this.db.execute("UPDATE notifications set read=1");
   }
 
   Future<List<Widget>> getAll() async {
     List<Widget> notifications = [];
-    if (db == null) return notifications;
+    if (this.db == null) return notifications;
 
-    ResultSet dbNotifications = db.select(
-        'SELECT _id, notification, read FROM Notifications ORDER BY _id DESC');
-    print(dbNotifications);
+    // language=SQLite
+    ResultSet dbNotifications = db.select('''
+    SELECT * FROM notifications ORDER BY _id DESC''');
+    var rows = dbNotifications.rows;
+    if (rows != null) {
+      for (var i = 0; i < rows.length; i++) {
+        var n = new NotificationUI(rows[i][2], rows[i][3], rows[i][1]);
+        notifications.add(n);
+      }
+    }
     return notifications;
   }
 
   DynamicLibrary _openOnLinux() {
-    final libraryNextToScript = File('/home/maximilian/Documents/work/notifi/sqlite3.so');
+    final libraryNextToScript =
+        File('/home/maximilian/Documents/work/notifi/sqlite3.so');
     return DynamicLibrary.open(libraryNextToScript.path);
   }
 }

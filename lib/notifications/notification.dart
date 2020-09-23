@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 @JsonSerializable(nullable: false)
 class NotificationUI extends StatefulWidget {
   final String title;
+  final String UUID;
   final String time;
   String message;
   String image;
@@ -16,7 +17,7 @@ class NotificationUI extends StatefulWidget {
   bool isRead;
   bool isExpanded;
 
-  NotificationUI(this.title, this.time,
+  NotificationUI(this.title, this.time, this.UUID,
       {Key key, this.message, this.image, this.link})
       : super(key: key);
 
@@ -33,6 +34,7 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
   return NotificationUI(
     json['title'] as String,
     json['time'] as String,
+    json['UUID'] as String,
     message: json['message'] as String,
     image: json['image'] as String,
     link: json['link'] as String,
@@ -73,7 +75,7 @@ class NotificationUIState extends State<NotificationUI> {
 
     // if link
     var linkBtn;
-    if (widget.link.length > 0) {
+    if (widget.link != null) {
       linkBtn = InkWell(
           onTap: () async {
             if (await canLaunch(widget.link)) {
@@ -93,7 +95,7 @@ class NotificationUIState extends State<NotificationUI> {
 
     // if image
     var image;
-    if (widget.image.length > 0) {
+    if (widget.image != null) {
       image = GestureDetector(
           onTap: _launchImageLink,
           child: Container(

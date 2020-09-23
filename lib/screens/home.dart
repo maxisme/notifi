@@ -39,11 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pushNamed(context, '/settings');
                 }
               }),
-          actions: [
-            widget.table == null || widget.table.user == null
-                ? RefreshProgressIndicator()
-                : Container()
-          ],
         ),
         body: widget.table,
         bottomNavigationBar: BottomNavigationBar(
@@ -51,11 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
             if (index == 0) {
               // MARK ALL AS READ EVENT
               widget.table.notificationDB.markAllRead();
-              setState(() {});
             } else if (index == 1) {
               // DELETE ALL EVENT
-              _deleteAllDialogue();
-              setState(() {});
+              _deleteAllNotificationsDialogue();
             }
           },
           items: <BottomNavigationBarItem>[
@@ -73,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  Future<void> _deleteAllDialogue() async {
+  Future<void> _deleteAllNotificationsDialogue() async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

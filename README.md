@@ -11,5 +11,8 @@ gcc -c -Wall -Werror -fpic sqlite3.c
 gcc -shared -o sqlite3.so sqlite3.o
 ```
 
+### Jetbrains flutter plugin:
+https://plugins.jetbrains.com/plugin/9212-flutter/versions
+
 # TODO
 - [ ] show HTTP error code when failing to connect to server

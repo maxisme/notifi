@@ -41,11 +41,6 @@ class _BaseLayoutState extends State<BaseLayout> {
                   Navigator.pushNamed(context, '/settings');
                 }
               }),
-          actions: [
-            widget.table == null || widget.table.user == null
-                ? RefreshProgressIndicator()
-                : Container()
-          ],
         ),
         body: widget.child,
         bottomNavigationBar: BottomNavigationBar(
