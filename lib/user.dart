@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 final storage = new UserStore();
@@ -103,11 +102,11 @@ class UserStore {
   static const key = "user";
   static const linuxFile = "user-store.json";
 
-  Future<void> set(User user) async{
+  Future<void> set(User user) async {
     var userJsonString;
     try {
       userJsonString = await storage.read(key: key);
-    } on MissingPluginException catch(e) {
+    } on MissingPluginException catch (e) {
       // read json from file
       var file = await getLinuxFile();
       userJsonString = await file.readAsString();
@@ -127,7 +126,7 @@ class UserStore {
     return user;
   }
 
-  Future write(User user) async{
+  Future write(User user) async {
     String jsonData = jsonEncode({
       'UUID': user.UUID,
       'credentialKey': user.credentialKey,
@@ -135,21 +134,19 @@ class UserStore {
     });
     try {
       await storage.write(key: key, value: jsonData);
-    } on MissingPluginException catch(e) {
+    } on MissingPluginException catch (e) {
       var file = await getLinuxFile();
       file.writeAsString(jsonData);
     }
   }
 
-  Future<File> getLinuxFile() async{
-    String dir = (await getApplicationDocumentsDirectory()).path; // TODO use getLibraryDirectory
-    String savePath = '$dir/'+linuxFile;
-    print(savePath);
+  Future<File> getLinuxFile() async {
+    String dir = (await getApplicationDocumentsDirectory())
+        .path; // TODO use getLibraryDirectory
+    String savePath = '$dir/.notifi/' + linuxFile;
 
     File file = File(savePath);
-    if (!await file.exists()) {
-      await file.writeAsString("");
-    }
+    file.create(recursive: true);
     return file;
   }
 }

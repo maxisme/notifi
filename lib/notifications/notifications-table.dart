@@ -136,7 +136,7 @@ class NotificationTableState extends State<NotificationTable>
     return FutureBuilder(
       future: initAccount(widget),
       builder: (context, f) {
-        if(f.hasError){
+        if (f.hasError) {
           print(f.error);
         }
         if (f.hasData != null && f.data != null && f.data.length > 0) {
@@ -204,14 +204,15 @@ class NotificationTableState extends State<NotificationTable>
 
   Future<List<Widget>> initAccount(NotificationTable widget) async {
     // init user
-    widget.user = User();
     if (widget.user == null) {
-      return null;
+      widget.user = User();
     }
 
     // connect to websocket
-    widget.ws =
-        await initWS(widget.user, await initLocalNotifications(), widget);
+    if (widget.ws == null) {
+      widget.ws =
+          await initWS(widget.user, await initLocalNotifications(), widget);
+    }
 
     // return all notifications
     return widget.notificationDB.getAll();
