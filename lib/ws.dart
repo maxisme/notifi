@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,27 +7,25 @@ import 'package:notifi/local-notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/user.dart';
-import 'package:sprintf/sprintf.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:yaml/yaml.dart';
-import 'dart:io';
 
 // values defined by backend
 const refKey = "ref";
 const messageKey = "msg";
 
-Future<IOWebSocketChannel> initWS(
+Future<IOWebSocketChannel> connectToWs(
     User user,
     FlutterLocalNotificationsPlugin localNotification,
     NotificationTable nt) async {
   if (user.isNull()) {
     await new Future.delayed(Duration(seconds: 3));
-    return await initWS(user, localNotification, nt);
+    return await connectToWs(user, localNotification, nt);
   }
 
   var headers = {
     "Sec-Key": DotEnv().env["SERVER_KEY"],
-    "Credentials": user.credentials,
+    "Credentials": user.credentials.value,
     "Uuid": user.UUID,
     "Key": user.credentialKey,
     "Version": await getVersion(),
@@ -35,7 +34,7 @@ Future<IOWebSocketChannel> initWS(
   var ws = IOWebSocketChannel.connect(DotEnv().env['WS_HOST'],
       headers: headers, pingInterval: Duration(seconds: 15));
 
-  print("Opened Websocket");
+  print("Connecting to Websocket");
 
   ws.stream.listen((msg) {
     // decode incoming ws message
@@ -47,7 +46,8 @@ Future<IOWebSocketChannel> initWS(
       print("ignoring un-parsable incoming WS message from server: $msg");
     }
 
-    for (var i=0; i<notifications.length; i++) {
+    // parse notifications from websocket message
+    for (var i = 0; i < notifications.length; i++) {
       Map<String, dynamic> jsonMessage;
       var n = notifications[i];
       try {
@@ -60,7 +60,6 @@ Future<IOWebSocketChannel> initWS(
 
         // store notification
         int id = nt.add(notification);
-        print(notification.title);
 
         // send local notification
         sendLocalNotification(localNotification, id, notification);
@@ -71,13 +70,13 @@ Future<IOWebSocketChannel> initWS(
   }, onDone: () async {
     print("ws closed");
     await new Future.delayed(Duration(seconds: 3));
-    return await initWS(user, localNotification, nt);
+    return connectToWs(user, localNotification, nt);
   });
 
   return ws;
 }
 
-Future<String> getVersion() async{
+Future<String> getVersion() async {
   File f = new File("pubspec.yaml");
   var content = await f.readAsString();
   Map yaml = loadYaml(content);

@@ -4,18 +4,29 @@ import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
+import 'package:notifi/user.dart';
+import 'package:notifi/ws.dart';
+
+import 'local-notifications.dart';
 
 void main() async {
   await DotEnv().load();
 
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  var user = new User();
+  var nt = new NotificationTable(user);
+
+  // connect to websocket
+  user.ws = await connectToWs(user, await initLocalNotifications(), nt);
+
+  runApp(MyApp(nt, user));
 }
 
 class MyApp extends StatefulWidget {
-  NotificationTable table = new NotificationTable();
+  final NotificationTable table;
+  final User user;
 
-  MyApp({Key key}) : super(key: key);
+  MyApp(this.table, this.user, {Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -48,7 +59,7 @@ class _MyAppState extends State<MyApp> {
                     fontSize: 35))),
         routes: {
           '/': (context) => HomeScreen(widget.table),
-          '/settings': (context) => SettingsScreen(widget.table),
+          '/settings': (context) => SettingsScreen(widget.user),
         });
   }
 }

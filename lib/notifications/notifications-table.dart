@@ -4,20 +4,16 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
-import 'package:web_socket_channel/io.dart';
 
-import '../local-notifications.dart';
-import '../ws.dart';
 import 'notification-provider.dart';
 
 class NotificationTable extends StatefulWidget {
   NotificationProvider notificationDB;
-  User user;
-  IOWebSocketChannel ws;
+  final User user;
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
-  NotificationTable() {
+  NotificationTable(this.user) {
     this.notificationDB = NotificationProvider();
     this.notificationDB.initDB("notifications.db");
   }
@@ -134,7 +130,7 @@ class NotificationTableState extends State<NotificationTable>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: initAccount(widget),
+      future: _getNotifications(widget),
       builder: (context, f) {
         if (f.hasError) {
           print(f.error);
@@ -170,11 +166,21 @@ class NotificationTableState extends State<NotificationTable>
                       style: TextStyle(
                           color: MyColour.grey, fontWeight: FontWeight.w500)),
                   Container(padding: const EdgeInsets.only(top: 20.0)),
-                  if (widget.user != null && widget.user.credentials != null)
-                    SelectableText(widget.user.credentials,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: MyColour.red, fontWeight: FontWeight.w900)),
+                  ValueListenableBuilder<String>(
+                    valueListenable: widget.user.credentials,
+                    builder:
+                        (BuildContext context, String value, Widget child) {
+                      var credentials = value;
+                      if (credentials == "") {
+                        credentials = "...";
+                      }
+                      return SelectableText(credentials,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColour.red,
+                              fontWeight: FontWeight.w900));
+                    },
+                  )
                   // if (widget.user == null || widget.user.credentials == null)
                   //   Column(children: [
                   //     Container(
@@ -202,18 +208,7 @@ class NotificationTableState extends State<NotificationTable>
     );
   }
 
-  Future<List<Widget>> initAccount(NotificationTable widget) async {
-    // init user
-    if (widget.user == null) {
-      widget.user = User();
-    }
-
-    // connect to websocket
-    if (widget.ws == null) {
-      widget.ws =
-          await initWS(widget.user, await initLocalNotifications(), widget);
-    }
-
+  Future<List<Widget>> _getNotifications(NotificationTable widget) async {
     // return all notifications
     return widget.notificationDB.getAll();
   }

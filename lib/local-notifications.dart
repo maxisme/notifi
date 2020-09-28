@@ -8,15 +8,15 @@ Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
   final settings = InitializationSettings(
       android: AndroidInitializationSettings('app_icon'),
       iOS: IOSInitializationSettings(
-        requestSoundPermission: false,
+        requestSoundPermission: true,
         requestBadgePermission: false,
-        requestAlertPermission: false,
+        requestAlertPermission: true,
         onDidReceiveLocalNotification: null,
       ),
       macOS: MacOSInitializationSettings(
-        requestAlertPermission: false,
+        requestAlertPermission: true,
         requestBadgePermission: false,
-        requestSoundPermission: false,
+        requestSoundPermission: true,
       ));
 
   await localNotifications.initialize(settings);

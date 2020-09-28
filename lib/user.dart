@@ -2,22 +2,27 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 final storage = new UserStore();
 
 const RequestNewUserCode = 551;
 
-class User {
+class User with ChangeNotifier {
   Future _doneFuture;
   String UUID;
   String credentialKey;
-  String credentials;
+  ValueListenable<String> credentials = ValueNotifier<String>("");
   String flutterToken;
+  IOWebSocketChannel ws;
 
   User() {
     _doneFuture = _init();
@@ -31,23 +36,19 @@ class User {
         this.credentials == null;
   }
 
-  Future _init() async {
+  Future<bool> _init() async {
     // attempt to get key if exists
-    await storage.set(this);
+    await storage.getUser(this);
 
     // create new credentials if any are missing
     if (this.isNull()) {
-      // CREATE NEW USER
-      var alreadyHadCredentials = false;
-      if (this.UUID != null ||
+      var alreadyHadCredentials = (this.UUID != null ||
           this.credentialKey != null ||
-          this.credentials != null) {
-        alreadyHadCredentials = true;
-      }
+          this.credentials != null);
 
       // Create new credentials as the user does not have any. it is completely
       // vital that this is successful so need to retry until it is.
-      await this.RequestNewUser();
+      bool gotUser = await this.RequestNewUser();
 
       if (alreadyHadCredentials) {
         // TODO return message to user to tell them that there credentials have been replaced
@@ -55,18 +56,21 @@ class User {
     }
   }
 
-  Future RequestNewUser() async {
-    var data = {"UUID": Uuid().v4()};
+  Future<bool> RequestNewUser() async {
+    var data = {"UUID": Uuid().v4()}; // generate UUID for user
     if (this.credentialKey != null) {
       data["current_credential_key"] = this.credentialKey;
     }
     if (this.credentials != null) {
-      data["current_credentials"] = this.credentials;
+      data["current_credentials"] = this.credentials.value;
     }
-    await this._newUserReq(data);
+    var gotUser = await this._newUserReq(data);
+    if (gotUser == true && this.ws != null) {
+      this.ws.sink.close(status.normalClosure, "new code!");
+    }
   }
 
-  Future _newUserReq(Map<String, dynamic> data) async {
+  Future<bool> _newUserReq(Map<String, dynamic> data) async {
     print("creating new user...");
     d.Dio dio = new d.Dio();
     var response = await dio.post(DotEnv().env['HOST'] + "code",
@@ -76,8 +80,8 @@ class User {
         }, contentType: d.Headers.formUrlEncodedContentType));
 
     if (response.statusCode != HttpStatus.ok) {
-      print("Major problem creating new code: $response");
-      return null;
+      print("Problem fetching new code from server: $response");
+      return false;
     }
 
     // decode response
@@ -85,15 +89,19 @@ class User {
     try {
       credentialsMap = jsonDecode(response.data);
     } catch (e) {
-      print('Problem decoding new code message: $e - ' + response.data);
-      return null;
+      print('Problem decoding new code from server: $e - ' + response.data);
+      return false;
     }
 
+    // set variables
     this.UUID = data["UUID"];
     this.credentialKey = credentialsMap["credential_key"];
-    this.credentials = credentialsMap["credentials"];
+    this.credentials = ValueNotifier<String>(credentialsMap["credentials"]);
+    notifyListeners();
 
-    await storage.write(this);
+    // store user credentials
+    await storage.writeUser(this);
+    return true;
   }
 }
 
@@ -102,13 +110,13 @@ class UserStore {
   static const key = "user";
   static const linuxFile = "user-store.json";
 
-  Future<void> set(User user) async {
+  Future<void> getUser(User user) async {
     var userJsonString;
     try {
       userJsonString = await storage.read(key: key);
     } on MissingPluginException catch (e) {
       // read json from file
-      var file = await getLinuxFile();
+      var file = await _getLinuxFile();
       userJsonString = await file.readAsString();
     }
 
@@ -117,7 +125,7 @@ class UserStore {
         var userJson = jsonDecode(userJsonString);
         user.UUID = userJson["UUID"];
         user.credentialKey = userJson["credentialKey"];
-        user.credentials = userJson["credentials"];
+        user.credentials = ValueNotifier<String>(userJson["credentials"]);
         user.flutterToken = userJson["flutterToken"];
       } catch (error) {
         print(error);
@@ -126,23 +134,23 @@ class UserStore {
     return user;
   }
 
-  Future write(User user) async {
+  Future writeUser(User user) async {
     String jsonData = jsonEncode({
       'UUID': user.UUID,
       'credentialKey': user.credentialKey,
-      'credentials': user.credentials,
+      'credentials': user.credentials.value,
     });
     try {
       await storage.write(key: key, value: jsonData);
     } on MissingPluginException catch (e) {
-      var file = await getLinuxFile();
+      // write to file instead of keychain
+      var file = await _getLinuxFile();
       file.writeAsString(jsonData);
     }
   }
 
-  Future<File> getLinuxFile() async {
-    String dir = (await getApplicationDocumentsDirectory())
-        .path; // TODO use getLibraryDirectory
+  Future<File> _getLinuxFile() async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
     String savePath = '$dir/.notifi/' + linuxFile;
     File file = File(savePath);
     file.create(recursive: true);
