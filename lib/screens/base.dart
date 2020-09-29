@@ -18,6 +18,10 @@ class BaseLayout extends StatefulWidget {
 class _BaseLayoutState extends State<BaseLayout> {
   @override
   Widget build(BuildContext context) {
+    bool settingsPage = false;
+    if (ModalRoute.of(context).settings.name == "/settings") {
+      settingsPage = true;
+    }
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
@@ -31,7 +35,7 @@ class _BaseLayoutState extends State<BaseLayout> {
                   filterQuality: FilterQuality.high)),
           leading: IconButton(
               icon: Icon(
-                Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,
+                settingsPage ? Icons.arrow_back : Icons.settings,
                 color: MyColour.grey,
               ),
               onPressed: () {

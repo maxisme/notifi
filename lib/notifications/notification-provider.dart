@@ -86,7 +86,9 @@ class NotificationProvider {
     var rows = dbNotifications.rows;
     if (rows != null) {
       for (var i = 0; i < rows.length; i++) {
-        var n = new NotificationUI(rows[i][2], rows[i][3], rows[i][1]);
+        print(rows[i]);
+        var n =
+            new NotificationUI(rows[i][0], rows[i][2], rows[i][3], rows[i][1]);
         notifications.add(n);
       }
     }

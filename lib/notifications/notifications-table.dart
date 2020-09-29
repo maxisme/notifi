@@ -102,8 +102,12 @@ class NotificationTableState extends State<NotificationTable>
   }
 
   deleteNotification(int notificationID, int index) {
+    print("deleting.......");
+    print(index);
+    print(notificationID);
     widget.notificationDB.delete(notificationID);
     this.notifications.removeAt(index);
+    setState(() {});
   }
 
   insert(NotificationUI notification) {

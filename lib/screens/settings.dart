@@ -147,9 +147,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                 onPressed: () async {
                   Navigator.pop(context);
                   var gotUser = await widget.user.RequestNewUser();
+                  setState(() {});
                   if (gotUser == true) {
-                    setState(() {});
-                  }else{
+                  } else {
                     // TODO show error
                   }
                 })
@@ -207,7 +207,7 @@ class SettingOptionState extends State<SettingOption> {
     } else {
       if (widget.switchValue == null) widget.switchValue = false;
       setting = Container(
-          padding: EdgeInsets.only(left: 30, right: 7),
+          padding: EdgeInsets.only(left: 23, right: 7),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

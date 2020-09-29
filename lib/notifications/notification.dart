@@ -10,14 +10,14 @@ class NotificationUI extends StatefulWidget {
   final String title;
   final String UUID;
   final String time;
+  int id;
   String message;
   String image;
   String link;
-  int id;
   bool isRead;
   bool isExpanded;
 
-  NotificationUI(this.title, this.time, this.UUID,
+  NotificationUI(this.id, this.title, this.time, this.UUID,
       {Key key, this.message, this.image, this.link})
       : super(key: key);
 
@@ -32,6 +32,7 @@ class NotificationUI extends StatefulWidget {
 
 NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
   return NotificationUI(
+    json['id'] as int,
     json['title'] as String,
     json['time'] as String,
     json['UUID'] as String,
@@ -43,6 +44,7 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$NotificationToJson(NotificationUI instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'time': instance.time,
       'message': instance.message,
@@ -126,7 +128,7 @@ class NotificationUIState extends State<NotificationUI> {
                     children: <Widget>[
                       Flexible(
                           fit: FlexFit.tight,
-                          flex: 4,
+                          flex: 2,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -139,40 +141,40 @@ class NotificationUIState extends State<NotificationUI> {
                                     child: Container(
                                         child: Icon(
                                       Icons.close,
-                                      size: 20,
+                                      size: 15,
                                       color: MyColour.grey,
                                     ))),
 
                                 // mark as read
-                                InkWell(
-                                    onTap: () async {
-                                      print("mark read");
-                                    },
-                                    child: Container(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: Icon(
-                                          Icons.check,
-                                          size: 20,
-                                          color: MyColour.grey,
-                                        ))),
-
-                                // link
-                                if (linkBtn != null) linkBtn,
-
-                                // expand
-                                InkWell(
-                                    onTap: () async {
-                                      print("expand");
-                                    },
-                                    child: Container(
-                                        padding:
-                                            const EdgeInsets.only(top: 5.0),
-                                        child: Icon(
-                                          Icons.zoom_out_map,
-                                          size: 20,
-                                          color: MyColour.grey,
-                                        )))
+                                // InkWell(
+                                //     onTap: () async {
+                                //       print("mark read");
+                                //     },
+                                //     child: Container(
+                                //         padding:
+                                //             const EdgeInsets.only(top: 5.0),
+                                //         child: Icon(
+                                //           Icons.check,
+                                //           size: 20,
+                                //           color: MyColour.grey,
+                                //         ))),
+                                //
+                                // // link
+                                // if (linkBtn != null) linkBtn,
+                                //
+                                // // expand
+                                // InkWell(
+                                //     onTap: () async {
+                                //       print("expand");
+                                //     },
+                                //     child: Container(
+                                //         padding:
+                                //             const EdgeInsets.only(top: 5.0),
+                                //         child: Icon(
+                                //           Icons.zoom_out_map,
+                                //           size: 20,
+                                //           color: MyColour.grey,
+                                //         )))
                               ])),
                       // IMAGE
                       Flexible(
@@ -187,40 +189,46 @@ class NotificationUIState extends State<NotificationUI> {
                       Flexible(
                           fit: FlexFit.tight,
                           flex: 60,
-                          child: Column(children: <Widget>[
-                            // TITLE
-                            Container(
-                              padding: const EdgeInsets.only(bottom: 5.0),
-                              child: SelectableText(widget.title,
-                                  scrollPhysics: NeverScrollableScrollPhysics(),
-                                  style: titleStyle,
-                                  minLines: 1,
-                                  maxLines: titleMaxLines),
-                            ),
-
-                            // TIME
-                            Container(
-                              padding: const EdgeInsets.only(bottom: 7.0),
-                              child: Row(children: <Widget>[
-                                SelectableText(widget.time,
-                                    style: TextStyle(
-                                        color: MyColour.grey, fontSize: 12)),
-                              ]),
-                            ),
-
-                            // MESSAGE
-                            Row(children: <Widget>[
-                              Flexible(
-                                  fit: FlexFit.loose,
-                                  child: SelectableText(widget.message ?? "",
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // TITLE
+                                Container(
+                                  padding: const EdgeInsets.only(bottom: 5.0),
+                                  child: SelectableText(widget.title,
                                       scrollPhysics:
                                           NeverScrollableScrollPhysics(),
-                                      style: TextStyle(
-                                          color: MyColour.black, fontSize: 15),
+                                      style: titleStyle,
+                                      textAlign: TextAlign.left,
                                       minLines: 1,
-                                      maxLines: messageMaxLines)),
-                            ])
-                          ]))
+                                      maxLines: titleMaxLines),
+                                ),
+
+                                // TIME
+                                Container(
+                                  padding: const EdgeInsets.only(bottom: 7.0),
+                                  child: Row(children: <Widget>[
+                                    SelectableText(widget.time,
+                                        style: TextStyle(
+                                            color: MyColour.grey,
+                                            fontSize: 12)),
+                                  ]),
+                                ),
+
+                                // MESSAGE
+                                Row(children: <Widget>[
+                                  Flexible(
+                                      child: SelectableText(
+                                          widget.message ?? "",
+                                          scrollPhysics:
+                                              NeverScrollableScrollPhysics(),
+                                          style: TextStyle(
+                                              color: MyColour.black,
+                                              fontSize: 15),
+                                          minLines: 1,
+                                          maxLines: messageMaxLines)),
+                                ])
+                              ]))
                     ]))));
   }
 
