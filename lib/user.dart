@@ -73,11 +73,17 @@ class User with ChangeNotifier {
   Future<bool> _newUserReq(Map<String, dynamic> data) async {
     print("creating new user...");
     d.Dio dio = new d.Dio();
-    var response = await dio.post(DotEnv().env['HOST'] + "code",
-        data: data,
-        options: d.Options(headers: {
-          "Sec-Key": DotEnv().env["SERVER_KEY"],
-        }, contentType: d.Headers.formUrlEncodedContentType));
+    var response;
+    try {
+      response = await dio.post(env['HOST'] + "code",
+          data: data,
+          options: d.Options(headers: {
+            "Sec-Key": env["SERVER_KEY"],
+          }, contentType: d.Headers.formUrlEncodedContentType));
+    } catch (e) {
+      print('Problem fetching user code: $e');
+      return false;
+    }
 
     if (response.statusCode != HttpStatus.ok) {
       print("Problem fetching new code from server: $response");

@@ -13,20 +13,20 @@ class AppDelegate: FlutterAppDelegate {
             button.image = NSImage(named:NSImage.Name("AppIcon"))
             button.action = #selector(togglePopover(_:))
         }
-        
+
         let flutterViewController = FlutterViewController.init()
         popover.contentViewController = flutterViewController
         popover.contentSize = NSSize(width: 450, height: 600)
-        
+
 //        self.setFrame(windowFrame, display: true)
 
         RegisterGeneratedPlugins(registry: flutterViewController)
     }
-    
+
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
-    
+
     @objc func togglePopover(_ sender: Any?) {
       if popover.isShown {
         closePopover(sender: sender)

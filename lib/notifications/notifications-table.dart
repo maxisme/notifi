@@ -64,9 +64,7 @@ class NotificationTableState extends State<NotificationTable>
                   color: MyColour.offWhite,
                   icon: Icons.check,
                   onTap: () {
-                    setState(() {
-                      readNotification(notification);
-                    });
+                    readNotification(notification);
                   },
                 ),
                 IconSlideAction(
@@ -95,10 +93,10 @@ class NotificationTableState extends State<NotificationTable>
   }
 
   readNotification(NotificationUI notification) {
-    bool read = false;
-    if (notification.isRead) read = true;
+    bool read = true;
+    if (notification.isRead) read = false;
     widget.notificationDB.toggleRead(notification.id, read);
-    notification.isRead = !read;
+    notification.toggleRead(read);
   }
 
   deleteNotification(int notificationID, int index) {

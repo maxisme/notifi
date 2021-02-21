@@ -24,17 +24,17 @@ Future<IOWebSocketChannel> connectToWs(
   }
 
   var headers = {
-    "Sec-Key": DotEnv().env["SERVER_KEY"],
+    "Sec-Key": env["SERVER_KEY"],
     "Credentials": user.credentials.value,
     "Uuid": user.UUID,
     "Key": user.credentialKey,
-    "Version": await getVersion(),
+    "Version": await getVersionFromPubSpec(),
   };
 
-  var ws = IOWebSocketChannel.connect(DotEnv().env['WS_HOST'],
+  var ws = IOWebSocketChannel.connect(env['WS_HOST'],
       headers: headers, pingInterval: Duration(seconds: 15));
 
-  print("Connecting to Websocket");
+  print("Connecting to Websocket...");
 
   ws.stream.listen((msg) {
     // decode incoming ws message
@@ -76,9 +76,11 @@ Future<IOWebSocketChannel> connectToWs(
   return ws;
 }
 
-Future<String> getVersion() async {
-  File f = new File("pubspec.yaml");
-  var content = await f.readAsString();
-  Map yaml = loadYaml(content);
-  return yaml['version'];
+Future<String> getVersionFromPubSpec() async {
+  // TODO fix
+  // File f = new File("./pubspec.yaml");
+  // var content = await f.readAsString();
+  // Map yaml = loadYaml(content);
+  // return yaml['version'];
+  return "1.0.0";
 }

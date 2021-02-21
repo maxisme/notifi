@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/home.dart';
@@ -10,7 +10,7 @@ import 'package:notifi/ws.dart';
 import 'local-notifications.dart';
 
 void main() async {
-  await DotEnv().load();
+  await DotEnv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
   var user = new User();

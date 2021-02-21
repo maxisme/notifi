@@ -62,9 +62,10 @@ class NotificationProvider {
   }
 
   Future toggleRead(int id, bool isRead) async {
-    int read = 1;
-    if (isRead) read = 0;
+    int read = 0;
+    if (isRead) read = 1;
 
+    print(read);
     // language=SQLite
     final stmt = this.db.prepare('UPDATE notifications set read=? WHERE _id=?');
     stmt.execute([read, id]);
@@ -89,6 +90,8 @@ class NotificationProvider {
         print(rows[i]);
         var n =
             new NotificationUI(rows[i][0], rows[i][2], rows[i][3], rows[i][1]);
+
+        n.toggleRead(rows[0][7] == 1);
         notifications.add(n);
       }
     }

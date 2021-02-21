@@ -11,4 +11,4 @@ PRODUCT_NAME = notifi
 PRODUCT_BUNDLE_IDENTIFIER = uk.me.max.notifi
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 uk.me.max. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2021 uk.me.max. All rights reserved.

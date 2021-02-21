@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/pallete.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class NotificationUI extends StatefulWidget {
   final String title;
   final String UUID;
@@ -28,6 +28,10 @@ class NotificationUI extends StatefulWidget {
 
   @override
   NotificationUIState createState() => new NotificationUIState();
+
+  toggleRead(bool isRead){
+    this.isRead = isRead;
+  }
 }
 
 NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
@@ -73,6 +77,25 @@ class NotificationUIState extends State<NotificationUI> {
     if (widget.isRead) {
       backgroundColour = MyColour.offWhite;
       titleColour = MyColour.black;
+    }
+
+    // if message
+    var messageRow;
+    if (widget.message != null) {
+      messageRow = Row(children: <Widget>[
+        Flexible(
+            child: SelectableText(
+                widget.message,
+                scrollPhysics:
+                NeverScrollableScrollPhysics(),
+                style: TextStyle(
+                    color: MyColour.black,
+                    fontSize: 15),
+                minLines: 1,
+                maxLines: messageMaxLines)),
+      ]);
+    }else{
+      messageRow = Container(width: 0, height: 0);
     }
 
     // if link
@@ -140,10 +163,10 @@ class NotificationUIState extends State<NotificationUI> {
                                     },
                                     child: Container(
                                         child: Icon(
-                                      Icons.close,
-                                      size: 15,
-                                      color: MyColour.grey,
-                                    ))),
+                                          Icons.close,
+                                          size: 15,
+                                          color: MyColour.grey,
+                                        ))),
 
                                 // mark as read
                                 // InkWell(
@@ -197,7 +220,7 @@ class NotificationUIState extends State<NotificationUI> {
                                   padding: const EdgeInsets.only(bottom: 5.0),
                                   child: SelectableText(widget.title,
                                       scrollPhysics:
-                                          NeverScrollableScrollPhysics(),
+                                      NeverScrollableScrollPhysics(),
                                       style: titleStyle,
                                       textAlign: TextAlign.left,
                                       minLines: 1,
@@ -216,18 +239,7 @@ class NotificationUIState extends State<NotificationUI> {
                                 ),
 
                                 // MESSAGE
-                                Row(children: <Widget>[
-                                  Flexible(
-                                      child: SelectableText(
-                                          widget.message ?? "",
-                                          scrollPhysics:
-                                              NeverScrollableScrollPhysics(),
-                                          style: TextStyle(
-                                              color: MyColour.black,
-                                              fontSize: 15),
-                                          minLines: 1,
-                                          maxLines: messageMaxLines)),
-                                ])
+                                messageRow
                               ]))
                     ]))));
   }
