@@ -41,6 +41,9 @@ class NotificationTableState extends State<NotificationTable>
   Widget _buildNotification(BuildContext context, int index) {
     if (this.notifications.length > index) {
       final NotificationUI notification = this.notifications[index];
+      notification.index = index;
+      notification.toggleExpand = toggleExpand;
+      notification.toggleRead = toggleRead;
 
       return AnimatedSize(
           vsync: this,
@@ -56,7 +59,7 @@ class NotificationTableState extends State<NotificationTable>
                 },
                 child: SlidableDrawerDismissal(),
                 onDismissed: (_) {
-                  deleteNotification(notification.id, index);
+                  deleteNotification(index);
                 },
               ),
               actions: <Widget>[
@@ -64,18 +67,14 @@ class NotificationTableState extends State<NotificationTable>
                   color: MyColour.offWhite,
                   icon: Icons.check,
                   onTap: () {
-                    readNotification(notification);
+                    toggleRead(index);
                   },
                 ),
                 IconSlideAction(
                   color: MyColour.offWhite,
                   icon: Icons.zoom_out_map,
                   onTap: () {
-                    bool isExpanded = false;
-                    if (notification.isExpanded) isExpanded = true;
-                    notification.isExpanded = !isExpanded;
-                    print(!isExpanded);
-                    Scrollable.ensureVisible(this.context);
+                    toggleExpand(index);
                   },
                 ),
               ],
@@ -84,7 +83,9 @@ class NotificationTableState extends State<NotificationTable>
                   color: MyColour.offWhite,
                   icon: Icons.delete,
                   onTap: () {
-                    deleteNotification(notification.id, index);
+                    setState(() {
+                      deleteNotification(index);
+                    });
                   },
                 ),
               ],
@@ -92,20 +93,33 @@ class NotificationTableState extends State<NotificationTable>
     }
   }
 
-  readNotification(NotificationUI notification) {
+  toggleExpand(int index) {
+    NotificationUI notification = this.notifications[index];
+
+    bool isExpanded = false;
+    if (notification.isExpanded) isExpanded = true;
+    notification.isExpanded = !isExpanded;
+    Scrollable.ensureVisible(this.context);
+
+    // mark read
+    widget.notificationDB.toggleRead(notification.id, true);
+    notification.isRead = true;
+  }
+
+  toggleRead(int index) {
+    NotificationUI notification = this.notifications[index];
+
     bool read = true;
     if (notification.isRead) read = false;
     widget.notificationDB.toggleRead(notification.id, read);
-    notification.toggleRead(read);
+    notification.isRead = read;
   }
 
-  deleteNotification(int notificationID, int index) {
-    print("deleting.......");
-    print(index);
-    print(notificationID);
-    widget.notificationDB.delete(notificationID);
+  deleteNotification(int index) {
+    NotificationUI notification = this.notifications[index];
+
+    widget.notificationDB.delete(notification.id);
     this.notifications.removeAt(index);
-    setState(() {});
   }
 
   insert(NotificationUI notification) {

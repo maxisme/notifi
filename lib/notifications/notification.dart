@@ -11,14 +11,17 @@ class NotificationUI extends StatefulWidget {
   final String UUID;
   final String time;
   int id;
+  int index;
   String message;
   String image;
   String link;
   bool isRead;
   bool isExpanded;
+  void Function(int id) toggleExpand;
+  void Function(int id) toggleRead;
 
   NotificationUI(this.id, this.title, this.time, this.UUID,
-      {Key key, this.message, this.image, this.link})
+      {Key key, this.message, this.image, this.link, this.isRead})
       : super(key: key);
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
@@ -28,10 +31,6 @@ class NotificationUI extends StatefulWidget {
 
   @override
   NotificationUIState createState() => new NotificationUIState();
-
-  toggleRead(bool isRead){
-    this.isRead = isRead;
-  }
 }
 
 NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
@@ -81,26 +80,27 @@ class NotificationUIState extends State<NotificationUI> {
 
     // if message
     var messageRow;
-    if (widget.message != null) {
+    if (widget.message != "") {
       messageRow = Row(children: <Widget>[
         Flexible(
-            child: SelectableText(
-                widget.message,
-                scrollPhysics:
-                NeverScrollableScrollPhysics(),
-                style: TextStyle(
-                    color: MyColour.black,
-                    fontSize: 15),
+            child: SelectableText(widget.message,
+                onTap: () {
+                  setState(() {
+                    widget.toggleExpand(widget.index);
+                  });
+                },
+                scrollPhysics: NeverScrollableScrollPhysics(),
+                style: TextStyle(color: MyColour.black, fontSize: 10),
                 minLines: 1,
                 maxLines: messageMaxLines)),
       ]);
-    }else{
+    } else {
       messageRow = Container(width: 0, height: 0);
     }
 
     // if link
     var linkBtn;
-    if (widget.link != null) {
+    if (widget.link != "") {
       linkBtn = InkWell(
           onTap: () async {
             if (await canLaunch(widget.link)) {
@@ -120,20 +120,22 @@ class NotificationUIState extends State<NotificationUI> {
 
     // if image
     var image;
-    if (widget.image != null) {
-      image = GestureDetector(
-          onTap: _launchImageLink,
-          child: Container(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: CachedNetworkImage(
-                  fadeInDuration: new Duration(seconds: 1),
-                  imageUrl: widget.image,
-                  width: 50,
-                  filterQuality: FilterQuality.high)));
+    if (widget.image != "") {
+      image = SizedBox(
+          width: 60,
+          child: GestureDetector(
+              onTap: _launchImageLink,
+              child: Container(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: CachedNetworkImage(
+                      fadeInDuration: new Duration(seconds: 1),
+                      imageUrl: widget.image,
+                      width: 50,
+                      filterQuality: FilterQuality.high))));
     }
 
     var titleStyle = TextStyle(
-        color: titleColour, fontSize: 20, fontWeight: FontWeight.w600);
+        color: titleColour, fontSize: 14, fontWeight: FontWeight.w600);
 
     return Container(
         color: Colors.transparent,
@@ -147,100 +149,83 @@ class NotificationUIState extends State<NotificationUI> {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Flexible(
-                          fit: FlexFit.tight,
-                          flex: 2,
+                      Container(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: SizedBox(
+                          width: 15,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 // mark as read
                                 InkWell(
-                                    onTap: () async {
-                                      print("delete");
+                                    onTap: () {
+                                      setState(() {
+                                        widget.toggleRead(widget.index);
+                                      });
                                     },
                                     child: Container(
+                                        padding: const EdgeInsets.only(top: 2.0),
                                         child: Icon(
-                                          Icons.close,
+                                          Icons.check,
                                           size: 15,
                                           color: MyColour.grey,
                                         ))),
-
-                                // mark as read
-                                // InkWell(
-                                //     onTap: () async {
-                                //       print("mark read");
-                                //     },
-                                //     child: Container(
-                                //         padding:
-                                //             const EdgeInsets.only(top: 5.0),
-                                //         child: Icon(
-                                //           Icons.check,
-                                //           size: 20,
-                                //           color: MyColour.grey,
-                                //         ))),
-                                //
-                                // // link
-                                // if (linkBtn != null) linkBtn,
-                                //
-                                // // expand
-                                // InkWell(
-                                //     onTap: () async {
-                                //       print("expand");
-                                //     },
-                                //     child: Container(
-                                //         padding:
-                                //             const EdgeInsets.only(top: 5.0),
-                                //         child: Icon(
-                                //           Icons.zoom_out_map,
-                                //           size: 20,
-                                //           color: MyColour.grey,
-                                //         )))
-                              ])),
-                      // IMAGE
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: image != null ? 5 : 0,
-                        child: image != null
-                            ? image
-                            : Container(width: 0, height: 0), // optional image
+                                InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.toggleExpand(widget.index);
+                                      });
+                                    },
+                                    child: Container(
+                                        padding: const EdgeInsets.only(top: 7.0),
+                                        child: Icon(
+                                          Icons.zoom_out_map,
+                                          size: 15,
+                                          color: MyColour.grey,
+                                        )))
+                              ]),
+                        ),
                       ),
-                      Spacer(),
-                      // CONTENT
-                      Flexible(
-                          fit: FlexFit.tight,
-                          flex: 60,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                // TITLE
-                                Container(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: SelectableText(widget.title,
-                                      scrollPhysics:
-                                      NeverScrollableScrollPhysics(),
-                                      style: titleStyle,
-                                      textAlign: TextAlign.left,
-                                      minLines: 1,
-                                      maxLines: titleMaxLines),
-                                ),
+                      image != null ? image : Container(width: 0, height: 0),
+                      Expanded(
+                          child: SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // TITLE
+                              Container(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: SelectableText(widget.title,
+                                    onTap: () {
+                                      setState(() {
+                                        widget.toggleExpand(widget.index);
+                                      });
+                                    },
+                                    scrollPhysics:
+                                        NeverScrollableScrollPhysics(),
+                                    style: titleStyle,
+                                    textAlign: TextAlign.left,
+                                    minLines: 1,
+                                    maxLines: titleMaxLines),
+                              ),
 
-                                // TIME
-                                Container(
-                                  padding: const EdgeInsets.only(bottom: 7.0),
-                                  child: Row(children: <Widget>[
-                                    SelectableText(widget.time,
-                                        style: TextStyle(
-                                            color: MyColour.grey,
-                                            fontSize: 12)),
-                                  ]),
-                                ),
+                              // TIME
+                              Container(
+                                padding: const EdgeInsets.only(bottom: 7.0),
+                                child: Row(children: <Widget>[
+                                  SelectableText(widget.time,
+                                      style: TextStyle(
+                                          color: MyColour.grey, fontSize: 12)),
+                                ]),
+                              ),
 
-                                // MESSAGE
-                                messageRow
-                              ]))
+                              // MESSAGE
+                              messageRow
+                            ]),
+                      ))
                     ]))));
   }
 

@@ -192,9 +192,13 @@ class SettingOptionState extends State<SettingOption> {
     if (widget.switchCallback == null) {
       setting = Container(
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: RaisedButton(
-              elevation: 0,
-              color: MyColour.offWhite,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
+              shadowColor: MaterialStateProperty.all(MyColour.offWhite),
+              overlayColor: MaterialStateProperty.all(MyColour.offWhite),
+              elevation: MaterialStateProperty.all(0)
+            ),
               onPressed: widget.onTapCallback,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

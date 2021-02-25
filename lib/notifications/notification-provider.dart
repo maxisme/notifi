@@ -84,15 +84,20 @@ class NotificationProvider {
     // language=SQLite
     ResultSet dbNotifications = db.select('''
     SELECT * FROM notifications ORDER BY _id DESC''');
+
     var rows = dbNotifications.rows;
     if (rows != null) {
       for (var i = 0; i < rows.length; i++) {
-        print(rows[i]);
-        var n =
-            new NotificationUI(rows[i][0], rows[i][2], rows[i][3], rows[i][1]);
-
-        n.toggleRead(rows[0][7] == 1);
-        notifications.add(n);
+        notifications.add(new NotificationUI(
+          rows[i][0],
+          rows[i][2],
+          rows[i][3],
+          rows[i][1],
+          message: rows[i][4],
+          image: rows[i][5],
+          link: rows[i][6],
+          isRead: rows[0][7] == 1,
+        ));
       }
     }
     return notifications;

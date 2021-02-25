@@ -19,11 +19,11 @@ curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=hey&link=https:
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=hi&image=https://notifi.it/images/logo.png"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}&image=https://notifi.it/images/logo.png"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&image=https://notifi.it/images/logo.png"
-#curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=hi&image=https://notifi.it/images/logo.png&link=https://google.com"
+curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=hi&image=https://notifi.it/images/logo.png&link=https://google.com"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}&link=https://google.com"
 #curl "http://127.0.creating new user...0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}&link=https://google.com"
 
-for i in {1..5}
-do
-    echo curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=$i%20${LOREM}&link=https://google.com"
-done
+#for i in {1..3}
+#do
+#    curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=$i%20${LOREM}&message=$i%20${LOREM}&link=https://google.com"
+#done

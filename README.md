@@ -32,6 +32,8 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 # TODO
 - [ ] show UI even when network connection fails on creating user
 - [ ] add about view
-- [ ] log to view
+- [ ] add log view
 - [ ] fix open notifi at login
+- [ ] add local notifications
+- [ ] add ability to find out whether notification can be expanded or not
 - [ ] show HTTP error code when failing to connect to server
