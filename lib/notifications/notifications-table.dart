@@ -8,25 +8,30 @@ import 'package:notifi/user.dart';
 import 'notification-provider.dart';
 
 class NotificationTable extends StatefulWidget {
-  NotificationProvider notificationDB;
   final User user;
+  List<NotificationUI> notifications;
+  void Function(int id) toggleExpand;
+  void Function(int id) toggleRead;
+  void Function(int id) delete;
+  Future<int> Function(NotificationUI notification) store;
+  Future<List<NotificationUI>> Function() getAll;
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
-  NotificationTable(this.user) {
-    this.notificationDB = NotificationProvider();
-    this.notificationDB.initDB("notifications.db");
-  }
+  NotificationTable(this.user, {Key key}) : super(key: key);
 
-  int add(NotificationUI notification) {
-    notification.id = this.notificationDB.store(notification);
+  Future<int> add(NotificationUI notification) async {
+    notification.id = await this.store(notification);
     notificationTableState.insert(notification);
     return notification.id;
   }
 
-  Future deleteAll() async {
-    await this.notificationDB.deleteAll();
+  deleteAll(){
     notificationTableState.deleteAll();
+  }
+
+  readAll(){
+    notificationTableState.readAll();
   }
 
   @override
@@ -35,15 +40,14 @@ class NotificationTable extends StatefulWidget {
 
 class NotificationTableState extends State<NotificationTable>
     with TickerProviderStateMixin {
-  List<Widget> notifications;
   final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey();
 
   Widget _buildNotification(BuildContext context, int index) {
-    if (this.notifications.length > index) {
-      final NotificationUI notification = this.notifications[index];
+    if (widget.notifications.length > index) {
+      final NotificationUI notification = widget.notifications[index];
       notification.index = index;
-      notification.toggleExpand = toggleExpand;
-      notification.toggleRead = toggleRead;
+      notification.toggleExpand = widget.toggleExpand;
+      notification.toggleRead = widget.toggleRead;
 
       return AnimatedSize(
           vsync: this,
@@ -58,8 +62,8 @@ class NotificationTableState extends State<NotificationTable>
                   SlideActionType.primary: 1.0
                 },
                 child: SlidableDrawerDismissal(),
-                onDismissed: (_) {
-                  deleteNotification(index);
+                onDismissed: (_) async {
+                  await widget.delete(index);
                 },
               ),
               actions: <Widget>[
@@ -67,14 +71,15 @@ class NotificationTableState extends State<NotificationTable>
                   color: MyColour.offWhite,
                   icon: Icons.check,
                   onTap: () {
-                    toggleRead(index);
+                    widget.toggleRead(index);
+                    setState(() {});
                   },
                 ),
                 IconSlideAction(
                   color: MyColour.offWhite,
                   icon: Icons.zoom_out_map,
-                  onTap: () {
-                    toggleExpand(index);
+                  onTap: () async {
+                    await widget.toggleRead(index);
                   },
                 ),
               ],
@@ -84,7 +89,7 @@ class NotificationTableState extends State<NotificationTable>
                   icon: Icons.delete,
                   onTap: () {
                     setState(() {
-                      deleteNotification(index);
+                      widget.delete(index);
                     });
                   },
                 ),
@@ -93,41 +98,12 @@ class NotificationTableState extends State<NotificationTable>
     }
   }
 
-  toggleExpand(int index) {
-    NotificationUI notification = this.notifications[index];
-
-    bool isExpanded = false;
-    if (notification.isExpanded) isExpanded = true;
-    notification.isExpanded = !isExpanded;
-    Scrollable.ensureVisible(this.context);
-
-    // mark read
-    widget.notificationDB.toggleRead(notification.id, true);
-    notification.isRead = true;
-  }
-
-  toggleRead(int index) {
-    NotificationUI notification = this.notifications[index];
-
-    bool read = true;
-    if (notification.isRead) read = false;
-    widget.notificationDB.toggleRead(notification.id, read);
-    notification.isRead = read;
-  }
-
-  deleteNotification(int index) {
-    NotificationUI notification = this.notifications[index];
-
-    widget.notificationDB.delete(notification.id);
-    this.notifications.removeAt(index);
-  }
-
   insert(NotificationUI notification) {
-    if (this.notifications == null) {
-      this.notifications = [];
+    if (widget.notifications == null) {
+      widget.notifications = [];
     }
-    final index = this.notifications.length;
-    this.notifications.insert(0, notification);
+    final index = widget.notifications.length;
+    widget.notifications.insert(0, notification);
     if (_listKey.currentState == null) {
       setState(() {});
     }
@@ -137,27 +113,33 @@ class NotificationTableState extends State<NotificationTable>
     }
   }
 
-  deleteAll() {
-    setState(() {
-      this.notifications = [];
-    });
+  readAll(){
+    for (var i = 0; i < widget.notifications.length; i++) {
+      widget.notifications[i].isRead = true;
+    }
+    setState(() {});
+  }
+
+  deleteAll(){
+    widget.notifications = [];
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _getNotifications(widget),
+      future: widget.getAll(),
       builder: (context, f) {
         if (f.hasError) {
           print(f.error);
         }
         if (f.hasData != null && f.data != null && f.data.length > 0) {
-          List<Widget> notifications = f.data;
-          this.notifications = notifications;
+          List<NotificationUI> notifications = f.data;
+          widget.notifications = notifications;
           return new ListView.builder(
               key: _listKey,
               itemBuilder: _buildNotification,
-              itemCount: this.notifications.length);
+              itemCount: widget.notifications.length);
         } else {
           // NO notifications
           return Container(
@@ -222,10 +204,5 @@ class NotificationTableState extends State<NotificationTable>
         }
       },
     );
-  }
-
-  Future<List<Widget>> _getNotifications(NotificationTable widget) async {
-    // return all notifications
-    return widget.notificationDB.getAll();
   }
 }

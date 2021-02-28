@@ -29,11 +29,19 @@ gcc -shared -o sqlite3.so sqlite3.o
 ### Jetbrains flutter plugin:
 https://plugins.jetbrains.com/plugin/9212-flutter/versions
 
+## db path 
+~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
+
 # TODO
+- [ ] fix menu bar icon
+- [ ] fix notifications appearing as all unread on startup
+- [ ] fix open notifi at login
+- [ ] show HTTP error code when failing to connect to server
 - [ ] show UI even when network connection fails on creating user
+- [ ] add ability to find out whether notification can be expanded or not
 - [ ] add about view
 - [ ] add log view
-- [ ] fix open notifi at login
-- [ ] add local notifications
-- [ ] add ability to find out whether notification can be expanded or not
-- [ ] show HTTP error code when failing to connect to server
+- [x] interactions not working after delete
+- [x] fix local notifications - need to make sure it is turned on
+- [x] add unread notification count
+- [x] fix mark all as read

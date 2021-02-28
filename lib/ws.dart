@@ -36,7 +36,7 @@ Future<IOWebSocketChannel> connectToWs(
 
   print("Connecting to Websocket...");
 
-  ws.stream.listen((msg) {
+  ws.stream.listen((msg) async {
     // decode incoming ws message
     List<dynamic> notifications;
     try {
@@ -59,7 +59,7 @@ Future<IOWebSocketChannel> connectToWs(
         var notification = NotificationUI.fromJson(jsonMessage);
 
         // store notification
-        int id = nt.add(notification);
+        int id = await nt.add(notification);
 
         // send local notification
         sendLocalNotification(localNotification, id, notification);

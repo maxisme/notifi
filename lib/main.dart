@@ -8,6 +8,7 @@ import 'package:notifi/user.dart';
 import 'package:notifi/ws.dart';
 
 import 'local-notifications.dart';
+import 'notifications/notification-provider.dart';
 
 void main() async {
   await DotEnv.load(fileName: ".env");
@@ -35,6 +36,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    var db = NotificationProvider();
+    db.initDB("notifications.db");
+
     return MaterialApp(
         theme: ThemeData(
             fontFamily: 'Inconsolata',
@@ -58,7 +62,7 @@ class _MyAppState extends State<MyApp> {
                     fontWeight: FontWeight.w900,
                     fontSize: 35))),
         routes: {
-          '/': (context) => HomeScreen(widget.table),
+          '/': (context) => HomeScreen(widget.table, db),
           '/settings': (context) => SettingsScreen(widget.user),
         });
   }

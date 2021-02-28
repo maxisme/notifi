@@ -1,43 +1,47 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:sqlite3/open.dart';
-import 'package:sqlite3/sqlite3.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+// import 'package:sqlite3/sqlite3.dart';
 
 import 'notification.dart';
 
 class NotificationProvider {
-  Database db;
+  Future<Database> db;
+  String table = 'notifications';
 
   Future<Database> initDB(String path) async {
-    open.overrideFor(OperatingSystem.linux, _openOnLinux);
-    this.db = sqlite3.open("notifications.db");
-
-    // language=SQLite
-    this.db.execute('''
-    CREATE TABLE IF NOT EXISTS notifications (
-      _id integer primary key autoincrement,  
-      UUID text unique not null,
-      title text not null,
-      time text not null,
-      message text,
-      image text,
-      link text,
-      read int default 0
-    );
-    ''');
+    this.db = openDatabase(
+        // Set the path to the database. Note: Using the `join` function from the
+        // `path` package is best practice to ensure the path is correctly
+        // constructed for each platform.
+        join(await getDatabasesPath(), path), onCreate: (db, version) {
+      return db.execute('''
+        CREATE TABLE IF NOT EXISTS ${this.table} (
+          _id integer primary key autoincrement, 
+          UUID text unique not null,
+          title text not null,
+          time text not null,
+          message text,
+          image text,
+          link text,
+          read integer default 0
+        );
+        ''');
+    }, version: 1);
   }
 
-  int store(NotificationUI notification) {
-    // language=SQLite
-    final stmt = this.db.prepare('''
-    INSERT INTO notifications 
-      (UUID, title, time, message, image, link)
-    VALUES 
-      (?, ?, ?, ?, ?, ?)
-    ''');
-    stmt.execute([
+  Future<int> store(NotificationUI notification) async {
+    final Database db = await this.db;
+    return await db.rawInsert('''
+        INSERT INTO ${this.table} 
+          (UUID, title, time, message, image, link)
+        VALUES 
+          (?, ?, ?, ?, ?, ?)
+        ''', [
       notification.UUID,
       notification.title,
       notification.time,
@@ -45,60 +49,54 @@ class NotificationProvider {
       notification.image,
       notification.link,
     ]);
-    stmt.dispose();
-    return this.db.lastInsertRowId;
   }
 
-  Future<int> delete(int id) async {
-    // language=SQLite
-    final stmt = this.db.prepare('DELETE FROM notifications where _id = ?');
-    stmt.execute([id]);
-    stmt.dispose();
+  Future<void> delete(int id) async {
+    final Database db = await this.db;
+    db.delete(this.table, where: "_id = ?", whereArgs: [id]);
   }
 
-  Future deleteAll() async {
-    // language=SQLite
-    this.db.execute("DELETE FROM notifications");
+  Future<void> deleteAll() async {
+    final Database db = await this.db;
+    db.rawDelete("DELETE FROM ${this.table}");
   }
 
-  Future toggleRead(int id, bool isRead) async {
+  Future<void> markRead(int id, bool isRead) async {
     int read = 0;
     if (isRead) read = 1;
-
-    print(read);
-    // language=SQLite
-    final stmt = this.db.prepare('UPDATE notifications set read=? WHERE _id=?');
-    stmt.execute([read, id]);
-    stmt.dispose();
+    final Database db = await this.db;
+    db.rawUpdate("UPDATE ${this.table} SET read=? WHERE _id=?", [read, id]);
   }
 
-  Future markAllRead() async {
-    // language=SQLite
-    this.db.execute("UPDATE notifications set read=1");
+  markAllRead() async {
+    final Database db = await this.db;
+    db.rawUpdate("UPDATE ${this.table} SET read=?", [1]);
   }
 
-  Future<List<Widget>> getAll() async {
-    List<Widget> notifications = [];
-    if (this.db == null) return notifications;
+  Future<List<NotificationUI>> getAll() async {
+    List<NotificationUI> notifications = [];
+    final Database db = await this.db;
 
     // language=SQLite
-    ResultSet dbNotifications = db.select('''
+    final List<Map<String, dynamic>> rows = await db.rawQuery('''
     SELECT * FROM notifications ORDER BY _id DESC''');
 
-    var rows = dbNotifications.rows;
-    if (rows != null) {
-      for (var i = 0; i < rows.length; i++) {
-        notifications.add(new NotificationUI(
-          rows[i][0],
-          rows[i][2],
-          rows[i][3],
-          rows[i][1],
-          message: rows[i][4],
-          image: rows[i][5],
-          link: rows[i][6],
-          isRead: rows[0][7] == 1,
-        ));
+    for (var i = 0; i < rows.length; i++) {
+      bool isRead = false;
+      if (rows[i]['read'] == 1) {
+        isRead = true;
       }
+
+      notifications.add(new NotificationUI(
+        rows[i]['_id'],
+        rows[i]['title'],
+        rows[i]['time'],
+        rows[i]['UUID'],
+        message: rows[i]['message'],
+        image: rows[i]['image'],
+        link: rows[i]['link'],
+        isRead: isRead,
+      ));
     }
     return notifications;
   }
