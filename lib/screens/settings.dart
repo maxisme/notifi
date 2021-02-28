@@ -101,7 +101,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     padding: EdgeInsets.only(top: 15),
                   ),
                 SettingOption('About...', onTapCallback: () {
-                  print('Terms of Service');
+                  launch("https://notifi.it");
                 }),
                 SettingOption('Open Logs...', onTapCallback: () {
                   print('Terms of Service');

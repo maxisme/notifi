@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notifi/local-notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifications-table.dart';
+import 'package:notifi/screens/home.dart';
 import 'package:notifi/user.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:yaml/yaml.dart';
@@ -17,10 +18,10 @@ const messageKey = "msg";
 Future<IOWebSocketChannel> connectToWs(
     User user,
     FlutterLocalNotificationsPlugin localNotification,
-    NotificationTable nt) async {
+    HomeScreen homeScreen) async {
   if (user.isNull()) {
     await new Future.delayed(Duration(seconds: 3));
-    return await connectToWs(user, localNotification, nt);
+    return await connectToWs(user, localNotification, homeScreen);
   }
 
   var headers = {
@@ -59,7 +60,7 @@ Future<IOWebSocketChannel> connectToWs(
         var notification = NotificationUI.fromJson(jsonMessage);
 
         // store notification
-        int id = await nt.add(notification);
+        int id = await homeScreen.add(notification);
 
         // send local notification
         sendLocalNotification(localNotification, id, notification);
@@ -70,7 +71,7 @@ Future<IOWebSocketChannel> connectToWs(
   }, onDone: () async {
     print("ws closed");
     await new Future.delayed(Duration(seconds: 3));
-    return connectToWs(user, localNotification, nt);
+    return connectToWs(user, localNotification, homeScreen);
   });
 
   return ws;

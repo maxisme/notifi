@@ -16,18 +16,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var user = new User();
   var nt = new NotificationTable(user);
+  var db = NotificationProvider();
+  db.initDB("notifications.db");
+  var homeScreen = HomeScreen(nt, db);
 
   // connect to websocket
-  user.ws = await connectToWs(user, await initLocalNotifications(), nt);
+  user.ws = await connectToWs(user, await initLocalNotifications(), homeScreen);
 
-  runApp(MyApp(nt, user));
+  runApp(MyApp(homeScreen, user));
 }
 
 class MyApp extends StatefulWidget {
-  final NotificationTable table;
+  final HomeScreen homeScreen;
   final User user;
 
-  MyApp(this.table, this.user, {Key key}) : super(key: key);
+  MyApp(this.homeScreen, this.user, {Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -36,8 +39,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    var db = NotificationProvider();
-    db.initDB("notifications.db");
 
     return MaterialApp(
         theme: ThemeData(
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
                     fontWeight: FontWeight.w900,
                     fontSize: 35))),
         routes: {
-          '/': (context) => HomeScreen(widget.table, db),
+          '/': (context) => widget.homeScreen,
           '/settings': (context) => SettingsScreen(widget.user),
         });
   }

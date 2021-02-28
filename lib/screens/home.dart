@@ -12,6 +12,12 @@ class HomeScreen extends StatefulWidget {
 
   HomeScreen(this.table, this.db, {Key key}) : super(key: key);
 
+  Future<int> add(NotificationUI notification) async {
+    notification.id = await this.db.store(notification);
+    this.table.add(notification);
+    return notification.id;
+  }
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -25,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     widget.table.toggleRead = toggleRead;
     widget.table.toggleExpand = toggleExpand;
     widget.table.delete = deleteNotification;
-    widget.table.store = widget.db.store;
+    widget.table.setUnreadCnt = setUnreadCnt;
     widget.table.getAll = widget.db.getAll;
 
     return Scaffold(
@@ -73,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (int index) async {
             if (index == 0) {
               // MARK ALL AS READ EVENT
-
               await markAllRead();
             } else if (index == 1) {
               // DELETE ALL EVENT
@@ -128,16 +133,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  int setUnreadCnt() {
+  setUnreadCnt({shouldSetState=true}) {
     int cnt = 0;
-    for (var i = 0; i < widget.table.notifications.length; i++) {
-      if (!widget.table.notifications[i].isRead) {
-        cnt++;
+    if (widget.table.notifications != null) {
+      for (var i = 0; i < widget.table.notifications.length; i++) {
+        if (!widget.table.notifications[i].isRead) {
+          cnt++;
+        }
       }
     }
-    setState(() {
-      this._unreadCnt = ValueNotifier(cnt);
-    });
+    this._unreadCnt = ValueNotifier(cnt);
+    if (shouldSetState) {
+      setState((){});
+    }
   }
 
   toggleExpand(int index) async {

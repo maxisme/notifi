@@ -34,14 +34,15 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 
 # TODO
 - [ ] fix menu bar icon
-- [ ] fix notifications appearing as all unread on startup
 - [ ] fix open notifi at login
 - [ ] show HTTP error code when failing to connect to server
 - [ ] show UI even when network connection fails on creating user
 - [ ] add ability to find out whether notification can be expanded or not
-- [ ] add about view
 - [ ] add log view
+- [x] add about view
 - [x] interactions not working after delete
 - [x] fix local notifications - need to make sure it is turned on
 - [x] add unread notification count
 - [x] fix mark all as read
+- [x] notifications not showing when adding first.
+- [x] fix notifications appearing as all unread on startup

@@ -13,17 +13,15 @@ class NotificationTable extends StatefulWidget {
   void Function(int id) toggleExpand;
   void Function(int id) toggleRead;
   void Function(int id) delete;
-  Future<int> Function(NotificationUI notification) store;
+  void Function({bool shouldSetState}) setUnreadCnt;
   Future<List<NotificationUI>> Function() getAll;
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
   NotificationTable(this.user, {Key key}) : super(key: key);
 
-  Future<int> add(NotificationUI notification) async {
-    notification.id = await this.store(notification);
+  add(NotificationUI notification) {
     notificationTableState.insert(notification);
-    return notification.id;
   }
 
   deleteAll(){
@@ -43,59 +41,57 @@ class NotificationTableState extends State<NotificationTable>
   final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey();
 
   Widget _buildNotification(BuildContext context, int index) {
-    if (widget.notifications.length > index) {
-      final NotificationUI notification = widget.notifications[index];
-      notification.index = index;
-      notification.toggleExpand = widget.toggleExpand;
-      notification.toggleRead = widget.toggleRead;
+    final NotificationUI notification = widget.notifications[index];
+    notification.index = index;
+    notification.toggleExpand = widget.toggleExpand;
+    notification.toggleRead = widget.toggleRead;
 
-      return AnimatedSize(
-          vsync: this,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.fastOutSlowIn,
-          child: Slidable(
-              key: Key(notification.id.toString()),
-              actionPane: SlidableDrawerActionPane(),
-              actionExtentRatio: 0.2,
-              dismissal: SlidableDismissal(
-                dismissThresholds: <SlideActionType, double>{
-                  SlideActionType.primary: 1.0
-                },
-                child: SlidableDrawerDismissal(),
-                onDismissed: (_) async {
-                  await widget.delete(index);
+    return AnimatedSize(
+        vsync: this,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+        child: Slidable(
+            key: Key(notification.id.toString()),
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.2,
+            dismissal: SlidableDismissal(
+              dismissThresholds: <SlideActionType, double>{
+                SlideActionType.primary: 1.0
+              },
+              child: SlidableDrawerDismissal(),
+              onDismissed: (_) async {
+                await widget.delete(index);
+              },
+            ),
+            actions: <Widget>[
+              IconSlideAction(
+                color: MyColour.offWhite,
+                icon: Icons.check,
+                onTap: () {
+                  widget.toggleRead(index);
+                  setState(() {});
                 },
               ),
-              actions: <Widget>[
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Icons.check,
-                  onTap: () {
-                    widget.toggleRead(index);
-                    setState(() {});
-                  },
-                ),
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Icons.zoom_out_map,
-                  onTap: () async {
-                    await widget.toggleRead(index);
-                  },
-                ),
-              ],
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Icons.delete,
-                  onTap: () {
-                    setState(() {
-                      widget.delete(index);
-                    });
-                  },
-                ),
-              ],
-              child: notification));
-    }
+              IconSlideAction(
+                color: MyColour.offWhite,
+                icon: Icons.zoom_out_map,
+                onTap: () async {
+                  await widget.toggleRead(index);
+                },
+              ),
+            ],
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                color: MyColour.offWhite,
+                icon: Icons.delete,
+                onTap: () {
+                  setState(() {
+                    widget.delete(index);
+                  });
+                },
+              ),
+            ],
+            child: notification));
   }
 
   insert(NotificationUI notification) {
@@ -114,14 +110,16 @@ class NotificationTableState extends State<NotificationTable>
   }
 
   readAll(){
-    for (var i = 0; i < widget.notifications.length; i++) {
-      widget.notifications[i].isRead = true;
+    if (widget.notifications != null) {
+      for (var i = 0; i < widget.notifications.length; i++) {
+        widget.notifications[i].isRead = true;
+      }
+      setState(() {});
     }
-    setState(() {});
   }
 
   deleteAll(){
-    widget.notifications = [];
+    widget.notifications = null;
     setState(() {});
   }
 
@@ -136,6 +134,7 @@ class NotificationTableState extends State<NotificationTable>
         if (f.hasData != null && f.data != null && f.data.length > 0) {
           List<NotificationUI> notifications = f.data;
           widget.notifications = notifications;
+          widget.setUnreadCnt(shouldSetState: false);
           return new ListView.builder(
               key: _listKey,
               itemBuilder: _buildNotification,
