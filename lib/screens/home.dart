@@ -52,12 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ValueListenableBuilder(
                       valueListenable: _unreadCnt,
                       builder: (context, value, child) {
-                        return Text(value.toString() + " unread notifications",
-                            style: TextStyle(
-                              color: MyColour.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                            ));
+                        if (value != 0) {
+                          return Text(
+                              value.toString() + " unread notifications",
+                              style: TextStyle(
+                                color: MyColour.grey,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ));
+                        }else{
+                          return Spacer();
+                        }
                       })),
             ],
           ),

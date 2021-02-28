@@ -33,7 +33,6 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 ~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
 
 # TODO
-- [ ] fix menu bar icon
 - [ ] fix open notifi at login
 - [ ] show HTTP error code when failing to connect to server
 - [ ] show UI even when network connection fails on creating user
@@ -46,3 +45,4 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 - [x] fix mark all as read
 - [x] notifications not showing when adding first.
 - [x] fix notifications appearing as all unread on startup
+- [x] fix menu bar icon

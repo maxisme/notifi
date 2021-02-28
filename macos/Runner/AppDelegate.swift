@@ -8,21 +8,19 @@ class AppDelegate: FlutterAppDelegate {
     @IBOutlet weak var window: NSWindow!
     
     override func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.window?.titlebarAppearsTransparent = true;
-        self.window?.titleVisibility = .hidden;
-        window?.styleMask.remove(.titled)
-        
         let statusBar = NSStatusBar.system
         statusBarItem = statusBar.statusItem(withLength: NSStatusItem.squareLength)
 
         if let button = statusBarItem.button {
-            button.image = NSImage(named:NSImage.Name("AppIcon"))
+            let image = NSImage(named:NSImage.Name("AppIcon"));
+            image?.size = NSSize(width: 20, height: 20);
+            button.image = image
             button.action = #selector(togglePopover(_:))
         }
         
         let flutterViewController = FlutterViewController.init()
         popover.contentViewController = flutterViewController
-        popover.contentSize = NSSize(width: 250, height: 600)
+        popover.contentSize = NSSize(width: 400, height: 600)
         
         NSApp.activate(ignoringOtherApps: true)
 
