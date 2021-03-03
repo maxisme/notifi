@@ -34,38 +34,57 @@ class _HomeScreenState extends State<HomeScreen> {
     widget.table.setUnreadCnt = setUnreadCnt;
     widget.table.getAll = widget.db.getAll;
 
+    const double leadingWidth = 60.0;
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
           shape: Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
-          centerTitle: true,
-          title: Column(
-            children: [
-              SizedBox(
-                  height: 50,
-                  child: Image.asset('images/bell.png',
-                      filterQuality: FilterQuality.high)),
-              Container(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: ValueListenableBuilder(
-                      valueListenable: _unreadCnt,
-                      builder: (context, value, child) {
-                        if (value != 0) {
-                          return Text(
-                              value.toString() + " unread notifications",
-                              style: TextStyle(
-                                color: MyColour.grey,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ));
-                        }else{
-                          return Spacer();
-                        }
-                      })),
-            ],
+          title: Container(
+            padding:  const EdgeInsets.only(right: leadingWidth),
+            child: Stack(
+              children: [
+                Container(
+                  alignment: Alignment(0, 0),
+                  child: SizedBox(
+                      height: 50,
+                      child: Image.asset('images/bell.png',
+                          filterQuality: FilterQuality.high)),
+                ),
+                Container(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: ValueListenableBuilder(
+                        valueListenable: _unreadCnt,
+                        builder: (context, value, child) {
+                          if (value != 0) {
+                            if (value > 99) {
+                              value = "99+";
+                            }else{
+                              value = value.toString();
+                            }
+                            return Container(
+                              alignment: Alignment(0.1, 0),
+                              child: CircleAvatar(
+                                backgroundColor: MyColour.red,
+                                radius: 10,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color: MyColour.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                              )),
+                            );
+                          }else{
+                            return Spacer();
+                          }
+                        })),
+              ],
+            ),
           ),
+          leadingWidth: leadingWidth,
           leading: IconButton(
               icon: Icon(
                 Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,

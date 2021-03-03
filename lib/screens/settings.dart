@@ -50,15 +50,16 @@ class SettingsScreenState extends State<SettingsScreen> {
         ),
         body: ValueListenableBuilder<String>(
             valueListenable: widget.user.credentials,
-            builder: (BuildContext context, String creds, Widget child) {
+            builder: (BuildContext context, String credentials, Widget child) {
               return Column(children: [
+                Container(padding: EdgeInsets.only(top: 20.0)),
                 SettingOption('How do I receive notifications?',
                     onTapCallback: () {
-                  launch("https://notifi.it?c=" + creds + "#how-to");
+                  launch("https://notifi.it?c=" + credentials + "#how-to");
                 }),
-                SettingOption('Copy Credentials ' + creds, onTapCallback: () {
-                  Clipboard.setData(new ClipboardData(text: creds));
-                  showToast("Copied " + creds, gravity: Toast.CENTER);
+                SettingOption('Copy Credentials ' + credentials, onTapCallback: () {
+                  Clipboard.setData(new ClipboardData(text: credentials));
+                  showToast("Copied " + credentials, gravity: Toast.CENTER);
                 }),
                 SettingOption('Create New Credentials',
                     onTapCallback: _newCredentialsDialogue),
@@ -193,12 +194,11 @@ class SettingOptionState extends State<SettingOption> {
       setting = Container(
           padding: EdgeInsets.only(left: 15, right: 15),
           child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
-              shadowColor: MaterialStateProperty.all(MyColour.offWhite),
-              overlayColor: MaterialStateProperty.all(MyColour.offWhite),
-              elevation: MaterialStateProperty.all(0)
-            ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
+                  shadowColor: MaterialStateProperty.all(MyColour.offWhite),
+                  overlayColor: MaterialStateProperty.all(MyColour.offWhite),
+                  elevation: MaterialStateProperty.all(0)),
               onPressed: widget.onTapCallback,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

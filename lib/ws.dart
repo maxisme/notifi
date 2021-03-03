@@ -32,7 +32,7 @@ Future<IOWebSocketChannel> connectToWs(
     "Version": await getVersionFromPubSpec(),
   };
 
-  var ws = IOWebSocketChannel.connect(env['WS_HOST'],
+  var ws = IOWebSocketChannel.connect("ws://"+env['HOST']+"/ws",
       headers: headers, pingInterval: Duration(seconds: 15));
 
   print("Connecting to Websocket...");
