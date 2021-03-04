@@ -20,8 +20,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  bool _stickyEnabled = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +55,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                     onTapCallback: () {
                   launch("https://notifi.it?c=" + credentials + "#how-to");
                 }),
-                SettingOption('Copy Credentials ' + credentials, onTapCallback: () {
+                SettingOption('Copy Credentials ' + credentials,
+                    onTapCallback: () {
                   Clipboard.setData(new ClipboardData(text: credentials));
                   showToast("Copied " + credentials, gravity: Toast.CENTER);
                 }),
@@ -68,12 +67,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
                 if (!Platform.isAndroid && !Platform.isIOS)
                   SettingOption('Sticky Notifications',
-                      switchValue: _stickyEnabled,
-                      switchCallback: (isEnabled) async {
-                    setState(() {
-                      _stickyEnabled = isEnabled;
-                    });
-                  }),
+                      switchValue: false, switchCallback: (isEnabled) {}),
                 if (!Platform.isAndroid && !Platform.isIOS)
                   FutureBuilder(
                       future: LaunchAtLogin.isEnabled,

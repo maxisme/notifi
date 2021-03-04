@@ -14,8 +14,9 @@ Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
         onDidReceiveLocalNotification: null,
       ),
       macOS: MacOSInitializationSettings(
+        defaultPresentAlert: true,
         requestAlertPermission: true,
-        requestBadgePermission: false,
+        requestBadgePermission: true,
         requestSoundPermission: true,
       ));
 
@@ -35,7 +36,7 @@ Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
 sendLocalNotification(FlutterLocalNotificationsPlugin localNotification, int id,
     NotificationUI notification) {
   var iOS = IOSNotificationDetails(presentAlert: true);
-  var macOS = MacOSNotificationDetails(presentAlert: true);
+  var macOS = MacOSNotificationDetails(presentAlert: true, presentBadge: true);
   var platformChannelSpecifics = NotificationDetails(iOS: iOS, macOS: macOS);
 
   localNotification.show(

@@ -39,6 +39,7 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 - [ ] show UI even when network connection fails on creating user
 - [ ] add ability to find out whether notification can be expanded or not
 - [ ] add log view
+- [ ] add ability to toggle sticky notifications
 - [x] add about view
 - [x] interactions not working after delete
 - [x] fix local notifications - need to make sure it is turned on
@@ -49,3 +50,4 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 - [x] fix menu bar icon
 - [x] fix open notifi at login
 - [x] redesign unread notification count
+- [x] add link

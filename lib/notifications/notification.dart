@@ -58,12 +58,13 @@ Map<String, dynamic> _$NotificationToJson(NotificationUI instance) =>
 class NotificationUIState extends State<NotificationUI> {
   @override
   Widget build(BuildContext context) {
+    const iconSize = 15.0;
+    var messageMaxLines = 3;
+    var titleMaxLines = 1;
     if (widget.isExpanded == null) widget.isExpanded = false;
     if (widget.isRead == null) widget.isRead = false;
 
     // if expanded notification
-    var messageMaxLines = 3;
-    var titleMaxLines = 1;
     if (widget.isExpanded) {
       // no limit on lines TODO must be a better way to handle this
       titleMaxLines = null;
@@ -113,7 +114,7 @@ class NotificationUIState extends State<NotificationUI> {
               padding: const EdgeInsets.only(top: 5.0),
               child: Icon(
                 Icons.link,
-                size: 20,
+                size: iconSize,
                 color: MyColour.grey,
               )));
     }
@@ -139,14 +140,14 @@ class NotificationUIState extends State<NotificationUI> {
 
     return Container(
         color: Colors.transparent,
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
         child: Container(
             decoration: BoxDecoration(
                 border: Border.all(color: MyColour.offGrey),
                 color: backgroundColour,
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
             child: Container(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -169,9 +170,10 @@ class NotificationUIState extends State<NotificationUI> {
                                         padding: const EdgeInsets.only(top: 2.0),
                                         child: Icon(
                                           Icons.check,
-                                          size: 15,
+                                          size: iconSize,
                                           color: MyColour.grey,
                                         ))),
+                                linkBtn != null ? linkBtn : Container(),
                                 InkWell(
                                     onTap: () {
                                       setState(() {
@@ -181,14 +183,14 @@ class NotificationUIState extends State<NotificationUI> {
                                     child: Container(
                                         padding: const EdgeInsets.only(top: 7.0),
                                         child: Icon(
-                                          Icons.zoom_out_map,
-                                          size: 15,
+                                         widget.isExpanded ? Icons.compress : Icons.expand,
+                                          size: iconSize,
                                           color: MyColour.grey,
                                         )))
                               ]),
                         ),
                       ),
-                      image != null ? image : Container(width: 0, height: 0),
+                      image != null ? image : Container(),
                       Expanded(
                           child: SizedBox(
                         width: double.infinity,

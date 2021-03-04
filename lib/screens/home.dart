@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
   Future<int> add(NotificationUI notification) async {
     notification.id = await this.db.store(notification);
     this.table.add(notification);
+    this.table.setUnreadCnt();
     return notification.id;
   }
 
@@ -23,7 +24,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ValueNotifier _unreadCnt = ValueNotifier(0);
+  ValueNotifier<int> _unreadCnt;
+
+  @override
+  void initState() {
+    _unreadCnt = ValueNotifier<int>(0);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _unreadCnt.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0.0,
           toolbarHeight: 80,
           title: Container(
-            padding:  const EdgeInsets.only(right: leadingWidth),
+            padding: const EdgeInsets.only(right: leadingWidth),
             child: Stack(
               children: [
                 Container(
@@ -60,24 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (value != 0) {
                             if (value > 99) {
                               value = "99+";
-                            }else{
+                            } else {
                               value = value.toString();
                             }
                             return Container(
                               alignment: Alignment(0.1, 0),
                               child: CircleAvatar(
-                                backgroundColor: MyColour.red,
-                                radius: 10,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    color: MyColour.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              )),
+                                  backgroundColor: MyColour.red,
+                                  radius: 10,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      color: MyColour.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  )),
                             );
-                          }else{
+                          } else {
                             return Spacer();
                           }
                         })),
@@ -157,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  setUnreadCnt({shouldSetState=true}) {
+  setUnreadCnt() {
     int cnt = 0;
     if (widget.table.notifications != null) {
       for (var i = 0; i < widget.table.notifications.length; i++) {
@@ -166,10 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
-    this._unreadCnt = ValueNotifier(cnt);
-    if (shouldSetState) {
-      setState((){});
-    }
+    this._unreadCnt.value = cnt;
   }
 
   toggleExpand(int index) async {

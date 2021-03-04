@@ -13,7 +13,7 @@ class NotificationTable extends StatefulWidget {
   void Function(int id) toggleExpand;
   void Function(int id) toggleRead;
   void Function(int id) delete;
-  void Function({bool shouldSetState}) setUnreadCnt;
+  void Function() setUnreadCnt;
   Future<List<NotificationUI>> Function() getAll;
 
   NotificationTableState notificationTableState = new NotificationTableState();
@@ -134,7 +134,7 @@ class NotificationTableState extends State<NotificationTable>
         if (f.hasData != null && f.data != null && f.data.length > 0) {
           List<NotificationUI> notifications = f.data;
           widget.notifications = notifications;
-          widget.setUnreadCnt(shouldSetState: false);
+          widget.setUnreadCnt();
           return new ListView.builder(
               key: _listKey,
               itemBuilder: _buildNotification,
