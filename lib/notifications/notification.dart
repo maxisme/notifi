@@ -56,6 +56,12 @@ Map<String, dynamic> _$NotificationToJson(NotificationUI instance) =>
     };
 
 class NotificationUIState extends State<NotificationUI> {
+  GlobalKey _columnKey = GlobalKey();
+  GlobalKey _titleKey = GlobalKey();
+  static const _CANEXPANDHEIGHT = 116;
+
+  bool _canExpand = false;
+
   @override
   Widget build(BuildContext context) {
     const iconSize = 15.0;
@@ -84,19 +90,18 @@ class NotificationUIState extends State<NotificationUI> {
     if (widget.message != "") {
       messageRow = Row(children: <Widget>[
         Flexible(
-            child: SelectableText(widget.message,
-                onTap: () {
-                  setState(() {
-                    widget.toggleExpand(widget.index);
-                  });
-                },
+            child: SelectableText(widget.message, onTap: () {
+          setState(() {
+            widget.toggleExpand(widget.index);
+          });
+        },
                 scrollPhysics: NeverScrollableScrollPhysics(),
-                style: TextStyle(color: MyColour.black, fontSize: 10),
+                style: TextStyle(color: MyColour.black, fontSize: 10, letterSpacing:0.2, height: 1.4),
                 minLines: 1,
                 maxLines: messageMaxLines)),
       ]);
     } else {
-      messageRow = Container(width: 0, height: 0);
+      messageRow = Container();
     }
 
     // if link
@@ -167,26 +172,32 @@ class NotificationUIState extends State<NotificationUI> {
                                       });
                                     },
                                     child: Container(
-                                        padding: const EdgeInsets.only(top: 2.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 2.0),
                                         child: Icon(
                                           Icons.check,
                                           size: iconSize,
                                           color: MyColour.grey,
                                         ))),
                                 linkBtn != null ? linkBtn : Container(),
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        widget.toggleExpand(widget.index);
-                                      });
-                                    },
-                                    child: Container(
-                                        padding: const EdgeInsets.only(top: 7.0),
-                                        child: Icon(
-                                         widget.isExpanded ? Icons.compress : Icons.expand,
-                                          size: iconSize,
-                                          color: MyColour.grey,
-                                        )))
+                                _canExpand
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            widget.toggleExpand(widget.index);
+                                          });
+                                        },
+                                        child: Container(
+                                            padding:
+                                                const EdgeInsets.only(top: 7.0),
+                                            child: Icon(
+                                              widget.isExpanded
+                                                  ? Icons.compress
+                                                  : Icons.expand,
+                                              size: iconSize,
+                                              color: MyColour.grey,
+                                            )))
+                                    : Container()
                               ]),
                         ),
                       ),
@@ -195,17 +206,18 @@ class NotificationUIState extends State<NotificationUI> {
                           child: SizedBox(
                         width: double.infinity,
                         child: Column(
+                            key: _columnKey,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               // TITLE
                               Container(
                                 padding: const EdgeInsets.only(bottom: 5.0),
                                 child: SelectableText(widget.title,
-                                    onTap: () {
-                                      setState(() {
-                                        widget.toggleExpand(widget.index);
-                                      });
-                                    },
+                                    key: _titleKey, onTap: () {
+                                  setState(() {
+                                    widget.toggleExpand(widget.index);
+                                  });
+                                },
                                     scrollPhysics:
                                         NeverScrollableScrollPhysics(),
                                     style: titleStyle,
@@ -216,7 +228,6 @@ class NotificationUIState extends State<NotificationUI> {
 
                               // TIME
                               Container(
-                                padding: const EdgeInsets.only(bottom: 7.0),
                                 child: Row(children: <Widget>[
                                   SelectableText(widget.time,
                                       style: TextStyle(
@@ -236,6 +247,36 @@ class NotificationUIState extends State<NotificationUI> {
       await launch(widget.image);
     } else {
       throw 'Could not launch ' + widget.image;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _canExpandHandler(context));
+  }
+
+  _canExpandHandler(BuildContext context) {
+    var canExpand = false;
+    // for title
+    if (_titleKey.currentContext.size.width >=
+        _columnKey.currentContext.size.width) {
+      print(_titleKey.currentContext.size.width);
+      canExpand = true;
+    }
+
+    // for message
+    // print(context.size.height);
+    if (context.size.height >= _CANEXPANDHEIGHT) {
+      print(context.size.height);
+      canExpand = true;
+    }
+
+    if (canExpand) {
+      setState(() {
+        _canExpand = true;
+      });
     }
   }
 }

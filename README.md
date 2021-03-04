@@ -35,11 +35,11 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 # TODO
 - [ ] fix number of unread notifications when adding new notifications
 - [ ] fix number of unread notifications on startup
-- [ ] add ability to find out whether notification can be expanded or not
 - [ ] show HTTP error code when failing to connect to server
 - [ ] show UI even when network connection fails on creating user
 - [ ] add log view
 - [ ] add ability to toggle sticky notifications
+- [ ] fix showing can be expanded message even when can't on three row message
 - [x] add about view
 - [x] interactions not working after delete
 - [x] fix local notifications - need to make sure it is turned on
@@ -51,3 +51,4 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 - [x] fix open notifi at login
 - [x] redesign unread notification count
 - [x] add link
+- [x] add ability to find out whether notification can be expanded or not
