@@ -19,22 +19,33 @@ class HomeScreen extends StatefulWidget {
     return notification.id;
   }
 
+  setError(bool err) {
+    try {
+      this.table.setError(err);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   ValueNotifier<int> _unreadCnt;
+  ValueNotifier<bool> _networkError;
 
   @override
   void initState() {
     _unreadCnt = ValueNotifier<int>(0);
+    _networkError = ValueNotifier<bool>(false);
     super.initState();
   }
 
   @override
   void dispose() {
     _unreadCnt.dispose();
+    _networkError.dispose();
     super.dispose();
   }
 
@@ -45,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     widget.table.toggleExpand = toggleExpand;
     widget.table.delete = deleteNotification;
     widget.table.setUnreadCnt = setUnreadCnt;
+    widget.table.setError = setError;
     widget.table.getAll = widget.db.getAll;
 
     const double leadingWidth = 60.0;
@@ -56,44 +68,57 @@ class _HomeScreenState extends State<HomeScreen> {
           toolbarHeight: 80,
           title: Container(
             padding: const EdgeInsets.only(right: leadingWidth),
-            child: Stack(
+            child: Column(
               children: [
-                Container(
-                  alignment: Alignment(0, 0),
-                  child: SizedBox(
-                      height: 50,
-                      child: Image.asset('images/bell.png',
-                          filterQuality: FilterQuality.high)),
+                Stack(
+                  children: [
+                    Container(
+                      alignment: Alignment(0, 0),
+                      child: SizedBox(
+                          height: 50,
+                          child: Image.asset('images/bell.png',
+                              filterQuality: FilterQuality.high)),
+                    ),
+                    Container(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: ValueListenableBuilder(
+                            valueListenable: _unreadCnt,
+                            builder: (context, value, child) {
+                              if (value != 0) {
+                                if (value > 99) {
+                                  value = "99+";
+                                } else {
+                                  value = value.toString();
+                                }
+                                return Container(
+                                  alignment: Alignment(0.1, 0),
+                                  child: CircleAvatar(
+                                      backgroundColor: MyColour.red,
+                                      radius: 10,
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(
+                                          color: MyColour.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      )),
+                                );
+                              }
+                              return Spacer();
+                            })),
+                  ],
                 ),
-                Container(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: ValueListenableBuilder(
-                        valueListenable: _unreadCnt,
-                        builder: (context, value, child) {
-                          if (value != 0) {
-                            if (value > 99) {
-                              value = "99+";
-                            } else {
-                              value = value.toString();
-                            }
-                            return Container(
-                              alignment: Alignment(0.1, 0),
-                              child: CircleAvatar(
-                                  backgroundColor: MyColour.red,
-                                  radius: 10,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                      color: MyColour.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  )),
-                            );
-                          } else {
-                            return Spacer();
-                          }
-                        })),
+                ValueListenableBuilder(
+                    valueListenable: _networkError,
+                    builder: (context, value, child) {
+                      if (value) {
+                        return Text("Network error!",
+                            style:
+                                TextStyle(color: MyColour.grey, fontSize: 10));
+                      }
+                      return Container();
+                    })
               ],
             ),
           ),
@@ -126,7 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.done_all, color: MyColour.darkGrey),
               title: Text('Mark All Read',
-                  style: TextStyle(color: MyColour.grey, fontSize: 12)),
+                  style: TextStyle(
+                      color: MyColour.grey,
+                      fontSize:
+                          14)), // no idea why this needs to be 14 to match the other button
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
@@ -180,6 +208,10 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
     this._unreadCnt.value = cnt;
+  }
+
+  setError(bool err) {
+    this._networkError.value = err;
   }
 
   toggleExpand(int index) async {

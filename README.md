@@ -35,11 +35,18 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 # TODO
 - [ ] fix number of unread notifications when adding new notifications
 - [ ] fix number of unread notifications on startup
-- [ ] show HTTP error code when failing to connect to server
+- [ ] add version and copyright stuff to bottom of settings page
+- [ ] handle create new credentials not working when network is down (show error)
 - [ ] show UI even when network connection fails on creating user
 - [ ] add log view
 - [ ] add ability to toggle sticky notifications
 - [ ] fix showing can be expanded message even when can't on three row message
+- [ ] when clicking off menu bar app make it disappear
+- [ ] stop network error from flashing
+- [x] copy on click no notifications credentials
+- [x] make "HTTP REQUESTS" a link to -> how to send credentials
+- [x] show HTTP error when failing to connect to server
+- [x] fix text at two bottom panel buttons
 - [x] add about view
 - [x] interactions not working after delete
 - [x] fix local notifications - need to make sure it is turned on

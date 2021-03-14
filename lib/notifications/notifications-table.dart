@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
-
-import 'notification-provider.dart';
+import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotificationTable extends StatefulWidget {
   final User user;
@@ -14,6 +16,7 @@ class NotificationTable extends StatefulWidget {
   void Function(int id) toggleRead;
   void Function(int id) delete;
   void Function() setUnreadCnt;
+  void Function(bool err) setError;
   Future<List<NotificationUI>> Function() getAll;
 
   NotificationTableState notificationTableState = new NotificationTableState();
@@ -24,11 +27,11 @@ class NotificationTable extends StatefulWidget {
     notificationTableState.insert(notification);
   }
 
-  deleteAll(){
+  deleteAll() {
     notificationTableState.deleteAll();
   }
 
-  readAll(){
+  readAll() {
     notificationTableState.readAll();
   }
 
@@ -109,7 +112,7 @@ class NotificationTableState extends State<NotificationTable>
     }
   }
 
-  readAll(){
+  readAll() {
     if (widget.notifications != null) {
       for (var i = 0; i < widget.notifications.length; i++) {
         widget.notifications[i].isRead = true;
@@ -118,7 +121,7 @@ class NotificationTableState extends State<NotificationTable>
     }
   }
 
-  deleteAll(){
+  deleteAll() {
     widget.notifications = null;
     setState(() {});
   }
@@ -157,47 +160,62 @@ class NotificationTableState extends State<NotificationTable>
                           fontWeight: FontWeight.w900,
                           fontSize: 35)),
                   Container(padding: const EdgeInsets.only(top: 20.0)),
-                  SelectableText(
-                      "To receive notifications use HTTP Requests with your credentials...",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: MyColour.grey, fontWeight: FontWeight.w500)),
-                  Container(padding: const EdgeInsets.only(top: 20.0)),
                   ValueListenableBuilder<String>(
-                    valueListenable: widget.user.credentials,
-                    builder:
-                        (BuildContext context, String value, Widget child) {
-                      var credentials = value;
-                      if (credentials == "") {
-                        credentials = "...";
-                      }
-                      return SelectableText(credentials,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MyColour.red,
-                              fontWeight: FontWeight.w900));
-                    },
-                  )
-                  // if (widget.user == null || widget.user.credentials == null)
-                  //   Column(children: [
-                  //     Container(
-                  //       padding: const EdgeInsets.only(bottom: 20.0, top: 20),
-                  //       child: Text("Problem connecting to server..."),
-                  //     ),
-                  //     Container(r
-                  //         height: 40.0,
-                  //         width: 40.0,
-                  //         child: FittedBox(
-                  //             child: FloatingActionButton(
-                  //           child: Text(
-                  //             "Retry",
-                  //             style: TextStyle(fontSize: 12),
-                  //           ),
-                  //           onPressed: () {
-                  //             setState(() {});
-                  //           },
-                  //         ))),
-                  //   ])
+                      valueListenable: widget.user.credentials,
+                      builder:
+                          (BuildContext context, String value, Widget child) {
+                        var credentials = value;
+                        if (credentials == "") {
+                          credentials = "...";
+                        }
+                        return Column(children: [
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'To receive notifications use ',
+                                  style: TextStyle(
+                                      color: MyColour.grey,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Inconsolata'),
+                                ),
+                                TextSpan(
+                                  text: 'HTTP Requests',
+                                  style: TextStyle(
+                                      color: MyColour.red,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Inconsolata'),
+                                  recognizer: new TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launch("https://notifi.it?c=" +
+                                          widget.user.credentials.value +
+                                          "#how-to");
+                                    },
+                                ),
+                                TextSpan(
+                                  text: ' with your credentials...',
+                                  style: TextStyle(
+                                      color: MyColour.grey,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Inconsolata'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(padding: const EdgeInsets.only(top: 20.0)),
+                          SelectableText(credentials,
+                              textAlign: TextAlign.center, onTap: () {
+                            Clipboard.setData(
+                                new ClipboardData(text: credentials));
+                            Toast.show("Copied " + credentials, context,
+                                gravity: Toast.BOTTOM);
+                          },
+                              style: TextStyle(
+                                  color: MyColour.red,
+                                  fontWeight: FontWeight.w900))
+                        ]);
+                      })
                 ]),
           );
         }

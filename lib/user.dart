@@ -21,6 +21,7 @@ class User with ChangeNotifier {
   String UUID;
   String credentialKey;
   ValueListenable<String> credentials = ValueNotifier<String>("");
+  ValueListenable<bool> error = ValueNotifier<bool>(false);
   String flutterToken;
   IOWebSocketChannel ws;
 
@@ -67,6 +68,8 @@ class User with ChangeNotifier {
     var gotUser = await this._newUserReq(data);
     if (gotUser == true && this.ws != null) {
       this.ws.sink.close(status.normalClosure, "new code!");
+    } else {
+      error = ValueNotifier<bool>(false);
     }
   }
 
@@ -75,7 +78,7 @@ class User with ChangeNotifier {
     d.Dio dio = new d.Dio();
     var response;
     try {
-      response = await dio.post("http://" + env['HOST'] + "/code",
+      response = await dio.post("https://" + env['HOST'] + "/code",
           data: data,
           options: d.Options(headers: {
             "Sec-Key": env["SERVER_KEY"],

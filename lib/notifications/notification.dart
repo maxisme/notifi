@@ -42,6 +42,7 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
     message: json['message'] as String,
     image: json['image'] as String,
     link: json['link'] as String,
+    isRead: false,
   );
 }
 

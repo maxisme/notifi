@@ -65,9 +65,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                 Container(
                   padding: EdgeInsets.only(top: 15),
                 ),
-                if (!Platform.isAndroid && !Platform.isIOS)
-                  SettingOption('Sticky Notifications',
-                      switchValue: false, switchCallback: (isEnabled) {}),
+                // if (!Platform.isAndroid && !Platform.isIOS)
+                //   SettingOption('Sticky Notifications',
+                //       switchValue: false, switchCallback: (isEnabled) {}),
                 if (!Platform.isAndroid && !Platform.isIOS)
                   FutureBuilder(
                       future: LaunchAtLogin.isEnabled,
@@ -98,9 +98,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                 SettingOption('About...', onTapCallback: () {
                   launch("https://notifi.it");
                 }),
-                SettingOption('Open Logs...', onTapCallback: () {
-                  print('Terms of Service');
-                }),
+                // SettingOption('Open Logs...', onTapCallback: () {
+                //   print('Terms of Service');
+                // }),
                 if (!Platform.isIOS)
                   Container(
                     padding: EdgeInsets.only(top: 15),
