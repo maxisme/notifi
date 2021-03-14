@@ -20,4 +20,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: macos-build
-          path: build/macos/Build/Products/Release/notifi.app
+          path: build/macos/Build/Products/Release/
