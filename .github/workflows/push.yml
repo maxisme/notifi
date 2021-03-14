@@ -2,10 +2,27 @@ name: notifi
 on: [push]
 
 jobs:
-  build:
-    runs-on: macos-latest
+  bump:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.bump_version.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        id: bump_version
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+  build:
+    runs-on: macos-latest
+    needs: bump
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
@@ -17,15 +34,33 @@ jobs:
       - name: Run flutter build macos
         run: |
           echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
-          flutter build macos --release
+          flutter build macos --release --build-name=${{ needs.bump.outputs.tag }}
       - name: Create dmg
         continue-on-error: true
         run: |
           npm install --global create-dmg
           mkdir dmg
-          ls build/macos/Build/Products/Release/notifi.app
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
+          (cd dmg && mv *.dmg notifi.dmg)
       - uses: actions/upload-artifact@v2
         with:
-          name: notifi-dmg
+          name: notifi.dmg
           path: dmg/
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.bump.outputs.tag }}
+          release_name: Mac Release ${{ needs.bump.outputs.tag }}
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./dmg/notifi.dmg
+          asset_name: notifi.dmg
+          asset_content_type: application/x-apple-diskimage

@@ -46,6 +46,7 @@ cat .env | openssl base64
 - [ ] fix showing can be expanded message even when can't on three row message
 - [ ] when clicking off menu bar app make it disappear
 - [ ] stop network error from flashing
+- [ ] check for updates
 - [x] copy on click no notifications credentials
 - [x] make "HTTP REQUESTS" a link to -> how to send credentials
 - [x] show HTTP error when failing to connect to server
