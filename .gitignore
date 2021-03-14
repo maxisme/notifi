@@ -1,6 +1,6 @@
 flutter_build
 notifications.db
-
+.env
 # Miscellaneous
 *.class
 *.log

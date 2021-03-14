@@ -27,6 +27,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>LSUIElement</key>
-	<false/>
+	<true/> <!--SET TO FALSE WHEN DEBUGGING-->
 </dict>
 </plist>

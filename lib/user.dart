@@ -78,7 +78,7 @@ class User with ChangeNotifier {
     d.Dio dio = new d.Dio();
     var response;
     try {
-      response = await dio.post("https://" + env['HOST'] + "/code",
+      response = await dio.post(env['CODE_ENDPOINT'],
           data: data,
           options: d.Options(headers: {
             "Sec-Key": env["SERVER_KEY"],
