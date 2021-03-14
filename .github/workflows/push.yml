@@ -12,6 +12,6 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - run: flutter config --enable-macos
+      - run: flutter config --enable-macos-desktop
       - run: flutter pub get
       - run: flutter build macos --release
