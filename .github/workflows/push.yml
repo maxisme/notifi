@@ -17,4 +17,7 @@ jobs:
       - run: |
           echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           flutter build macos --release
-          rm .env
+      - uses: actions/upload-artifact@v2
+        with:
+          name: macos-build
+          path: build
