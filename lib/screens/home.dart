@@ -13,10 +13,20 @@ class HomeScreen extends StatefulWidget {
   HomeScreen(this.table, this.db, {Key key}) : super(key: key);
 
   Future<int> add(NotificationUI notification) async {
-    notification.id = await this.db.store(notification);
-    this.table.add(notification);
-    this.table.setUnreadCnt();
-    return notification.id;
+    // returns -1 if failed
+    int id;
+    try {
+      id = await this.db.store(notification);
+    } catch (e) {
+      print("Problem storing notification: $e");
+      id = -1;
+    }
+    if (id != -1) {
+      notification.id = id;
+      this.table.add(notification);
+      this.table.setUnreadCnt();
+    }
+    return id;
   }
 
   setError(bool err) {

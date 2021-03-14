@@ -12,8 +12,7 @@ import 'package:web_socket_channel/io.dart';
 const refKey = "ref";
 const messageKey = "msg";
 
-Future<IOWebSocketChannel> connectToWs(
-    User user,
+Future<IOWebSocketChannel> connectToWs(User user,
     FlutterLocalNotificationsPlugin localNotification,
     HomeScreen homeScreen) async {
   if (user.isNull()) {
@@ -47,6 +46,7 @@ Future<IOWebSocketChannel> connectToWs(
     }
 
     // parse notifications from websocket message
+    var UUIDs = "";
     for (var i = 0; i < notifications.length; i++) {
       Map<String, dynamic> jsonMessage;
       var n = notifications[i];
@@ -56,18 +56,22 @@ Future<IOWebSocketChannel> connectToWs(
         print("ignoring un-parsable ws message: $msg\n$e\n$n");
       }
       if (jsonMessage != null) {
-        try {
-          var notification = NotificationUI.fromJson(jsonMessage);
+        var notification = NotificationUI.fromJson(jsonMessage);
 
-          // store notification
-          int id = await homeScreen.add(notification);
+        // store notification
+        int id = await homeScreen.add(notification);
 
-          // send local notification
+        // send local notification
+        if (id != -1) {
           sendLocalNotification(localNotification, id, notification);
-        } catch (e) {
-          print("Problem storing notification: $e");
+          UUIDs += "," + notification.UUID;
         }
       }
+    }
+    if (UUIDs.length > 0){
+      print("UUIDSSSS");
+      print(UUIDs);
+      ws.sink.add(UUIDs);
     }
   }, onError: (error) {
     print(error);
