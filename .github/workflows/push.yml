@@ -14,15 +14,18 @@ jobs:
           channel: 'dev'
       - run: flutter config --enable-macos-desktop
       - run: flutter pub get
-      - name: flutter build macos
+      - name: Run flutter build macos
         run: |
           echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           flutter build macos --release
-      - name: create dmg
+      - name: Create dmg
+        continue-on-error: true
         run: |
           npm install --global create-dmg
+          mkdir dmg
+          ls build/macos/Build/Products/Release/notifi.app
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
       - uses: actions/upload-artifact@v2
         with:
-          name: macos-build
+          name: notifi-dmg
           path: dmg/
