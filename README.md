@@ -38,7 +38,7 @@ cat .env | openssl base64
 # TODO
 - [ ] fix number of unread notifications when adding new notifications
 - [ ] fix number of unread notifications on startup
-- [ ] add version and copyright stuff to bottom of settings page
+- [ ] add copyright stuff to bottom of settings page
 - [ ] handle create new credentials not working when network is down (show error)
 - [ ] show UI even when network connection fails on creating user
 - [ ] add log view
@@ -47,6 +47,9 @@ cat .env | openssl base64
 - [ ] when clicking off menu bar app make it disappear
 - [ ] stop network error from flashing
 - [ ] check for updates
+- [ ] fix grey square when no unread notifications
+- [ ] remove window still showing up
+- [x] add version to bottom of settings page
 - [x] copy on click no notifications credentials
 - [x] make "HTTP REQUESTS" a link to -> how to send credentials
 - [x] show HTTP error when failing to connect to server

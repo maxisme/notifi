@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
+import 'package:package_info/package_info.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,8 +21,26 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
+  ValueNotifier<String> _versionStr;
+
+  @override
+  void initState() {
+    _versionStr = ValueNotifier<String>("");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _versionStr.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      _versionStr.value ="notifi: " + packageInfo.buildNumber;
+    });
+
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
@@ -112,6 +131,15 @@ class SettingsScreenState extends State<SettingsScreen> {
                       SystemNavigator.pop();
                     },
                   ),
+                ValueListenableBuilder(
+                    valueListenable: _versionStr,
+                    builder: (context, value, child) {
+                      return Container(
+                        padding: EdgeInsets.only(top: 30),
+                        child: Text(value,
+                            style: TextStyle(color: MyColour.grey, fontSize: 12)),
+                      );
+                    })
               ]);
             }));
   }

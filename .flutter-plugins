@@ -2,6 +2,7 @@
 flutter_local_notifications=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-4.0.1+1/
 flutter_secure_storage=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/git/flutter_secure_storage-f119be4d13c6764628e1701a84d04f85d2f6e6e9/
 launch_at_login=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/hosted/pub.dartlang.org/launch_at_login-0.0.3/
+package_info=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-2.0.0/
 path_provider=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.27/
 path_provider_linux=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2/
 path_provider_macos=/usr/local/Caskroom/flutter/1.22.6/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+8/
