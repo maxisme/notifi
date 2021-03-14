@@ -15,6 +15,6 @@ jobs:
       - run: flutter config --enable-macos-desktop
       - run: flutter pub get
       - run: |
-        echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
-        flutter build macos --release
-        rm .env
+          echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          flutter build macos --release
+          rm .env
