@@ -22,8 +22,9 @@ class AppDelegate: FlutterAppDelegate {
         popover.contentViewController = flutterViewController
         popover.contentSize = NSSize(width: 400, height: 600)
         
-        NSApp.activate(ignoringOtherApps: true)
-
+        
+        // COMMENT OUT WHEN DEBUGGING
+        // NSApp.activate(ignoringOtherApps: true)
         RegisterGeneratedPlugins(registry: flutterViewController)
     }
     

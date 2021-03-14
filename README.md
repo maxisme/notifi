@@ -32,6 +32,9 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 ## db path 
 ~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
 
+## gh .env secrets
+cat .env | openssl base64
+
 # TODO
 - [ ] fix number of unread notifications when adding new notifications
 - [ ] fix number of unread notifications on startup
