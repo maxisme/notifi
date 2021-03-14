@@ -40,12 +40,7 @@ jobs:
         continue-on-error: true
         run: |
           npm install --global create-dmg
-          mkdir dmg
-          create-dmg build/macos/Build/Products/Release/notifi.app dmg/
-      - uses: actions/upload-artifact@v2
-        with:
-          name: notifi.dmg
-          path: dmg/
+          create-dmg build/macos/Build/Products/Release/notifi.app
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -53,4 +48,4 @@ jobs:
           prerelease: true
           title: "Release ${{ needs.bump.outputs.tag }}"
           files: |
-            dmg/*
+            *.dmg
