@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
@@ -21,26 +22,34 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  ValueNotifier<String> _versionStr;
+  ValueNotifier<String> _version;
+  ValueNotifier<String> _remoteVersion;
 
   @override
   void initState() {
-    _versionStr = ValueNotifier<String>("");
+    _version = ValueNotifier<String>("");
+    _remoteVersion = ValueNotifier<String>("");
     super.initState();
   }
 
   @override
   void dispose() {
-    _versionStr.dispose();
+    _version.dispose();
+    _remoteVersion.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      _versionStr.value ="notifi: " + packageInfo.buildNumber;
+      _version.value = "notifi: " + packageInfo.buildNumber;
     });
 
+    http.get("https://notifi.it/version").then((value) {
+      _remoteVersion.value = value.body;
+    });
+
+    DateTime now = new DateTime.now();
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
@@ -132,14 +141,71 @@ class SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                 ValueListenableBuilder(
-                    valueListenable: _versionStr,
+                    valueListenable: _version,
                     builder: (context, value, child) {
                       return Container(
                         padding: EdgeInsets.only(top: 30),
-                        child: Text(value,
-                            style: TextStyle(color: MyColour.grey, fontSize: 12)),
+                        child: Column(
+                          children: [
+                            Text(value,
+                                style: TextStyle(
+                                    color: MyColour.grey, fontSize: 12)),
+                            ValueListenableBuilder(
+                                valueListenable: _remoteVersion,
+                                builder: (context, remoteVersion, child) {
+                                  if (_version != remoteVersion) {
+                                    return TextButton(
+                                        onPressed: () {
+                                          launch("https://notifi.it/download");
+                                        },
+                                        child: Text(" Download New Version ",
+                                            // ($remoteVersion)
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                color: MyColour.red,
+                                                fontSize: 12)));
+                                  }
+                                  return Container(width: 0, height: 0);
+                                })
+                          ],
+                        ),
                       );
-                    })
+                    }),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: 'Made by ',
+                          style: TextStyle(
+                              color: MyColour.grey,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              fontFamily: 'Inconsolata'),
+                        ),
+                        TextSpan(
+                          text: '\nMaximilian Mitchell',
+                          style: TextStyle(
+                              color: MyColour.darkGrey,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              fontFamily: 'Inconsolata'),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              launch("https://max.me.uk");
+                            },
+                        ),
+                        // TextSpan(
+                        //   text: '\n\nCopyright © ${now.year}',
+                        //   style: TextStyle(
+                        //       color: MyColour.grey,
+                        //       fontWeight: FontWeight.w500,
+                        //       fontSize: 10,
+                        //       fontFamily: 'Inconsolata'),
+                        // ),
+                      ])),
+                )
               ]);
             }));
   }
