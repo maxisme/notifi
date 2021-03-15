@@ -46,7 +46,7 @@ cat .env | openssl base64
 - [ ] fix showing can be expanded message even when can't on three row message
 - [ ] when clicking off menu bar app make it disappear
 - [ ] stop network error from flashing
-- [ ] check for updates
+- [ ] check for updates (https://api.github.com/repos/maxisme/notifi/releases/latest)
 - [ ] fix grey square when no unread notifications
 - [ ] remove window still showing up
 - [x] add version to bottom of settings page

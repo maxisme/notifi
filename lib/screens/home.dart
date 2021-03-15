@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       )),
                                 );
                               }
-                              return Spacer();
+                              return Container(width: 0, height: 0);
                             })),
                   ],
                 ),

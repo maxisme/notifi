@@ -28,7 +28,7 @@ class AppDelegate: FlutterAppDelegate {
         RegisterGeneratedPlugins(registry: flutterViewController)
     }
     
-override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
     
