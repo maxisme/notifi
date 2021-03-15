@@ -35,6 +35,11 @@ class AppDelegate: FlutterAppDelegate {
       if popover.isShown {
         closePopover(sender: sender)
       } else {
+//        // remove all push notifications
+//        let notificationcenter = NSUserNotificationCenter.default;
+//        notificationcenter.removeAllDeliveredNotifications();
+        
+        // open popup
         showPopover(sender: sender)
       }
     }

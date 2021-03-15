@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
     widget.table.getAll = widget.db.getAll;
 
     const double leadingWidth = 60.0;
-    return Scaffold(
+    var scaffold = Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
           shape: Border(bottom: BorderSide(color: MyColour.offGrey)),
@@ -173,6 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           currentIndex: 1,
         ));
+    setUnreadCnt();
+    return scaffold;
   }
 
   Future<void> _deleteAllNotificationsDialogue() async {
