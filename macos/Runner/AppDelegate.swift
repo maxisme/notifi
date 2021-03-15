@@ -24,7 +24,6 @@ class AppDelegate: FlutterAppDelegate {
         
         
         // COMMENT OUT WHEN DEBUGGING
-        // NSApp.activate(ignoringOtherApps: true)
         RegisterGeneratedPlugins(registry: flutterViewController)
     }
     
