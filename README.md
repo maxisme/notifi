@@ -36,19 +36,21 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 cat .env | openssl base64
 
 # TODO
+- [ ] check for updates (https://api.github.com/repos/maxisme/notifi/releases/latest)
 - [ ] fix number of unread notifications when adding new notifications
 - [ ] fix number of unread notifications on startup
 - [ ] add copyright stuff to bottom of settings page
 - [ ] handle create new credentials not working when network is down (show error)
 - [ ] show UI even when network connection fails on creating user
-- [ ] add log view
+- [ ] add log view and logging
 - [ ] add ability to toggle sticky notifications
 - [ ] fix showing can be expanded message even when can't on three row message
 - [ ] when clicking off menu bar app make it disappear
+- [ ] when opening app delete current notifications
 - [ ] stop network error from flashing
-- [ ] check for updates (https://api.github.com/repos/maxisme/notifi/releases/latest)
-- [ ] fix grey square when no unread notifications
-- [ ] remove window still showing up
+- [ ] only allow one running version of notifi
+- [x] remove window still showing up when opening app
+- [x] fix grey square when no unread notifications
 - [x] add version to bottom of settings page
 - [x] copy on click no notifications credentials
 - [x] make "HTTP REQUESTS" a link to -> how to send credentials
