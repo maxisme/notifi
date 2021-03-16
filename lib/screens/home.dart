@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     valueListenable: _networkError,
                     builder: (context, value, child) {
                       if (value) {
-                        return Text("Network error!",
+                        return Text("Network Error!",
                             style:
                                 TextStyle(color: MyColour.grey, fontSize: 10));
                       }
@@ -222,8 +222,14 @@ class _HomeScreenState extends State<HomeScreen> {
     this._unreadCnt.value = cnt;
   }
 
+  var waitErr;
   setError(bool err) {
-    this._networkError.value = err;
+    this.waitErr = err;
+    Future.delayed(const Duration(seconds: 1), (){
+      if(this.waitErr == err) {
+        this._networkError.value = err;
+      }
+    });
   }
 
   toggleExpand(int index) async {

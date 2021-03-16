@@ -43,7 +43,7 @@ cat .env | openssl base64
 - [ ] fix showing can be expanded message even when can't on three row message
 - [ ] when clicking off menu bar app make it disappear
 - [ ] when opening app delete current notifications
-- [ ] stop network error from flashing
+- [x] stop network error from flashing
 - [x] add copyright stuff to bottom of settings page
 - [x] check for updates (https://api.github.com/repos/maxisme/notifi/releases/latest)
 - [x] fix number of unread notifications on startup
