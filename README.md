@@ -34,37 +34,3 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 
 ## gh .env secrets
 cat .env | openssl base64
-
-# TODO
-- [ ] handle create new credentials not working when network is down (show error)
-- [ ] show UI even when network connection fails on creating user
-- [ ] add log view and logging
-- [ ] add ability to toggle sticky notifications
-- [ ] fix showing can be expanded message even when can't on three row message
-- [ ] when clicking off menu bar app make it disappear
-- [ ] when opening app delete current notifications
-- [x] fix every other notification not showing up in UI when open
-- [x] stop network error from flashing
-- [x] add copyright stuff to bottom of settings page
-- [x] check for updates (https://api.github.com/repos/maxisme/notifi/releases/latest)
-- [x] fix number of unread notifications on startup
-- [x] fix number of unread notifications when adding new notifications
-- [x] remove window still showing up when opening app
-- [x] fix grey square when no unread notifications
-- [x] add version to bottom of settings page
-- [x] copy on click no notifications credentials
-- [x] make "HTTP REQUESTS" a link to -> how to send credentials
-- [x] show HTTP error when failing to connect to server
-- [x] fix text at two bottom panel buttons
-- [x] add about view
-- [x] interactions not working after delete
-- [x] fix local notifications - need to make sure it is turned on
-- [x] add unread notification count
-- [x] fix mark all as read
-- [x] notifications not showing when adding first.
-- [x] fix notifications appearing as all unread on startup
-- [x] fix menu bar icon
-- [x] fix open notifi at login
-- [x] redesign unread notification count
-- [x] add link
-- [x] add ability to find out whether notification can be expanded or not

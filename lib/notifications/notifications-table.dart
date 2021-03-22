@@ -125,7 +125,7 @@ class NotificationTableState extends State<NotificationTable>
     this.notifications.insert(0, notification);
 
     if (this.notifications.length == 1) {
-      // going from no this.notifications to table
+      // going from no notifications to table
       setState(() {});
     } else {
       listKey.currentState.insertItem(0, duration: Duration(milliseconds: 500));
@@ -178,7 +178,7 @@ class NotificationTableState extends State<NotificationTable>
               itemBuilder: _buildNotification,
               initialItemCount: this.notifications.length);
         } else {
-          // NO this.notifications
+          // NO notifications
           return Container(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -209,7 +209,7 @@ class NotificationTableState extends State<NotificationTable>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'To receive this.notifications use ',
+                                  text: 'To receive notifications use ',
                                   style: TextStyle(
                                       color: MyColour.grey,
                                       fontWeight: FontWeight.w500,
