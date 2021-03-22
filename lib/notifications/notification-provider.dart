@@ -74,7 +74,7 @@ class NotificationProvider {
   }
 
   Future<List<NotificationUI>> getAll() async {
-    List<NotificationUI> notifications = [];
+    List<NotificationUI> notifications = List.empty(growable: true);
     final Database db = await this.db;
 
     // language=SQLite

@@ -42,7 +42,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      _version.value = "notifi: " + packageInfo.buildNumber;
+      _version.value = packageInfo.buildNumber;
     });
 
     http.get("https://notifi.it/version").then((value) {
@@ -140,37 +140,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                       SystemNavigator.pop();
                     },
                   ),
-                ValueListenableBuilder(
-                    valueListenable: _version,
-                    builder: (context, value, child) {
-                      return Container(
-                        padding: EdgeInsets.only(top: 30),
-                        child: Column(
-                          children: [
-                            Text(value,
-                                style: TextStyle(
-                                    color: MyColour.grey, fontSize: 12)),
-                            ValueListenableBuilder(
-                                valueListenable: _remoteVersion,
-                                builder: (context, remoteVersion, child) {
-                                  if (_version != remoteVersion) {
-                                    return TextButton(
-                                        onPressed: () {
-                                          launch("https://notifi.it/download");
-                                        },
-                                        child: Text(" Download New Version ",
-                                            // ($remoteVersion)
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                color: MyColour.red,
-                                                fontSize: 12)));
-                                  }
-                                  return Container(width: 0, height: 0);
-                                })
-                          ],
-                        ),
-                      );
-                    }),
                 Container(
                   padding: EdgeInsets.only(top: 10),
                   child: RichText(
@@ -205,7 +174,40 @@ class SettingsScreenState extends State<SettingsScreen> {
                         //       fontFamily: 'Inconsolata'),
                         // ),
                       ])),
-                )
+                ),
+                ValueListenableBuilder(
+                    valueListenable: _version,
+                    builder: (context, version, child) {
+                      return Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text("version: " + version,
+                                style: TextStyle(
+                                    color: MyColour.grey, fontSize: 12)),
+                            ValueListenableBuilder(
+                                valueListenable: _remoteVersion,
+                                builder: (context, remoteVersion, child) {
+                                  if (version != remoteVersion) {
+                                    return FlatButton(
+                                        minWidth: 0,
+                                        onPressed: () {
+                                          launch("https://notifi.it/download");
+                                        },
+                                        child: Icon(
+                                          Icons.arrow_circle_down,
+                                          color: MyColour.red,
+                                          size: 18,
+                                        ));
+                                  }
+                                  return Container(width: 0, height: 0);
+                                })
+                          ],
+                        ),
+                      );
+                    }),
               ]);
             }));
   }

@@ -12,6 +12,7 @@ import 'package:web_socket_channel/io.dart';
 const refKey = "ref";
 const messageKey = "msg";
 
+var ws;
 Future<IOWebSocketChannel> connectToWs(User user,
     FlutterLocalNotificationsPlugin localNotification,
     HomeScreen homeScreen) async {
@@ -28,8 +29,12 @@ Future<IOWebSocketChannel> connectToWs(User user,
     "Version": await getVersionFromPubSpec(),
   };
 
-  var ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
-      headers: headers, pingInterval: Duration(seconds: 5));
+  if (ws != null){
+    ws.sink.close();
+    ws = null;
+  }
+
+  ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'], headers: headers, pingInterval: Duration(seconds: 5));
 
   print("Connecting to Websocket...");
   homeScreen.setError(false);
@@ -69,7 +74,6 @@ Future<IOWebSocketChannel> connectToWs(User user,
       }
     }
     if (UUIDs.length > 0){
-      print("UUIDSSSS");
       print(UUIDs);
       ws.sink.add(UUIDs);
     }
@@ -80,7 +84,7 @@ Future<IOWebSocketChannel> connectToWs(User user,
     print("ws closed");
     homeScreen.setError(true);
     await new Future.delayed(Duration(seconds: 3));
-    return connectToWs(user, localNotification, homeScreen);
+    return await connectToWs(user, localNotification, homeScreen);
   });
 
   return ws;

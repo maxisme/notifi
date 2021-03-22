@@ -14,8 +14,8 @@ void main() async {
   await DotEnv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
-  var user = new User();
-  var nt = new NotificationTable(user);
+  var user = User();
+  var nt = NotificationTable(user);
   var db = NotificationProvider();
   db.initDB("notifications.db");
   var homeScreen = HomeScreen(nt, db);
@@ -39,7 +39,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         theme: ThemeData(
             fontFamily: 'Inconsolata',
@@ -49,6 +48,7 @@ class _MyAppState extends State<MyApp> {
             splashColor: MyColour.transparent,
             accentColor: MyColour.black,
             buttonColor: MyColour.red,
+            focusColor: MyColour.transparent,
             dialogTheme: DialogTheme(
                 elevation: 0,
                 shape: Border.all(width: 3),

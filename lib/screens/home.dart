@@ -211,15 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   setUnreadCnt() {
-    int cnt = 0;
-    if (widget.table.notifications != null) {
-      for (var i = 0; i < widget.table.notifications.length; i++) {
-        if (!widget.table.notifications[i].isRead) {
-          cnt++;
-        }
-      }
-    }
-    this._unreadCnt.value = cnt;
+    this._unreadCnt.value = widget.table.unreadCnt();
   }
 
   var waitErr;
@@ -233,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   toggleExpand(int index) async {
-    NotificationUI notification = widget.table.notifications[index];
+    NotificationUI notification = widget.table.getNotification(index);
 
     bool isExpanded = false;
     if (notification.isExpanded) isExpanded = true;
@@ -247,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   toggleRead(int index) async {
-    NotificationUI notification = widget.table.notifications[index];
+    NotificationUI notification = widget.table.getNotification(index);
     bool read = true;
     if (notification.isRead) read = false;
     notification.isRead = read;
@@ -256,10 +248,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   deleteNotification(int index) async {
-    NotificationUI notification = widget.table.notifications[index];
+    NotificationUI notification = widget.table.getNotification(index);
 
     await widget.db.delete(notification.id);
-    widget.table.notifications.removeAt(index);
+    widget.table.deleteNotification(index);
 
     setUnreadCnt();
   }

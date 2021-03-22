@@ -263,14 +263,11 @@ class NotificationUIState extends State<NotificationUI> {
     // for title
     if (_titleKey.currentContext.size.width >=
         _columnKey.currentContext.size.width) {
-      print(_titleKey.currentContext.size.width);
       canExpand = true;
     }
 
     // for message
-    // print(context.size.height);
     if (context.size.height >= _CANEXPANDHEIGHT) {
-      print(context.size.height);
       canExpand = true;
     }
 

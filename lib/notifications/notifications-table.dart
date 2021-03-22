@@ -11,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 class NotificationTable extends StatefulWidget {
   final User user;
-  List<NotificationUI> notifications;
   void Function(int id) toggleExpand;
   void Function(int id) toggleRead;
   void Function(int id) delete;
@@ -21,10 +20,32 @@ class NotificationTable extends StatefulWidget {
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
-  NotificationTable(this.user, {Key key}) : super(key: key);
+  NotificationTable(this.user, {Key key}){
+    print('init1');
+  }
 
   add(NotificationUI notification) {
     notificationTableState.insert(notification);
+  }
+
+  getNotification(int index) {
+    return notificationTableState.notifications[index];
+  }
+
+  deleteNotification(int index) {
+    notificationTableState.removeAt(index);
+  }
+
+  unreadCnt() {
+    int cnt = 0;
+    if (notificationTableState.notifications != null) {
+      for (var i = 0; i < notificationTableState.notifications.length; i++) {
+        if (!notificationTableState.notifications[i].isRead) {
+          cnt++;
+        }
+      }
+    }
+    return cnt;
   }
 
   deleteAll() {
@@ -41,10 +62,12 @@ class NotificationTable extends StatefulWidget {
 
 class NotificationTableState extends State<NotificationTable>
     with TickerProviderStateMixin {
-  final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey();
+  List<NotificationUI> notifications = List.empty(growable: true);
 
-  Widget _buildNotification(BuildContext context, int index) {
-    final NotificationUI notification = widget.notifications[index];
+  Widget _buildNotification(
+      BuildContext context, int index, Animation<double> animation) {
+
+    final NotificationUI notification = this.notifications[index];
     notification.index = index;
     notification.toggleExpand = widget.toggleExpand;
     notification.toggleRead = widget.toggleRead;
@@ -98,33 +121,41 @@ class NotificationTableState extends State<NotificationTable>
   }
 
   insert(NotificationUI notification) {
-    if (widget.notifications == null) {
-      widget.notifications = [];
-    }
-    final index = widget.notifications.length;
-    widget.notifications.insert(0, notification);
-    if (_listKey.currentState == null) {
+    print(notification.title);
+    this.notifications.insert(0, notification);
+
+    if (this.notifications.length == 1) {
+      // going from no this.notifications to table
       setState(() {});
-    }
-    if (_listKey.currentState != null) {
-      _listKey.currentState
-          .insertItem(index, duration: Duration(milliseconds: 500));
+    } else {
+      listKey.currentState.insertItem(0, duration: Duration(milliseconds: 500));
     }
   }
 
+  removeAt(int index) {
+    this.notifications.removeAt(index);
+    // listKey.currentState.removeItem(index, );
+  }
+
   readAll() {
-    if (widget.notifications != null) {
-      for (var i = 0; i < widget.notifications.length; i++) {
-        widget.notifications[i].isRead = true;
-      }
-      setState(() {});
+    if (this.notifications != null) {
+      setState(() {
+        for (var i = 0; i < this.notifications.length; i++) {
+          this.notifications[i].isRead = true;
+        }
+      });
     }
   }
 
   deleteAll() {
-    widget.notifications = null;
-    setState(() {});
+    setState(() {
+      this.notifications.clear();
+      this.notifications = List.empty(growable: true);
+      print(this.notifications.length);
+    });
   }
+
+  GlobalKey<AnimatedListState> listKey;
 
   @override
   Widget build(BuildContext context) {
@@ -134,16 +165,20 @@ class NotificationTableState extends State<NotificationTable>
         if (f.hasError) {
           print(f.error);
         }
-        if (f.hasData != null && f.data != null && f.data.length > 0) {
-          List<NotificationUI> notifications = f.data;
-          widget.notifications = notifications;
-          widget.setUnreadCnt();
-          return new ListView.builder(
-              key: _listKey,
+        listKey = null;
+        if (f.hasData && f.data.length > 0) {
+          if(f.connectionState == ConnectionState.done) {
+            this.notifications = f.data;
+            print("reloaded $f");
+            widget.setUnreadCnt();
+          }
+          listKey = GlobalKey<AnimatedListState>();
+          return AnimatedList(
+              key: listKey,
               itemBuilder: _buildNotification,
-              itemCount: widget.notifications.length);
+              initialItemCount: this.notifications.length);
         } else {
-          // NO notifications
+          // NO this.notifications
           return Container(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -153,7 +188,7 @@ class NotificationTableState extends State<NotificationTable>
                   Image.asset('images/sad.png',
                       height: 150, filterQuality: FilterQuality.high),
                   Container(padding: const EdgeInsets.only(top: 20.0)),
-                  SelectableText("No Notifications!",
+                  SelectableText("No notifications!",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: MyColour.black,
@@ -174,7 +209,7 @@ class NotificationTableState extends State<NotificationTable>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'To receive notifications use ',
+                                  text: 'To receive this.notifications use ',
                                   style: TextStyle(
                                       color: MyColour.grey,
                                       fontWeight: FontWeight.w500,
