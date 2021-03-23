@@ -93,7 +93,9 @@ class NotificationUIState extends State<NotificationUI> {
         Flexible(
             child: SelectableText(widget.message, onTap: () {
           setState(() {
-            widget.toggleExpand(widget.index);
+            if (!widget.isExpanded) {
+              widget.toggleExpand(widget.index);
+            }
           });
         },
                 scrollPhysics: NeverScrollableScrollPhysics(),
@@ -216,7 +218,9 @@ class NotificationUIState extends State<NotificationUI> {
                                 child: SelectableText(widget.title,
                                     key: _titleKey, onTap: () {
                                   setState(() {
-                                    widget.toggleExpand(widget.index);
+                                    if (!widget.isExpanded) {
+                                      widget.toggleExpand(widget.index);
+                                    }
                                   });
                                 },
                                     scrollPhysics:
