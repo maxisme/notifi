@@ -1,4 +1,4 @@
-name: notifi
+name: MacOS Deploy
 on: [push]
 
 jobs:

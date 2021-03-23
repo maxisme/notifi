@@ -92,17 +92,18 @@ class NotificationTableState extends State<NotificationTable>
             actions: <Widget>[
               IconSlideAction(
                 color: MyColour.offWhite,
-                icon: Icons.check,
+                icon: Icons.copy,
+                caption: "Title",
                 onTap: () {
-                  widget.toggleRead(index);
-                  setState(() {});
+                  Clipboard.setData(new ClipboardData(text: notification.title));
                 },
               ),
               IconSlideAction(
                 color: MyColour.offWhite,
-                icon: Icons.zoom_out_map,
+                icon: Icons.copy,
+                caption: "Message",
                 onTap: () async {
-                  await widget.toggleRead(index);
+                  Clipboard.setData(new ClipboardData(text: notification.message));
                 },
               ),
             ],
