@@ -1,16 +1,33 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:notifi/local-notifications.dart';
-import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/user.dart';
+import 'package:package_info/package_info.dart';
 import 'package:web_socket_channel/io.dart';
 
-// values defined by backend
+import 'local-notifications.dart';
+import 'notifications/notification.dart';
+
+const platform = const MethodChannel('max.me.uk/notifications');
 const refKey = "ref";
 const messageKey = "msg";
+
+
+Future<void> invokeMethod(method) async {
+  try {
+    await platform.invokeMethod(method);
+  } on PlatformException catch (e) {
+    print("Failed to invoke method ($method): '${e.message}'.");
+  }
+}
+
+Future<String> getVersionFromPubSpec() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  return packageInfo.buildNumber;
+}
 
 var ws;
 Future<IOWebSocketChannel> connectToWs(User user,
@@ -45,8 +62,7 @@ Future<IOWebSocketChannel> connectToWs(User user,
     try {
       notifications = json.decode(msg);
     } catch (e) {
-      print(e);
-      print("ignoring un-parsable incoming WS message from server: $msg");
+      print("ignoring un-parsable incoming message from server: $msg: $e");
       homeScreen.setError(true);
     }
 
@@ -83,18 +99,9 @@ Future<IOWebSocketChannel> connectToWs(User user,
   }, onDone: () async {
     print("ws closed");
     homeScreen.setError(true);
-    await new Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 3));
     return await connectToWs(user, localNotification, homeScreen);
   });
 
   return ws;
-}
-
-Future<String> getVersionFromPubSpec() async {
-  // TODO fix
-  // File f = new File("./pubspec.yaml");
-  // var content = await f.readAsString();
-  // Map yaml = loadYaml(content);
-  // return yaml['version'];
-  return "1.0.0";
 }

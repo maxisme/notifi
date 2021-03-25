@@ -10,15 +10,15 @@ import 'package:sqflite/sqflite.dart';
 import 'notification.dart';
 
 class NotificationProvider {
-  Future<Database> db;
   String table = 'notifications';
+  String dbPath = "notifications.db";
 
-  Future<Database> initDB(String path) async {
-    this.db = openDatabase(
+  Future<Database> initDB() async {
+    return openDatabase(
         // Set the path to the database. Note: Using the `join` function from the
         // `path` package is best practice to ensure the path is correctly
         // constructed for each platform.
-        join(await getDatabasesPath(), path), onCreate: (db, version) {
+        join(await getDatabasesPath(), dbPath), onCreate: (db, version) {
       return db.execute('''
         CREATE TABLE IF NOT EXISTS ${this.table} (
           _id integer primary key autoincrement, 
@@ -35,7 +35,7 @@ class NotificationProvider {
   }
 
   Future<int> store(NotificationUI notification) async {
-    final Database db = await this.db;
+    final Database db = await initDB();
     return await db.rawInsert('''
         INSERT INTO ${this.table} 
           (UUID, title, time, message, image, link)
@@ -52,30 +52,30 @@ class NotificationProvider {
   }
 
   Future<void> delete(int id) async {
-    final Database db = await this.db;
+    final Database db = await initDB();
     db.delete(this.table, where: "_id = ?", whereArgs: [id]);
   }
 
   Future<void> deleteAll() async {
-    final Database db = await this.db;
+    final Database db = await initDB();
     db.rawDelete("DELETE FROM ${this.table}");
   }
 
   Future<void> markRead(int id, bool isRead) async {
     int read = 0;
     if (isRead) read = 1;
-    final Database db = await this.db;
+    final Database db = await initDB();
     db.rawUpdate("UPDATE ${this.table} SET read=? WHERE _id=?", [read, id]);
   }
 
   markAllRead() async {
-    final Database db = await this.db;
+    final Database db = await initDB();
     db.rawUpdate("UPDATE ${this.table} SET read=?", [1]);
   }
 
   Future<List<NotificationUI>> getAll() async {
     List<NotificationUI> notifications = List.empty(growable: true);
-    final Database db = await this.db;
+    final Database db = await initDB();
 
     // language=SQLite
     final List<Map<String, dynamic>> rows = await db.rawQuery('''

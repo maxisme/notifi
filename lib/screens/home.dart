@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notification-provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifications-table.dart';
+import 'package:notifi/utils.dart';
 
 import '../pallete.dart';
 
@@ -219,6 +220,11 @@ class _HomeScreenState extends State<HomeScreen> {
     this.waitErr = err;
     Future.delayed(const Duration(seconds: 1), (){
       if(this.waitErr == err) {
+        if (err){
+          invokeMethod("error_icon");
+        }else{
+          setUnreadCnt();
+        }
         this._networkError.value = err;
       }
     });

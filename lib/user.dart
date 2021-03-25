@@ -17,7 +17,6 @@ final storage = new UserStore();
 const RequestNewUserCode = 551;
 
 class User with ChangeNotifier {
-  Future _doneFuture;
   String UUID;
   String credentialKey;
   ValueListenable<String> credentials = ValueNotifier<String>("");
@@ -25,35 +24,31 @@ class User with ChangeNotifier {
   String flutterToken;
   IOWebSocketChannel ws;
 
-  User() {
-    _doneFuture = _init();
-  }
-
-  Future get initializationDone => _doneFuture;
-
   bool isNull() {
     return this.UUID == null ||
         this.credentialKey == null ||
         this.credentials == null;
   }
 
-  Future<bool> _init() async {
-    // attempt to get key if exists
-    await storage.getUser(this);
+  Future<bool> create() async {
+    // attempt to get user if exists
+    var gotUser = await storage.getUser(this);
 
     // create new credentials if any are missing
-    if (this.isNull()) {
+    while (!gotUser) {
       var alreadyHadCredentials = (this.UUID != null ||
           this.credentialKey != null ||
           this.credentials != null);
 
-      // Create new credentials as the user does not have any. it is completely
-      // vital that this is successful so need to retry until it is.
-      bool gotUser = await this.RequestNewUser();
+      // Create new credentials as the user does not have any.
+      gotUser = await this.RequestNewUser();
 
-      if (alreadyHadCredentials) {
+      if (alreadyHadCredentials && gotUser) {
         // TODO return message to user to tell them that there credentials have been replaced
+        print("replaced your credentials...");
       }
+
+      await Future.delayed(Duration(seconds: 3));
     }
   }
 
@@ -71,6 +66,7 @@ class User with ChangeNotifier {
     } else {
       error = ValueNotifier<bool>(false);
     }
+    return gotUser;
   }
 
   Future<bool> _newUserReq(Map<String, dynamic> data) async {
@@ -117,9 +113,9 @@ class User with ChangeNotifier {
 class UserStore {
   final storage = new FlutterSecureStorage();
   static const key = "user";
-  static const linuxFile = "user-store.json";
+  static const linuxFilePath = "user-store.json";
 
-  Future<void> getUser(User user) async {
+  Future<bool> getUser(User user) async {
     var userJsonString;
     try {
       userJsonString = await storage.read(key: key);
@@ -129,18 +125,17 @@ class UserStore {
       userJsonString = await file.readAsString();
     }
 
-    if (userJsonString != null) {
-      try {
-        var userJson = jsonDecode(userJsonString);
-        user.UUID = userJson["UUID"];
-        user.credentialKey = userJson["credentialKey"];
-        user.credentials = ValueNotifier<String>(userJson["credentials"]);
-        user.flutterToken = userJson["flutterToken"];
-      } catch (error) {
-        print(error);
-      }
+    try {
+      var userJson = jsonDecode(userJsonString);
+      user.UUID = userJson["UUID"];
+      user.credentialKey = userJson["credentialKey"];
+      user.credentials = ValueNotifier<String>(userJson["credentials"]);
+      user.flutterToken = userJson["flutterToken"];
+    } catch (error) {
+      print(error);
+      return false;
     }
-    return user;
+    return true;
   }
 
   Future writeUser(User user) async {
@@ -152,15 +147,18 @@ class UserStore {
     try {
       await storage.write(key: key, value: jsonData);
     } on MissingPluginException catch (e) {
+      print("unable to store in keychain - storing in file $e");
       // write to file instead of keychain
       var file = await _getLinuxFile();
       file.writeAsString(jsonData);
+    } catch (e){
+      print("unable to store in keychain $e");
     }
   }
 
   Future<File> _getLinuxFile() async {
     String dir = (await getApplicationDocumentsDirectory()).path;
-    String savePath = '$dir/.notifi/' + linuxFile;
+    String savePath = '$dir/.notifi/' + linuxFilePath;
     File file = File(savePath);
     file.create(recursive: true);
     return file;

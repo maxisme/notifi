@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,7 +22,7 @@ class NotificationTable extends StatefulWidget {
 
   NotificationTableState notificationTableState = new NotificationTableState();
 
-  NotificationTable(this.user, {Key key}){
+  NotificationTable(this.user, {Key key}) {
     print('init1');
   }
 
@@ -36,15 +38,18 @@ class NotificationTable extends StatefulWidget {
     notificationTableState.removeAt(index);
   }
 
-  unreadCnt() {
+  int unreadCnt() {
     int cnt = 0;
+    var method = "grey_menu_icon";
     if (notificationTableState.notifications != null) {
       for (var i = 0; i < notificationTableState.notifications.length; i++) {
         if (!notificationTableState.notifications[i].isRead) {
           cnt++;
+          method = "red_menu_icon";
         }
       }
     }
+    invokeMethod(method);
     return cnt;
   }
 
@@ -66,7 +71,6 @@ class NotificationTableState extends State<NotificationTable>
 
   Widget _buildNotification(
       BuildContext context, int index, Animation<double> animation) {
-
     final NotificationUI notification = this.notifications[index];
     notification.index = index;
     notification.toggleExpand = widget.toggleExpand;
@@ -95,7 +99,8 @@ class NotificationTableState extends State<NotificationTable>
                 icon: Icons.copy,
                 caption: "Title",
                 onTap: () {
-                  Clipboard.setData(new ClipboardData(text: notification.title));
+                  Clipboard.setData(
+                      new ClipboardData(text: notification.title));
                 },
               ),
               IconSlideAction(
@@ -103,7 +108,8 @@ class NotificationTableState extends State<NotificationTable>
                 icon: Icons.copy,
                 caption: "Message",
                 onTap: () async {
-                  Clipboard.setData(new ClipboardData(text: notification.message));
+                  Clipboard.setData(
+                      new ClipboardData(text: notification.message));
                 },
               ),
             ],
@@ -168,7 +174,7 @@ class NotificationTableState extends State<NotificationTable>
         }
         listKey = null;
         if (f.hasData && f.data.length > 0) {
-          if(f.connectionState == ConnectionState.done) {
+          if (f.connectionState == ConnectionState.done) {
             this.notifications = f.data;
             print("reloaded $f");
             widget.setUnreadCnt();
@@ -216,19 +222,21 @@ class NotificationTableState extends State<NotificationTable>
                                       fontWeight: FontWeight.w500,
                                       fontFamily: 'Inconsolata'),
                                 ),
-                                TextSpan(
-                                  text: 'HTTP Requests',
-                                  style: TextStyle(
-                                      color: MyColour.red,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Inconsolata'),
-                                  recognizer: new TapGestureRecognizer()
-                                    ..onTap = () {
-                                      launch("https://notifi.it?c=" +
-                                          widget.user.credentials.value +
-                                          "#how-to");
-                                    },
-                                ),
+                                MouseRegionSpan(
+                                    mouseCursor: SystemMouseCursors.click,
+                                    inlineSpan: TextSpan(
+                                      text: 'HTTP Requests',
+                                      style: TextStyle(
+                                          color: MyColour.red,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Inconsolata'),
+                                      recognizer: new TapGestureRecognizer()
+                                        ..onTap = () {
+                                          launch("https://notifi.it?c=" +
+                                              widget.user.credentials.value +
+                                              "#how-to");
+                                        },
+                                    )),
                                 TextSpan(
                                   text: ' with your credentials...',
                                   style: TextStyle(
@@ -258,4 +266,18 @@ class NotificationTableState extends State<NotificationTable>
       },
     );
   }
+}
+
+class MouseRegionSpan extends WidgetSpan {
+  MouseRegionSpan({
+    @required MouseCursor mouseCursor,
+    @required InlineSpan inlineSpan,
+  }) : super(
+          child: MouseRegion(
+            cursor: mouseCursor,
+            child: Text.rich(
+              inlineSpan,
+            ),
+          ),
+        );
 }

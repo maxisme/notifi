@@ -1,10 +1,10 @@
 #!/bin/bash
-CREDENTIALS=oaN7bhLb2HybUBfmFdfpTBz5a
+CREDENTIALS=ssu0BkKyu0a2dT5o0GNYHfyqj
 
 LOREM="Lorem%20ipsum%20dolor%20sit%20amet,%20consectetur%20adipiscing%20elit.%20Curabitur%20egestas%20ac%20velit%20suscipit%20efficitur.%20Nam%20laoreet%20ornare%20velit%20ut%20vulputate.%20Aliquam%20quam%20erat,%20volutpat%20ac%20metus%20id,%20hendrerit%20consectetur%20nisl"
 
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}"
-curl "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=13&message=${LOREM}"
+curl -i "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=$(date +%s)&message=${LOREM}"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=hey&message=${LOREM}"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=hey&message=hey"
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=1"
