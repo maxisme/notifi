@@ -2,10 +2,12 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:launch_at_login/launch_at_login.dart';
+import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
 import 'package:package_info/package_info.dart';
@@ -146,25 +148,27 @@ class SettingsScreenState extends State<SettingsScreen> {
                       textAlign: TextAlign.center,
                       text: TextSpan(children: [
                         TextSpan(
-                          text: 'Made by ',
+                          text: 'Made by \n',
                           style: TextStyle(
                               color: MyColour.grey,
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
                               fontFamily: 'Inconsolata'),
                         ),
-                        TextSpan(
-                          text: '\nMaximilian Mitchell',
-                          style: TextStyle(
-                              color: MyColour.darkGrey,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: 'Inconsolata'),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () {
-                              launch("https://max.me.uk");
-                            },
-                        ),
+                        MouseRegionSpan(
+                            mouseCursor: SystemMouseCursors.click,
+                            inlineSpan: TextSpan(
+                              text: 'Maximilian Mitchell',
+                              style: TextStyle(
+                                  color: MyColour.darkGrey,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  fontFamily: 'Inconsolata'),
+                              recognizer: new TapGestureRecognizer()
+                                ..onTap = () {
+                                  launch("https://max.me.uk");
+                                },
+                            )),
                         // TextSpan(
                         //   text: '\n\nCopyright © ${now.year}',
                         //   style: TextStyle(
