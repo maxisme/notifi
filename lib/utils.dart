@@ -85,6 +85,7 @@ Future<IOWebSocketChannel> connectToWs(User user,
         // send local notification
         if (id != -1) {
           sendLocalNotification(localNotification, id, notification);
+          invokeMethod("animate");
           UUIDs += "," + notification.UUID;
         }
       }

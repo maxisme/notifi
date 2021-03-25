@@ -2,6 +2,7 @@ import Cocoa
 import FlutterMacOS
 import UserNotifications
 
+let menuImageSize = NSSize(width: 22, height: 22);
 extension NSImage.Name {
     static let grey = NSImage.Name("menu_icon")
     static let red = NSImage.Name("red_menu_icon")
@@ -20,7 +21,7 @@ class AppDelegate: FlutterAppDelegate {
 
         if let button = statusBarItem.button {
             let image = NSImage(named: .red);
-            image?.size = NSSize(width: 25, height: 25);
+            image?.size = menuImageSize;
             button.image = image
             button.action = #selector(togglePopover(_:))
         }
@@ -30,7 +31,7 @@ class AppDelegate: FlutterAppDelegate {
         let notificationChannel = FlutterMethodChannel(name: "max.me.uk/notifications",
                 binaryMessenger: flutterViewController.engine.binaryMessenger);
 
-        notificationChannel.setMethodCallHandler({
+        notificationChannel.setMethodCallHandler {
             (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let menu_image: NSImage?;
             switch call.method {
@@ -40,17 +41,22 @@ class AppDelegate: FlutterAppDelegate {
                 menu_image = NSImage(named: .grey)
             case "error_icon":
                 menu_image = NSImage(named: .error)
+            case "animate":
+                if let button = self.statusBarItem.button {
+                    Animater(button: button).run()
+                }
+                menu_image = nil
             default:
                 return
             }
             if (menu_image != nil) {
                 if let button = self.statusBarItem.button {
-                    menu_image?.size = NSSize(width: 25, height: 25);
+                    menu_image?.size = menuImageSize;
                     button.image = menu_image;
                     result(0); // success
                 }
             }
-        })
+        }
 
         RegisterGeneratedPlugins(registry: flutterViewController)
 
