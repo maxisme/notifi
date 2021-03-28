@@ -3,22 +3,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'notifications/notification.dart';
 
 Future<FlutterLocalNotificationsPlugin> initPushNotifications() async {
+  final FlutterLocalNotificationsPlugin localNotifications =
+      FlutterLocalNotificationsPlugin();
 
-  final localNotifications = FlutterLocalNotificationsPlugin();
-
-  final settings = InitializationSettings(
+  const InitializationSettings settings = InitializationSettings(
       android: AndroidInitializationSettings('app_icon'),
-      iOS: IOSInitializationSettings(
-        requestSoundPermission: true,
-        requestBadgePermission: true,
-        requestAlertPermission: true,
-        onDidReceiveLocalNotification: null,
-      ),
+      iOS: IOSInitializationSettings(),
       macOS: MacOSInitializationSettings(
         defaultPresentAlert: false,
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
       ));
 
   await localNotifications.initialize(settings);
@@ -34,11 +26,12 @@ Future<FlutterLocalNotificationsPlugin> initPushNotifications() async {
   return localNotifications;
 }
 
-sendLocalNotification(FlutterLocalNotificationsPlugin localNotification, int id,
-    NotificationUI notification) {
-  var iOS = IOSNotificationDetails();
-  var macOS = MacOSNotificationDetails();
-  var platformChannelSpecifics = NotificationDetails(iOS: iOS, macOS: macOS);
+void sendLocalNotification(FlutterLocalNotificationsPlugin localNotification,
+    int id, NotificationUI notification) {
+  const IOSNotificationDetails iOS = IOSNotificationDetails();
+  const MacOSNotificationDetails macOS = MacOSNotificationDetails();
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(iOS: iOS, macOS: macOS);
 
   localNotification.show(
       id, notification.title, notification.message, platformChannelSpecifics);

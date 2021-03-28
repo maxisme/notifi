@@ -3,13 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notifi/main.dart';
-import 'package:notifi/notifications/db-provider.dart';
+import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 void main() {
   testWidgets('Test No Notifications', (WidgetTester tester) async {
@@ -27,7 +28,8 @@ void main() {
     // open settings
     await tester.tap(find.byIcon(Icons.settings));
     await tester.pump();
-    await tester.pump(Duration(seconds: 1)); // not sure why I have to do twice
+    // not sure why I have to do twice
+    await tester.pump(const Duration(seconds: 1));
 
     // should show that there are new credentials
     expect(find.text('Create New Credentials'), findsOneWidget);
@@ -36,10 +38,17 @@ void main() {
         matchesGoldenFile('golden-asserts/settings.png'));
   });
 
-
   testWidgets('Test Notification UI', (WidgetTester tester) async {
-    await pumpWidget(tester,
-        NotificationUI(1, "title of notification", "some time", "UUID", "message of notification", "https://foo.com/jpg", "https://max.me.uk/"));
+    await pumpWidget(
+        tester,
+        NotificationUI(
+            1,
+            'title of notification',
+            'some time',
+            'UUID',
+            'message of notification',
+            'https://foo.com/jpg',
+            'https://max.me.uk/'));
 
     expect(find.text('No notifications!'), findsNothing);
     expect(find.text('some time'), findsOneWidget);
@@ -52,29 +61,33 @@ void main() {
   });
 }
 
-pumpWidget(WidgetTester tester, notification) async {
+Future<void> pumpWidget(
+    WidgetTester tester, NotificationUI notification) async {
   WidgetsFlutterBinding.ensureInitialized();
-  var db = DBProvider("test.db");
-  List<NotificationUI> notifications = List.empty(growable: true);
+  final DBProvider db = DBProvider('test.db');
+  final List<NotificationUI> notifications =
+      List<NotificationUI>.empty(growable: true);
   if (notification != null) {
     notifications.add(notification);
   }
   await tester.pumpWidget(MultiProvider(
-    providers: [
+    providers: <SingleChildWidget>[
       ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
       ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (context) => Notifications(notifications, db,
+        create: (BuildContext context) => Notifications(notifications, db,
             Provider.of<ReloadTable>(context, listen: false)),
-        update: (context, tableNotifier, user) =>
+        update: (BuildContext context, ReloadTable tableNotifier,
+                Notifications user) =>
             user..setTableNotifier(tableNotifier),
       ),
       ChangeNotifierProxyProvider<Notifications, User>(
-        create: (context) =>
+        create: (BuildContext context) =>
             User(Provider.of<Notifications>(context, listen: false), null),
-        update: (context, notifications, user) =>
-            user..setNotifications(notifications),
+        update:
+            (BuildContext context, Notifications notifications, User user) =>
+                user..setNotifications(notifications),
       ),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }

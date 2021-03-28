@@ -3,7 +3,7 @@
 # [notifi.it](https://notifi.it/)
 
 ## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
-
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 # install
 ```
 flutter channel master

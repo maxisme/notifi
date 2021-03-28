@@ -1,41 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:notifi/local-notifications.dart';
-import 'package:notifi/notifications/db-provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:notifi/local_notifications.dart';
+import 'package:notifi/notifications/db_provider.dart';
+import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var db = DBProvider("notifications.db");
-  var notifications = await db.getAll();
-  var pushNotifications = await initPushNotifications();
+  final DBProvider db = DBProvider('notifications.db');
+  final List<NotificationUI> notifications = await db.getAll();
+  final FlutterLocalNotificationsPlugin pushNotifications =
+      await initPushNotifications();
+
   runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
+    providers: <SingleChildWidget>[
+      ChangeNotifierProvider<ReloadTable>(
+          create: (BuildContext context) => ReloadTable()),
       ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (context) => Notifications(notifications, db,
+        create: (BuildContext context) => Notifications(notifications, db,
             Provider.of<ReloadTable>(context, listen: false)),
-        update: (context, tableNotifier, user) =>
+        update: (BuildContext context, ReloadTable tableNotifier,
+                Notifications user) =>
             user..setTableNotifier(tableNotifier),
       ),
       ChangeNotifierProxyProvider<Notifications, User>(
-        create: (context) =>
-            User(Provider.of<Notifications>(context, listen: false), pushNotifications),
-        update: (context, notifications, user) =>
-            user..setNotifications(notifications),
+        create: (BuildContext context) => User(
+            Provider.of<Notifications>(context, listen: false),
+            pushNotifications),
+        update:
+            (BuildContext context, Notifications notifications, User user) =>
+                user..setNotifications(notifications),
       ),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -57,19 +66,19 @@ class _MyAppState extends State<MyApp> {
             dialogTheme: DialogTheme(
                 elevation: 0,
                 shape: Border.all(width: 3),
-                contentTextStyle: TextStyle(
+                contentTextStyle: const TextStyle(
                   fontFamily: 'Inconsolata',
                   color: MyColour.black,
                   fontWeight: FontWeight.w500,
                 ),
-                titleTextStyle: TextStyle(
+                titleTextStyle: const TextStyle(
                     fontFamily: 'Inconsolata',
                     color: MyColour.black,
                     fontWeight: FontWeight.w900,
                     fontSize: 35))),
-        routes: {
-          '/': (context) => HomeScreen(),
-          '/settings': (context) => SettingsScreen(),
+        routes: <String, Widget Function(BuildContext)>{
+          '/': (BuildContext context) => HomeScreen(),
+          '/settings': (BuildContext context) => const SettingsScreen(),
         });
   }
 }

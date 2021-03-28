@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:notifi/local-notifications.dart';
+import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,22 +21,11 @@ import 'package:web_socket_channel/status.dart' as status;
 
 import 'notifications/notification.dart';
 
-final storage = new UserStore();
+final UserStore storage = UserStore();
 
-const RequestNewUserCode = 551;
+const int requestNewUserCode = 551;
 
 class User with ChangeNotifier {
-  String UUID;
-  String credentialKey;
-  String credentials = "";
-  bool _hasError = false;
-  String flutterToken;
-
-  Notifications _notifications;
-
-  IOWebSocketChannel _ws;
-  FlutterLocalNotificationsPlugin _pushNotifications;
-
   User(this._notifications, this._pushNotifications) {
     setNotifications(_notifications);
     if (!isTest()) {
@@ -43,52 +33,66 @@ class User with ChangeNotifier {
     }
   }
 
+  String uuid;
+  String credentialKey;
+  String credentials = '';
+  bool _hasError = false;
+  String flutterToken;
+
+  Notifications _notifications;
+
+  IOWebSocketChannel _ws;
+  final FlutterLocalNotificationsPlugin _pushNotifications;
+
+  // ignore: use_setters_to_change_properties
   void setNotifications(Notifications _notifications) {
     this._notifications = _notifications;
   }
 
   bool isNull() {
-    return UUID == null || credentialKey == null || credentials == null;
+    return uuid == null || credentialKey == null || credentials == null;
   }
 
-  Future<bool> _createUser() async {
-    await DotEnv.load(fileName: ".env");
+  Future<void> _createUser() async {
+    await dot_env.load();
 
     // attempt to get user if exists
-    var gotUser = await storage.getUser(this);
+    bool gotUser = await storage.getUser(this);
 
     // create new credentials if any are missing
     while (!gotUser) {
-      var alreadyHadCredentials =
-          (UUID != null || credentialKey != null || credentials != null);
+      final bool alreadyHadCredentials =
+          uuid != null || credentialKey != null || credentials != null;
 
       // Create new credentials as the user does not have any.
-      gotUser = await RequestNewUser();
+      gotUser = await requestNewUser();
 
       if (gotUser) {
         if (alreadyHadCredentials && gotUser) {
-          // TODO return message to user to tell them that there credentials have been replaced
-          print("replaced your credentials...");
+          // TODO return message to user to tell them
+          // that there credentials have been replaced
+          print('replaced your credentials...');
         }
       } else {
-        print("attempting to create user again...");
-        await Future.delayed(Duration(seconds: 5));
+        print('attempting to create user again...');
+        await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
     }
 
     await _initWSS();
   }
 
-  Future<bool> RequestNewUser() async {
-    var data = {"UUID": Uuid().v4()}; // generate UUID for user
+  Future<bool> requestNewUser() async {
+    // generate UUID for user
+    final Map<String, String> data = <String, String>{'UUID': Uuid().v4()};
     if (!isNull()) {
-      data["current_credential_key"] = credentialKey;
-      data["current_credentials"] = credentials;
+      data['current_credential_key'] = credentialKey;
+      data['current_credentials'] = credentials;
     }
-    var gotUser = await _newUserReq(data);
+    final bool gotUser = await _newUserReq(data);
     if (gotUser && _ws != null) {
-      print("reconnecting to ws...");
-      _ws.sink.close(status.normalClosure, "new code!");
+      print('reconnecting to ws...');
+      _ws.sink.close(status.normalClosure, 'new code!');
     }
     notifyListeners();
     return gotUser;
@@ -97,9 +101,9 @@ class User with ChangeNotifier {
   ////////
   // ws //
   ////////
-  _initWSS() async {
+  Future<void> _initWSS() async {
     if (_ws != null) {
-      print("closing...");
+      print('closing...');
       _ws.sink.close();
       _ws = null;
     }
@@ -108,38 +112,39 @@ class User with ChangeNotifier {
 
   Future<IOWebSocketChannel> _connectToWS() async {
     if (isNull()) {
-      print("user not ready...");
-      await Future.delayed(Duration(seconds: 2));
-      return await _connectToWS();
+      print('user not ready...');
+      await Future<dynamic>.delayed(const Duration(seconds: 2));
+      return _connectToWS();
     }
-    var headers = {
-      "Sec-Key": env["SERVER_KEY"],
-      "Credentials": credentials,
-      "Uuid": UUID,
-      "Key": credentialKey,
-      "Version": await getVersionFromPubSpec(),
+    final Map<String, String> headers = <String, String>{
+      'Sec-Key': env['SERVER_KEY'],
+      'Credentials': credentials,
+      'Uuid': uuid,
+      'Key': credentialKey,
+      'Version': await getVersionFromPubSpec(),
     };
 
-    print("connecting...");
-    setError(false);
-    var ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
-        headers: headers, pingInterval: Duration(seconds: 3));
+    print('connecting...');
+    setError(hasErr: false);
+    final IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
+        headers: headers, pingInterval: const Duration(seconds: 3));
 
-    var wsError = false;
-    ws.stream.listen((streamData) async {
+    bool wsError = false;
+    ws.stream.listen((dynamic streamData) async {
       wsError = false;
-      var msg = await _handleMessage(streamData);
-      if (msg != null) {
-        ws.sink.add(jsonEncode(msg));
+      final List<String> msgUUIDs = await _handleMessage(streamData);
+      if (msgUUIDs != null) {
+        ws.sink.add(jsonEncode(msgUUIDs));
       }
+      // ignore: always_specify_types
     }, onError: (e) async {
       wsError = true;
       print('WS error: $e');
     }, onDone: () async {
-      print("ws connection closed");
+      print('ws connection closed');
       if (wsError) {
-        setError(true);
-        await Future.delayed(Duration(seconds: 5));
+        setError(hasErr: true);
+        await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
       await _initWSS();
     });
@@ -147,15 +152,15 @@ class User with ChangeNotifier {
     return ws;
   }
 
-  Future<bool> _newUserReq(Map<String, dynamic> data) async {
-    print("creating new user...");
-    d.Dio dio = new d.Dio();
-    var response;
+  Future<bool> _newUserReq(Map<String, String> data) async {
+    print('creating new user...');
+    final d.Dio dio = d.Dio();
+    Response<dynamic> response;
     try {
       response = await dio.post(env['CODE_ENDPOINT'],
           data: data,
-          options: d.Options(headers: {
-            "Sec-Key": env["SERVER_KEY"],
+          options: d.Options(headers: <String, String>{
+            'Sec-Key': env['SERVER_KEY'],
           }, contentType: d.Headers.formUrlEncodedContentType));
     } catch (e) {
       print('Problem fetching user code: $e');
@@ -163,23 +168,24 @@ class User with ChangeNotifier {
     }
 
     if (response.statusCode != HttpStatus.ok) {
-      print("Problem fetching new code from server: $response");
+      print('Problem fetching new code from server: $response');
       return false;
     }
 
     // decode response
-    Map credentialsMap;
+    Map<String, dynamic> credentialsMap;
     try {
-      credentialsMap = jsonDecode(response.data);
+      credentialsMap =
+          json.decode(response.data as String) as Map<String, dynamic>;
     } catch (e) {
-      print('Problem decoding new code from server: $e - ' + response.data);
+      print('Problem decoding new code from server: $e - ${response.data}');
       return false;
     }
 
     // set variables
-    UUID = data["UUID"];
-    credentialKey = credentialsMap["credential_key"];
-    credentials = credentialsMap["credentials"];
+    uuid = data['UUID'];
+    credentialKey = credentialsMap['credential_key'] as String;
+    credentials = credentialsMap['credentials'] as String;
 
     // store user credentials
     await storage.writeUser(this);
@@ -187,63 +193,62 @@ class User with ChangeNotifier {
     return true;
   }
 
-  _handleMessage(msg) async {
+  Future<List<String>> _handleMessage(dynamic msg) async {
     // json decode incoming ws message
-    List<dynamic> notifications = [];
+    List<Map<String, dynamic>> notifications = <Map<String, dynamic>>[];
     try {
-      notifications = json.decode(msg);
+      notifications = json.decode(msg as String) as List<Map<String, dynamic>>;
     } catch (e) {
-      print("ignoring un-parsable incoming message from server: $msg: $e");
-      return;
+      print('ignoring un-parsable incoming message from server: $msg: $e');
+      return <String>[];
     }
 
     // parse notifications from websocket message
-    var msgUUIDs = [];
-    for (var i = 0; i < notifications.length; i++) {
+    final List<String> msgUUIDs = <String>[];
+    for (int i = 0; i < notifications.length; i++) {
       Map<String, dynamic> jsonMessage;
       try {
-        jsonMessage = new Map<String, dynamic>.from(notifications[i]);
+        jsonMessage = Map<String, dynamic>.from(notifications[i]);
       } catch (e) {
-        print("ignoring un-parsable ws message: $msg: $e");
-        return;
+        print('ignoring un-parsable ws message: $msg: $e');
+        return <String>[];
       }
 
       if (jsonMessage != null) {
-        var notification = NotificationUI.fromJson(jsonMessage);
+        final NotificationUI notification =
+            NotificationUI.fromJson(jsonMessage);
 
         // store notification
-        int id = await _notifications.add(notification);
+        final int id = await _notifications.add(notification);
 
         if (id != -1) {
           // send local notification
-          sendLocalNotification(await _pushNotifications, id, notification);
-          invokeMacMethod("animate");
+          sendLocalNotification(_pushNotifications, id, notification);
+          invokeMacMethod('animate');
         }
-        msgUUIDs.add(notification.UUID);
+        msgUUIDs.add(notification.uuid);
       }
     }
-    if (msgUUIDs.length > 0) {
-      return msgUUIDs;
-    }
+    return msgUUIDs;
   }
 
   ///////////
   // error //
   ///////////
-  hasError() {
+  bool hasError() {
     return _hasError;
   }
 
-  var err;
+  bool err;
 
-  setError(bool err) {
-    this.err = err;
-    Future.delayed(const Duration(seconds: 1), () {
-      if (this.err == err) {
+  void setError({bool hasErr}) {
+    err = hasErr;
+    Future<dynamic>.delayed(const Duration(seconds: 1), () {
+      if (err == hasErr) {
         if (err) {
-          invokeMacMethod("error_icon");
+          invokeMacMethod('error_icon');
         }
-        this._hasError = err;
+        _hasError = err;
         notifyListeners();
       }
     });
@@ -251,26 +256,27 @@ class User with ChangeNotifier {
 }
 
 class UserStore {
-  final storage = new FlutterSecureStorage();
-  static const key = "user";
-  static const linuxFilePath = "user-store.json";
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  static const String key = 'user';
+  static const String linuxFilePath = 'user-store.json';
 
   Future<bool> getUser(User user) async {
-    var userJsonString;
+    String userJsonString;
     try {
       userJsonString = await storage.read(key: key);
     } on MissingPluginException catch (_) {
       // read json from file
-      var file = await _getLinuxFile();
+      final File file = await _getLinuxFile();
       userJsonString = await file.readAsString();
     }
 
     try {
-      var userJson = jsonDecode(userJsonString);
-      user.UUID = userJson["UUID"];
-      user.credentialKey = userJson["credentialKey"];
-      user.credentials = userJson["credentials"];
-      user.flutterToken = userJson["flutterToken"];
+      final Map<String, String> userJson =
+          jsonDecode(userJsonString) as Map<String, String>;
+      user.uuid = userJson['UUID'];
+      user.credentialKey = userJson['credentialKey'];
+      user.credentials = userJson['credentials'];
+      user.flutterToken = userJson['flutterToken'];
     } catch (error) {
       print(error);
       return false;
@@ -278,28 +284,28 @@ class UserStore {
     return true;
   }
 
-  Future writeUser(User user) async {
-    String jsonData = jsonEncode({
-      'UUID': user.UUID,
+  Future<void> writeUser(User user) async {
+    final String jsonData = jsonEncode(<String, String>{
+      'UUID': user.uuid,
       'credentialKey': user.credentialKey,
       'credentials': user.credentials,
     });
     try {
       await storage.write(key: key, value: jsonData);
     } on MissingPluginException catch (e) {
-      print("unable to store in keychain - storing in file $e");
+      print('unable to store in keychain - storing in file $e');
       // write to file instead of keychain
-      var file = await _getLinuxFile();
+      final File file = await _getLinuxFile();
       file.writeAsString(jsonData);
     } catch (e) {
-      print("unable to store in keychain $e");
+      print('unable to store in keychain $e');
     }
   }
 
   Future<File> _getLinuxFile() async {
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    String savePath = '$dir/.notifi/' + linuxFilePath;
-    File file = File(savePath);
+    final String dir = (await getApplicationDocumentsDirectory()).path;
+    final String savePath = '${'$dir/.notifi/'}$linuxFilePath';
+    final File file = File(savePath);
     file.create(recursive: true);
     return file;
   }

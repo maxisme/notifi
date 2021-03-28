@@ -1,18 +1,20 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
+import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const platform = const MethodChannel('max.me.uk/notifications');
-const refKey = "ref";
-const messageKey = "msg";
+const MethodChannel platform = MethodChannel('max.me.uk/notifications');
+const String refKey = 'ref';
+const String messageKey = 'msg';
 
 bool isTest() {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
-Future<void> invokeMacMethod(method) async {
+Future<void> invokeMacMethod(String method) async {
   if (Platform.isMacOS && !isTest()) {
     try {
       await platform.invokeMethod(method);
@@ -23,15 +25,19 @@ Future<void> invokeMacMethod(method) async {
 }
 
 Future<String> getVersionFromPubSpec() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   return packageInfo.buildNumber;
 }
 
-openUrl(url) async {
+Future<void> openUrl(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
-    invokeMacMethod("close_window");
+    invokeMacMethod('close_window');
   } else {
-    print("can't open: " + url);
+    print("can't open: $url");
   }
+}
+
+void showToast(String msg, BuildContext context, {int duration, int gravity}) {
+  Toast.show(msg, context, duration: duration, gravity: gravity);
 }

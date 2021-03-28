@@ -20,7 +20,7 @@ jobs:
           RELEASE_BRANCHES: .*
 
   deploy:
-    name: "Test, Build & Deploy"
+    name: "Lint, Test, Build & Deploy"
     runs-on: macos-latest
     needs: version
     steps:
@@ -33,6 +33,8 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
+      - name: "Lint"
+        run: flutter analyze
       - name: "Test"
         run: |
           touch .env
