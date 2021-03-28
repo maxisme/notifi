@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
+import 'package:notifi/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,11 +119,7 @@ class NotificationUIState extends State<NotificationUI> {
       if (widget.link != "") {
         linkBtn = InkWell(
             onTap: () async {
-              if (await canLaunch(widget.link)) {
-                await launch(widget.link);
-              } else {
-                print("can't open: " + widget.link);
-              }
+              await openUrl(widget.link);
             },
             child: Container(
                 padding: const EdgeInsets.only(top: 5.0),

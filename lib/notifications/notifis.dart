@@ -33,14 +33,12 @@ class Notifications extends ChangeNotifier {
       }
     }
 
-    if (Platform.isMacOS) {
-      // update menu bar
-      if (cnt > 0) {
-        invokeMethod("red_menu_icon");
-      } else {
-        invokeMethod("grey_menu_icon");
-      }
+    if (cnt > 0) {
+      invokeMacMethod("red_menu_icon");
+    } else {
+      invokeMacMethod("grey_menu_icon");
     }
+
     return cnt;
   }
 

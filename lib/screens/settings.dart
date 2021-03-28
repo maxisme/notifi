@@ -10,6 +10,7 @@ import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications-table.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
@@ -83,8 +84,8 @@ class SettingsScreenState extends State<SettingsScreen> {
             Container(padding: EdgeInsets.only(top: 20.0)),
             if (!user.isNull())
               SettingOption('How do I receive notifications?',
-                  onTapCallback: () {
-                launch("https://notifi.it?c=" + user.credentials + "#how-to");
+                  onTapCallback: () async {
+                await openUrl("https://notifi.it?c=" + user.credentials + "#how-to");
               }),
             SettingOption('Copy Credentials ' + user.credentials,
                 onTapCallback: () {

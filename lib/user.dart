@@ -216,7 +216,7 @@ class User with ChangeNotifier {
         if (id != -1) {
           // send local notification
           sendLocalNotification(await _pushNotifications, id, notification);
-          if (Platform.isMacOS) invokeMethod("animate");
+          invokeMacMethod("animate");
         }
         msgUUIDs.add(notification.UUID);
       }
@@ -239,7 +239,7 @@ class User with ChangeNotifier {
     Future.delayed(const Duration(seconds: 1), () {
       if (this.err == err) {
         if (err) {
-          invokeMethod("error_icon");
+          invokeMacMethod("error_icon");
         }
         this._hasError = err;
         notifyListeners();
