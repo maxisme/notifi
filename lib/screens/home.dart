@@ -101,13 +101,18 @@ class HomeScreen extends StatelessWidget {
             const BottomNavigationBarItem(
               icon: Icon(Icons.done_all, color: MyColour.darkGrey),
               label: 'Mark All Read',
+              tooltip: '',
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
               label: 'Delete All',
+              tooltip: '',
             ),
           ],
-          currentIndex: 1,
+          selectedLabelStyle: const TextStyle(fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontSize: 12),
+          selectedItemColor: MyColour.grey,
+          unselectedItemColor: MyColour.grey,
         ));
   }
 

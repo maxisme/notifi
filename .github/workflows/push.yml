@@ -44,7 +44,7 @@ jobs:
         if: failure()
         with:
           name: golden-failures
-          path: failures/
+          path: test/failures
       - name: "Build"
         run: |
           flutter config --enable-macos-desktop
