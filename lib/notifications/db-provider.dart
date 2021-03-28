@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'notification.dart';
 
-class NotificationProvider {
+class DBProvider {
   String table = 'notifications';
   String dbPath = "notifications.db";
 
@@ -51,26 +51,26 @@ class NotificationProvider {
     ]);
   }
 
-  Future<void> delete(int id) async {
+  Future<int> delete(int id) async {
     final Database db = await initDB();
-    db.delete(this.table, where: "_id = ?", whereArgs: [id]);
+    return await db.delete(this.table, where: "_id = ?", whereArgs: [id]);
   }
 
-  Future<void> deleteAll() async {
+  Future<int> deleteAll() async {
     final Database db = await initDB();
-    db.rawDelete("DELETE FROM ${this.table}");
+    return await db.rawDelete("DELETE FROM ${this.table}");
   }
 
-  Future<void> markRead(int id, bool isRead) async {
+  Future<int> markRead(int id, bool isRead) async {
     int read = 0;
     if (isRead) read = 1;
     final Database db = await initDB();
-    db.rawUpdate("UPDATE ${this.table} SET read=? WHERE _id=?", [read, id]);
+    return await db.rawUpdate("UPDATE ${this.table} SET read=? WHERE _id=?", [read, id]);
   }
 
-  markAllRead() async {
+  Future<int> markAllRead() async {
     final Database db = await initDB();
-    db.rawUpdate("UPDATE ${this.table} SET read=?", [1]);
+    return await db.rawUpdate("UPDATE ${this.table} SET read=?", [1]);
   }
 
   Future<List<NotificationUI>> getAll() async {

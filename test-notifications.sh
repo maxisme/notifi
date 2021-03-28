@@ -1,5 +1,5 @@
 #!/bin/bash
-CREDENTIALS=ssu0BkKyu0a2dT5o0GNYHfyqj
+CREDENTIALS=$1
 
 LOREM="Lorem%20ipsum%20dolor%20sit%20amet,%20consectetur%20adipiscing%20elit.%20Curabitur%20egestas%20ac%20velit%20suscipit%20efficitur.%20Nam%20laoreet%20ornare%20velit%20ut%20vulputate.%20Aliquam%20quam%20erat,%20volutpat%20ac%20metus%20id,%20hendrerit%20consectetur%20nisl"
 

@@ -2,7 +2,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'notifications/notification.dart';
 
-Future<FlutterLocalNotificationsPlugin> initLocalNotifications() async {
+Future<FlutterLocalNotificationsPlugin> initPushNotifications() async {
   final localNotifications = FlutterLocalNotificationsPlugin();
 
   final settings = InitializationSettings(

@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
-import 'package:notifi/notifications/notifications-table.dart';
+import 'package:notifi/notifications/db-provider.dart';
+import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils.dart';
-
-import 'local-notifications.dart';
-import 'notifications/notification-provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await DotEnv.load(fileName: ".env");
-
-  var user = User();
-  var nt = NotificationTable(user);
-  var db = NotificationProvider();
-  var homeScreen = HomeScreen(nt, db);
-
-  runApp(MyApp(homeScreen, user));
-
-  // connect to websocket
-  await user.create();
-  user.ws = await connectToWs(user, await initLocalNotifications(), homeScreen);
+  var db = DBProvider();
+  var notifications = await db.getAll();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
+      ChangeNotifierProxyProvider<ReloadTable, Notifications>(
+        create: (context) => Notifications(notifications, db,
+            Provider.of<ReloadTable>(context, listen: false)),
+        update: (context, tableNotifier, user) =>
+            user..setTableNotifier(tableNotifier),
+      ),
+      ChangeNotifierProxyProvider<Notifications, User>(
+        create: (context) =>
+            User(Provider.of<Notifications>(context, listen: false)),
+        update: (context, notifications, user) =>
+            user..setNotifications(notifications),
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
-  final HomeScreen homeScreen;
-  final User user;
-
-  MyApp(this.homeScreen, this.user, {Key key}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -64,9 +66,8 @@ class _MyAppState extends State<MyApp> {
                     fontWeight: FontWeight.w900,
                     fontSize: 35))),
         routes: {
-          '/': (context) => widget.homeScreen,
-          '/settings': (context) => SettingsScreen(widget.user),
+          '/': (context) => HomeScreen(),
+          '/settings': (context) => SettingsScreen(),
         });
   }
 }
-
