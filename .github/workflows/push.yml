@@ -22,7 +22,7 @@ jobs:
   deploy:
     name: "Test, Build & Deploy"
     runs-on: macos-latest
-    needs: tag
+    needs: version
     steps:
       - uses: actions/checkout@v2
         with:
