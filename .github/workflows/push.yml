@@ -2,7 +2,8 @@ name: MacOS Deploy
 on: [push]
 
 jobs:
-  bump:
+  version:
+    name: "Get Version"
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}
@@ -10,16 +11,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - name: Bump version and push tag
-        id: bump_version
+      - id: bump_version
         uses: anothrNick/github-tag-action@1.26.0
         env:
+          DRY_RUN: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           RELEASE_BRANCHES: .*
-  build:
+
+  deploy:
+    name: "Test, Build & Deploy"
     runs-on: macos-latest
-    needs: bump
+    needs: version
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,22 +33,33 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - run: flutter config --enable-macos-desktop
-      - run: flutter pub get
-      - name: Run flutter build macos
+      - name: "Test"
         run: |
+          touch .env
+          flutter test
+      - name: "Upload failure Screenshots"
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: golden-failures
+          path: failures/
+      - name: "Build"
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
           echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
-          flutter build macos --release --build-name=${{ needs.bump.outputs.tag }}
-      - name: Create dmg
+          flutter build macos --release --build-name=${{ needs.version.outputs.tag }}
+      - name: "Create dmg"
         continue-on-error: true
         run: |
           npm install --global create-dmg
           create-dmg build/macos/Build/Products/Release/notifi.app
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: "Deploy dmg"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: ${{ needs.bump.outputs.tag }}
+          automatic_release_tag: ${{ needs.version.outputs.tag }}
           prerelease: true
-          title: "Release ${{ needs.bump.outputs.tag }}"
+          title: "Release ${{ needs.version.outputs.tag }}"
           files: |
             *.dmg

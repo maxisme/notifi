@@ -46,6 +46,9 @@ class AppDelegate: FlutterAppDelegate {
                     Animater(button: button).run()
                 }
                 menu_image = nil
+            case "close_window":
+                self.closePopover(sender: nil);
+                return
             default:
                 return
             }
