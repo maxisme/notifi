@@ -68,12 +68,14 @@ class User with ChangeNotifier {
       gotUser = await requestNewUser();
 
       if (gotUser) {
+        setError(hasErr: false);
         if (alreadyHadCredentials && gotUser) {
           // TODO return message to user to tell them
           // that there credentials have been replaced
           print('replaced your credentials...');
         }
       } else {
+        setError(hasErr: true);
         print('attempting to create user again...');
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
