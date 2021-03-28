@@ -122,19 +122,24 @@ class User with ChangeNotifier {
     print("connecting...");
     setError(false);
     var ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
-        headers: headers, pingInterval: Duration(seconds: 5));
+        headers: headers, pingInterval: Duration(seconds: 3));
 
+    var wsError = false;
     ws.stream.listen((streamData) async {
+      wsError = false;
       var msg = await _handleMessage(streamData);
       if (msg != null) {
         ws.sink.add(jsonEncode(msg));
       }
     }, onError: (e) async {
+      wsError = true;
       print('WS error: $e');
     }, onDone: () async {
       print("ws connection closed");
-      setError(true);
-      await Future.delayed(Duration(seconds: 5));
+      if(wsError) {
+        setError(true);
+        await Future.delayed(Duration(seconds: 5));
+      }
       await _initWSS();
     });
 
