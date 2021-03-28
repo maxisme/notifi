@@ -43,14 +43,16 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      _version.value = packageInfo.buildNumber;
-    });
+    if(!isTest()) {
+      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+        _version.value = packageInfo.buildNumber;
+      });
+    }
 
     http.get("https://notifi.it/version").then((value) {
-      if (value.statusCode == 200){
+      if (value.statusCode == 200) {
         _remoteVersion.value = value.body;
-      }else{
+      } else {
         print("problem getting /version");
       }
     });
@@ -68,7 +70,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   filterQuality: FilterQuality.high)),
           leading: IconButton(
               icon: Icon(
-                Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,
+                Icons.arrow_back,
                 color: MyColour.grey,
               ),
               onPressed: () {
@@ -79,143 +81,145 @@ class SettingsScreenState extends State<SettingsScreen> {
                 }
               }),
         ),
-        body: Consumer<User>(builder: (context, user, child) {
-          return Column(children: [
-            Container(padding: EdgeInsets.only(top: 20.0)),
-            if (!user.isNull())
-              SettingOption('How do I receive notifications?',
-                  onTapCallback: () async {
-                await openUrl("https://notifi.it?c=" + user.credentials + "#how-to");
-              }),
-            SettingOption('Copy Credentials ' + user.credentials,
-                onTapCallback: () {
-              Clipboard.setData(new ClipboardData(text: user.credentials));
-              showToast("Copied " + user.credentials, gravity: Toast.CENTER);
-            }),
-            SettingOption('Create New Credentials',
-                onTapCallback: _newCredentialsDialogue),
+        body: Column(children: [
+          Consumer<User>(builder: (context, user, child) {
+            return Column(children: [
+              Container(padding: EdgeInsets.only(top: 20.0)),
+              if (!user.isNull())
+                SettingOption('How do I receive notifications?',
+                    onTapCallback: () async {
+                  await openUrl(
+                      "https://notifi.it?c=" + user.credentials + "#how-to");
+                }),
+              SettingOption('Copy Credentials ' + user.credentials,
+                  onTapCallback: () {
+                Clipboard.setData(new ClipboardData(text: user.credentials));
+                showToast("Copied " + user.credentials, gravity: Toast.CENTER);
+              })
+            ]);
+          }),
+          SettingOption('Create New Credentials',
+              onTapCallback: _newCredentialsDialogue),
+          Container(
+            padding: EdgeInsets.only(top: 15),
+          ),
+          // if (!Platform.isAndroid && !Platform.isIOS)
+          //   SettingOption('Sticky Notifications',
+          //       switchValue: false, switchCallback: (isEnabled) {}),
+          if (!Platform.isAndroid && !Platform.isIOS)
+            FutureBuilder(
+                future: LaunchAtLogin.isEnabled,
+                builder: (context, f) {
+                  if (f.connectionState == ConnectionState.none &&
+                      f.hasData == null) {
+                    return CircularProgressIndicator();
+                  }
+
+                  return SettingOption(
+                    'Open notifi at Login',
+                    switchValue: f.data,
+                    switchCallback: (_) async {
+                      var enabled = await LaunchAtLogin.isEnabled;
+                      if (enabled) {
+                        await LaunchAtLogin.disable;
+                      } else {
+                        await LaunchAtLogin.enable;
+                      }
+                      setState(() {});
+                    },
+                  );
+                }),
+          if (!Platform.isAndroid && !Platform.isIOS)
             Container(
               padding: EdgeInsets.only(top: 15),
             ),
-            // if (!Platform.isAndroid && !Platform.isIOS)
-            //   SettingOption('Sticky Notifications',
-            //       switchValue: false, switchCallback: (isEnabled) {}),
-            if (!Platform.isAndroid && !Platform.isIOS)
-              FutureBuilder(
-                  future: LaunchAtLogin.isEnabled,
-                  builder: (context, f) {
-                    if (f.connectionState == ConnectionState.none &&
-                        f.hasData == null) {
-                      return CircularProgressIndicator();
-                    }
-
-                    return SettingOption(
-                      'Open notifi at Login',
-                      switchValue: f.data,
-                      switchCallback: (_) async {
-                        var enabled = await LaunchAtLogin.isEnabled;
-                        if (enabled) {
-                          await LaunchAtLogin.disable;
-                        } else {
-                          await LaunchAtLogin.enable;
-                        }
-                        setState(() {});
-                      },
-                    );
-                  }),
-            if (!Platform.isAndroid && !Platform.isIOS)
-              Container(
-                padding: EdgeInsets.only(top: 15),
-              ),
-            SettingOption('About...', onTapCallback: () {
-              launch("https://notifi.it");
-            }),
-            // SettingOption('Open Logs...', onTapCallback: () {
-            //   print('Terms of Service');
-            // }),
-            if (!Platform.isIOS)
-              Container(
-                padding: EdgeInsets.only(top: 15),
-              ),
-            if (!Platform.isIOS)
-              SettingOption(
-                'Quit notifi',
-                onTapCallback: () {
-                  SystemNavigator.pop();
-                },
-              ),
+          SettingOption('About...', onTapCallback: () {
+            launch("https://notifi.it");
+          }),
+          // SettingOption('Open Logs...', onTapCallback: () {
+          //   print('Terms of Service');
+          // }),
+          if (!Platform.isIOS)
             Container(
-              padding: EdgeInsets.only(top: 10),
-              child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: 'Made by \n',
-                      style: TextStyle(
-                          color: MyColour.grey,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          fontFamily: 'Inconsolata'),
-                    ),
-                    MouseRegionSpan(
-                        mouseCursor: SystemMouseCursors.click,
-                        inlineSpan: TextSpan(
-                          text: 'Maximilian Mitchell',
-                          style: TextStyle(
-                              color: MyColour.darkGrey,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: 'Inconsolata'),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () {
-                              launch("https://max.me.uk");
-                            },
-                        )),
-                    // TextSpan(
-                    //   text: '\n\nCopyright © ${now.year}',
-                    //   style: TextStyle(
-                    //       color: MyColour.grey,
-                    //       fontWeight: FontWeight.w500,
-                    //       fontSize: 10,
-                    //       fontFamily: 'Inconsolata'),
-                    // ),
-                  ])),
+              padding: EdgeInsets.only(top: 15),
             ),
-            ValueListenableBuilder(
-                valueListenable: _version,
-                builder: (context, version, child) {
-                  return Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("version: " + version,
-                            style:
-                                TextStyle(color: MyColour.grey, fontSize: 12)),
-                        ValueListenableBuilder(
-                            valueListenable: _remoteVersion,
-                            builder: (context, remoteVersion, child) {
-                              if (version != remoteVersion) {
-                                return FlatButton(
-                                    minWidth: 0,
-                                    onPressed: () {
-                                      launch("https://notifi.it/download");
-                                    },
-                                    child: Icon(
-                                      Icons.arrow_circle_down,
-                                      color: MyColour.red,
-                                      size: 18,
-                                    ));
-                              }
-                              return Container(width: 0, height: 0);
-                            })
-                      ],
-                    ),
-                  );
-                }),
-          ]);
-        }));
+          if (!Platform.isIOS)
+            SettingOption(
+              'Quit notifi',
+              onTapCallback: () {
+                SystemNavigator.pop();
+              },
+            ),
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'Made by \n',
+                    style: TextStyle(
+                        color: MyColour.grey,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                        fontFamily: 'Inconsolata'),
+                  ),
+                  MouseRegionSpan(
+                      mouseCursor: SystemMouseCursors.click,
+                      inlineSpan: TextSpan(
+                        text: 'Maximilian Mitchell',
+                        style: TextStyle(
+                            color: MyColour.darkGrey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            fontFamily: 'Inconsolata'),
+                        recognizer: new TapGestureRecognizer()
+                          ..onTap = () {
+                            launch("https://max.me.uk");
+                          },
+                      )),
+                  // TextSpan(
+                  //   text: '\n\nCopyright © ${now.year}',
+                  //   style: TextStyle(
+                  //       color: MyColour.grey,
+                  //       fontWeight: FontWeight.w500,
+                  //       fontSize: 10,
+                  //       fontFamily: 'Inconsolata'),
+                  // ),
+                ])),
+          ),
+          ValueListenableBuilder(
+              valueListenable: _version,
+              builder: (context, version, child) {
+                return Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("version: " + version,
+                          style: TextStyle(color: MyColour.grey, fontSize: 12)),
+                      ValueListenableBuilder(
+                          valueListenable: _remoteVersion,
+                          builder: (context, remoteVersion, child) {
+                            if (version != remoteVersion) {
+                              return FlatButton(
+                                  minWidth: 0,
+                                  onPressed: () {
+                                    launch("https://notifi.it/download");
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_circle_down,
+                                    color: MyColour.red,
+                                    size: 18,
+                                  ));
+                            }
+                            return Container(width: 0, height: 0);
+                          })
+                    ],
+                  ),
+                );
+              }),
+        ]));
   }
 
   Future<void> _newCredentialsDialogue() async {

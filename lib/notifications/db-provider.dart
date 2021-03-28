@@ -10,17 +10,23 @@ import 'package:sqflite/sqflite.dart';
 import 'notification.dart';
 
 class DBProvider {
-  String table = 'notifications';
-  String dbPath = "notifications.db";
+  String _table = 'notifications';
+  final String dbPath;
+  Database _db;
+
+  DBProvider(this.dbPath);
 
   Future<Database> initDB() async {
-    return openDatabase(
+    if (_db != null){
+      return _db;
+    }
+    _db = await openDatabase(
         // Set the path to the database. Note: Using the `join` function from the
         // `path` package is best practice to ensure the path is correctly
         // constructed for each platform.
         join(await getDatabasesPath(), dbPath), onCreate: (db, version) {
       return db.execute('''
-        CREATE TABLE IF NOT EXISTS ${this.table} (
+        CREATE TABLE IF NOT EXISTS ${this._table} (
           _id integer primary key autoincrement, 
           UUID text unique not null,
           title text not null,
@@ -32,12 +38,13 @@ class DBProvider {
         );
         ''');
     }, version: 1);
+    return _db;
   }
 
   Future<int> store(NotificationUI notification) async {
     final Database db = await initDB();
     return await db.rawInsert('''
-        INSERT INTO ${this.table} 
+        INSERT INTO ${this._table} 
           (UUID, title, time, message, image, link)
         VALUES 
           (?, ?, ?, ?, ?, ?)
@@ -53,24 +60,24 @@ class DBProvider {
 
   Future<int> delete(int id) async {
     final Database db = await initDB();
-    return await db.delete(this.table, where: "_id = ?", whereArgs: [id]);
+    return await db.delete(this._table, where: "_id = ?", whereArgs: [id]);
   }
 
   Future<int> deleteAll() async {
     final Database db = await initDB();
-    return await db.rawDelete("DELETE FROM ${this.table}");
+    return await db.rawDelete("DELETE FROM ${this._table}");
   }
 
   Future<int> markRead(int id, bool isRead) async {
     int read = 0;
     if (isRead) read = 1;
     final Database db = await initDB();
-    return await db.rawUpdate("UPDATE ${this.table} SET read=? WHERE _id=?", [read, id]);
+    return await db.rawUpdate("UPDATE ${this._table} SET read=? WHERE _id=?", [read, id]);
   }
 
   Future<int> markAllRead() async {
     final Database db = await initDB();
-    return await db.rawUpdate("UPDATE ${this.table} SET read=?", [1]);
+    return await db.rawUpdate("UPDATE ${this._table} SET read=?", [1]);
   }
 
   Future<List<NotificationUI>> getAll() async {
@@ -92,10 +99,10 @@ class DBProvider {
         rows[i]['title'],
         rows[i]['time'],
         rows[i]['UUID'],
-        message: rows[i]['message'],
-        image: rows[i]['image'],
-        link: rows[i]['link'],
-        isRead: isRead,
+        rows[i]['message'],
+        rows[i]['image'],
+        rows[i]['link'],
+        read: isRead,
       ));
     }
     return notifications;

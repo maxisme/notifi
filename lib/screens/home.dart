@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
           leadingWidth: leadingWidth,
           leading: IconButton(
               icon: Icon(
-                Navigator.canPop(context) ? Icons.arrow_back : Icons.settings,
+                Icons.settings,
                 color: MyColour.grey,
               ),
               onPressed: () {

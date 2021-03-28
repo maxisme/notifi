@@ -27,19 +27,20 @@ const RequestNewUserCode = 551;
 class User with ChangeNotifier {
   String UUID;
   String credentialKey;
-  String credentials;
+  String credentials = "";
   bool _hasError = false;
   String flutterToken;
 
   Notifications _notifications;
 
   IOWebSocketChannel _ws;
-  Future<FlutterLocalNotificationsPlugin> _pushNotifications;
+  FlutterLocalNotificationsPlugin _pushNotifications;
 
-  User(this._notifications) {
+  User(this._notifications, this._pushNotifications) {
     setNotifications(_notifications);
-    _pushNotifications = initPushNotifications();
-    _createUser();
+    if (!isTest()) {
+      _createUser();
+    }
   }
 
   void setNotifications(Notifications _notifications) {
@@ -136,7 +137,7 @@ class User with ChangeNotifier {
       print('WS error: $e');
     }, onDone: () async {
       print("ws connection closed");
-      if(wsError) {
+      if (wsError) {
         setError(true);
         await Future.delayed(Duration(seconds: 5));
       }
@@ -234,6 +235,7 @@ class User with ChangeNotifier {
   }
 
   var err;
+
   setError(bool err) {
     this.err = err;
     Future.delayed(const Duration(seconds: 1), () {

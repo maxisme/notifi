@@ -83,7 +83,7 @@ class Notifications extends ChangeNotifier {
   }
 
   void markRead(int index, bool isRead) async {
-    notifications[index].isRead = isRead;
+    notifications[index].read = isRead;
     await db.markRead(notifications[index].id, isRead);
     notifyListeners();
   }
@@ -96,7 +96,7 @@ class Notifications extends ChangeNotifier {
 
   void readAll() async {
     for (var i = 0; i < notifications.length; i++) {
-      notifications[i].isRead = true;
+      notifications[i].read = true;
     }
     await db.markAllRead();
     notifyListeners();

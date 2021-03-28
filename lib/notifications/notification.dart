@@ -13,18 +13,21 @@ class NotificationUI extends StatefulWidget {
   final String title;
   final String UUID;
   final String time;
+  final String message;
+  final String image;
+  final String link;
   int id;
   int index;
-  String message;
-  String image;
-  String link;
-  bool isRead;
-  bool isExpanded;
+  bool read = false;
+  bool isExpanded = false;
   void Function(int id) toggleExpand;
 
-  NotificationUI(this.id, this.title, this.time, this.UUID,
-      {Key key, this.message, this.image, this.link, this.isRead})
+  NotificationUI(this.id, this.title, this.time, this.UUID, this.message,
+      this.image, this.link,
+      {Key key, this.read})
       : super(key: key);
+
+  bool get isRead => read != null && read;
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
       _$NotificationFromJson(json);
@@ -41,10 +44,10 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
     json['title'] as String,
     json['time'] as String,
     json['UUID'] as String,
-    message: json['message'] as String,
-    image: json['image'] as String,
-    link: json['link'] as String,
-    isRead: false,
+    json['message'] as String,
+    json['image'] as String,
+    json['link'] as String,
+    read: false,
   );
 }
 
@@ -72,7 +75,6 @@ class NotificationUIState extends State<NotificationUI> {
       var messageMaxLines = 3;
       var titleMaxLines = 1;
       if (widget.isExpanded == null) widget.isExpanded = false;
-      if (widget.isRead == null) widget.isRead = false;
 
       // if expanded notification
       if (widget.isExpanded) {
@@ -116,7 +118,7 @@ class NotificationUIState extends State<NotificationUI> {
 
       // if link
       var linkBtn;
-      if (widget.link != "") {
+      if (widget.link != null) {
         linkBtn = InkWell(
             onTap: () async {
               await openUrl(widget.link);
@@ -136,7 +138,9 @@ class NotificationUIState extends State<NotificationUI> {
         image = SizedBox(
             width: 60,
             child: GestureDetector(
-                onTap: _launchImageLink,
+                onTap: () async{
+                  await openUrl(widget.image);
+                },
                 child: Container(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CachedNetworkImage(
@@ -252,14 +256,6 @@ class NotificationUIState extends State<NotificationUI> {
                         ))
                       ]))));
     });
-  }
-
-  _launchImageLink() async {
-    if (await canLaunch(widget.image)) {
-      await launch(widget.image);
-    } else {
-      throw 'Could not launch ' + widget.image;
-    }
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notifi/local-notifications.dart';
 import 'package:notifi/notifications/db-provider.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
@@ -10,8 +11,9 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var db = DBProvider();
+  var db = DBProvider("notifications.db");
   var notifications = await db.getAll();
+  var pushNotifications = await initPushNotifications();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
@@ -23,7 +25,7 @@ void main() async {
       ),
       ChangeNotifierProxyProvider<Notifications, User>(
         create: (context) =>
-            User(Provider.of<Notifications>(context, listen: false)),
+            User(Provider.of<Notifications>(context, listen: false), pushNotifications),
         update: (context, notifications, user) =>
             user..setNotifications(notifications),
       ),

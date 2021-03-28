@@ -34,3 +34,8 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 
 ## gh .env secrets
 cat .env | openssl base64
+
+## set screenshot asserts
+```
+flutter test --update-goldens
+```
