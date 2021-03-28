@@ -75,7 +75,7 @@ class User with ChangeNotifier {
       }
     }
 
-    _ws = await _initWSS();
+    await _initWSS();
   }
 
   Future<bool> RequestNewUser() async {
@@ -85,9 +85,11 @@ class User with ChangeNotifier {
       data["current_credentials"] = credentials;
     }
     var gotUser = await _newUserReq(data);
-    if (gotUser == true && _ws != null) {
+    if (gotUser && _ws != null) {
+      print("reconnecting to ws...");
       _ws.sink.close(status.normalClosure, "new code!");
     }
+    notifyListeners();
     return gotUser;
   }
 
@@ -129,12 +131,11 @@ class User with ChangeNotifier {
       }
     }, onError: (e) async {
       print('WS error: $e');
-      setError(true);
     }, onDone: () async {
       print("ws connection closed");
-      await Future.delayed(Duration(seconds: 5));
       setError(true);
-      return await _connectToWS();
+      await Future.delayed(Duration(seconds: 5));
+      await _initWSS();
     });
 
     return ws;
@@ -176,6 +177,7 @@ class User with ChangeNotifier {
 
     // store user credentials
     await storage.writeUser(this);
+    notifyListeners();
     return true;
   }
 
