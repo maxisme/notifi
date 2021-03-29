@@ -1,50 +1,45 @@
-# --------  Xcode --------
-Swift.gitignore
-build/
-DerivedData/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata/
-*.moved-aside
-*.xccheckout
-*.xcscmblueprint
-# ------- end --------
+flutter_build
+notifications.db
+.env
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
 
-#CUSTOM 
-db.pass
-db.user
-encryption.key
-notifi.it/vendor
-*.psd
-composer.lock
-notifi.it/vendor
-notifi.it/_compareTemp
-google*.html
-Mac App/Pods
-Podfile.lock
-server.path
-notifi.it/favicons
-Mac App/keys
-updates.php
-AppDelegate copy.m
-animation/Adobe After Effects Auto-Save
-animation
-icon-assets
-notifi.it/public_html/notifi
-Pods
-.!1211!LOOCryptString.m
-.!1196!LOOCryptString.m
-.!84369!LOOCryptString.m
-Debug.xcconfig
-Release.xcconfig
-buildOptions.plist
-DistributionSummary.plist
-ExportOptions.plist
-tmp.xcarchive
-notifi.app
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Web related
+lib/generated_plugin_registrant.dart
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+/test/failures/

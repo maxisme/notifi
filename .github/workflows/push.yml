@@ -1,0 +1,68 @@
+name: MacOS Deploy
+on: [push]
+
+jobs:
+  version:
+    name: "Get Version"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    outputs:
+      tag: ${{ steps.bump_version.outputs.new_tag }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - id: bump_version
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          DRY_RUN: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: "Lint, Test, [Build & Deploy]"
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - name: "create tmp .env"
+        run: touch .env
+      - name: "Lint"
+        run: flutter analyze
+      - name: "Test"
+        run: flutter test
+      - name: "Upload failure Screenshots"
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: golden-failures
+          path: test/failures
+      - name: "Build"
+        if: github.ref == 'refs/heads/master'
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
+          echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          flutter build macos --release --build-name=${{ needs.version.outputs.tag }}
+      - name: "Create dmg"
+        if: github.ref == 'refs/heads/master'
+        continue-on-error: true
+        run: |
+          npm install --global create-dmg
+          create-dmg build/macos/Build/Products/Release/notifi.app
+      - name: "Deploy dmg"
+        if: github.ref == 'refs/heads/master'
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: ${{ needs.version.outputs.tag }}
+          prerelease: true
+          title: "Release ${{ needs.version.outputs.tag }}"
+          files: |
+            *.dmg

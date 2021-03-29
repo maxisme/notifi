@@ -2,17 +2,46 @@
 
 # [notifi.it](https://notifi.it/)
 
-## Mac App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
+## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+# install
+```
+flutter channel master
+flutter upgrade
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -runFirstLaunch
+flutter doctor
+```
+## mac
+```
+flutter build macos
+flutter run -d macos
+```
 
-## TODO
+## [install flutter](https://flutter.dev/docs/get-started/install)
 
-- [x] More efficient way to sort notification views in window.
-- [x] When clicking on notification popup does not always open notifi Mac app.
-- [x] Links not clickable
-- [x] Fix icon to show error even when has notifications.
-- [x] For some reason after deleting notifications in the window if you follow the mouse around you can see the cursor for text and links and also if you right click it throws an error because of it thinking there is an object there. I believe this may have something todo with wantsLayer
-- [x] time not updating automatically.
-- [x] fix horizontal scrolling in window
-- [x] Getting weird `Uncommitted CATransaction` errors.
-- [x] Fix bug where date text appears at top of notification:
-    - usually happens when the title text has been shrunk
+## creating sqlite.so
+```
+gcc -c -Wall -Werror -fpic sqlite3.c
+gcc -shared -o sqlite3.so sqlite3.o
+```
+
+### Jetbrains flutter plugin:
+https://plugins.jetbrains.com/plugin/9212-flutter/versions
+
+## db path 
+~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
+
+## gh .env secrets
+cat .env | openssl base64
+
+## set screenshot asserts
+```
+flutter test --update-goldens
+```
+
+## pre-commit hook
+```bash
+cp pre-commit.sh .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
