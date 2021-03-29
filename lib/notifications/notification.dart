@@ -159,7 +159,10 @@ class NotificationUIState extends State<NotificationUI> {
                 child: Container(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CachedNetworkImage(
-                        fadeInDuration: const Duration(seconds: 1), imageUrl: widget.image, width: 50, filterQuality: FilterQuality.high))));
+                        fadeInDuration: const Duration(seconds: 1),
+                        imageUrl: widget.image,
+                        width: 50,
+                        filterQuality: FilterQuality.high))));
       }
 
       titleStyle = TextStyle(

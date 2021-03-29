@@ -40,17 +40,8 @@ cat .env | openssl base64
 flutter test --update-goldens
 ```
 
-## pre-commit (.git/hooks/pre-commit)
+## pre-commit hook
 ```bash
-echo "#!/bin/bash
-flutter format lib
-flutter format test
-if flutter analyze; then
-  flutter test
-  exit $?
-else
-  exit 1
-fi
-" > .git/hooks/pre-commit
+cp pre-commit.sh .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 ```
