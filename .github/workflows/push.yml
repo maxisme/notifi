@@ -5,8 +5,9 @@ jobs:
   version:
     name: "Get Version"
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     outputs:
-      tag: ${{ steps.bump_version.outputs.tag }}
+      tag: ${{ steps.bump_version.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -16,13 +17,10 @@ jobs:
         env:
           DRY_RUN: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
-          RELEASE_BRANCHES: .*
 
   deploy:
-    name: "Lint, Test, Build & Deploy"
+    name: "Lint, Test, [Build & Deploy]"
     runs-on: macos-latest
-    needs: version
     steps:
       - uses: actions/checkout@v2
         with:
@@ -46,17 +44,20 @@ jobs:
           name: golden-failures
           path: test/failures
       - name: "Build"
+        if: github.ref == 'refs/heads/master'
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
           echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           flutter build macos --release --build-name=${{ needs.version.outputs.tag }}
       - name: "Create dmg"
+        if: github.ref == 'refs/heads/master'
         continue-on-error: true
         run: |
           npm install --global create-dmg
           create-dmg build/macos/Build/Products/Release/notifi.app
       - name: "Deploy dmg"
+        if: github.ref == 'refs/heads/master'
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
