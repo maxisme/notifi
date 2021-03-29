@@ -1,7 +1,10 @@
 #!/bin/bash
 CREDENTIALS=$1
-
+# no expand message
+# Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur egestas ac velit suscipit efficitur. Nam laoreet ornare velit ut v Lorem ipsum dolor sit amet, consectetur fffff
+# add another 'f' to cause expand
 LOREM="Lorem%20ipsum%20dolor%20sit%20amet,%20consectetur%20adipiscing%20elit.%20Curabitur%20egestas%20ac%20velit%20suscipit%20efficitur.%20Nam%20laoreet%20ornare%20velit%20ut%20vulputate.%20Aliquam%20quam%20erat,%20volutpat%20ac%20metus%20id,%20hendrerit%20consectetur%20nisl"
+LOREM="Lorem%20ipsum%20dolor%20sit%20amet,%20consectetur%20adipiscing%20elit.%20Curabitur%20egestas%20ac%20velit"
 
 #curl "http://127.0.0.1:8080/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}"
 curl -i "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=$(date +%s)&message=${LOREM}"

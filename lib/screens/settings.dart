@@ -87,7 +87,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             return Column(children: <Widget>[
               Container(padding: const EdgeInsets.only(top: 20.0)),
               if (!user.isNull())
-                SettingOption('How do I receive notifications?',
+                SettingOption('How Do I Receive Notifications?',
                     onTapCallback: () async {
                   await openUrl(
                       'https://notifi.it?c=${user.credentials}#how-to');
@@ -118,7 +118,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                       f.hasData == null) {
                     return const CircularProgressIndicator();
                   }
-
                   return SettingOption(
                     'Open notifi at Login',
                     switchValue: f.data as bool,
@@ -133,21 +132,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                     },
                   );
                 }),
-          if (!Platform.isAndroid && !Platform.isIOS)
-            Container(
-              padding: const EdgeInsets.only(top: 15),
-            ),
           SettingOption('About...', onTapCallback: () {
             launch('https://notifi.it');
           }),
-          // SettingOption('Open Logs...', onTapCallback: () {
-          //   print('Terms of Service');
-          // }),
-          if (!Platform.isIOS)
-            Container(
-              padding: const EdgeInsets.only(top: 15),
-            ),
-          if (!Platform.isIOS)
+          if (Platform.isMacOS)
             SettingOption(
               'Quit notifi',
               onTapCallback: () {
@@ -182,14 +170,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                             launch('https://max.me.uk');
                           },
                       )),
-                  // TextSpan(
-                  //   text: '\n\nCopyright © ${now.year}',
-                  //   style: TextStyle(
-                  //       color: MyColour.grey,
-                  //       fontWeight: FontWeight.w500,
-                  //       fontSize: 10,
-                  //       fontFamily: 'Inconsolata'),
-                  // ),
                 ])),
           ),
           // ignore: always_specify_types

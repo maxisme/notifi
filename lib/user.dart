@@ -86,7 +86,7 @@ class User with ChangeNotifier {
 
   Future<bool> requestNewUser() async {
     // generate UUID for user
-    final Map<String, String> data = <String, String>{'UUID': Uuid().v4()};
+    final Map<String, dynamic> data = <String, String>{'UUID': Uuid().v4()};
     if (!isNull()) {
       data['current_credential_key'] = credentialKey;
       data['current_credentials'] = credentials;
@@ -113,12 +113,7 @@ class User with ChangeNotifier {
   }
 
   Future<IOWebSocketChannel> _connectToWS() async {
-    if (isNull()) {
-      print('user not ready...');
-      await Future<dynamic>.delayed(const Duration(seconds: 2));
-      return _connectToWS();
-    }
-    final Map<String, String> headers = <String, String>{
+    final Map<String, dynamic> headers = <String, dynamic>{
       'Sec-Key': env['SERVER_KEY'],
       'Credentials': credentials,
       'Uuid': uuid,
@@ -154,14 +149,14 @@ class User with ChangeNotifier {
     return ws;
   }
 
-  Future<bool> _newUserReq(Map<String, String> data) async {
+  Future<bool> _newUserReq(Map<String, dynamic> data) async {
     print('creating new user...');
     final d.Dio dio = d.Dio();
     Response<dynamic> response;
     try {
       response = await dio.post(env['CODE_ENDPOINT'],
           data: data,
-          options: d.Options(headers: <String, String>{
+          options: d.Options(headers: <String, dynamic>{
             'Sec-Key': env['SERVER_KEY'],
           }, contentType: d.Headers.formUrlEncodedContentType));
     } catch (e) {
@@ -197,9 +192,9 @@ class User with ChangeNotifier {
 
   Future<List<String>> _handleMessage(dynamic msg) async {
     // json decode incoming ws message
-    List<Map<String, dynamic>> notifications = <Map<String, dynamic>>[];
+    List<dynamic> notifications = <dynamic>[];
     try {
-      notifications = json.decode(msg as String) as List<Map<String, dynamic>>;
+      notifications = json.decode(msg as String) as List<dynamic>;
     } catch (e) {
       print('ignoring un-parsable incoming message from server: $msg: $e');
       return <String>[];
@@ -244,6 +239,8 @@ class User with ChangeNotifier {
   bool err;
 
   void setError({bool hasErr}) {
+    // wait for 1 second to make sure still error to prevent
+    // stuttering.
     err = hasErr;
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (err == hasErr) {
@@ -273,8 +270,8 @@ class UserStore {
     }
 
     try {
-      final Map<String, String> userJson =
-          jsonDecode(userJsonString) as Map<String, String>;
+      final Map<String, dynamic> userJson =
+          jsonDecode(userJsonString) as Map<String, dynamic>;
       user.uuid = userJson['UUID'];
       user.credentialKey = userJson['credentialKey'];
       user.credentials = userJson['credentials'];

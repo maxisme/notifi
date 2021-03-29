@@ -96,13 +96,13 @@ class DBProvider {
       }
 
       notifications.add(NotificationUI(
-        rows[i]['_id'] as int,
-        rows[i]['title'] as String,
-        rows[i]['time'] as String,
-        rows[i]['UUID'] as String,
-        rows[i]['message'] as String,
-        rows[i]['image'] as String,
-        rows[i]['link'] as String,
+        id: rows[i]['_id'] as int,
+        uuid: rows[i]['UUID'] as String,
+        time: rows[i]['time'] as String,
+        title: rows[i]['title'] as String,
+        message: rows[i]['message'] as String,
+        image: rows[i]['image'] as String,
+        link: rows[i]['link'] as String,
         read: isRead,
       ));
     }

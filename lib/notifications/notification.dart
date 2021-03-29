@@ -10,24 +10,36 @@ import 'package:provider/provider.dart';
 @JsonSerializable()
 // ignore: must_be_immutable
 class NotificationUI extends StatefulWidget {
-  NotificationUI(this.id, this.title, this.time, this.uuid, this.message,
-      this.image, this.link,
-      {Key key, this.read})
-      : super(key: key);
+  NotificationUI({
+    @required this.uuid,
+    @required this.time,
+    @required this.title,
+    this.message,
+    this.image,
+    this.link,
+    this.id,
+    this.read,
+    Key key,
+  }) : super(key: key) {
+    message = message ?? '';
+    image = image ?? '';
+    link = link ?? '';
+    read = read ?? false;
+  }
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
       _$NotificationFromJson(json);
 
-  final String title;
   final String uuid;
   final String time;
-  final String message;
-  final String image;
-  final String link;
+  final String title;
+  String message;
+  String image;
+  String link;
   int id;
-  int index;
-  bool read = false;
+  bool read;
   bool isExpanded = false;
+  int index;
   void Function(int id) toggleExpand;
 
   bool get isRead => read != null && read;
@@ -40,33 +52,32 @@ class NotificationUI extends StatefulWidget {
 
 NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
   return NotificationUI(
-    json['id'] as int,
-    json['title'] as String,
-    json['time'] as String,
-    json['UUID'] as String,
-    json['message'] as String,
-    json['image'] as String,
-    json['link'] as String,
-    read: false,
-  );
+      id: json['id'] as int,
+      uuid: json['UUID'] as String,
+      time: json['time'] as String,
+      title: json['title'] as String,
+      message: json['message'] as String,
+      image: json['image'] as String,
+      link: json['link'] as String);
 }
 
-Map<String, dynamic> _$NotificationToJson(NotificationUI instance) =>
+Map<String, dynamic> _$NotificationToJson(NotificationUI notification) =>
     <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'time': instance.time,
-      'message': instance.message,
-      'image': instance.image,
-      'link': instance.link
+      'id': notification.id,
+      'title': notification.title,
+      'time': notification.time,
+      'message': notification.message,
+      'image': notification.image,
+      'link': notification.link,
+      'read': notification.isRead,
     };
 
 class NotificationUIState extends State<NotificationUI> {
   final GlobalKey _columnKey = GlobalKey();
   final GlobalKey _titleKey = GlobalKey();
-  static const int _canExpandHeight = 116;
-
-  bool _canExpand = false;
+  final GlobalKey _messageKey = GlobalKey();
+  TextStyle messageStyle;
+  TextStyle titleStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +86,6 @@ class NotificationUIState extends State<NotificationUI> {
       const double iconSize = 15.0;
       int messageMaxLines = 3;
       int titleMaxLines = 1;
-      widget.isExpanded ??= false;
 
       // if expanded notification
       if (widget.isExpanded) {
@@ -95,7 +105,15 @@ class NotificationUIState extends State<NotificationUI> {
       // if message
       Widget messageRow;
       if (widget.message != '') {
-        messageRow = Row(children: <Widget>[
+        messageStyle = const TextStyle(
+            inherit: false,
+            textBaseline: TextBaseline.alphabetic,
+            fontFamily: 'Inconsolata',
+            color: MyColour.black,
+            fontSize: 10,
+            letterSpacing: 0.2,
+            height: 1.4);
+        messageRow = Row(key: _messageKey, children: <Widget>[
           Flexible(
               child: SelectableText(widget.message, onTap: () {
             setState(() {
@@ -105,21 +123,17 @@ class NotificationUIState extends State<NotificationUI> {
             });
           },
                   scrollPhysics: const NeverScrollableScrollPhysics(),
-                  style: const TextStyle(
-                      color: MyColour.black,
-                      fontSize: 10,
-                      letterSpacing: 0.2,
-                      height: 1.4),
+                  style: messageStyle,
                   minLines: 1,
                   maxLines: messageMaxLines)),
         ]);
       } else {
-        messageRow = Container();
+        messageRow = const SizedBox();
       }
 
       // if link
       Widget linkBtn;
-      if (widget.link != null) {
+      if (widget.link != '') {
         linkBtn = InkWell(
             onTap: () async {
               await openUrl(widget.link);
@@ -151,8 +165,13 @@ class NotificationUIState extends State<NotificationUI> {
                         filterQuality: FilterQuality.high))));
       }
 
-      final TextStyle titleStyle = TextStyle(
-          color: titleColour, fontSize: 14, fontWeight: FontWeight.w600);
+      titleStyle = TextStyle(
+          inherit: false,
+          textBaseline: TextBaseline.alphabetic,
+          fontFamily: 'Inconsolata',
+          color: titleColour,
+          fontSize: 14,
+          fontWeight: FontWeight.w600);
 
       return Container(
           color: Colors.transparent,
@@ -192,9 +211,8 @@ class NotificationUIState extends State<NotificationUI> {
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
-                                  if (linkBtn != null)
-                                    linkBtn
-                                  else if (_canExpand)
+                                  if (linkBtn != null) linkBtn,
+                                  if (_canExpand)
                                     InkWell(
                                         onTap: () {
                                           setState(() {
@@ -265,23 +283,35 @@ class NotificationUIState extends State<NotificationUI> {
         .addPostFrameCallback((_) => _canExpandHandler(context));
   }
 
+  bool _canExpand = false;
+
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
     // for title
-    if (_titleKey.currentContext.size.width >=
-        _columnKey.currentContext.size.width) {
+    if (hasTextOverflow(widget.title, titleStyle,
+        maxWidth: _columnKey.currentContext.size.width)) {
       canExpand = true;
-    }
-
-    // for message
-    if (context.size.height >= _canExpandHeight) {
+    } else if (widget.message != '' &&
+        hasTextOverflow(widget.message, messageStyle,
+            maxWidth: _messageKey.currentContext.size.width, maxLines: 3)) {
       canExpand = true;
     }
 
     if (canExpand) {
-      setState(() {
-        _canExpand = true;
-      });
+      _canExpand = true;
+      setState(() {});
     }
+  }
+
+  bool hasTextOverflow(String text, TextStyle style,
+      {double maxWidth = double.infinity, int maxLines = 1}) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+      textWidthBasis: TextWidthBasis.longestLine,
+    )..layout(minWidth: 0, maxWidth: maxWidth - 1);
+    // not really sure why I have to -1
+    return textPainter.didExceedMaxLines;
   }
 }

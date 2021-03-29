@@ -1,6 +1,7 @@
 // This is a basic Flutter widget test.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notifi/main.dart';
 import 'package:notifi/notifications/db_provider.dart';
@@ -13,51 +14,180 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 void main() {
-  testWidgets('Test No Notifications', (WidgetTester tester) async {
-    await pumpWidget(tester, null);
-    // first page should show no notifications
-    expect(find.text('No notifications!'), findsOneWidget);
+  group('Test Screens', () {
+    testWidgets('No Notifications', (WidgetTester tester) async {
+      await pumpWidget(tester, null);
+      // first page should show no notifications
+      expect(find.text('No notifications!'), findsOneWidget);
 
-    await expectLater(find.byType(HomeScreen),
-        matchesGoldenFile('golden-asserts/no-notifications.png'));
+      await expectLater(find.byType(HomeScreen),
+          matchesGoldenFile('golden-asserts/screen/no-notifications.png'));
+    });
+
+    testWidgets('Single Notification', (WidgetTester tester) async {
+      await pumpWidget(
+          tester,
+          NotificationUI(
+            title: 'title of notification',
+            uuid: '',
+            time: '',
+          ));
+      // first page should show no notifications
+      expect(find.text('title of notification'), findsOneWidget);
+
+      await expectLater(find.byType(HomeScreen),
+          matchesGoldenFile('golden-asserts/screen/notification.png'));
+    });
+
+    testWidgets('Test Settings Navigation', (WidgetTester tester) async {
+      await pumpWidget(tester, null);
+
+      // open settings
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pump();
+      // not sure why I have to do twice
+      await tester.pump(const Duration(seconds: 1));
+
+      // should show that there are new credentials
+      expect(find.text('Create New Credentials'), findsOneWidget);
+
+      await expectLater(find.byType(SettingsScreen),
+          matchesGoldenFile('golden-asserts/screen/settings.png'));
+    });
   });
 
-  testWidgets('Test Settings Navigation', (WidgetTester tester) async {
-    await pumpWidget(tester, null);
+  group('Test Notification', () {
+    const String title = 'title of notification';
+    const String message = 'message of notification';
+    const String link = 'https://max.me.uk/';
+    const String image = 'https://max.me.uk/someimage.jpg';
+    const String longMsg = 'message of notification message of notification '
+        'message of notification message of notification notification messag';
+    const String longTtl = 'title of notification title of -';
 
-    // open settings
-    await tester.tap(find.byIcon(Icons.settings));
-    await tester.pump();
-    // not sure why I have to do twice
-    await tester.pump(const Duration(seconds: 1));
+    final Map<String, NotificationUI> inputsToExpected =
+        <String, NotificationUI>{
+      'title': NotificationUI(
+        title: longTtl.substring(0, longTtl.length - 1),
+        uuid: '',
+        time: '',
+      ),
+      'message': NotificationUI(
+        title: title,
+        message: longMsg.substring(0, longMsg.length - 1),
+        uuid: '',
+        time: '',
+      ),
+      'link': NotificationUI(
+        title: title,
+        message: message,
+        link: link,
+        uuid: '',
+        time: '',
+      ),
+      'image': NotificationUI(
+        title: title,
+        message: message,
+        link: link,
+        image: image,
+        uuid: '',
+        time: '',
+      ),
+      'overflow-title': NotificationUI(
+        title: longTtl,
+        uuid: '',
+        time: '',
+      ),
+      'overflow-message': NotificationUI(
+        title: 'title of notification',
+        message: longMsg,
+        uuid: '',
+        time: '',
+      ),
+    };
+    inputsToExpected.forEach((String name, NotificationUI notification) {
+      testWidgets(name, (WidgetTester tester) async {
+        // original 2400.0, 1800.0
+        tester.binding.window.physicalSizeTestValue = const Size(1500, 600);
+        addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
 
-    // should show that there are new credentials
-    expect(find.text('Create New Credentials'), findsOneWidget);
+        await pumpWidget(tester, notification);
+        await tester.pump();
 
-    await expectLater(find.byType(SettingsScreen),
-        matchesGoldenFile('golden-asserts/settings.png'));
-  });
+        if (name.contains('overflow')) {
+          expect(find.byIcon(Icons.expand), findsOneWidget);
+        } else {
+          expect(find.byIcon(Icons.expand), findsNothing);
+        }
 
-  testWidgets('Test Notification UI', (WidgetTester tester) async {
-    await pumpWidget(
-        tester,
-        NotificationUI(
-            1,
-            'title of notification',
-            'some time',
-            'UUID',
-            'message of notification',
-            'https://foo.com/jpg',
-            'https://max.me.uk/'));
+        await expectLater(find.byType(NotificationUI),
+            matchesGoldenFile('golden-asserts/notification/$name.png'));
+      });
+    });
 
-    expect(find.text('No notifications!'), findsNothing);
-    expect(find.text('some time'), findsOneWidget);
-    expect(find.text('title of notification'), findsOneWidget);
-    expect(find.text('message of notification'), findsOneWidget);
-    expect(find.byIcon(Icons.link), findsOneWidget);
+    testWidgets('Test Mark As Read', (WidgetTester tester) async {
+      final NotificationUI n = NotificationUI(
+        title: title,
+        message: '',
+        uuid: '',
+        time: '',
+      );
+      await pumpWidget(tester, n);
+      await tester.pump();
 
-    await expectLater(find.byType(NotificationUI),
-        matchesGoldenFile('golden-asserts/single-notification.png'));
+      expect(n.isRead, false);
+
+      // mock db call
+      const MethodChannel channel = MethodChannel('com.tekartik.sqflite');
+      channel.setMockMethodCallHandler((MethodCall methodCall) async {
+        if (methodCall.method == 'getDatabasesPath') {
+          return '';
+        }
+      });
+
+      // mark read
+      await tester.tap(find.byIcon(Icons.check));
+      await tester.pump();
+
+      expect(n.isRead, true);
+
+      await expectLater(find.byType(NotificationUI),
+          matchesGoldenFile('golden-asserts/notification/read.png'));
+    });
+
+    testWidgets('Test Expand', (WidgetTester tester) async {
+      tester.binding.window.physicalSizeTestValue = const Size(1500, 600);
+      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+
+      final NotificationUI n = NotificationUI(
+        title: longTtl,
+        message: '',
+        uuid: '',
+        time: '',
+      );
+      await pumpWidget(tester, n);
+      await tester.pump();
+      await tester.pump();
+
+      expect(n.isExpanded, false);
+
+      // mock db call (as expanding marks as read)
+      const MethodChannel channel = MethodChannel('com.tekartik.sqflite');
+      channel.setMockMethodCallHandler((MethodCall methodCall) async {
+        if (methodCall.method == 'getDatabasesPath') {
+          return '';
+        }
+      });
+
+      // mark read
+      await tester.tap(find.byIcon(Icons.expand));
+      await tester.pump();
+
+      expect(n.isExpanded, true);
+
+      await expectLater(find.byType(NotificationUI),
+          matchesGoldenFile('golden-asserts/notification/expand.png'));
+    });
   });
 }
 
