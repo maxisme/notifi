@@ -2,7 +2,8 @@ import Cocoa
 import FlutterMacOS
 import UserNotifications
 
-let menuImageSize = NSSize(width: 22, height: 22);
+let menuImageSize = NSSize(width: 22, height: 22)
+
 extension NSImage.Name {
     static let grey = NSImage.Name("menu_icon")
     static let red = NSImage.Name("red_menu_icon")
@@ -20,20 +21,21 @@ class AppDelegate: FlutterAppDelegate {
         statusBarItem = statusBar.statusItem(withLength: NSStatusItem.squareLength)
 
         if let button = statusBarItem.button {
-            let image = NSImage(named: .red);
-            image?.size = menuImageSize;
+            let image = NSImage(named: .red)
+            image?.size = menuImageSize
             button.image = image
             button.action = #selector(togglePopover(_:))
         }
 
-        let flutterViewController = FlutterViewController.init();
+        let flutterViewController = FlutterViewController.init()
 
         let notificationChannel = FlutterMethodChannel(name: "max.me.uk/notifications",
-                binaryMessenger: flutterViewController.engine.binaryMessenger);
+                binaryMessenger: flutterViewController.engine.binaryMessenger)
 
+        var menuBarAnimater: Animater!
         notificationChannel.setMethodCallHandler {
             (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
-            let menu_image: NSImage?;
+            let menu_image: NSImage?
             switch call.method {
             case "red_menu_icon":
                 menu_image = NSImage(named: .red)
@@ -43,20 +45,25 @@ class AppDelegate: FlutterAppDelegate {
                 menu_image = NSImage(named: .error)
             case "animate":
                 if let button = self.statusBarItem.button {
-                    Animater(button: button).run()
+                    if menuBarAnimater != nil {
+                        menuBarAnimater.invalidate()
+                    }
+                    menuBarAnimater = Animater(button: button)
+                    menuBarAnimater.run()
                 }
                 menu_image = nil
             case "close_window":
-                self.closePopover(sender: nil);
+                self.closePopover(sender: nil)
                 return
             default:
+                result(1)
                 return
             }
             if (menu_image != nil) {
                 if let button = self.statusBarItem.button {
-                    menu_image?.size = menuImageSize;
-                    button.image = menu_image;
-                    result(0); // success
+                    menu_image?.size = menuImageSize
+                    button.image = menu_image
+                    result(0) // success
                 }
             }
         }
@@ -83,12 +90,9 @@ class AppDelegate: FlutterAppDelegate {
         } else {
             if #available(OSX 10.14, *) {
                 let center = UNUserNotificationCenter.current()
-                center.removeAllDeliveredNotifications();
+                center.removeAllDeliveredNotifications()
             }
-
-            // open popup
             showPopover(sender: sender)
-
             NSApp.activate(ignoringOtherApps: true)
         }
     }
