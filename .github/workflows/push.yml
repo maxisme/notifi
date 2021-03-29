@@ -15,7 +15,6 @@ jobs:
       - id: bump_version
         uses: anothrNick/github-tag-action@1.26.0
         env:
-          DRY_RUN: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
