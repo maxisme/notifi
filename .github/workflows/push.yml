@@ -20,7 +20,7 @@ jobs:
           RELEASE_BRANCHES: .*
 
   deploy:
-    name: "Test, Build & Deploy"
+    name: "Lint, Test, Build & Deploy"
     runs-on: macos-latest
     needs: version
     steps:
@@ -33,16 +33,18 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
+      - name: "create tmp .env"
+        run: touch .env
+      - name: "Lint"
+        run: flutter analyze
       - name: "Test"
-        run: |
-          touch .env
-          flutter test
+        run: flutter test
       - name: "Upload failure Screenshots"
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: golden-failures
-          path: failures/
+          path: test/failures
       - name: "Build"
         run: |
           flutter config --enable-macos-desktop

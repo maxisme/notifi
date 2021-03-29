@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:notifi/notifications/notifications-table.dart';
+import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
 import 'package:provider/provider.dart';
-
-import '../pallete.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -14,17 +13,17 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: MyColour.offWhite,
         appBar: AppBar(
-          shape: Border(bottom: BorderSide(color: MyColour.offGrey)),
+          shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
           title: Container(
             padding: const EdgeInsets.only(right: leadingWidth),
             child: Column(
-              children: [
+              children: <Widget>[
                 Stack(
-                  children: [
+                  children: <Widget>[
                     Container(
-                      alignment: Alignment(0, 0),
+                      alignment: const Alignment(0, 0),
                       child: SizedBox(
                           height: 50,
                           child: Image.asset('images/bell.png',
@@ -32,23 +31,24 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Container(
                         padding: const EdgeInsets.only(top: 5.0),
-                        child: Consumer<Notifications>(
-                            builder: (context, notifi, child) {
-                          int unreadCnt = notifi.unreadCnt;
+                        child: Consumer<Notifications>(builder:
+                            (BuildContext context, Notifications notifi,
+                                Widget child) {
+                          final int unreadCnt = notifi.unreadCnt;
                           if (unreadCnt != 0) {
-                            var numUnread = unreadCnt.toString();
+                            String numUnread = unreadCnt.toString();
                             if (unreadCnt > 99) {
-                              numUnread = "99+";
+                              numUnread = '99+';
                             }
                             // TODO animate
                             return Container(
-                              alignment: Alignment(0.1, 0),
+                              alignment: const Alignment(0.1, 0),
                               child: CircleAvatar(
                                   backgroundColor: MyColour.red,
                                   radius: 10,
                                   child: Text(
                                     numUnread,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: MyColour.white,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w900,
@@ -60,9 +60,10 @@ class HomeScreen extends StatelessWidget {
                         })),
                   ],
                 ),
-                Consumer<User>(builder: (context, user, child) {
+                Consumer<User>(
+                    builder: (BuildContext context, User user, Widget child) {
                   if (user.hasError()) {
-                    return Text("Network Error!",
+                    return const Text('Network Error!',
                         style: TextStyle(color: MyColour.grey, fontSize: 10));
                   }
                   return Container();
@@ -72,7 +73,7 @@ class HomeScreen extends StatelessWidget {
           ),
           leadingWidth: leadingWidth,
           leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.settings,
                 color: MyColour.grey,
               ),
@@ -84,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                 }
               }),
         ),
-        body: NotificationTable(),
+        body: const NotificationTable(),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (int index) {
             if (index == 0) {
@@ -95,21 +96,23 @@ class HomeScreen extends StatelessWidget {
               _deleteAllNotificationsDialogue(context);
             }
           },
+          // ignore: prefer_const_literals_to_create_immutables
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.done_all, color: MyColour.darkGrey),
-              title: Text('Mark All Read',
-                  style: TextStyle(
-                      color: MyColour.grey,
-                      fontSize:
-                          14)), // no idea why this needs to be 14 to match the other button
+              label: 'Mark All Read',
+              tooltip: '',
             ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
-                title: Text('Delete All',
-                    style: TextStyle(color: MyColour.grey, fontSize: 12))),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
+              label: 'Delete All',
+              tooltip: '',
+            ),
           ],
-          currentIndex: 1,
+          selectedLabelStyle: const TextStyle(fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontSize: 12),
+          selectedItemColor: MyColour.grey,
+          unselectedItemColor: MyColour.grey,
         ));
   }
 
@@ -118,27 +121,28 @@ class HomeScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete All'),
-          content: Text('All notifications will be irretrievable'),
+          title: const Text('Delete All'),
+          content: const Text('All notifications will be irretrievable'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(color: MyColour.grey),
               ),
             ),
             TextButton(
-                child: Text(
+                onPressed: () {
+                  Provider.of<Notifications>(context, listen: false)
+                      .deleteAll();
+                  Navigator.pop(context);
+                },
+                child: const Text(
                   'Ok',
                   style: TextStyle(color: MyColour.black),
-                ),
-                onPressed: () {
-                  Provider.of<Notifications>(context, listen: false).deleteAll();
-                  Navigator.pop(context);
-                })
+                )),
           ],
         );
       },

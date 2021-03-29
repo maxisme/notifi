@@ -3,7 +3,7 @@
 # [notifi.it](https://notifi.it/)
 
 ## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
-
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 # install
 ```
 flutter channel master
@@ -38,4 +38,19 @@ cat .env | openssl base64
 ## set screenshot asserts
 ```
 flutter test --update-goldens
+```
+
+## pre-commit (.git/hooks/pre-commit)
+```bash
+echo "#!/bin/bash
+flutter format lib
+flutter format test
+if flutter analyze; then
+  flutter test
+  exit $?
+else
+  exit 1
+fi
+" > .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
 ```

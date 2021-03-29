@@ -6,75 +6,86 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/utils.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 @JsonSerializable()
+// ignore: must_be_immutable
 class NotificationUI extends StatefulWidget {
-  final String title;
-  final String UUID;
-  final String time;
-  final String message;
-  final String image;
-  final String link;
-  int id;
-  int index;
-  bool read = false;
-  bool isExpanded = false;
-  void Function(int id) toggleExpand;
-
-  NotificationUI(this.id, this.title, this.time, this.UUID, this.message,
-      this.image, this.link,
-      {Key key, this.read})
-      : super(key: key);
-
-  bool get isRead => read != null && read;
+  NotificationUI({
+    @required this.uuid,
+    @required this.time,
+    @required this.title,
+    this.message,
+    this.image,
+    this.link,
+    this.id,
+    this.read,
+    Key key,
+  }) : super(key: key) {
+    message = message ?? '';
+    image = image ?? '';
+    link = link ?? '';
+    read = read ?? false;
+  }
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
       _$NotificationFromJson(json);
 
+  final String uuid;
+  final String time;
+  final String title;
+  String message;
+  String image;
+  String link;
+  int id;
+  bool read;
+  bool isExpanded = false;
+  int index;
+  void Function(int id) toggleExpand;
+
+  bool get isRead => read != null && read;
+
   Map<String, dynamic> toJson() => _$NotificationToJson(this);
 
   @override
-  NotificationUIState createState() => new NotificationUIState();
+  NotificationUIState createState() => NotificationUIState();
 }
 
 NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
   return NotificationUI(
-    json['id'] as int,
-    json['title'] as String,
-    json['time'] as String,
-    json['UUID'] as String,
-    json['message'] as String,
-    json['image'] as String,
-    json['link'] as String,
-    read: false,
-  );
+      id: json['id'] as int,
+      uuid: json['UUID'] as String,
+      time: json['time'] as String,
+      title: json['title'] as String,
+      message: json['message'] as String,
+      image: json['image'] as String,
+      link: json['link'] as String);
 }
 
-Map<String, dynamic> _$NotificationToJson(NotificationUI instance) =>
+Map<String, dynamic> _$NotificationToJson(NotificationUI notification) =>
     <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'time': instance.time,
-      'message': instance.message,
-      'image': instance.image,
-      'link': instance.link
+      'id': notification.id,
+      'title': notification.title,
+      'time': notification.time,
+      'message': notification.message,
+      'image': notification.image,
+      'link': notification.link,
+      'read': notification.isRead,
     };
 
 class NotificationUIState extends State<NotificationUI> {
-  GlobalKey _columnKey = GlobalKey();
-  GlobalKey _titleKey = GlobalKey();
-  static const _CANEXPANDHEIGHT = 116;
-
-  bool _canExpand = false;
+  final GlobalKey _columnKey = GlobalKey();
+  final GlobalKey _titleKey = GlobalKey();
+  final GlobalKey _messageKey = GlobalKey();
+  TextStyle messageStyle;
+  TextStyle titleStyle;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ReloadTable>(builder: (context, reloadTable, child) {
-      const iconSize = 15.0;
-      var messageMaxLines = 3;
-      var titleMaxLines = 1;
-      if (widget.isExpanded == null) widget.isExpanded = false;
+    return Consumer<ReloadTable>(
+        builder: (BuildContext context, ReloadTable reloadTable, Widget child) {
+      const double iconSize = 15.0;
+      int messageMaxLines = 3;
+      int titleMaxLines = 1;
 
       // if expanded notification
       if (widget.isExpanded) {
@@ -84,17 +95,25 @@ class NotificationUIState extends State<NotificationUI> {
       }
 
       // if read notification
-      var backgroundColour = Colors.white;
-      var titleColour = MyColour.black;
+      Color backgroundColour = Colors.white;
+      Color titleColour = MyColour.black;
       if (widget.isRead) {
         backgroundColour = MyColour.offWhite;
         titleColour = MyColour.black;
       }
 
       // if message
-      var messageRow;
-      if (widget.message != "") {
-        messageRow = Row(children: <Widget>[
+      Widget messageRow;
+      if (widget.message != '') {
+        messageStyle = const TextStyle(
+            inherit: false,
+            textBaseline: TextBaseline.alphabetic,
+            fontFamily: 'Inconsolata',
+            color: MyColour.black,
+            fontSize: 10,
+            letterSpacing: 0.2,
+            height: 1.4);
+        messageRow = Row(key: _messageKey, children: <Widget>[
           Flexible(
               child: SelectableText(widget.message, onTap: () {
             setState(() {
@@ -103,29 +122,25 @@ class NotificationUIState extends State<NotificationUI> {
               }
             });
           },
-                  scrollPhysics: NeverScrollableScrollPhysics(),
-                  style: TextStyle(
-                      color: MyColour.black,
-                      fontSize: 10,
-                      letterSpacing: 0.2,
-                      height: 1.4),
+                  scrollPhysics: const NeverScrollableScrollPhysics(),
+                  style: messageStyle,
                   minLines: 1,
                   maxLines: messageMaxLines)),
         ]);
       } else {
-        messageRow = Container();
+        messageRow = const SizedBox();
       }
 
       // if link
-      var linkBtn;
-      if (widget.link != null) {
+      Widget linkBtn;
+      if (widget.link != '') {
         linkBtn = InkWell(
             onTap: () async {
               await openUrl(widget.link);
             },
             child: Container(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Icon(
+                child: const Icon(
                   Icons.link,
                   size: iconSize,
                   color: MyColour.grey,
@@ -133,36 +148,41 @@ class NotificationUIState extends State<NotificationUI> {
       }
 
       // if image
-      var image;
-      if (widget.image != "") {
+      Widget image;
+      if (widget.image != '') {
         image = SizedBox(
             width: 60,
             child: GestureDetector(
-                onTap: () async{
+                onTap: () async {
                   await openUrl(widget.image);
                 },
                 child: Container(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CachedNetworkImage(
-                        fadeInDuration: new Duration(seconds: 1),
+                        fadeInDuration: const Duration(seconds: 1),
                         imageUrl: widget.image,
                         width: 50,
                         filterQuality: FilterQuality.high))));
       }
 
-      var titleStyle = TextStyle(
-          color: titleColour, fontSize: 14, fontWeight: FontWeight.w600);
+      titleStyle = TextStyle(
+          inherit: false,
+          textBaseline: TextBaseline.alphabetic,
+          fontFamily: 'Inconsolata',
+          color: titleColour,
+          fontSize: 14,
+          fontWeight: FontWeight.w600);
 
       return Container(
           color: Colors.transparent,
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: MyColour.offGrey),
                   color: backgroundColour,
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0))),
               child: Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -172,7 +192,7 @@ class NotificationUIState extends State<NotificationUI> {
                             width: 15,
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                // ignore: always_specify_types
                                 children: [
                                   // mark as read
                                   InkWell(
@@ -186,34 +206,35 @@ class NotificationUIState extends State<NotificationUI> {
                                       child: Container(
                                           padding:
                                               const EdgeInsets.only(top: 2.0),
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.check,
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
-                                  linkBtn != null ? linkBtn : Container(),
-                                  _canExpand
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              widget.toggleExpand(widget.index);
-                                            });
-                                          },
-                                          child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  top: 7.0),
-                                              child: Icon(
-                                                widget.isExpanded
-                                                    ? Icons.compress
-                                                    : Icons.expand,
-                                                size: iconSize,
-                                                color: MyColour.grey,
-                                              )))
-                                      : Container()
+                                  if (linkBtn != null) linkBtn,
+                                  if (_canExpand)
+                                    InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            widget.toggleExpand(widget.index);
+                                          });
+                                        },
+                                        child: Container(
+                                            padding:
+                                                const EdgeInsets.only(top: 7.0),
+                                            child: Icon(
+                                              widget.isExpanded
+                                                  ? Icons.compress
+                                                  : Icons.expand,
+                                              size: iconSize,
+                                              color: MyColour.grey,
+                                            )))
+                                  else
+                                    Container()
                                 ]),
                           ),
                         ),
-                        image != null ? image : Container(),
+                        image ?? Container(),
                         Expanded(
                             child: SizedBox(
                           width: double.infinity,
@@ -233,7 +254,7 @@ class NotificationUIState extends State<NotificationUI> {
                                     });
                                   },
                                       scrollPhysics:
-                                          NeverScrollableScrollPhysics(),
+                                          const NeverScrollableScrollPhysics(),
                                       style: titleStyle,
                                       textAlign: TextAlign.left,
                                       minLines: 1,
@@ -241,14 +262,11 @@ class NotificationUIState extends State<NotificationUI> {
                                 ),
 
                                 // TIME
-                                Container(
-                                  child: Row(children: <Widget>[
-                                    SelectableText(widget.time,
-                                        style: TextStyle(
-                                            color: MyColour.grey,
-                                            fontSize: 12)),
-                                  ]),
-                                ),
+                                Row(children: <Widget>[
+                                  SelectableText(widget.time,
+                                      style: const TextStyle(
+                                          color: MyColour.grey, fontSize: 12)),
+                                ]),
 
                                 // MESSAGE
                                 messageRow
@@ -265,23 +283,35 @@ class NotificationUIState extends State<NotificationUI> {
         .addPostFrameCallback((_) => _canExpandHandler(context));
   }
 
-  _canExpandHandler(BuildContext context) {
-    var canExpand = false;
-    // for title
-    if (_titleKey.currentContext.size.width >=
-        _columnKey.currentContext.size.width) {
-      canExpand = true;
-    }
+  bool _canExpand = false;
 
-    // for message
-    if (context.size.height >= _CANEXPANDHEIGHT) {
+  void _canExpandHandler(BuildContext context) {
+    bool canExpand = false;
+    // for title
+    if (hasTextOverflow(widget.title, titleStyle,
+        maxWidth: _columnKey.currentContext.size.width)) {
+      canExpand = true;
+    } else if (widget.message != '' &&
+        hasTextOverflow(widget.message, messageStyle,
+            maxWidth: _messageKey.currentContext.size.width, maxLines: 3)) {
       canExpand = true;
     }
 
     if (canExpand) {
-      setState(() {
-        _canExpand = true;
-      });
+      _canExpand = true;
+      setState(() {});
     }
+  }
+
+  bool hasTextOverflow(String text, TextStyle style,
+      {double maxWidth = double.infinity, int maxLines = 1}) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+      textWidthBasis: TextWidthBasis.longestLine,
+    )..layout(minWidth: 0, maxWidth: maxWidth - 1);
+    // not really sure why I have to -1
+    return textPainter.didExceedMaxLines;
   }
 }
