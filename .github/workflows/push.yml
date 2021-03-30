@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     outputs:
-      tag: ${{ steps.bump_version.outputs.new_tag }}
+      tag: ${{ steps.bump_version.outputs.tag }}
     steps:
       - uses: actions/checkout@v2
         with:
