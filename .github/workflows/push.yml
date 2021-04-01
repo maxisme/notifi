@@ -13,11 +13,11 @@ jobs:
         with:
           fetch-depth: '0'
       - id: bump_version
-        if: ${{ !github.event.issue.pull_request && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') }}
+        if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
         uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_BRANCHES: .*
+          RELEASE_BRANCHES: master
           DRY_RUN: true
       - id: version
         name: Create Version
