@@ -1,9 +1,10 @@
-<p align="center"><img height="150px" src="https://github.com/maxisme/notifi/raw/master/notifi/images/bell.png"></p>
+<p align="center"><img height="150px" src="https://github.com/maxisme/notifi/raw/master/images/bell.png"></p>
 
 # [notifi.it](https://notifi.it/)
 
 ## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
-[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+[![style: lint](https://img.shields.io/badge/lint-flutter-4BC0F5)](https://pub.dev/packages/lint)
+[![MacOS](https://github.com/maxisme/notifi/actions/workflows/push.yml/badge.svg?branch=master)](https://github.com/maxisme/notifi/actions/workflows/push.yml)
 # install
 ```
 flutter channel master
