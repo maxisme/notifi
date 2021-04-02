@@ -42,6 +42,14 @@ void main() {
     testWidgets('Test Settings Navigation', (WidgetTester tester) async {
       await pumpWidget(tester, null);
 
+      const MethodChannel channel =
+          MethodChannel('plugins.flutter.io/path_provider');
+      channel.setMockMethodCallHandler((MethodCall methodCall) async {
+        if (methodCall.method == 'getApplicationDocumentsDirectory') {
+          return '';
+        }
+      });
+
       // open settings
       await tester.tap(find.byIcon(Icons.settings));
       await tester.pump();
@@ -54,6 +62,8 @@ void main() {
       await expectLater(find.byType(SettingsScreen),
           matchesGoldenFile('golden-asserts/screen/settings.png'));
     });
+
+    // TODO test log navigation
   });
 
   group('Test Notification', () {

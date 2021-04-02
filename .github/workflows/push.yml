@@ -7,27 +7,24 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
-      deploy: ${{ steps.version.outputs.SHOULD_DEPLOY }}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
       - id: bump_version
-        if: ${{ !github.event.issue.pull_request && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') }}
+        if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
         uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_BRANCHES: .*
+          RELEASE_BRANCHES: master
           DRY_RUN: true
       - id: version
         name: Create Version
         run: |
           if [ -n "${{ steps.bump_version.outputs.new_tag }}" ]
           then
-            echo ::set-output name=SHOULD_DEPLOY::true
             echo ::set-output name=VERSION::${{ steps.bump_version.outputs.new_tag }}
           else
-            echo ::set-output name=SHOULD_DEPLOY::false
             echo ::set-output name=VERSION::ci-$GITHUB_RUN_ID
           fi
 
@@ -84,12 +81,11 @@ jobs:
         with:
           name: notifi-dmg
           path: dmg/
-          retention-days: 1
           if-no-files-found: error
 
   deploy:
     name: "Deploy"
-    if: ${{ needs.version.outputs.deploy == true }}
+    if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
     runs-on: macos-latest
     needs: [ checks, build, version ]
     steps:

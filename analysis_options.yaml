@@ -3,20 +3,21 @@ analyzer:
 linter:
   rules:
     always_put_required_named_parameters_first: true
-    avoid_classes_with_only_static_members: true
-    sort_constructors_first: true
-    prefer_single_quotes: true
-    prefer_double_quotes: false
-    public_member_api_docs: false
     always_specify_types: true
-    lines_longer_than_80_chars: true
+    always_use_package_imports: true
+    avoid_classes_with_only_static_members: true
+    avoid_print: true
+    avoid_redundant_argument_values: true
     avoid_relative_lib_imports: true
     avoid_slow_async_io: true
     close_sinks: true
+    lines_longer_than_80_chars: true
     literal_only_boolean_expressions: true
-    prefer_void_to_null: true
     no_logic_in_create_state: true
-    avoid_redundant_argument_values: true
-    avoid_print: false
+    prefer_double_quotes: false
     prefer_foreach: true
     prefer_is_empty: true
+    prefer_single_quotes: true
+    prefer_void_to_null: true
+    public_member_api_docs: false
+    sort_constructors_first: true
