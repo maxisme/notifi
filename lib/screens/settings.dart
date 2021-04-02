@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/pallete.dart';
+import 'package:notifi/screens/logs.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils.dart';
 import 'package:package_info/package_info.dart';
@@ -53,7 +54,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       if (value.statusCode == 200) {
         _remoteVersion.value = value.body;
       } else {
-        print('problem getting /version');
+        L.e('Problem getting /version from notifi.it');
       }
     });
 
@@ -134,6 +135,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                 }),
           SettingOption('About...', onTapCallback: () {
             launch('https://notifi.it');
+          }),
+          SettingOption('Logs...', onTapCallback: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<StatelessWidget>(
+                  builder: (BuildContext context) => LogsScreen()),
+            );
           }),
           if (Platform.isMacOS)
             SettingOption(
@@ -237,7 +245,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                           .requestNewUser();
                   if (!gotUser) {
                     // TODO show error
-                    print('Unable to fetch new user!');
+                    L.i('Unable to fetch new user!');
                   }
                 },
                 child: const Text(

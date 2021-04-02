@@ -4,6 +4,7 @@ import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -93,7 +94,11 @@ class HomeScreen extends StatelessWidget {
               Provider.of<Notifications>(context, listen: false).readAll();
             } else if (index == 1) {
               // DELETE ALL EVENT
-              _deleteAllNotificationsDialogue(context);
+              showAlert(context, 'Delete All',
+                  'All notifications will be irretrievable', onOkPressed: () {
+                Provider.of<Notifications>(context, listen: false).deleteAll();
+                Navigator.pop(context);
+              });
             }
           },
           // ignore: prefer_const_literals_to_create_immutables
@@ -114,39 +119,6 @@ class HomeScreen extends StatelessWidget {
           selectedItemColor: MyColour.grey,
           unselectedItemColor: MyColour.grey,
         ));
-  }
-
-  Future<void> _deleteAllNotificationsDialogue(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete All'),
-          content: const Text('All notifications will be irretrievable'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: MyColour.grey),
-              ),
-            ),
-            TextButton(
-                onPressed: () {
-                  Provider.of<Notifications>(context, listen: false)
-                      .deleteAll();
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Ok',
-                  style: TextStyle(color: MyColour.black),
-                )),
-          ],
-        );
-      },
-    );
   }
 
 // var waitErr;

@@ -6,20 +6,17 @@ import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:notifi/local_notifications.dart';
+import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
-
-import 'notifications/notification.dart';
 
 final UserStore storage = UserStore();
 
@@ -72,11 +69,11 @@ class User with ChangeNotifier {
         if (alreadyHadCredentials && gotUser) {
           // TODO return message to user to tell them
           // that there credentials have been replaced
-          print('replaced your credentials...');
+          L.e('Replaced your credentials...');
         }
       } else {
         setError(hasErr: true);
-        print('attempting to create user again...');
+        L.w('Attempting to create user again...');
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
     }
@@ -93,7 +90,7 @@ class User with ChangeNotifier {
     }
     final bool gotUser = await _newUserReq(data);
     if (gotUser && _ws != null) {
-      print('reconnecting to ws...');
+      L.i('Reconnecting to ws...');
       _ws.sink.close(status.normalClosure, 'new code!');
     }
     notifyListeners();
@@ -105,7 +102,7 @@ class User with ChangeNotifier {
   ////////
   Future<void> _initWSS() async {
     if (_ws != null) {
-      print('closing...');
+      L.i('Closing already open WS...');
       _ws.sink.close();
       _ws = null;
     }
@@ -121,7 +118,7 @@ class User with ChangeNotifier {
       'Version': await getVersionFromPubSpec(),
     };
 
-    print('connecting...');
+    L.i('Connecting to WS...');
     setError(hasErr: false);
     final IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
         headers: headers, pingInterval: const Duration(seconds: 3));
@@ -136,9 +133,9 @@ class User with ChangeNotifier {
       // ignore: always_specify_types
     }, onError: (e) async {
       wsError = true;
-      print('WS error: $e');
+      L.w('Problem with WS: $e');
     }, onDone: () async {
-      print('ws connection closed');
+      L.i('WS connection closed.');
       if (wsError) {
         setError(hasErr: true);
         await Future<dynamic>.delayed(const Duration(seconds: 5));
@@ -150,7 +147,7 @@ class User with ChangeNotifier {
   }
 
   Future<bool> _newUserReq(Map<String, dynamic> data) async {
-    print('creating new user...');
+    L.i('Creating new credentials...');
     final d.Dio dio = d.Dio();
     Response<dynamic> response;
     try {
@@ -160,12 +157,12 @@ class User with ChangeNotifier {
             'Sec-Key': env['SERVER_KEY'],
           }, contentType: d.Headers.formUrlEncodedContentType));
     } catch (e) {
-      print('Problem fetching user code: $e');
+      L.e('Problem fetching user code: $e');
       return false;
     }
 
     if (response.statusCode != HttpStatus.ok) {
-      print('Problem fetching new code from server: $response');
+      L.e('Problem fetching new code from server: $response');
       return false;
     }
 
@@ -175,7 +172,7 @@ class User with ChangeNotifier {
       credentialsMap =
           json.decode(response.data as String) as Map<String, dynamic>;
     } catch (e) {
-      print('Problem decoding new code from server: $e - ${response.data}');
+      L.e('Problem decoding new code from server: $e - ${response.data}');
       return false;
     }
 
@@ -196,7 +193,7 @@ class User with ChangeNotifier {
     try {
       notifications = json.decode(msg as String) as List<dynamic>;
     } catch (e) {
-      print('ignoring un-parsable incoming message from server: $msg: $e');
+      L.e('Ignoring un-parsable incoming message from server: $msg: $e');
       return <String>[];
     }
 
@@ -207,7 +204,7 @@ class User with ChangeNotifier {
       try {
         jsonMessage = Map<String, dynamic>.from(notifications[i]);
       } catch (e) {
-        print('ignoring un-parsable ws message: $msg: $e');
+        L.e('Ignoring un-parsable WS message: $msg: $e');
         return <String>[];
       }
 
@@ -239,7 +236,7 @@ class User with ChangeNotifier {
   bool err;
 
   void setError({bool hasErr}) {
-    // wait for 1 second to make sure still error to prevent
+    // wait for 1 second to make sure hasErr hasn't changed to prevent
     // stuttering.
     err = hasErr;
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
@@ -263,10 +260,8 @@ class UserStore {
     String userJsonString;
     try {
       userJsonString = await storage.read(key: key);
-    } on MissingPluginException catch (_) {
-      // read json from file
-      final File file = await _getLinuxFile();
-      userJsonString = await file.readAsString();
+    } catch (e) {
+      L.f(e);
     }
 
     try {
@@ -277,7 +272,7 @@ class UserStore {
       user.credentials = userJson['credentials'];
       user.flutterToken = userJson['flutterToken'];
     } catch (error) {
-      print(error);
+      L.f(error);
       return false;
     }
     return true;
@@ -291,21 +286,8 @@ class UserStore {
     });
     try {
       await storage.write(key: key, value: jsonData);
-    } on MissingPluginException catch (e) {
-      print('unable to store in keychain - storing in file $e');
-      // write to file instead of keychain
-      final File file = await _getLinuxFile();
-      file.writeAsString(jsonData);
     } catch (e) {
-      print('unable to store in keychain $e');
+      L.f(e);
     }
-  }
-
-  Future<File> _getLinuxFile() async {
-    final String dir = (await getApplicationDocumentsDirectory()).path;
-    final String savePath = '${'$dir/.notifi/'}$linuxFilePath';
-    final File file = File(savePath);
-    file.create(recursive: true);
-    return file;
   }
 }

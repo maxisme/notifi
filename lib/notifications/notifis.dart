@@ -46,7 +46,7 @@ class Notifications extends ChangeNotifier {
     try {
       id = await db.store(notification);
     } catch (e) {
-      print('Problem storing notification in db: $e');
+      L.e('Problem storing notification in db: $e');
       return -1;
     }
 
