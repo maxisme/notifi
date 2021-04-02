@@ -3,46 +3,60 @@
 # [notifi.it](https://notifi.it/)
 
 ## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
+
 [![style: lint](https://img.shields.io/badge/lint-flutter-4BC0F5)](https://pub.dev/packages/lint)
 [![MacOS](https://github.com/maxisme/notifi/actions/workflows/push.yml/badge.svg?branch=master)](https://github.com/maxisme/notifi/actions/workflows/push.yml)
-# install
-```
+
+# Install Flutter
+
+https://flutter.dev/docs/get-started/install
+
+## MacOS build & run
+
+```bash
 flutter channel master
 flutter upgrade
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 sudo xcodebuild -runFirstLaunch
 flutter doctor
-```
-## mac
-```
 flutter build macos
 flutter run -d macos
 ```
 
-## [install flutter](https://flutter.dev/docs/get-started/install)
+## Tests
 
-## creating sqlite.so
+### Lint & Test
+
+```bash
+bash ./pre-commit.sh
 ```
-gcc -c -Wall -Werror -fpic sqlite3.c
-gcc -shared -o sqlite3.so sqlite3.o
-```
 
-### Jetbrains flutter plugin:
-https://plugins.jetbrains.com/plugin/9212-flutter/versions
+### Set screenshot asserts
 
-## db path 
-~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
-
-## gh .env secrets
-cat .env | openssl base64
-
-## set screenshot asserts
 ```
 flutter test --update-goldens
 ```
 
-## pre-commit hook
+## Extras
+
+### Add pre-commit hook
+
 ```bash
-cp pre-commit.sh .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
+ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
+chmod +x $(pwd)/.git/hooks/pre-commit
 ```
+
+### Jetbrains flutter plugin:
+
+https://plugins.jetbrains.com/plugin/9212-flutter/versions
+
+### Db path
+
+~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
+
+### GH .env secret to base64 string
+
+cat .env | openssl base64
+
+
+
