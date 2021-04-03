@@ -64,10 +64,6 @@ class L {
     FLog.error(text: msg);
   }
 
-  static void f(Exception msg) {
-    FLog.fatal(text: msg.toString(), exception: msg);
-  }
-
   static Future<ListView> logListView() async {
     final List<Log> logs = await FLog.getAllLogs();
 

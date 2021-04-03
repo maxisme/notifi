@@ -261,7 +261,7 @@ class UserStore {
     try {
       userJsonString = await storage.read(key: key);
     } catch (e) {
-      L.f(e);
+      L.e(e.toString());
     }
 
     try {
@@ -272,7 +272,7 @@ class UserStore {
       user.credentials = userJson['credentials'];
       user.flutterToken = userJson['flutterToken'];
     } catch (error) {
-      L.f(error);
+      L.e(error.toString());
       return false;
     }
     return true;
@@ -287,7 +287,7 @@ class UserStore {
     try {
       await storage.write(key: key, value: jsonData);
     } catch (e) {
-      L.f(e);
+      L.e(e.toString());
     }
   }
 }

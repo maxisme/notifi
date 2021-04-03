@@ -101,8 +101,22 @@ class SettingsScreenState extends State<SettingsScreen> {
               })
             ]);
           }),
-          SettingOption('Create New Credentials',
-              onTapCallback: _newCredentialsDialogue),
+          SettingOption('Create New Credentials', onTapCallback: () {
+            showAlert(
+                context,
+                'New Credentials',
+                'Are you sure? You will never be able to use your '
+                    'current credentials again!', onOkPressed: () async {
+              Navigator.pop(context);
+              final bool gotUser =
+                  await Provider.of<User>(context, listen: false)
+                      .requestNewUser();
+              if (!gotUser) {
+                // TODO show error
+                L.i('Unable to fetch new user!');
+              }
+            });
+          }),
           Container(
             padding: const EdgeInsets.only(top: 15),
           ),
@@ -134,7 +148,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   );
                 }),
           SettingOption('About...', onTapCallback: () {
-            launch('https://notifi.it');
+            openUrl('https://notifi.it');
           }),
           SettingOption('Logs...', onTapCallback: () {
             Navigator.push(
@@ -216,46 +230,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                 );
               }),
         ]));
-  }
-
-  Future<void> _newCredentialsDialogue() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('New Credentials'),
-          content:
-              const Text('Are you sure? You will never be able to use your '
-                  'current credentials again!'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'No',
-                style: TextStyle(color: MyColour.grey),
-              ),
-            ),
-            TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  final bool gotUser =
-                      await Provider.of<User>(context, listen: false)
-                          .requestNewUser();
-                  if (!gotUser) {
-                    // TODO show error
-                    L.i('Unable to fetch new user!');
-                  }
-                },
-                child: const Text(
-                  'Yes',
-                  style: TextStyle(color: MyColour.black),
-                )),
-          ],
-        );
-      },
-    );
   }
 }
 
