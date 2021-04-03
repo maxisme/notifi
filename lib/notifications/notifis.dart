@@ -65,10 +65,22 @@ class Notifications extends ChangeNotifier {
     final int id = notifications[index].id;
     await db.delete(id);
     notifications.removeAt(index);
-    tableKey.currentState.removeItem(
-        index, (BuildContext context, Animation<double> animation) => null);
     if (notifications.isEmpty) {
       tableNotifier.reloadTable();
+    } else {
+      // animate out notification
+      tableKey.currentState.removeItem(index,
+          (BuildContext context, Animation<double> animation) {
+        final Animation<Offset> _offsetAnimation = Tween<Offset>(
+          begin: const Offset(0, 0.0),
+          end: const Offset(-0.8, 0),
+        ).animate(ReverseAnimation(animation));
+
+        return SlideTransition(
+          position: _offsetAnimation,
+          child: get(index),
+        );
+      }, duration: const Duration(milliseconds: 300));
     }
     notifyListeners();
   }
@@ -100,7 +112,6 @@ class Notifications extends ChangeNotifier {
     }
     await db.markAllRead();
     notifyListeners();
-    tableNotifier.reloadTable();
   }
 }
 

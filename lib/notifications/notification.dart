@@ -81,8 +81,8 @@ class NotificationUIState extends State<NotificationUI> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ReloadTable>(
-        builder: (BuildContext context, ReloadTable reloadTable, Widget child) {
+    return Consumer<Notifications>(builder:
+        (BuildContext context, Notifications reloadTable, Widget child) {
       const double iconSize = 15.0;
       int messageMaxLines = 3;
       int titleMaxLines = 1;

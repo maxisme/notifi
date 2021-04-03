@@ -29,55 +29,56 @@ class NotificationTableState extends State<NotificationTable>
     notification.index = index;
     notification.toggleExpand = toggleExpand;
 
-    return AnimatedSize(
-        // to animate expand
-        vsync: this,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-        child: Slidable(
-            key: Key(notification.id.toString()),
-            actionPane: const SlidableDrawerActionPane(),
-            actionExtentRatio: 0.2,
-            dismissal: SlidableDismissal(
-              // ignore: prefer_const_literals_to_create_immutables
-              dismissThresholds: <SlideActionType, double>{
-                SlideActionType.primary: 1.0
-              },
-              onDismissed: (_) {
-                Provider.of<Notifications>(context, listen: false)
-                    .delete(index);
-              },
-              child: const SlidableDrawerDismissal(),
-            ),
-            actions: <Widget>[
-              IconSlideAction(
-                color: MyColour.offWhite,
-                icon: Icons.copy,
-                caption: 'Title',
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: notification.title));
-                },
-              ),
-              IconSlideAction(
-                color: MyColour.offWhite,
-                icon: Icons.copy,
-                caption: 'Message',
-                onTap: () async {
-                  Clipboard.setData(ClipboardData(text: notification.message));
-                },
-              ),
-            ],
-            secondaryActions: <Widget>[
-              IconSlideAction(
-                color: MyColour.offWhite,
-                icon: Icons.delete,
-                onTap: () {
-                  Provider.of<Notifications>(context, listen: false)
-                      .delete(index);
-                },
-              ),
-            ],
-            child: notification));
+    final Animation<Offset> _offsetAnimation = Tween<Offset>(
+      begin: const Offset(-1, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.fastLinearToSlowEaseIn,
+    ));
+
+    return SlideTransition(
+      position: _offsetAnimation,
+      child: AnimatedSize(
+          // to animate expand
+          vsync: this,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+          child: Slidable(
+              key: Key(notification.id.toString()),
+              actionPane: const SlidableDrawerActionPane(),
+              actionExtentRatio: 0.2,
+              actions: <Widget>[
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Icons.copy,
+                  caption: 'Title',
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: notification.title));
+                  },
+                ),
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Icons.copy,
+                  caption: 'Message',
+                  onTap: () async {
+                    Clipboard.setData(
+                        ClipboardData(text: notification.message));
+                  },
+                ),
+              ],
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Icons.delete,
+                  onTap: () {
+                    Provider.of<Notifications>(context, listen: false)
+                        .delete(index);
+                  },
+                ),
+              ],
+              child: notification)),
+    );
   }
 
   @override
