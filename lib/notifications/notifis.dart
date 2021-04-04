@@ -33,9 +33,9 @@ class Notifications extends ChangeNotifier {
     }
 
     if (cnt > 0) {
-      invokeMacMethod('red_menu_icon');
+      MenuBarIcon.set('red');
     } else {
-      invokeMacMethod('grey_menu_icon');
+      MenuBarIcon.set('grey');
     }
 
     return cnt;

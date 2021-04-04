@@ -242,7 +242,9 @@ class User with ChangeNotifier {
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (err == hasErr) {
         if (err) {
-          invokeMacMethod('error_icon');
+          MenuBarIcon.set('error');
+        } else {
+          MenuBarIcon.revert();
         }
         _hasError = err;
         notifyListeners();

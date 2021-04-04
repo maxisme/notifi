@@ -41,7 +41,7 @@ class AppDelegate: FlutterAppDelegate {
                 menu_image = NSImage(named: .red)
             case "grey_menu_icon":
                 menu_image = NSImage(named: .grey)
-            case "error_icon":
+            case "error_menu_icon":
                 menu_image = NSImage(named: .error)
             case "animate":
                 if let button = self.statusBarItem.button {

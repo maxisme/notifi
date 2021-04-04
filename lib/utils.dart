@@ -29,6 +29,21 @@ Future<void> invokeMacMethod(String method) async {
   }
 }
 
+String currentIcon;
+
+class MenuBarIcon {
+  static Future<void> set(String icon) async {
+    if (icon != 'error') currentIcon = icon;
+    await invokeMacMethod('${icon}_menu_icon');
+  }
+
+  static Future<void> revert() async {
+    String icon = currentIcon;
+    if (currentIcon.isEmpty) icon = 'grey';
+    set(icon);
+  }
+}
+
 Future<String> getVersionFromPubSpec() async {
   final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   return packageInfo.buildNumber;
