@@ -72,6 +72,10 @@ class AppDelegate: FlutterAppDelegate {
 
         popover.contentViewController = flutterViewController
 
+        // Close the popover when the user interacts with a user
+        // interface element outside the popover
+        popover.behavior = .transient;
+
         // to connect to ws in background
         popover.contentSize = NSSize(width: 1, height: 1)
         showPopover(sender: nil)
