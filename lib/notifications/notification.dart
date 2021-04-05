@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as i;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
 import 'package:notifi/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 @JsonSerializable()
 // ignore: must_be_immutable
@@ -78,6 +82,8 @@ class NotificationUIState extends State<NotificationUI> {
   final GlobalKey _messageKey = GlobalKey();
   TextStyle messageStyle;
   TextStyle titleStyle;
+  final ValueNotifier<String> _timeStr = ValueNotifier<String>('');
+  Timer timer;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +92,9 @@ class NotificationUIState extends State<NotificationUI> {
       const double iconSize = 15.0;
       int messageMaxLines = 3;
       int titleMaxLines = 1;
+
+      // parse date
+      _setTime();
 
       // if expanded notification
       if (widget.isExpanded) {
@@ -263,9 +272,15 @@ class NotificationUIState extends State<NotificationUI> {
 
                                 // TIME
                                 Row(children: <Widget>[
-                                  SelectableText(widget.time,
-                                      style: const TextStyle(
-                                          color: MyColour.grey, fontSize: 12)),
+                                  ValueListenableBuilder<String>(
+                                      valueListenable: _timeStr,
+                                      builder: (BuildContext context,
+                                          String timeStr, Widget child) {
+                                        return SelectableText(timeStr,
+                                            style: const TextStyle(
+                                                color: MyColour.grey,
+                                                fontSize: 12));
+                                      })
                                 ]),
 
                                 // MESSAGE
@@ -281,6 +296,13 @@ class NotificationUIState extends State<NotificationUI> {
     super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _canExpandHandler(context));
+    timer = Timer.periodic(const Duration(minutes: 1), (Timer t) => _setTime());
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   bool _canExpand = false;
@@ -288,10 +310,12 @@ class NotificationUIState extends State<NotificationUI> {
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
     // for title
-    if (hasTextOverflow(widget.title, titleStyle,
-        maxWidth: _columnKey.currentContext.size.width)) {
+    if (_columnKey.currentContext != null &&
+        hasTextOverflow(widget.title, titleStyle,
+            maxWidth: _columnKey.currentContext.size.width)) {
       canExpand = true;
-    } else if (widget.message != '' &&
+    } else if (_messageKey.currentContext != null &&
+        widget.message != '' &&
         hasTextOverflow(widget.message, messageStyle,
             maxWidth: _messageKey.currentContext.size.width, maxLines: 3)) {
       canExpand = true;
@@ -301,6 +325,13 @@ class NotificationUIState extends State<NotificationUI> {
       _canExpand = true;
       setState(() {});
     }
+  }
+
+  void _setTime() {
+    final DateTime dttm =
+        i.DateFormat('yyyy-MM-dd HH:mm:ss').parse(widget.time, true).toLocal();
+    final String friendlyDttm = i.DateFormat('MMM d, y HH:mm:ss').format(dttm);
+    _timeStr.value = '$friendlyDttm - ${timeago.format(dttm)}';
   }
 
   bool hasTextOverflow(String text, TextStyle style,

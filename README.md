@@ -34,7 +34,7 @@ bash ./pre-commit.sh
 ### Set screenshot asserts
 
 ```
-flutter test --update-goldens
+bash ./test/set-asserts.sh
 ```
 
 ## Extras
