@@ -44,3 +44,4 @@ app.*.symbols
 app.*.map.json
 /test/failures/
 /flog.db
+/.dev.env
