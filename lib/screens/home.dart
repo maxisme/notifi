@@ -79,11 +79,7 @@ class HomeScreen extends StatelessWidget {
                 color: MyColour.grey,
               ),
               onPressed: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
-                } else {
-                  Navigator.pushNamed(context, '/settings');
-                }
+                Navigator.pushNamed(context, '/settings');
               }),
         ),
         body: const NotificationTable(),
@@ -120,17 +116,4 @@ class HomeScreen extends StatelessWidget {
           unselectedItemColor: MyColour.grey,
         ));
   }
-
-// var waitErr;
-// setError(bool err) {
-//   this.waitErr = err;
-//   Future.delayed(const Duration(seconds: 1), (){
-//     if(this.waitErr == err) {
-//       if (err){
-//         invokeMethod("error_icon");
-//       }
-//       this._networkError.value = err;
-//     }
-//   });
-// }
 }

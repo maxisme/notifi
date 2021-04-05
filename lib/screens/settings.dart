@@ -75,11 +75,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 color: MyColour.grey,
               ),
               onPressed: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
-                } else {
-                  Navigator.pushNamed(context, '/settings');
-                }
+                Navigator.pop(context);
               }),
         ),
         body: Column(children: <Widget>[
