@@ -218,6 +218,15 @@ class User with ChangeNotifier {
         if (id != -1) {
           // send local notification
           sendLocalNotification(_pushNotifications, id, notification);
+
+          // scroll to top on notification
+          _notifications.tableController.animateTo(
+            0,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.ease,
+          );
+
+          // animate menu bar icon
           invokeMacMethod('animate');
         }
         msgUUIDs.add(notification.uuid);

@@ -10,6 +10,7 @@ class Notifications extends ChangeNotifier {
   DBProvider db;
   List<NotificationUI> notifications = List<NotificationUI>.empty();
   GlobalKey<AnimatedListState> tableKey = GlobalKey<AnimatedListState>();
+  ScrollController tableController = ScrollController();
 
   // ignore: use_setters_to_change_properties
   void setTableNotifier(ReloadTable tableNotifier) {

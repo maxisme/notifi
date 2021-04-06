@@ -30,6 +30,7 @@ class NotificationTableState extends State<NotificationTable>
       if (notifications.notifications.isNotEmpty) {
         return AnimatedList(
             key: notifications.tableKey,
+            controller: notifications.tableController,
             itemBuilder: _buildNotification,
             initialItemCount: notifications.length);
       } else {
