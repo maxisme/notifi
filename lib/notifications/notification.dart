@@ -10,6 +10,7 @@ import 'package:notifi/pallete.dart';
 import 'package:notifi/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:fluttericon/font_awesome5_icons.dart';
 
 @JsonSerializable()
 // ignore: must_be_immutable
@@ -150,7 +151,7 @@ class NotificationUIState extends State<NotificationUI> {
             child: Container(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: const Icon(
-                  Icons.link,
+                  FontAwesome5.link,
                   size: iconSize,
                   color: MyColour.grey,
                 )));
@@ -216,7 +217,7 @@ class NotificationUIState extends State<NotificationUI> {
                                           padding:
                                               const EdgeInsets.only(top: 2.0),
                                           child: const Icon(
-                                            Icons.check,
+                                            FontAwesome5.check,
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
@@ -233,8 +234,8 @@ class NotificationUIState extends State<NotificationUI> {
                                                 const EdgeInsets.only(top: 7.0),
                                             child: Icon(
                                               widget.isExpanded
-                                                  ? Icons.compress
-                                                  : Icons.expand,
+                                                  ? FontAwesome5.compress
+                                                  : FontAwesome5.expand,
                                               size: iconSize,
                                               color: MyColour.grey,
                                             )))

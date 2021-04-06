@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttericon/entypo_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
@@ -75,7 +77,7 @@ class HomeScreen extends StatelessWidget {
           leadingWidth: leadingWidth,
           leading: IconButton(
               icon: const Icon(
-                Icons.settings,
+                Entypo.cog,
                 color: MyColour.grey,
               ),
               onPressed: () {
@@ -105,7 +107,7 @@ class HomeScreen extends StatelessWidget {
               tooltip: '',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.delete_outline, color: MyColour.darkGrey),
+              icon: Icon(FontAwesome.trash, color: MyColour.darkGrey),
               label: 'Delete All',
               tooltip: '',
             ),

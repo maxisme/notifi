@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/pallete.dart';
@@ -148,7 +150,7 @@ class NotificationTableState extends State<NotificationTable>
               actions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.copy,
+                  icon: FontAwesome5.copy,
                   caption: 'Title',
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: notification.title));
@@ -156,7 +158,7 @@ class NotificationTableState extends State<NotificationTable>
                 ),
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.copy,
+                  icon: FontAwesome5.copy,
                   caption: 'Message',
                   onTap: () async {
                     Clipboard.setData(
@@ -167,7 +169,7 @@ class NotificationTableState extends State<NotificationTable>
               secondaryActions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.delete,
+                  icon: FontAwesome.trash,
                   onTap: () {
                     Provider.of<Notifications>(context, listen: false)
                         .delete(index);
