@@ -148,9 +148,9 @@ class NotificationUIState extends State<NotificationUI> {
               await openUrl(widget.link);
             },
             child: Container(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 7.0),
                 child: const Icon(
-                  Icons.link,
+                  Akaricons.link,
                   size: iconSize,
                   color: MyColour.grey,
                 )));
@@ -216,7 +216,7 @@ class NotificationUIState extends State<NotificationUI> {
                                           padding:
                                               const EdgeInsets.only(top: 2.0),
                                           child: const Icon(
-                                            Icons.check,
+                                            Akaricons.check,
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
@@ -233,8 +233,8 @@ class NotificationUIState extends State<NotificationUI> {
                                                 const EdgeInsets.only(top: 7.0),
                                             child: Icon(
                                               widget.isExpanded
-                                                  ? Icons.compress
-                                                  : Icons.expand,
+                                                  ? Akaricons.reduce
+                                                  : Akaricons.enlarge,
                                               size: iconSize,
                                               color: MyColour.grey,
                                             )))

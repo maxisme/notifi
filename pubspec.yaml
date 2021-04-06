@@ -78,6 +78,9 @@ flutter:
           weight: 700
         - asset: fonts/Inconsolata-Black.ttf
           weight: 900
+    - family: Akaricons
+      fonts:
+        - asset: fonts/Akaricons.ttf
 
 flutter_icons:
   image_path: 'images/bell.png'

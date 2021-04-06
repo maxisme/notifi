@@ -59,4 +59,8 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 cat .env | openssl base64
 
 
+### Add new icons
+
+https://www.fluttericon.com/
+
 

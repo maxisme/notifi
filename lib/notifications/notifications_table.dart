@@ -148,7 +148,7 @@ class NotificationTableState extends State<NotificationTable>
               actions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.copy,
+                  icon: Akaricons.copy,
                   caption: 'Title',
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: notification.title));
@@ -156,7 +156,7 @@ class NotificationTableState extends State<NotificationTable>
                 ),
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.copy,
+                  icon: Akaricons.copy,
                   caption: 'Message',
                   onTap: () async {
                     Clipboard.setData(
@@ -167,7 +167,7 @@ class NotificationTableState extends State<NotificationTable>
               secondaryActions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,
-                  icon: Icons.delete,
+                  icon: Akaricons.cross,
                   onTap: () {
                     Provider.of<Notifications>(context, listen: false)
                         .delete(index);
