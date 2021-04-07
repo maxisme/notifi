@@ -220,7 +220,6 @@ class NotificationUIState extends State<NotificationUI> {
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
-                                  if (linkBtn != null) linkBtn,
                                   if (_canExpand)
                                     InkWell(
                                         onTap: () {
@@ -239,7 +238,8 @@ class NotificationUIState extends State<NotificationUI> {
                                               color: MyColour.grey,
                                             )))
                                   else
-                                    Container()
+                                    Container(),
+                                  if (linkBtn != null) linkBtn,
                                 ]),
                           ),
                         ),

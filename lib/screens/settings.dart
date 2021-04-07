@@ -78,8 +78,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pop(context);
               }),
         ),
-        // dive back in content based on your recently searched
-        // data team was messing with the columns
         body: Column(children: <Widget>[
           Consumer<User>(
               builder: (BuildContext context, User user, Widget child) {
@@ -118,10 +116,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               }
             });
           }),
-          // if (!Platform.isAndroid && !Platform.isIOS)
-          //   SettingOption('Sticky Notifications',
-          //       switchValue: false, switchCallback: (isEnabled) {}),
-
           SettingOption('About...', Akaricons.info, onTapCallback: () {
             openUrl('https://notifi.it');
           }),
@@ -166,7 +160,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   );
                 }),
           Container(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 30),
             child: RichText(
                 textAlign: TextAlign.center,
                 // ignore: always_specify_types
@@ -202,7 +196,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               builder: (BuildContext context, String version, Widget child) {
                 return Container(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text('version: $version',
@@ -251,11 +245,15 @@ class SettingOption extends StatelessWidget {
     const TextStyle style = TextStyle(
         fontSize: 15, color: MyColour.black, fontWeight: FontWeight.w400);
 
+    final Container iconWidget = Container(
+        padding: const EdgeInsets.only(right: 10),
+        child: Icon(icon, size: 20, color: MyColour.black));
+
     // switch or link
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
@@ -264,24 +262,17 @@ class SettingOption extends StatelessWidget {
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
               child: Row(children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Icon(icon, size: 14, color: MyColour.grey)),
+                iconWidget,
                 Text(text, style: style),
               ])));
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 23, right: 7),
+          padding: const EdgeInsets.only(left: 23, right: 7, top: 10),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(children: <Widget>[
-                  Container(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: Icon(icon, size: 14, color: MyColour.grey)),
-                  Text(text, style: style)
-                ]),
+                Row(children: <Widget>[iconWidget, Text(text, style: style)]),
                 Switch(value: switchValue, onChanged: switchCallback)
               ]));
     }

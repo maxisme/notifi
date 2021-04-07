@@ -64,8 +64,20 @@ class HomeScreen extends StatelessWidget {
                 Consumer<User>(
                     builder: (BuildContext context, User user, Widget child) {
                   if (user.hasError()) {
-                    return const Text('Network Error!',
-                        style: TextStyle(color: MyColour.grey, fontSize: 10));
+                    return Row(mainAxisAlignment: MainAxisAlignment.center,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: <Widget>[
+                          const Icon(
+                            Akaricons.circleAlert,
+                            color: MyColour.red,
+                            size: 13,
+                          ),
+                          const Text(' Network Error!',
+                              style: TextStyle(
+                                  color: MyColour.red,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600))
+                        ]);
                   }
                   return Container();
                 })
@@ -87,19 +99,8 @@ class HomeScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          onTap: (int index) {
-            if (index == 0) {
-              // MARK ALL AS READ EVENT
-              Provider.of<Notifications>(context, listen: false).readAll();
-            } else if (index == 1) {
-              // DELETE ALL EVENT
-              showAlert(context, 'Delete All Notifications?',
-                  'All notifications will be irretrievable.', onOkPressed: () {
-                Provider.of<Notifications>(context, listen: false).deleteAll();
-                Navigator.pop(context);
-              });
-            }
-          },
+          selectedItemColor: MyColour.grey,
+          unselectedItemColor: MyColour.grey,
           // ignore: prefer_const_literals_to_create_immutables
           items: <BottomNavigationBarItem>[
             const BottomNavigationBarItem(
@@ -113,10 +114,19 @@ class HomeScreen extends StatelessWidget {
               tooltip: '',
             ),
           ],
-          selectedLabelStyle: const TextStyle(fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontSize: 12),
-          selectedItemColor: MyColour.grey,
-          unselectedItemColor: MyColour.grey,
+          onTap: (int index) {
+            if (index == 0) {
+              // MARK ALL AS READ EVENT
+              Provider.of<Notifications>(context, listen: false).readAll();
+            } else if (index == 1) {
+              // DELETE ALL EVENT
+              showAlert(context, 'Delete All Notifications?',
+                  'All notifications will be irretrievable.', onOkPressed: () {
+                Provider.of<Notifications>(context, listen: false).deleteAll();
+                Navigator.pop(context);
+              });
+            }
+          },
         ));
   }
 }
