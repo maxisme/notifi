@@ -22,6 +22,7 @@ class AppDelegate: FlutterAppDelegate {
 
         if let button = statusBarItem.button {
             let image = NSImage(named: .red)
+            image?.isTemplate = true
             image?.size = menuImageSize
             button.image = image
             button.action = #selector(togglePopover(_:))
@@ -64,6 +65,7 @@ class AppDelegate: FlutterAppDelegate {
             if (menu_image != nil) {
                 if let button = self.statusBarItem.button {
                     menu_image?.size = menuImageSize
+                    menu_image?.isTemplate = true
                     button.image = menu_image
                     result(0) // success
                 }
