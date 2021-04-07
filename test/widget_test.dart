@@ -10,6 +10,7 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -55,7 +56,7 @@ void main() {
       });
 
       // open settings
-      await tester.tap(find.byIcon(Icons.settings));
+      await tester.tap(find.byIcon(Akaricons.gear));
       await tester.pump();
       // not sure why I have to do twice
       await tester.pump(const Duration(seconds: 1));
@@ -141,7 +142,7 @@ void main() {
       });
 
       // mark read
-      await tester.tap(find.byIcon(Icons.check));
+      await tester.tap(find.byIcon(Akaricons.check));
       await tester.pump();
 
       expect(n.isRead, true);
@@ -172,7 +173,7 @@ void main() {
       });
 
       // expand
-      await tester.tap(find.byIcon(Icons.expand));
+      await tester.tap(find.byIcon(Akaricons.enlarge));
       await tester.pump();
 
       expect(n.isExpanded, true);
@@ -207,7 +208,7 @@ void main() {
           await pumpWidget(tester, notification);
           await tester.pump();
 
-          expect(find.byIcon(Icons.expand), findsOneWidget);
+          expect(find.byIcon(Akaricons.enlarge), findsOneWidget);
         });
       });
     });
@@ -238,7 +239,7 @@ void main() {
           await pumpWidget(tester, notification);
           await tester.pump();
 
-          expect(find.byIcon(Icons.expand), findsNothing);
+          expect(find.byIcon(Akaricons.enlarge), findsNothing);
         });
       });
     });

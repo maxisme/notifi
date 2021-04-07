@@ -71,7 +71,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   filterQuality: FilterQuality.high)),
           leading: IconButton(
               icon: const Icon(
-                Icons.arrow_back,
+                Akaricons.chevronLeft,
                 color: MyColour.grey,
               ),
               onPressed: () {
@@ -84,12 +84,14 @@ class SettingsScreenState extends State<SettingsScreen> {
             return Column(children: <Widget>[
               Container(padding: const EdgeInsets.only(top: 20.0)),
               if (!user.isNull())
-                SettingOption('How Do I Receive Notifications?',
+                SettingOption(
+                    'How Do I Receive Notifications?', Akaricons.question,
                     onTapCallback: () async {
                   await openUrl(
                       'https://notifi.it?c=${user.credentials}#how-to');
                 }),
-              SettingOption('Copy Credentials ${user.credentials}',
+              SettingOption(
+                  'Copy Credentials ${user.credentials}', Akaricons.clipboard,
                   onTapCallback: () {
                 Clipboard.setData(ClipboardData(text: user.credentials));
                 showToast('Copied ${user.credentials}', context,
@@ -97,10 +99,11 @@ class SettingsScreenState extends State<SettingsScreen> {
               })
             ]);
           }),
-          SettingOption('Create New Credentials', onTapCallback: () {
+          SettingOption('Create New Credentials', Akaricons.arrowClockwise,
+              onTapCallback: () {
             showAlert(
                 context,
-                'New Credentials',
+                'Replace Credentials?',
                 'Are you sure? You will never be able to use your '
                     'current credentials again!', onOkPressed: () async {
               Navigator.pop(context);
@@ -113,12 +116,24 @@ class SettingsScreenState extends State<SettingsScreen> {
               }
             });
           }),
-          Container(
-            padding: const EdgeInsets.only(top: 15),
-          ),
-          // if (!Platform.isAndroid && !Platform.isIOS)
-          //   SettingOption('Sticky Notifications',
-          //       switchValue: false, switchCallback: (isEnabled) {}),
+          SettingOption('About...', Akaricons.info, onTapCallback: () {
+            openUrl('https://notifi.it');
+          }),
+          SettingOption('Logs...', Akaricons.file, onTapCallback: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<StatelessWidget>(
+                  builder: (BuildContext context) => LogsScreen()),
+            );
+          }),
+          if (Platform.isMacOS)
+            SettingOption(
+              'Quit notifi',
+              Akaricons.signOut,
+              onTapCallback: () {
+                SystemNavigator.pop();
+              },
+            ),
           if (!Platform.isAndroid && !Platform.isIOS)
             // ignore: always_specify_types
             FutureBuilder(
@@ -131,6 +146,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   }
                   return SettingOption(
                     'Open notifi at Login',
+                    Akaricons.person,
                     switchValue: f.data as bool,
                     switchCallback: (_) async {
                       final bool enabled = await LaunchAtLogin.isEnabled;
@@ -143,25 +159,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                     },
                   );
                 }),
-          SettingOption('About...', onTapCallback: () {
-            openUrl('https://notifi.it');
-          }),
-          SettingOption('Logs...', onTapCallback: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute<StatelessWidget>(
-                  builder: (BuildContext context) => LogsScreen()),
-            );
-          }),
-          if (Platform.isMacOS)
-            SettingOption(
-              'Quit notifi',
-              onTapCallback: () {
-                SystemNavigator.pop();
-              },
-            ),
           Container(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 30),
             child: RichText(
                 textAlign: TextAlign.center,
                 // ignore: always_specify_types
@@ -197,7 +196,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               builder: (BuildContext context, String version, Widget child) {
                 return Container(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text('version: $version',
@@ -214,7 +213,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                     launch('https://notifi.it/download');
                                   },
                                   child: const Icon(
-                                    Icons.arrow_circle_down,
+                                    Akaricons.cloudDownload,
                                     color: MyColour.red,
                                     size: 18,
                                   ));
@@ -231,11 +230,12 @@ class SettingsScreenState extends State<SettingsScreen> {
 
 // ignore: must_be_immutable
 class SettingOption extends StatelessWidget {
-  SettingOption(this.text,
+  SettingOption(this.text, this.icon,
       {Key key, this.onTapCallback, this.switchCallback, this.switchValue})
       : super(key: key);
 
   final String text;
+  final IconData icon;
   GestureTapCallback onTapCallback;
   ValueChanged<bool> switchCallback;
   bool switchValue;
@@ -243,16 +243,17 @@ class SettingOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const TextStyle style = TextStyle(
-        fontFamily: 'Inconsolata',
-        fontSize: 15,
-        color: MyColour.black,
-        fontWeight: FontWeight.w600);
+        fontSize: 15, color: MyColour.black, fontWeight: FontWeight.w400);
+
+    final Container iconWidget = Container(
+        padding: const EdgeInsets.only(right: 10),
+        child: Icon(icon, size: 20, color: MyColour.black));
 
     // switch or link
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
@@ -260,21 +261,18 @@ class SettingOption extends StatelessWidget {
                   overlayColor: MaterialStateProperty.all(MyColour.offWhite),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(text, style: style),
-                    const Icon(Icons.arrow_forward_ios,
-                        size: 12, color: MyColour.grey),
-                  ])));
+              child: Row(children: <Widget>[
+                iconWidget,
+                Text(text, style: style),
+              ])));
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 23, right: 7),
+          padding: const EdgeInsets.only(left: 23, right: 7, top: 10),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(text, style: style),
+                Row(children: <Widget>[iconWidget, Text(text, style: style)]),
                 Switch(value: switchValue, onChanged: switchCallback)
               ]));
     }
