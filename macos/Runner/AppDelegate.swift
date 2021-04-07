@@ -33,7 +33,7 @@ class AppDelegate: FlutterAppDelegate {
                 binaryMessenger: flutterViewController.engine.binaryMessenger)
 
         var menuBarAnimater: Animater!
-        notificationChannel.setMethodCallHandler {
+        notificationChannel.setMethodCallHandler { [self]
             (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let menu_image: NSImage?
             switch call.method {
@@ -55,8 +55,10 @@ class AppDelegate: FlutterAppDelegate {
             case "close_window":
                 self.closePopover(sender: nil)
                 return
+            case "UUID":
+                result(_hardwareUUID())
+                return
             default:
-                result(1)
                 return
             }
             if (menu_image != nil) {
@@ -109,5 +111,18 @@ class AppDelegate: FlutterAppDelegate {
 
     func closePopover(sender: Any?) {
         popover.performClose(sender)
+    }
+
+    func _hardwareUUID() -> String? {
+        let matchingDict = IOServiceMatching("IOPlatformExpertDevice")
+        let platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, matchingDict)
+        defer{
+            IOObjectRelease(platformExpert)
+        }
+
+        guard platformExpert != 0 else {
+            return nil
+        }
+        return IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformUUIDKey as CFString, kCFAllocatorDefault, 0).takeRetainedValue() as? String
     }
 }

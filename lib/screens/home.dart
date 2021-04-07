@@ -91,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                 color: MyColour.grey,
                 size: 22,
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pushNamed(context, '/settings');
               }),
         ),

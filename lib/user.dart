@@ -14,11 +14,10 @@ import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils.dart';
-import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-final UserStore storage = UserStore();
+final UserStore userStore = UserStore();
 
 const int requestNewUserCode = 551;
 
@@ -32,7 +31,7 @@ class User with ChangeNotifier {
 
   String uuid;
   String credentialKey;
-  String credentials = '';
+  String credentials;
   bool _hasError = false;
   String flutterToken;
 
@@ -54,7 +53,7 @@ class User with ChangeNotifier {
     await dot_env.load();
 
     // attempt to get user if exists
-    bool gotUser = await storage.getUser(this);
+    bool gotUser = await userStore.get(this);
 
     // create new credentials if any are missing
     while (!gotUser) {
@@ -83,14 +82,18 @@ class User with ChangeNotifier {
 
   Future<bool> requestNewUser() async {
     // generate UUID for user
-    final Map<String, dynamic> data = <String, String>{'UUID': Uuid().v4()};
+
+    final Map<String, dynamic> data = <String, String>{
+      'UUID': await getDeviceUUID()
+    };
     if (!isNull()) {
       data['current_credential_key'] = credentialKey;
       data['current_credentials'] = credentials;
+      L.w('Replacing credentials: $credentials');
     }
     final bool gotUser = await _newUserReq(data);
     if (gotUser && _ws != null) {
-      L.i('Reconnecting to ws...');
+      L.d('Reconnecting to ws...');
       _ws.sink.close(status.normalClosure, 'new code!');
     }
     notifyListeners();
@@ -118,7 +121,7 @@ class User with ChangeNotifier {
       'Version': await getVersionFromPubSpec(),
     };
 
-    L.i('Connecting to WS...');
+    L.d('Connecting to WS...');
     setError(hasErr: false);
     final IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
         headers: headers, pingInterval: const Duration(seconds: 3));
@@ -135,7 +138,7 @@ class User with ChangeNotifier {
       wsError = true;
       L.w('Problem with WS: $e');
     }, onDone: () async {
-      L.i('WS connection closed.');
+      L.d('WS connection closed.');
       if (wsError) {
         setError(hasErr: true);
         await Future<dynamic>.delayed(const Duration(seconds: 5));
@@ -182,7 +185,7 @@ class User with ChangeNotifier {
     credentials = credentialsMap['credentials'] as String;
 
     // store user credentials
-    await storage.writeUser(this);
+    await userStore.write(this);
     notifyListeners();
     return true;
   }
@@ -267,7 +270,7 @@ class UserStore {
   static const String key = 'user';
   static const String linuxFilePath = 'user-store.json';
 
-  Future<bool> getUser(User user) async {
+  Future<bool> get(User user) async {
     String userJsonString;
     try {
       userJsonString = await storage.read(key: key);
@@ -289,7 +292,7 @@ class UserStore {
     return true;
   }
 
-  Future<void> writeUser(User user) async {
+  Future<bool> write(User user) async {
     final String jsonData = jsonEncode(<String, String>{
       'UUID': user.uuid,
       'credentialKey': user.credentialKey,
@@ -297,8 +300,10 @@ class UserStore {
     });
     try {
       await storage.write(key: key, value: jsonData);
+      return true;
     } catch (e) {
       L.e(e.toString());
+      return false;
     }
   }
 }

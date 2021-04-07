@@ -19,10 +19,10 @@ bool isTest() {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
-Future<void> invokeMacMethod(String method) async {
+Future<dynamic> invokeMacMethod(String method) async {
   if (Platform.isMacOS && !isTest()) {
     try {
-      await platform.invokeMethod(method);
+      return await platform.invokeMethod(method);
     } on PlatformException catch (e) {
       L.e("Failed to invoke method ($method): '${e.message}'.");
     }
@@ -60,6 +60,11 @@ Future<void> openUrl(String url) async {
 
 void showToast(String msg, BuildContext context, {int duration, int gravity}) {
   Toast.show(msg, context, duration: duration, gravity: gravity);
+}
+
+Future<String> getDeviceUUID() async {
+  L.d('fetching UUID');
+  return await invokeMacMethod('UUID');
 }
 
 class L {
