@@ -81,7 +81,7 @@ class AppDelegate: FlutterAppDelegate {
         showPopover(sender: nil)
         closePopover(sender: nil)
 
-        popover.contentSize = NSSize(width: 400, height: 600)
+        popover.contentSize = NSSize(width: 400, height: 700)
     }
 
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
