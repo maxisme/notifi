@@ -104,7 +104,8 @@ class HomeScreen extends StatelessWidget {
           // ignore: prefer_const_literals_to_create_immutables
           items: <BottomNavigationBarItem>[
             const BottomNavigationBarItem(
-              icon: Icon(Icons.done_all, color: MyColour.darkGrey, size: 30),
+              icon: Icon(Akaricons.doubleCheck,
+                  color: MyColour.darkGrey, size: 30),
               label: '',
               tooltip: '',
             ),
