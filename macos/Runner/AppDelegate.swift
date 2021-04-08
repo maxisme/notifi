@@ -35,7 +35,7 @@ class AppDelegate: FlutterAppDelegate {
 
         var menuBarAnimater: Animater!
         notificationChannel.setMethodCallHandler { [self]
-            (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+        (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let menu_image: NSImage?
             switch call.method {
             case "red_menu_icon":
@@ -45,7 +45,7 @@ class AppDelegate: FlutterAppDelegate {
             case "error_menu_icon":
                 menu_image = NSImage(named: .error)
             case "animate":
-                if let button = self.statusBarItem.button {
+                if let button = statusBarItem.button {
                     if menuBarAnimater != nil {
                         menuBarAnimater.invalidate()
                     }
@@ -54,7 +54,7 @@ class AppDelegate: FlutterAppDelegate {
                 }
                 menu_image = nil
             case "close_window":
-                self.closePopover(sender: nil)
+                closePopover(sender: nil)
                 return
             case "UUID":
                 result(_hardwareUUID())
@@ -63,7 +63,7 @@ class AppDelegate: FlutterAppDelegate {
                 return
             }
             if (menu_image != nil) {
-                if let button = self.statusBarItem.button {
+                if let button = statusBarItem.button {
                     menu_image?.size = menuImageSize
                     menu_image?.isTemplate = true
                     button.image = menu_image
@@ -81,11 +81,11 @@ class AppDelegate: FlutterAppDelegate {
         popover.behavior = .transient
 
         // to connect to ws in background
-        popover.contentSize = NSSize(width: 1, height: 1)
-        showPopover(sender: nil)
+        // very hacky: opens the popup out of the screen
+        if let button = statusBarItem.button {
+            popover.show(relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0), of: button, preferredEdge: NSRectEdge.minY)
+        }
         closePopover(sender: nil)
-
-        popover.contentSize = NSSize(width: 400, height: 700)
     }
 
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -106,8 +106,13 @@ class AppDelegate: FlutterAppDelegate {
     }
 
     func showPopover(sender: Any?) {
-        if let button = statusBarItem.button {
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+        if let screen = NSScreen.main {
+            let rect = screen.frame
+            let height = rect.size.height * 0.7  // 70% of window
+            popover.contentSize = NSSize(width: 400, height: height)
+            if let button = statusBarItem.button {
+                popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+            }
         }
     }
 
