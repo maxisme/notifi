@@ -65,11 +65,6 @@ class SettingsScreenState extends State<SettingsScreen> {
           shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
-          centerTitle: true,
-          title: SizedBox(
-              height: 50,
-              child: Image.asset('images/bell.png',
-                  filterQuality: FilterQuality.high)),
           leading: IconButton(
               icon: const Icon(
                 Akaricons.chevronLeft,
@@ -78,6 +73,11 @@ class SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.pop(context);
               }),
+          centerTitle: true,
+          title: SizedBox(
+              height: 50,
+              child: Image.asset('images/bell.png',
+                  filterQuality: FilterQuality.high)),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
@@ -123,7 +123,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             Navigator.push(
               context,
               MaterialPageRoute<StatelessWidget>(
-                  builder: (BuildContext context) => LogsScreen()),
+                  builder: (BuildContext context) => const LogsScreen()),
             );
           }),
           if (Platform.isMacOS)
