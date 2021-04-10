@@ -83,7 +83,11 @@ class AppDelegate: FlutterAppDelegate {
         // to connect to ws in background
         // very hacky: opens the popup out of the screen
         if let button = statusBarItem.button {
-            popover.show(relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0), of: button, preferredEdge: NSRectEdge.minY)
+            popover.show(
+                relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0),
+                of: button,
+                preferredEdge: NSRectEdge.minY
+            )
         }
         closePopover(sender: nil)
     }
