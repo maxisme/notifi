@@ -22,20 +22,20 @@ Future<IOWebSocketChannel> connectToWS(
   IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
       headers: headers, pingInterval: const Duration(seconds: 3));
 
-  bool wsError = false;
+  bool _wsError = false;
   ws.stream.listen((dynamic streamData) async {
-    wsError = false;
+    _wsError = false;
     final List<String> receivedMsgUUIDs = await onMessage(streamData);
     if (receivedMsgUUIDs != null) {
       ws.sink.add(jsonEncode(receivedMsgUUIDs));
     }
     // ignore: always_specify_types
   }, onError: (e) async {
-    wsError = true;
+    _wsError = true;
     L.w('Problem with WS: $e');
   }, onDone: () async {
     L.d('WS connection closed.');
-    if (wsError) {
+    if (_wsError) {
       setErr(true);
       await Future<dynamic>.delayed(const Duration(seconds: 5));
     }

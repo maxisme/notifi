@@ -142,10 +142,11 @@ Future<void> showAlert(BuildContext context, String title, String description,
       return AlertDialog(
         title: Column(children: <Widget>[
           Container(
-            padding: const EdgeInsets.only(bottom: 5.0),
+            padding: const EdgeInsets.only(bottom: 10.0),
             child: const Icon(
               Akaricons.triangleAlert,
               color: MyColour.red,
+              size: 40,
             ),
           ),
           Text(
