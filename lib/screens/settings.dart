@@ -44,7 +44,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isTest()) {
+    if (!isFlutterTest()) {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
         _version.value = packageInfo.buildNumber;
       });
@@ -81,20 +81,20 @@ class SettingsScreenState extends State<SettingsScreen> {
         body: Column(children: <Widget>[
           Consumer<User>(
               builder: (BuildContext context, User user, Widget child) {
+            final String credentials = user.getCredentials();
             return Column(children: <Widget>[
               Container(padding: const EdgeInsets.only(top: 20.0)),
-              if (!user.isNull())
+              if (credentials != null)
                 SettingOption(
                     'How Do I Receive Notifications?', Akaricons.question,
                     onTapCallback: () async {
-                  await openUrl(
-                      'https://notifi.it?c=${user.credentials}#how-to');
+                  await openUrl('https://notifi.it?c=$credentials#how-to');
                 }),
               SettingOption(
-                  'Copy Credentials ${user.credentials}', Akaricons.clipboard,
+                  'Copy Credentials $credentials', Akaricons.clipboard,
                   onTapCallback: () {
-                Clipboard.setData(ClipboardData(text: user.credentials));
-                showToast('Copied ${user.credentials}', context,
+                Clipboard.setData(ClipboardData(text: credentials));
+                showToast('Copied $credentials', context,
                     gravity: Toast.CENTER);
               })
             ]);
@@ -108,8 +108,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     'current credentials again!', onOkPressed: () async {
               Navigator.pop(context);
               final bool gotUser =
-                  await Provider.of<User>(context, listen: false)
-                      .requestNewUser();
+                  await Provider.of<User>(context, listen: false).setNewUser();
               if (!gotUser) {
                 // TODO show error
                 L.i('Unable to fetch new user!');

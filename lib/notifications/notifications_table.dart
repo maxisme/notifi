@@ -42,7 +42,7 @@ class NotificationTableState extends State<NotificationTable>
               Image.asset('images/sad.png',
                   height: 150, filterQuality: FilterQuality.high),
               Container(padding: const EdgeInsets.only(top: 20.0)),
-              const SelectableText('No notifications!',
+              const SelectableText('No Notifications!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: MyColour.black,
@@ -51,10 +51,8 @@ class NotificationTableState extends State<NotificationTable>
               Container(padding: const EdgeInsets.only(top: 20.0)),
               Consumer<User>(
                   builder: (BuildContext context, User user, Widget child) {
-                String credentials = '...';
-                if (!user.isNull()) {
-                  credentials = user.credentials;
-                }
+                String credentials = user.getCredentials();
+                credentials ??= '...';
                 return Column(children: <Widget>[
                   RichText(
                     textAlign: TextAlign.center,

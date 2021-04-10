@@ -56,6 +56,14 @@ class Notifications extends ChangeNotifier {
     if (notifications.length == 1) {
       tableNotifier.reloadTable();
     } else {
+      // scroll to top of table
+      tableController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.ease,
+      );
+
+      // insert notification
       tableKey.currentState.insertItem(0, duration: const Duration(seconds: 1));
     }
     notifyListeners();

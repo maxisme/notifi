@@ -23,7 +23,7 @@ void main() {
     testWidgets('No Notifications', (WidgetTester tester) async {
       await pumpWidget(tester, null);
       // first page should show no notifications
-      expect(find.text('No notifications!'), findsOneWidget);
+      expect(find.text('No Notifications!'), findsOneWidget);
 
       await expectLater(find.byType(HomeScreen),
           matchesGoldenFile('golden-asserts/screen/no-notifications.png'));
