@@ -14,7 +14,7 @@ Future<IOWebSocketChannel> connectToWS(
     'Uuid': user.uuid,
     'Credentials': user.credentials,
     'Key': user.credentialKey,
-    'Version': await getVersionFromPubSpec(),
+    'Version': await getVersion(),
   };
 
   L.d('Connecting to WS...');

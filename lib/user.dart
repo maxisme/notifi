@@ -6,7 +6,6 @@ import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -48,8 +47,6 @@ class User with ChangeNotifier {
   }
 
   Future<void> _loadUser() async {
-    await dot_env.load();
-
     _user = UserStruct();
     await _user.load();
 

@@ -5,6 +5,7 @@ import 'package:f_logs/model/flog/flog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:package_info/package_info.dart';
@@ -44,9 +45,17 @@ class MenuBarIcon {
   }
 }
 
-Future<String> getVersionFromPubSpec() async {
+Future<String> getVersion() async {
   final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   return packageInfo.buildNumber;
+}
+
+Future<void> loadDotEnv() async {
+  try {
+    await dot_env.load();
+  } catch (e) {
+    return;
+  }
 }
 
 Future<void> openUrl(String url) async {

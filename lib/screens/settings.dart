@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
-import 'package:notifi/utils/icons.dart';
-import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/screens/logs.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils/icons.dart';
+import 'package:notifi/utils/pallete.dart';
+import 'package:notifi/utils/update.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,37 +26,32 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   ValueNotifier<String> _version;
-  ValueNotifier<String> _remoteVersion;
+  ValueNotifier<String> _downloadURL;
 
   @override
   void initState() {
     _version = ValueNotifier<String>('');
-    _remoteVersion = ValueNotifier<String>('');
+    _downloadURL = ValueNotifier<String>('');
     super.initState();
   }
 
   @override
   void dispose() {
     _version.dispose();
-    _remoteVersion.dispose();
+    _downloadURL.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if (!isFlutterTest()) {
-      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-        _version.value = packageInfo.buildNumber;
+      getVersion().then((String version) {
+        _version.value = version;
+        getUpdateURL(version).then((String url) {
+          _downloadURL.value = url;
+        });
       });
     }
-
-    http.get('https://notifi.it/version').then((http.Response value) {
-      if (value.statusCode == 200) {
-        _remoteVersion.value = value.body;
-      } else {
-        L.e('Problem getting /version from notifi.it');
-      }
-    });
 
     return Scaffold(
         backgroundColor: MyColour.offWhite,
@@ -204,13 +198,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                               color: MyColour.grey, fontSize: 12)),
                       // ignore: always_specify_types
                       ValueListenableBuilder(
-                          valueListenable: _remoteVersion,
-                          builder: (BuildContext context, String remoteVersion,
+                          valueListenable: _downloadURL,
+                          builder: (BuildContext context, String upgradeURL,
                               Widget child) {
-                            if (version != remoteVersion) {
+                            if (upgradeURL != '') {
                               return TextButton(
                                   onPressed: () {
-                                    launch('https://notifi.it/download');
+                                    launch(upgradeURL);
                                   },
                                   child: const Icon(
                                     Akaricons.cloudDownload,
