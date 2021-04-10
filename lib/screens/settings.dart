@@ -8,10 +8,11 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
-import 'package:notifi/pallete.dart';
+import 'package:notifi/utils/icons.dart';
+import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/screens/logs.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
@@ -44,7 +45,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isTest()) {
+    if (!isFlutterTest()) {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
         _version.value = packageInfo.buildNumber;
       });
@@ -64,51 +65,75 @@ class SettingsScreenState extends State<SettingsScreen> {
           shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
+          leading: IconButton(
+              icon: const Icon(
+                Akaricons.chevronLeft,
+                color: MyColour.grey,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           centerTitle: true,
           title: SizedBox(
               height: 50,
               child: Image.asset('images/bell.png',
                   filterQuality: FilterQuality.high)),
-          leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: MyColour.grey,
-              ),
-              onPressed: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
-                } else {
-                  Navigator.pushNamed(context, '/settings');
-                }
-              }),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
               builder: (BuildContext context, User user, Widget child) {
+            final String credentials = user.getCredentials();
             return Column(children: <Widget>[
               Container(padding: const EdgeInsets.only(top: 20.0)),
-              if (!user.isNull())
-                SettingOption('How Do I Receive Notifications?',
+              if (credentials != null)
+                SettingOption(
+                    'How Do I Receive Notifications?', Akaricons.question,
                     onTapCallback: () async {
-                  await openUrl(
-                      'https://notifi.it?c=${user.credentials}#how-to');
+                  await openUrl('https://notifi.it?c=$credentials#how-to');
                 }),
-              SettingOption('Copy Credentials ${user.credentials}',
+              SettingOption(
+                  'Copy Credentials $credentials', Akaricons.clipboard,
                   onTapCallback: () {
-                Clipboard.setData(ClipboardData(text: user.credentials));
-                showToast('Copied ${user.credentials}', context,
+                Clipboard.setData(ClipboardData(text: credentials));
+                showToast('Copied $credentials', context,
                     gravity: Toast.CENTER);
               })
             ]);
           }),
-          SettingOption('Create New Credentials',
-              onTapCallback: _newCredentialsDialogue),
-          Container(
-            padding: const EdgeInsets.only(top: 15),
-          ),
-          // if (!Platform.isAndroid && !Platform.isIOS)
-          //   SettingOption('Sticky Notifications',
-          //       switchValue: false, switchCallback: (isEnabled) {}),
+          SettingOption('Create New Credentials', Akaricons.arrowClockwise,
+              onTapCallback: () {
+            showAlert(
+                context,
+                'Replace Credentials?',
+                'Are you sure? You will never be able to use your '
+                    'current credentials again!', onOkPressed: () async {
+              Navigator.pop(context);
+              final bool gotUser =
+                  await Provider.of<User>(context, listen: false).setNewUser();
+              if (!gotUser) {
+                // TODO show error
+                L.i('Unable to fetch new user!');
+              }
+            });
+          }),
+          SettingOption('About...', Akaricons.info, onTapCallback: () {
+            openUrl('https://notifi.it');
+          }),
+          SettingOption('Logs...', Akaricons.file, onTapCallback: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<StatelessWidget>(
+                  builder: (BuildContext context) => const LogsScreen()),
+            );
+          }),
+          if (Platform.isMacOS)
+            SettingOption(
+              'Quit notifi',
+              Akaricons.signOut,
+              onTapCallback: () {
+                SystemNavigator.pop();
+              },
+            ),
           if (!Platform.isAndroid && !Platform.isIOS)
             // ignore: always_specify_types
             FutureBuilder(
@@ -121,6 +146,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   }
                   return SettingOption(
                     'Open notifi at Login',
+                    Akaricons.person,
                     switchValue: f.data as bool,
                     switchCallback: (_) async {
                       final bool enabled = await LaunchAtLogin.isEnabled;
@@ -133,25 +159,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                     },
                   );
                 }),
-          SettingOption('About...', onTapCallback: () {
-            launch('https://notifi.it');
-          }),
-          SettingOption('Logs...', onTapCallback: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute<StatelessWidget>(
-                  builder: (BuildContext context) => LogsScreen()),
-            );
-          }),
-          if (Platform.isMacOS)
-            SettingOption(
-              'Quit notifi',
-              onTapCallback: () {
-                SystemNavigator.pop();
-              },
-            ),
           Container(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 30),
             child: RichText(
                 textAlign: TextAlign.center,
                 // ignore: always_specify_types
@@ -187,7 +196,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               builder: (BuildContext context, String version, Widget child) {
                 return Container(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text('version: $version',
@@ -204,7 +213,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                     launch('https://notifi.it/download');
                                   },
                                   child: const Icon(
-                                    Icons.arrow_circle_down,
+                                    Akaricons.cloudDownload,
                                     color: MyColour.red,
                                     size: 18,
                                   ));
@@ -217,55 +226,16 @@ class SettingsScreenState extends State<SettingsScreen> {
               }),
         ]));
   }
-
-  Future<void> _newCredentialsDialogue() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('New Credentials'),
-          content:
-              const Text('Are you sure? You will never be able to use your '
-                  'current credentials again!'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'No',
-                style: TextStyle(color: MyColour.grey),
-              ),
-            ),
-            TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  final bool gotUser =
-                      await Provider.of<User>(context, listen: false)
-                          .requestNewUser();
-                  if (!gotUser) {
-                    // TODO show error
-                    L.i('Unable to fetch new user!');
-                  }
-                },
-                child: const Text(
-                  'Yes',
-                  style: TextStyle(color: MyColour.black),
-                )),
-          ],
-        );
-      },
-    );
-  }
 }
 
 // ignore: must_be_immutable
 class SettingOption extends StatelessWidget {
-  SettingOption(this.text,
+  SettingOption(this.text, this.icon,
       {Key key, this.onTapCallback, this.switchCallback, this.switchValue})
       : super(key: key);
 
   final String text;
+  final IconData icon;
   GestureTapCallback onTapCallback;
   ValueChanged<bool> switchCallback;
   bool switchValue;
@@ -273,16 +243,17 @@ class SettingOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const TextStyle style = TextStyle(
-        fontFamily: 'Inconsolata',
-        fontSize: 15,
-        color: MyColour.black,
-        fontWeight: FontWeight.w600);
+        fontSize: 15, color: MyColour.black, fontWeight: FontWeight.w400);
+
+    final Container iconWidget = Container(
+        padding: const EdgeInsets.only(right: 10),
+        child: Icon(icon, size: 20, color: MyColour.black));
 
     // switch or link
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
@@ -290,21 +261,18 @@ class SettingOption extends StatelessWidget {
                   overlayColor: MaterialStateProperty.all(MyColour.offWhite),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(text, style: style),
-                    const Icon(Icons.arrow_forward_ios,
-                        size: 12, color: MyColour.grey),
-                  ])));
+              child: Row(children: <Widget>[
+                iconWidget,
+                Text(text, style: style),
+              ])));
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 23, right: 7),
+          padding: const EdgeInsets.only(left: 23, right: 7, top: 10),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(text, style: style),
+                Row(children: <Widget>[iconWidget, Text(text, style: style)]),
                 Switch(value: switchValue, onChanged: switchCallback)
               ]));
     }

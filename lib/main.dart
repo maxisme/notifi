@@ -4,7 +4,7 @@ import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/pallete.dart';
+import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';

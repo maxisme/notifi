@@ -22,6 +22,7 @@ class AppDelegate: FlutterAppDelegate {
 
         if let button = statusBarItem.button {
             let image = NSImage(named: .red)
+            image?.isTemplate = true
             image?.size = menuImageSize
             button.image = image
             button.action = #selector(togglePopover(_:))
@@ -33,15 +34,15 @@ class AppDelegate: FlutterAppDelegate {
                 binaryMessenger: flutterViewController.engine.binaryMessenger)
 
         var menuBarAnimater: Animater!
-        notificationChannel.setMethodCallHandler {
-            (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+        notificationChannel.setMethodCallHandler { [self]
+        (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let menu_image: NSImage?
             switch call.method {
             case "red_menu_icon":
                 menu_image = NSImage(named: .red)
             case "grey_menu_icon":
                 menu_image = NSImage(named: .grey)
-            case "error_icon":
+            case "error_menu_icon":
                 menu_image = NSImage(named: .error)
             case "animate":
                 if let button = self.statusBarItem.button {
@@ -53,15 +54,18 @@ class AppDelegate: FlutterAppDelegate {
                 }
                 menu_image = nil
             case "close_window":
-                self.closePopover(sender: nil)
+                closePopover(sender: nil)
+                return
+            case "UUID":
+                result(hardwareUUID())
                 return
             default:
-                result(1)
                 return
             }
             if (menu_image != nil) {
-                if let button = self.statusBarItem.button {
+                if let button = statusBarItem.button {
                     menu_image?.size = menuImageSize
+                    menu_image?.isTemplate = true
                     button.image = menu_image
                     result(0) // success
                 }
@@ -72,12 +76,20 @@ class AppDelegate: FlutterAppDelegate {
 
         popover.contentViewController = flutterViewController
 
-        // to connect to ws in background
-        popover.contentSize = NSSize(width: 1, height: 1)
-        showPopover(sender: nil)
-        closePopover(sender: nil)
+        // Close the popover when the user interacts with a user
+        // interface element outside the popover
+        popover.behavior = .transient
 
-        popover.contentSize = NSSize(width: 400, height: 600)
+        // to connect to ws in background
+        // very hacky: opens the popup out of the screen
+        if let button = statusBarItem.button {
+            popover.show(
+                relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0),
+                of: button,
+                preferredEdge: NSRectEdge.minY
+            )
+        }
+        closePopover(sender: nil)
     }
 
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -98,12 +110,35 @@ class AppDelegate: FlutterAppDelegate {
     }
 
     func showPopover(sender: Any?) {
-        if let button = statusBarItem.button {
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+        if let screen = NSScreen.main {
+            let rect = screen.frame
+            let height = rect.size.height * 0.7  // 70% of window
+            popover.contentSize = NSSize(width: 400, height: height)
+            if let button = statusBarItem.button {
+                popover.show(
+                        relativeTo: button.bounds,
+                        of: button,
+                        preferredEdge: NSRectEdge.minY
+                )
+            }
         }
     }
 
     func closePopover(sender: Any?) {
         popover.performClose(sender)
+    }
+
+    func hardwareUUID() -> String? {
+        let matchingDict = IOServiceMatching("IOPlatformExpertDevice")
+        let platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, matchingDict)
+        defer {
+            IOObjectRelease(platformExpert)
+        }
+
+        guard platformExpert != 0 else {
+            return nil
+        }
+        return IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformUUIDKey as CFString, kCFAllocatorDefault, 0)
+                .takeRetainedValue() as? String
     }
 }

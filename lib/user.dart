@@ -13,26 +13,23 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/utils.dart';
-import 'package:uuid/uuid.dart';
+import 'package:notifi/utils/utils.dart';
+import 'package:notifi/ws.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
-
-final UserStore storage = UserStore();
 
 const int requestNewUserCode = 551;
 
 class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
+    _user = UserStruct();
     setNotifications(_notifications);
-    if (!isTest()) {
-      _createUser();
+    if (!isFlutterTest()) {
+      _loadUser();
     }
   }
 
-  String uuid;
-  String credentialKey;
-  String credentials = '';
+  UserStruct _user;
   bool _hasError = false;
   String flutterToken;
 
@@ -46,107 +43,72 @@ class User with ChangeNotifier {
     this._notifications = _notifications;
   }
 
-  bool isNull() {
-    return uuid == null || credentialKey == null || credentials == null;
+  String getCredentials() {
+    return _user.credentials;
   }
 
-  Future<void> _createUser() async {
+  Future<void> _loadUser() async {
     await dot_env.load();
 
-    // attempt to get user if exists
-    bool gotUser = await storage.getUser(this);
+    _user = UserStruct();
+    await _user.load();
 
     // create new credentials if any are missing
-    while (!gotUser) {
-      final bool alreadyHadCredentials =
-          uuid != null || credentialKey != null || credentials != null;
-
+    while (_user.isNull()) {
       // Create new credentials as the user does not have any.
-      gotUser = await requestNewUser();
+      await setNewUser();
 
-      if (gotUser) {
-        setError(hasErr: false);
-        if (alreadyHadCredentials && gotUser) {
-          // TODO return message to user to tell them
-          // that there credentials have been replaced
-          L.e('Replaced your credentials...');
-        }
-      } else {
-        setError(hasErr: true);
+      setErr(_user.isNull());
+      if (_user.isNull()) {
         L.w('Attempting to create user again...');
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
     }
 
-    await _initWSS();
+    await _initWSS(_user);
   }
 
-  Future<bool> requestNewUser() async {
-    // generate UUID for user
-    final Map<String, dynamic> data = <String, String>{'UUID': Uuid().v4()};
-    if (!isNull()) {
-      data['current_credential_key'] = credentialKey;
-      data['current_credentials'] = credentials;
+  Future<bool> setNewUser() async {
+    final Map<String, dynamic> postData = <String, String>{
+      'UUID': await getDeviceUUID()
+    };
+
+    if (!_user.isNull()) {
+      postData['current_credential_key'] = _user.credentialKey;
+      postData['current_credentials'] = _user.credentials;
+      L.w('Replacing credentials: ${_user.credentials}');
     }
-    final bool gotUser = await _newUserReq(data);
-    if (gotUser && _ws != null) {
-      L.i('Reconnecting to ws...');
-      _ws.sink.close(status.normalClosure, 'new code!');
+
+    final UserStruct newUser = await _newUserReq(postData);
+    if (!newUser.isNull()) {
+      _user = newUser;
+
+      // store user credentials
+      await newUser.store();
+
+      notifyListeners();
+
+      if (_ws != null) {
+        L.d('Reconnecting to ws...');
+        _ws.sink.close(status.normalClosure, 'new code!');
+      }
     }
-    notifyListeners();
-    return gotUser;
+    return !newUser.isNull();
   }
 
   ////////
   // ws //
   ////////
-  Future<void> _initWSS() async {
+  Future<void> _initWSS(UserStruct user) async {
     if (_ws != null) {
       L.i('Closing already open WS...');
       _ws.sink.close();
       _ws = null;
     }
-    _ws = await _connectToWS();
+    _ws = await connectToWS(user, _handleMessage, setErr);
   }
 
-  Future<IOWebSocketChannel> _connectToWS() async {
-    final Map<String, dynamic> headers = <String, dynamic>{
-      'Sec-Key': env['SERVER_KEY'],
-      'Credentials': credentials,
-      'Uuid': uuid,
-      'Key': credentialKey,
-      'Version': await getVersionFromPubSpec(),
-    };
-
-    L.i('Connecting to WS...');
-    setError(hasErr: false);
-    final IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
-        headers: headers, pingInterval: const Duration(seconds: 3));
-
-    bool wsError = false;
-    ws.stream.listen((dynamic streamData) async {
-      wsError = false;
-      final List<String> msgUUIDs = await _handleMessage(streamData);
-      if (msgUUIDs != null) {
-        ws.sink.add(jsonEncode(msgUUIDs));
-      }
-      // ignore: always_specify_types
-    }, onError: (e) async {
-      wsError = true;
-      L.w('Problem with WS: $e');
-    }, onDone: () async {
-      L.i('WS connection closed.');
-      if (wsError) {
-        setError(hasErr: true);
-        await Future<dynamic>.delayed(const Duration(seconds: 5));
-      }
-      await _initWSS();
-    });
-
-    return ws;
-  }
-
-  Future<bool> _newUserReq(Map<String, dynamic> data) async {
+  Future<UserStruct> _newUserReq(Map<String, dynamic> data) async {
     L.i('Creating new credentials...');
     final d.Dio dio = d.Dio();
     Response<dynamic> response;
@@ -158,12 +120,12 @@ class User with ChangeNotifier {
           }, contentType: d.Headers.formUrlEncodedContentType));
     } catch (e) {
       L.e('Problem fetching user code: $e');
-      return false;
+      return UserStruct();
     }
 
     if (response.statusCode != HttpStatus.ok) {
       L.e('Problem fetching new code from server: $response');
-      return false;
+      return UserStruct();
     }
 
     // decode response
@@ -173,18 +135,14 @@ class User with ChangeNotifier {
           json.decode(response.data as String) as Map<String, dynamic>;
     } catch (e) {
       L.e('Problem decoding new code from server: $e - ${response.data}');
-      return false;
+      return UserStruct();
     }
 
-    // set variables
-    uuid = data['UUID'];
-    credentialKey = credentialsMap['credential_key'] as String;
-    credentials = credentialsMap['credentials'] as String;
-
-    // store user credentials
-    await storage.writeUser(this);
-    notifyListeners();
-    return true;
+    return UserStruct(
+      uuid: data['UUID'],
+      credentials: credentialsMap['credentials'] as String,
+      credentialKey: credentialsMap['credential_key'] as String,
+    );
   }
 
   Future<List<String>> _handleMessage(dynamic msg) async {
@@ -199,6 +157,7 @@ class User with ChangeNotifier {
 
     // parse notifications from websocket message
     final List<String> msgUUIDs = <String>[];
+    bool hasNotification = false;
     for (int i = 0; i < notifications.length; i++) {
       Map<String, dynamic> jsonMessage;
       try {
@@ -216,12 +175,17 @@ class User with ChangeNotifier {
         final int id = await _notifications.add(notification);
 
         if (id != -1) {
-          // send local notification
+          // send push notification
           sendLocalNotification(_pushNotifications, id, notification);
-          invokeMacMethod('animate');
+          hasNotification = true;
         }
         msgUUIDs.add(notification.uuid);
       }
+    }
+
+    if (hasNotification) {
+      // animate menu bar icon
+      invokeMacMethod('animate');
     }
     return msgUUIDs;
   }
@@ -233,61 +197,80 @@ class User with ChangeNotifier {
     return _hasError;
   }
 
-  bool err;
+  bool _tmpErr;
 
-  void setError({bool hasErr}) {
-    // wait for 1 second to make sure hasErr hasn't changed to prevent
-    // stuttering.
-    err = hasErr;
+  // ignore: avoid_positional_boolean_parameters
+  void setErr(bool hasErr) {
+    // wait for 1 second to make sure hasErr hasn't changed.
+    // To prevent from stuttering.
+    _tmpErr = hasErr;
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
-      if (err == hasErr) {
-        if (err) {
-          invokeMacMethod('error_icon');
+      if (_tmpErr == hasErr) {
+        if (_tmpErr) {
+          MenuBarIcon.set('error');
+        } else {
+          MenuBarIcon.revert();
         }
-        _hasError = err;
+        _hasError = _tmpErr;
         notifyListeners();
       }
     });
   }
 }
 
-class UserStore {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-  static const String key = 'user';
-  static const String linuxFilePath = 'user-store.json';
+class UserStruct {
+  UserStruct({this.uuid, this.credentialKey, this.credentials});
 
-  Future<bool> getUser(User user) async {
-    String userJsonString;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  static const String _key = 'user';
+
+  String uuid;
+  String credentialKey;
+  String credentials;
+
+  bool isNull() {
+    return uuid == null || credentialKey == null || credentials == null;
+  }
+
+  Future<bool> store() async {
     try {
-      userJsonString = await storage.read(key: key);
+      await _storage.write(key: _key, value: _toJson());
     } catch (e) {
-      L.f(e);
-    }
-
-    try {
-      final Map<String, dynamic> userJson =
-          jsonDecode(userJsonString) as Map<String, dynamic>;
-      user.uuid = userJson['UUID'];
-      user.credentialKey = userJson['credentialKey'];
-      user.credentials = userJson['credentials'];
-      user.flutterToken = userJson['flutterToken'];
-    } catch (error) {
-      L.f(error);
+      L.e(e.toString());
       return false;
     }
     return true;
   }
 
-  Future<void> writeUser(User user) async {
-    final String jsonData = jsonEncode(<String, String>{
-      'UUID': user.uuid,
-      'credentialKey': user.credentialKey,
-      'credentials': user.credentials,
-    });
+  Future<bool> load() async {
+    String userJsonString;
     try {
-      await storage.write(key: key, value: jsonData);
+      userJsonString = await _storage.read(key: _key);
     } catch (e) {
-      L.f(e);
+      L.e(e.toString());
+      return false;
     }
+
+    try {
+      final Map<String, dynamic> userJson =
+          jsonDecode(userJsonString) as Map<String, dynamic>;
+
+      uuid = userJson['UUID'];
+      credentials = userJson['credentials'];
+      credentialKey = userJson['credentialKey'];
+    } catch (error) {
+      L.e(error.toString());
+      return false;
+    }
+    return true;
+  }
+
+  String _toJson() {
+    if (isNull()) throw 'Cannot encode unset user';
+    return jsonEncode(<String, String>{
+      'UUID': uuid,
+      'credentials': credentials,
+      'credentialKey': credentialKey,
+    });
   }
 }

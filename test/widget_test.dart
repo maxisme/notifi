@@ -1,5 +1,3 @@
-// This is a basic Flutter widget test.
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,15 +8,20 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 void main() {
+  const String time = '2006-01-02 15:04:05';
+  // original 2400.0, 1800.0
+  const Size physicalSizeTestValue = Size(2200, 1200);
+
   group('Test Screens', () {
     testWidgets('No Notifications', (WidgetTester tester) async {
       await pumpWidget(tester, null);
       // first page should show no notifications
-      expect(find.text('No notifications!'), findsOneWidget);
+      expect(find.text('No Notifications!'), findsOneWidget);
 
       await expectLater(find.byType(HomeScreen),
           matchesGoldenFile('golden-asserts/screen/no-notifications.png'));
@@ -30,7 +33,7 @@ void main() {
           NotificationUI(
             title: 'title of notification',
             uuid: '',
-            time: '',
+            time: time,
           ));
       // first page should show no notifications
       expect(find.text('title of notification'), findsOneWidget);
@@ -51,7 +54,7 @@ void main() {
       });
 
       // open settings
-      await tester.tap(find.byIcon(Icons.settings));
+      await tester.tap(find.byIcon(Akaricons.gear));
       await tester.pump();
       // not sure why I have to do twice
       await tester.pump(const Duration(seconds: 1));
@@ -66,81 +69,62 @@ void main() {
     // TODO test log navigation
   });
 
-  group('Test Notification', () {
-    const String title = 'title of notification';
-    const String message = 'message of notification';
-    const String link = 'https://max.me.uk/';
-    const String image = 'https://max.me.uk/someimage.jpg';
-    const String longMsg = 'message of notification message of notification '
-        'message of notification message of notification notification messag';
-    const String longTtl = 'title of notification title of -';
+  group('Test Notifications', () {
+    const List<String> titles = <String>[
+      'title of notification',
+      'title of notification title of notification titl'
+    ];
+    const List<String> messages = <String>[
+      '',
+      'message of notification',
+      // ignore: no_adjacent_strings_in_list
+      'notification '
+          'message of notification  message of notification message '
+          'of notification message of notification message of notification of '
+          'notification message of notification of notificati'
+    ];
+    const List<String> links = <String>['', 'https://max.me.uk/'];
+    const List<String> images = <String>['', 'https://max.me.uk/someimage.jpg'];
 
-    final Map<String, NotificationUI> inputsToExpected =
-        <String, NotificationUI>{
-      'title': NotificationUI(
-        title: longTtl.substring(0, longTtl.length - 1),
-        uuid: '',
-        time: '',
-      ),
-      'message': NotificationUI(
-        title: title,
-        message: longMsg.substring(0, longMsg.length - 1),
-        uuid: '',
-        time: '',
-      ),
-      'link': NotificationUI(
-        title: title,
-        message: message,
-        link: link,
-        uuid: '',
-        time: '',
-      ),
-      'image': NotificationUI(
-        title: title,
-        message: message,
-        link: link,
-        image: image,
-        uuid: '',
-        time: '',
-      ),
-      'overflow-title': NotificationUI(
-        title: longTtl,
-        uuid: '',
-        time: '',
-      ),
-      'overflow-message': NotificationUI(
-        title: 'title of notification',
-        message: longMsg,
-        uuid: '',
-        time: '',
-      ),
-    };
-    inputsToExpected.forEach((String name, NotificationUI notification) {
-      testWidgets(name, (WidgetTester tester) async {
-        // original 2400.0, 1800.0
-        tester.binding.window.physicalSizeTestValue = const Size(1500, 600);
-        addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+    final String longTtl = titles[1];
+    final String longMsg = messages[2];
 
-        await pumpWidget(tester, notification);
-        await tester.pump();
+    group('Test Notification Combinations', () {
+      for (int a = 0; a < titles.length; a++) {
+        for (int b = 0; b < messages.length; b++) {
+          for (int c = 0; c < links.length; c++) {
+            for (int d = 0; d < images.length; d++) {
+              final NotificationUI n = NotificationUI(
+                title: titles[a],
+                message: messages[b],
+                link: links[c],
+                image: images[d],
+                time: time,
+                uuid: '',
+              );
+              final String name = 'title_$a-message_$b-links_$c-images_$d';
+              testWidgets(name, (WidgetTester tester) async {
+                tester.binding.window.physicalSizeTestValue =
+                    physicalSizeTestValue;
 
-        if (name.contains('overflow')) {
-          expect(find.byIcon(Icons.expand), findsOneWidget);
-        } else {
-          expect(find.byIcon(Icons.expand), findsNothing);
+                await pumpWidget(tester, n);
+                await tester.pump();
+
+                await expectLater(find.byType(NotificationUI),
+                    matchesGoldenFile('golden-asserts/notification/$name.png'));
+              });
+            }
+          }
         }
-
-        await expectLater(find.byType(NotificationUI),
-            matchesGoldenFile('golden-asserts/notification/$name.png'));
-      });
+      }
     });
 
     testWidgets('Test Mark As Read', (WidgetTester tester) async {
       final NotificationUI n = NotificationUI(
-        title: title,
+        title: titles[0],
+        time: time,
         message: '',
         uuid: '',
-        time: '',
       );
       await pumpWidget(tester, n);
       await tester.pump();
@@ -156,24 +140,21 @@ void main() {
       });
 
       // mark read
-      await tester.tap(find.byIcon(Icons.check));
+      await tester.tap(find.byIcon(Akaricons.check));
       await tester.pump();
 
       expect(n.isRead, true);
 
       await expectLater(find.byType(NotificationUI),
-          matchesGoldenFile('golden-asserts/notification/read.png'));
+          matchesGoldenFile('golden-asserts/notification/is_read.png'));
     });
 
-    testWidgets('Test Expand', (WidgetTester tester) async {
-      tester.binding.window.physicalSizeTestValue = const Size(1500, 600);
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
-
+    testWidgets('Test Expand Action', (WidgetTester tester) async {
       final NotificationUI n = NotificationUI(
         title: longTtl,
-        message: '',
+        message: longMsg,
+        time: time,
         uuid: '',
-        time: '',
       );
       await pumpWidget(tester, n);
       await tester.pump();
@@ -189,14 +170,76 @@ void main() {
         }
       });
 
-      // mark read
-      await tester.tap(find.byIcon(Icons.expand));
+      // expand
+      await tester.tap(find.byIcon(Akaricons.enlarge));
       await tester.pump();
 
       expect(n.isExpanded, true);
 
       await expectLater(find.byType(NotificationUI),
-          matchesGoldenFile('golden-asserts/notification/expand.png'));
+          matchesGoldenFile('golden-asserts/notification/is_expanded.png'));
+    });
+
+    group('Test Expand Combinations', () {
+      final Map<String, NotificationUI> inputsToBeExpected =
+          <String, NotificationUI>{
+        'title': NotificationUI(
+          time: time,
+          uuid: '',
+          title: longTtl,
+        ),
+        'message': NotificationUI(
+          time: time,
+          uuid: '',
+          title: 'foo',
+          message: longMsg,
+        ),
+        'title-message': NotificationUI(
+          time: time,
+          uuid: '',
+          title: longTtl,
+          message: longMsg,
+        ),
+      };
+      inputsToBeExpected.forEach((String name, NotificationUI notification) {
+        testWidgets(name, (WidgetTester tester) async {
+          await pumpWidget(tester, notification);
+          await tester.pump();
+
+          expect(find.byIcon(Akaricons.enlarge), findsOneWidget);
+        });
+      });
+    });
+
+    group('Test No Expand Combinations', () {
+      final Map<String, NotificationUI> inputsToBeExpected =
+          <String, NotificationUI>{
+        'title': NotificationUI(
+          time: time,
+          uuid: '',
+          title: longTtl.substring(0, longTtl.length - 1),
+        ),
+        'message': NotificationUI(
+          time: time,
+          uuid: '',
+          title: 'foo',
+          message: longMsg.substring(0, longMsg.length - 1),
+        ),
+        'title-message': NotificationUI(
+          time: time,
+          uuid: '',
+          title: longTtl.substring(0, longTtl.length - 1),
+          message: longMsg.substring(0, longMsg.length - 1),
+        ),
+      };
+      inputsToBeExpected.forEach((String name, NotificationUI notification) {
+        testWidgets(name, (WidgetTester tester) async {
+          await pumpWidget(tester, notification);
+          await tester.pump();
+
+          expect(find.byIcon(Akaricons.enlarge), findsNothing);
+        });
+      });
     });
   });
 }

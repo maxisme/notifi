@@ -68,7 +68,12 @@ jobs:
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
-          echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
+          then
+            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+          else
+            echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          fi
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
       - name: "Create .dmg"
         continue-on-error: true

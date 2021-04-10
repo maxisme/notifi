@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/pallete.dart';
+import 'package:notifi/utils/icons.dart';
+import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
@@ -21,65 +22,6 @@ class NotificationTable extends StatefulWidget {
 
 class NotificationTableState extends State<NotificationTable>
     with TickerProviderStateMixin {
-  Widget _buildNotification(
-      BuildContext context, int index, Animation<double> animation) {
-    final NotificationUI notification =
-        Provider.of<Notifications>(context, listen: false).get(index);
-    notification.createState();
-    notification.index = index;
-    notification.toggleExpand = toggleExpand;
-
-    return AnimatedSize(
-        // to animate expand
-        vsync: this,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-        child: Slidable(
-            key: Key(notification.id.toString()),
-            actionPane: const SlidableDrawerActionPane(),
-            actionExtentRatio: 0.2,
-            dismissal: SlidableDismissal(
-              // ignore: prefer_const_literals_to_create_immutables
-              dismissThresholds: <SlideActionType, double>{
-                SlideActionType.primary: 1.0
-              },
-              onDismissed: (_) {
-                Provider.of<Notifications>(context, listen: false)
-                    .delete(index);
-              },
-              child: const SlidableDrawerDismissal(),
-            ),
-            actions: <Widget>[
-              IconSlideAction(
-                color: MyColour.offWhite,
-                icon: Icons.copy,
-                caption: 'Title',
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: notification.title));
-                },
-              ),
-              IconSlideAction(
-                color: MyColour.offWhite,
-                icon: Icons.copy,
-                caption: 'Message',
-                onTap: () async {
-                  Clipboard.setData(ClipboardData(text: notification.message));
-                },
-              ),
-            ],
-            secondaryActions: <Widget>[
-              IconSlideAction(
-                color: MyColour.offWhite,
-                icon: Icons.delete,
-                onTap: () {
-                  Provider.of<Notifications>(context, listen: false)
-                      .delete(index);
-                },
-              ),
-            ],
-            child: notification));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ReloadTable>(
@@ -89,6 +31,7 @@ class NotificationTableState extends State<NotificationTable>
       if (notifications.notifications.isNotEmpty) {
         return AnimatedList(
             key: notifications.tableKey,
+            controller: notifications.tableController,
             itemBuilder: _buildNotification,
             initialItemCount: notifications.length);
       } else {
@@ -100,7 +43,7 @@ class NotificationTableState extends State<NotificationTable>
               Image.asset('images/sad.png',
                   height: 150, filterQuality: FilterQuality.high),
               Container(padding: const EdgeInsets.only(top: 20.0)),
-              const SelectableText('No notifications!',
+              const SelectableText('No Notifications!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: MyColour.black,
@@ -109,10 +52,8 @@ class NotificationTableState extends State<NotificationTable>
               Container(padding: const EdgeInsets.only(top: 20.0)),
               Consumer<User>(
                   builder: (BuildContext context, User user, Widget child) {
-                String credentials = '...';
-                if (!user.isNull()) {
-                  credentials = user.credentials;
-                }
+                String credentials = user.getCredentials();
+                credentials ??= '...';
                 return Column(children: <Widget>[
                   RichText(
                     textAlign: TextAlign.center,
@@ -175,6 +116,65 @@ class NotificationTableState extends State<NotificationTable>
     // mark read
     Provider.of<Notifications>(context, listen: false)
         .markRead(index, isRead: true);
+  }
+
+  Widget _buildNotification(
+      BuildContext context, int index, Animation<double> animation) {
+    final NotificationUI notification =
+        Provider.of<Notifications>(context, listen: false).get(index);
+    notification.index = index;
+    notification.toggleExpand = toggleExpand;
+
+    final Animation<Offset> _offsetAnimation = Tween<Offset>(
+      begin: const Offset(-1, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.fastLinearToSlowEaseIn,
+    ));
+
+    return SlideTransition(
+      position: _offsetAnimation,
+      child: AnimatedSize(
+          // to animate expand
+          vsync: this,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+          child: Slidable(
+              key: Key(notification.id.toString()),
+              actionPane: const SlidableDrawerActionPane(),
+              actionExtentRatio: 0.2,
+              actions: <Widget>[
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Akaricons.copy,
+                  caption: 'Title',
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: notification.title));
+                  },
+                ),
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Akaricons.copy,
+                  caption: 'Message',
+                  onTap: () async {
+                    Clipboard.setData(
+                        ClipboardData(text: notification.message));
+                  },
+                ),
+              ],
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  color: MyColour.offWhite,
+                  icon: Akaricons.cross,
+                  onTap: () {
+                    Provider.of<Notifications>(context, listen: false)
+                        .delete(index);
+                  },
+                ),
+              ],
+              child: notification)),
+    );
   }
 }
 
