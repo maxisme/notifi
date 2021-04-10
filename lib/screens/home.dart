@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
           leading: IconButton(
               icon: const Icon(
                 Akaricons.gear,
-                color: MyColour.grey,
+                color: MyColour.darkGrey,
                 size: 22,
               ),
               onPressed: () async {

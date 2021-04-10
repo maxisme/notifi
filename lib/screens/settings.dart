@@ -62,7 +62,8 @@ class SettingsScreenState extends State<SettingsScreen> {
           leading: IconButton(
               icon: const Icon(
                 Akaricons.chevronLeft,
-                color: MyColour.grey,
+                color: MyColour.darkGrey,
+                size: 22,
               ),
               onPressed: () {
                 Navigator.pop(context);
