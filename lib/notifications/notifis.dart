@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/utils.dart';
 
 class Notifications extends ChangeNotifier {
   Notifications(this.notifications, this.db, this.tableNotifier);

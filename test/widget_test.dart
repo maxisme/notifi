@@ -8,7 +8,7 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 

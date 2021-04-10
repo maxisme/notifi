@@ -13,7 +13,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:notifi/ws.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;

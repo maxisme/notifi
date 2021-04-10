@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/pallete.dart';
+import 'package:notifi/utils/icons.dart';
+import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 

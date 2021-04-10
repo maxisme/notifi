@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:web_socket_channel/io.dart';
 
 Future<IOWebSocketChannel> connectToWS(
