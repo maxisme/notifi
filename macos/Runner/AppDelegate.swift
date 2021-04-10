@@ -45,7 +45,7 @@ class AppDelegate: FlutterAppDelegate {
             case "error_menu_icon":
                 menu_image = NSImage(named: .error)
             case "animate":
-                if let button = statusBarItem.button {
+                if let button = self.statusBarItem.button {
                     if menuBarAnimater != nil {
                         menuBarAnimater.invalidate()
                     }
@@ -57,7 +57,7 @@ class AppDelegate: FlutterAppDelegate {
                 closePopover(sender: nil)
                 return
             case "UUID":
-                result(_hardwareUUID())
+                result(hardwareUUID())
                 return
             default:
                 return
@@ -111,7 +111,11 @@ class AppDelegate: FlutterAppDelegate {
             let height = rect.size.height * 0.7  // 70% of window
             popover.contentSize = NSSize(width: 400, height: height)
             if let button = statusBarItem.button {
-                popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+                popover.show(
+                        relativeTo: button.bounds,
+                        of: button,
+                        preferredEdge: NSRectEdge.minY
+                )
             }
         }
     }
@@ -120,16 +124,17 @@ class AppDelegate: FlutterAppDelegate {
         popover.performClose(sender)
     }
 
-    func _hardwareUUID() -> String? {
+    func hardwareUUID() -> String? {
         let matchingDict = IOServiceMatching("IOPlatformExpertDevice")
         let platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, matchingDict)
-        defer{
+        defer {
             IOObjectRelease(platformExpert)
         }
 
         guard platformExpert != 0 else {
             return nil
         }
-        return IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformUUIDKey as CFString, kCFAllocatorDefault, 0).takeRetainedValue() as? String
+        return IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformUUIDKey as CFString, kCFAllocatorDefault, 0)
+                .takeRetainedValue() as? String
     }
 }
