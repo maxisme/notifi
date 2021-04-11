@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/screens/utils/animated_circle.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -33,33 +34,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Container(
                         padding: const EdgeInsets.only(top: 5.0),
-                        child: Consumer<Notifications>(builder:
-                            (BuildContext context, Notifications notifi,
-                                Widget child) {
-                          final int unreadCnt = notifi.unreadCnt;
-                          if (unreadCnt != 0) {
-                            String numUnread = unreadCnt.toString();
-                            if (unreadCnt > 99) {
-                              numUnread = '99+';
-                            }
-                            // TODO animate
-                            return Container(
-                              alignment: const Alignment(0.1, 0),
-                              child: CircleAvatar(
-                                  backgroundColor: MyColour.red,
-                                  radius: 10,
-                                  child: Text(
-                                    numUnread,
-                                    style: const TextStyle(
-                                      color: MyColour.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  )),
-                            );
-                          }
-                          return Container();
-                        })),
+                        child: const AnimatedCircle()),
                   ],
                 ),
                 Consumer<User>(
