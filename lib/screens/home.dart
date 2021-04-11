@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/user.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -97,38 +97,35 @@ class HomeScreen extends StatelessWidget {
               }),
         ),
         body: const NotificationTable(),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: MyColour.grey,
-          unselectedItemColor: MyColour.grey,
+        bottomNavigationBar: BottomAppBar(
           // ignore: prefer_const_literals_to_create_immutables
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
-              icon: Icon(Akaricons.doubleCheck,
-                  color: MyColour.darkGrey, size: 30),
-              label: '',
-              tooltip: '',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Akaricons.trash, color: MyColour.red, size: 30),
-              label: '',
-              tooltip: '',
-            ),
-          ],
-          onTap: (int index) {
-            if (index == 0) {
-              // MARK ALL AS READ EVENT
-              Provider.of<Notifications>(context, listen: false).readAll();
-            } else if (index == 1) {
-              // DELETE ALL EVENT
-              showAlert(context, 'Delete All Notifications?',
-                  'All notifications will be irretrievable.', onOkPressed: () {
-                Provider.of<Notifications>(context, listen: false).deleteAll();
-                Navigator.pop(context);
-              });
-            }
-          },
+          child: SizedBox(
+            height: 50,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Provider.of<Notifications>(context, listen: false)
+                            .readAll();
+                      },
+                      child: const Icon(Akaricons.doubleCheck,
+                          color: MyColour.darkGrey, size: 45)),
+                  Container(color: MyColour.offGrey, width: 1),
+                  TextButton(
+                      onPressed: () {
+                        showAlert(context, 'Delete All Notifications?',
+                            'All notifications will be irretrievable.',
+                            onOkPressed: () {
+                          Provider.of<Notifications>(context, listen: false)
+                              .deleteAll();
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: const Icon(Akaricons.trash,
+                          color: MyColour.red, size: 30))
+                ]),
+          ),
         ));
   }
 }

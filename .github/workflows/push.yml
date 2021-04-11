@@ -40,7 +40,9 @@ jobs:
         with:
           channel: 'dev'
       - name: "Lint"
-        run: flutter analyze
+        run: |
+          touch .env
+          flutter analyze
       - name: "Test"
         run: flutter test
       - name: "Upload failure Screenshots"

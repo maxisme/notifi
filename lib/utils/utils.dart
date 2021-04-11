@@ -51,11 +51,7 @@ Future<String> getVersion() async {
 }
 
 Future<void> loadDotEnv() async {
-  try {
-    await dot_env.load();
-  } catch (e) {
-    return;
-  }
+  await dot_env.load();
 }
 
 Future<void> openUrl(String url) async {

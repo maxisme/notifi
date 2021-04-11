@@ -66,6 +66,9 @@ class _MyAppState extends State<MyApp> {
             accentColor: MyColour.black,
             buttonColor: MyColour.red,
             focusColor: MyColour.transparent,
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.grey,
+            ).copyWith(),
             dialogTheme: DialogTheme(
                 elevation: 0,
                 shape: Border.all(width: 3),
