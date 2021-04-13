@@ -185,7 +185,7 @@ class NotificationUIState extends State<NotificationUI> {
 
       return Container(
           color: Colors.transparent,
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
           child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: MyColour.offGrey),
