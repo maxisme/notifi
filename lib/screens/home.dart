@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/animated_circle.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
