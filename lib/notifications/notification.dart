@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as i;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/utils/crypt.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
@@ -32,8 +33,8 @@ class NotificationUI extends StatefulWidget {
     read = read ?? false;
   }
 
-  factory NotificationUI.fromJson(Map<String, dynamic> json) =>
-      _$NotificationFromJson(json);
+  factory NotificationUI.fromJson(Map<String, dynamic> json, KeyPair keyPair) =>
+      _$NotificationFromJson(json, keyPair);
 
   final String uuid;
   final String time;
@@ -49,13 +50,23 @@ class NotificationUI extends StatefulWidget {
 
   bool get isRead => read != null && read;
 
-  Map<String, dynamic> toJson() => _$NotificationToJson(this);
-
   @override
   NotificationUIState createState() => NotificationUIState();
 }
 
-NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
+NotificationUI _$NotificationFromJson(
+    Map<String, dynamic> json, KeyPair keyPair) {
+  if (json['is_encrypted']) {
+    return NotificationUI(
+        id: json['id'] as int,
+        uuid: json['UUID'] as String,
+        time: json['time'] as String,
+        title: decryptString(json['title'], keyPair.privateKey),
+        message: decryptString(json['message'], keyPair.privateKey),
+        image: decryptString(json['image'], keyPair.privateKey),
+        link: decryptString(json['link'], keyPair.privateKey));
+  }
+
   return NotificationUI(
       id: json['id'] as int,
       uuid: json['UUID'] as String,
@@ -65,17 +76,6 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
       image: json['image'] as String,
       link: json['link'] as String);
 }
-
-Map<String, dynamic> _$NotificationToJson(NotificationUI notification) =>
-    <String, dynamic>{
-      'id': notification.id,
-      'title': notification.title,
-      'time': notification.time,
-      'message': notification.message,
-      'image': notification.image,
-      'link': notification.link,
-      'read': notification.isRead,
-    };
 
 class NotificationUIState extends State<NotificationUI> {
   final GlobalKey _columnKey = GlobalKey();

@@ -6,8 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
-import 'package:notifi/utils/icons.dart';
-import 'package:notifi/utils/pallete.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info/package_info.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,6 +49,10 @@ Future<String> getVersion() async {
   return packageInfo.buildNumber;
 }
 
+bool isBeta() {
+  return env['IS_BETA'] == 'true';
+}
+
 Future<void> loadDotEnv() async {
   await dot_env.load();
 }
@@ -88,47 +91,4 @@ class L {
   static void e(String msg) {
     FLog.error(text: msg);
   }
-}
-
-Future<void> showAlert(BuildContext context, String title, String description,
-    {int duration, int gravity, VoidCallback onOkPressed}) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Column(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: const Icon(
-              Akaricons.triangleAlert,
-              color: MyColour.red,
-              size: 40,
-            ),
-          ),
-          Text(
-            title,
-            textAlign: TextAlign.left,
-          )
-        ]),
-        content: Text(description),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: MyColour.grey),
-            ),
-          ),
-          TextButton(
-              onPressed: onOkPressed,
-              child: const Text(
-                'Ok',
-                style: TextStyle(color: MyColour.black),
-              )),
-        ],
-      );
-    },
-  );
 }

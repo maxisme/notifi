@@ -12,6 +12,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/utils/crypt.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:notifi/ws.dart';
 import 'package:web_socket_channel/io.dart';
@@ -22,7 +23,6 @@ const int requestNewUserCode = 551;
 class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
     _user = UserStruct();
-    setNotifications(_notifications);
     if (!isFlutterTest()) {
       _loadUser();
     }
@@ -66,18 +66,22 @@ class User with ChangeNotifier {
   }
 
   Future<bool> setNewUser() async {
+    final KeyPair keyPair = await getRSAKeyPair();
     final Map<String, dynamic> postData = <String, String>{
-      'UUID': await getDeviceUUID()
+      'UUID': await getDeviceUUID(),
+      'public_key': keyPair.b64PublicKey,
     };
 
     if (!_user.isNull()) {
+      L.w('Replacing credentials: ${_user.credentials}');
+
       postData['current_credential_key'] = _user.credentialKey;
       postData['current_credentials'] = _user.credentials;
-      L.w('Replacing credentials: ${_user.credentials}');
     }
 
     final UserStruct newUser = await _newUserReq(postData);
     if (!newUser.isNull()) {
+      newUser.keyPair = keyPair;
       _user = newUser;
 
       // store user credentials
@@ -87,7 +91,7 @@ class User with ChangeNotifier {
 
       if (_ws != null) {
         L.d('Reconnecting to ws...');
-        _ws.sink.close(status.normalClosure, 'new code!');
+        _ws.sink.close(status.normalClosure, 'replaced credentials!');
       }
     }
     return !newUser.isNull();
@@ -166,7 +170,7 @@ class User with ChangeNotifier {
 
       if (jsonMessage != null) {
         final NotificationUI notification =
-            NotificationUI.fromJson(jsonMessage);
+            NotificationUI.fromJson(jsonMessage, _user.keyPair);
 
         // store notification
         final int id = await _notifications.add(notification);
@@ -216,14 +220,17 @@ class User with ChangeNotifier {
 }
 
 class UserStruct {
-  UserStruct({this.uuid, this.credentialKey, this.credentials});
+  UserStruct({this.uuid, this.credentialKey, this.credentials}) {
+    _storageKey = isBeta() ? 'beta_user' : 'user';
+  }
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  static const String _key = 'user';
+  String _storageKey;
 
   String uuid;
   String credentialKey;
   String credentials;
+  KeyPair keyPair;
 
   bool isNull() {
     return uuid == null || credentialKey == null || credentials == null;
@@ -231,7 +238,7 @@ class UserStruct {
 
   Future<bool> store() async {
     try {
-      await _storage.write(key: _key, value: _toJson());
+      await _storage.write(key: _storageKey, value: _toJson());
     } catch (e) {
       L.e(e.toString());
       return false;
@@ -242,7 +249,7 @@ class UserStruct {
   Future<bool> load() async {
     String userJsonString;
     try {
-      userJsonString = await _storage.read(key: _key);
+      userJsonString = await _storage.read(key: _storageKey);
     } catch (e) {
       L.e(e.toString());
       return false;
@@ -251,10 +258,10 @@ class UserStruct {
     try {
       final Map<String, dynamic> userJson =
           jsonDecode(userJsonString) as Map<String, dynamic>;
-
       uuid = userJson['UUID'];
       credentials = userJson['credentials'];
       credentialKey = userJson['credentialKey'];
+      keyPair = KeyPair(userJson['publicKey'], userJson['privateKey']);
     } catch (error) {
       L.e(error.toString());
       return false;
@@ -268,6 +275,8 @@ class UserStruct {
       'UUID': uuid,
       'credentials': credentials,
       'credentialKey': credentialKey,
+      'publicKey': keyPair.b64PublicKey,
+      'privateKey': keyPair.b64PrivateKey,
     });
   }
 }

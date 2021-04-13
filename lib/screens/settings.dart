@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/screens/logs.dart';
+import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
