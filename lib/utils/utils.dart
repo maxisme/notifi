@@ -19,7 +19,13 @@ bool isFlutterTest() {
 }
 
 Future<dynamic> invokeMacMethod(String method) async {
-  if (Platform.isMacOS && !isFlutterTest()) {
+  if (Platform.isMacOS) {
+    invokeMethod(method);
+  }
+}
+
+Future<dynamic> invokeMethod(String method) async {
+  if (!isFlutterTest()) {
     try {
       return await platform.invokeMethod(method);
     } on PlatformException catch (e) {
@@ -67,7 +73,7 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 
 Future<String> getDeviceUUID() async {
   L.d('fetching UUID');
-  return await invokeMacMethod('UUID');
+  return await invokeMethod('UUID');
 }
 
 class L {

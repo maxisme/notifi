@@ -34,6 +34,7 @@ class AppDelegate: FlutterAppDelegate {
                 binaryMessenger: flutterViewController.engine.binaryMessenger)
 
         var menuBarAnimater: Animater!
+
         notificationChannel.setMethodCallHandler { [self]
         (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let menu_image: NSImage?
