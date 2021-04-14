@@ -7,6 +7,7 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils/firebase.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   loadDotEnv();
+
+  if (shouldUseFirebase()) {
+    initFirebase();
+  }
 
   final DBProvider db = DBProvider('notifications.db');
   final List<NotificationUI> notifications = await db.getAll();

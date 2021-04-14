@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -73,6 +74,10 @@ class User with ChangeNotifier {
     if (!_user.isNull()) {
       postData['current_credential_key'] = _user.credentialKey;
       postData['current_credentials'] = _user.credentials;
+      if (shouldUseFirebase()) {
+        postData['firebase_token'] =
+            await FirebaseMessaging.instance.getToken();
+      }
       L.w('Replacing credentials: ${_user.credentials}');
     }
 

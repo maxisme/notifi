@@ -63,8 +63,11 @@ class Notifications extends ChangeNotifier {
         curve: Curves.ease,
       );
 
-      // insert notification
-      tableKey.currentState.insertItem(0, duration: const Duration(seconds: 1));
+      // animate in notification
+      if (tableKey.currentState != null) {
+        tableKey.currentState
+            .insertItem(0, duration: const Duration(seconds: 1));
+      }
     }
     notifyListeners();
     return id;

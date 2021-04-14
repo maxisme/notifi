@@ -76,6 +76,10 @@ Future<String> getDeviceUUID() async {
   return await invokeMethod('UUID');
 }
 
+bool shouldUseFirebase() {
+  return Platform.isIOS;
+}
+
 class L {
   static void d(String msg) {
     FLog.debug(text: msg);
