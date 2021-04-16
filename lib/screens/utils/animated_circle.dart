@@ -52,24 +52,25 @@ class _AnimatedCircleState extends State<AnimatedCircle>
 
         _isShowing = true;
 
-        return Container(
-            alignment: const Alignment(0.1, 0),
-            child: ScaleTransition(
-                scale: CurvedAnimation(
-                  parent: _controller,
-                  curve: Curves.bounceOut,
-                ),
-                child: CircleAvatar(
-                    backgroundColor: MyColour.red,
-                    radius: 10,
-                    child: Text(
-                      numUnread,
-                      style: const TextStyle(
-                        color: MyColour.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ))));
+        return ScaleTransition(
+            scale: CurvedAnimation(
+              parent: _controller,
+              curve: Curves.bounceOut,
+            ),
+            child: CircleAvatar(
+                backgroundColor: MyColour.transparent,
+                radius: 8,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: Text(
+                    numUnread,
+                    style: const TextStyle(
+                      color: MyColour.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                )));
       }
 
       _isShowing = false;

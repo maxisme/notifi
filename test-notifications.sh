@@ -8,6 +8,7 @@ LOREM="Lorem%20ipsum%20dolor%20sit%20amet,%20consectetur%20adipiscing%20elit.%20
 
 #curl "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}"
 curl -i "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=$(date +%s)&message=${LOREM}"
+#curl -i "http://127.0.0.1:9081/api?credentials=${CREDENTIALS}&title=$(date +%s)&message=${LOREM}"
 #curl "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=hey&message=${LOREM}"
 #curl "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=hey&message=hey"
 #curl "https:/dev.notifi.it/api?credentials=${CREDENTIALS}&title=1"

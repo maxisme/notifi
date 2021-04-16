@@ -33,8 +33,8 @@ class HomeScreen extends StatelessWidget {
                               filterQuality: FilterQuality.high)),
                     ),
                     Container(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: const AnimatedCircle()),
+                        alignment: const Alignment(0.096, -1),
+                        child: const AnimatedCircle())
                   ],
                 ),
                 Consumer<User>(
@@ -46,12 +46,12 @@ class HomeScreen extends StatelessWidget {
                           const Icon(
                             Akaricons.circleAlert,
                             color: MyColour.red,
-                            size: 13,
+                            size: 11,
                           ),
                           const Text(' Network Error!',
                               style: TextStyle(
                                   color: MyColour.red,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600))
                         ]);
                   }
