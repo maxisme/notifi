@@ -2,7 +2,7 @@ import Cocoa
 import FlutterMacOS
 import UserNotifications
 
-let menuImageSize = NSSize(width: 15, height: 15)
+let menuImageSize = NSSize(width: 23, height: 23)
 
 extension NSImage.Name {
     static let grey = NSImage.Name("menu_icon")
