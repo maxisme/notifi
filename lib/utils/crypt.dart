@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:pointycastle/api.dart';
+import 'package:pointycastle/export.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
+import 'package:steel_crypt/steel_crypt.dart';
 
 RsaKeyHelper helper = RsaKeyHelper();
 Codec<String, String> b64 = utf8.fuse(base64);
@@ -59,7 +62,17 @@ PrivateKey b64StringToPrivateKey(String b64PrivateKey) {
   return helper.parsePrivateKeyFromPem(privateKey);
 }
 
-String decryptString(String b64Str, PrivateKey key) {
-  final String cipherText = b64.decode(b64Str);
-  return decrypt(cipherText, key);
+String decryptRSA(String b64Msg, PrivateKey privateKey) {
+  final Uint8List msg = base64.decode(b64Msg);
+  final OAEPEncoding cipher = OAEPEncoding(RSAEngine());
+  cipher.init(false, PrivateKeyParameter<RSAPrivateKey>(privateKey));
+  return String.fromCharCodes(cipher.process(msg));
+}
+
+String decryptAes(String b64Msg, String key) {
+  final Uint8List msg = base64.decode(b64Msg);
+  final AesCrypt aes = AesCrypt(key: key, padding: PaddingAES.none);
+  return aes.gcm.decrypt(
+      enc: base64.encode(msg.sublist(12, msg.length)),
+      iv: base64.encode(msg.sublist(0, 12)));
 }

@@ -221,7 +221,7 @@ class User with ChangeNotifier {
 
 class UserStruct {
   UserStruct({this.uuid, this.credentialKey, this.credentials}) {
-    _storageKey = isBeta() ? 'beta_user' : 'user';
+    _storageKey = env['KEY_STORE'];
   }
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage();

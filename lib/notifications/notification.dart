@@ -56,15 +56,16 @@ class NotificationUI extends StatefulWidget {
 
 NotificationUI _$NotificationFromJson(
     Map<String, dynamic> json, KeyPair keyPair) {
-  if (json['is_encrypted']) {
+  if (json['encrypted_key']) {
+    final String key = decryptRSA(json['encrypted_key'], keyPair.privateKey);
     return NotificationUI(
         id: json['id'] as int,
         uuid: json['UUID'] as String,
         time: json['time'] as String,
-        title: decryptString(json['title'], keyPair.privateKey),
-        message: decryptString(json['message'], keyPair.privateKey),
-        image: decryptString(json['image'], keyPair.privateKey),
-        link: decryptString(json['link'], keyPair.privateKey));
+        title: decryptAes(json['title'], key),
+        message: decryptAes(json['message'], key),
+        image: decryptAes(json['image'], key),
+        link: decryptAes(json['link'], key));
   }
 
   return NotificationUI(
