@@ -14,11 +14,9 @@ class AnimatedCircle extends StatefulWidget {
 class _AnimatedCircleState extends State<AnimatedCircle>
     with TickerProviderStateMixin {
   AnimationController _controller;
-  bool _isShowing;
 
   @override
   void initState() {
-    _isShowing = false;
     super.initState();
   }
 
@@ -40,17 +38,10 @@ class _AnimatedCircleState extends State<AnimatedCircle>
           numUnread = '99+';
         }
 
-        Duration duration = const Duration();
-        if (!_isShowing) {
-          duration = const Duration(milliseconds: 700);
-        }
-
         _controller = AnimationController(
-          duration: duration,
+          duration: const Duration(milliseconds: 700),
           vsync: this,
         )..forward();
-
-        _isShowing = true;
 
         return ScaleTransition(
             scale: CurvedAnimation(
@@ -73,7 +64,6 @@ class _AnimatedCircleState extends State<AnimatedCircle>
                 )));
       }
 
-      _isShowing = false;
       return Container();
     });
   }
