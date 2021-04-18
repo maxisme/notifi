@@ -5,13 +5,6 @@ import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:provider/provider.dart';
 
-// class MyAppBarTitle extends StatefulWidget {
-//   const MyAppBarTitle({Key key}) : super(key: key);
-//
-//   @override
-//   _MyAppBarTitleState createState() => _MyAppBarTitleState();
-// }
-
 class MyAppBarTitle extends StatelessWidget {
   const MyAppBarTitle(this._leadingWidth);
 
@@ -28,7 +21,7 @@ class MyAppBarTitle extends StatelessWidget {
             Container(
               alignment: const Alignment(0, 0),
               child: Image.asset('images/bell.png',
-                  height: 60, filterQuality: FilterQuality.high),
+                  height: 60, filterQuality: FilterQuality.medium),
             ),
             Container(
                 alignment: const Alignment(0.076, -0.62),
