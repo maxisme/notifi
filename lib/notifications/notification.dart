@@ -172,7 +172,7 @@ class NotificationUIState extends State<NotificationUI> {
                         fadeInDuration: const Duration(seconds: 1),
                         imageUrl: widget.image,
                         width: 50,
-                        filterQuality: FilterQuality.high))));
+                        filterQuality: FilterQuality.medium))));
       }
 
       titleStyle = TextStyle(

@@ -21,9 +21,12 @@ class MyAppBarTitle extends StatelessWidget {
             child: Image.asset('images/bell.png',
                 height: 70, filterQuality: FilterQuality.medium),
           ),
-          Container(
-              alignment: const Alignment(0.076, -0.62),
-              child: const AnimatedCircle()),
+          Positioned(
+            top: 9.8,
+            child: Container(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: const AnimatedCircle()),
+          ),
           Positioned(
             top: -4,
             child: Consumer<User>(

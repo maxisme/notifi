@@ -203,9 +203,9 @@ class User with ChangeNotifier {
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (_tmpErr == hasErr) {
         if (_tmpErr) {
-          MenuBarIcon.set('error');
+          MenuBarIcon.setErr();
         } else {
-          MenuBarIcon.revert();
+          MenuBarIcon.revertErr();
         }
         _hasError = _tmpErr;
         notifyListeners();
@@ -215,10 +215,13 @@ class User with ChangeNotifier {
 }
 
 class UserStruct {
-  UserStruct({this.uuid, this.credentialKey, this.credentials});
+  UserStruct({this.uuid, this.credentialKey, this.credentials}) {
+    _storage = const FlutterSecureStorage();
+    _key = 'notifi-${env['KEY_STORE']}';
+  }
 
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  static const String _key = 'user';
+  FlutterSecureStorage _storage;
+  String _key;
 
   String uuid;
   String credentialKey;

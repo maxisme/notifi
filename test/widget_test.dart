@@ -9,6 +9,7 @@ import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -247,6 +248,7 @@ void main() {
 Future<void> pumpWidget(
     WidgetTester tester, NotificationUI notification) async {
   WidgetsFlutterBinding.ensureInitialized();
+  loadDotEnv();
   final DBProvider db = DBProvider('test.db');
   final List<NotificationUI> notifications =
       List<NotificationUI>.empty(growable: true);

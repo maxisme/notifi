@@ -51,15 +51,12 @@ class _AnimatedCircleState extends State<AnimatedCircle>
             child: CircleAvatar(
                 backgroundColor: MyColour.transparent,
                 radius: 8,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 2.0),
-                  child: Text(
-                    numUnread,
-                    style: const TextStyle(
-                      color: MyColour.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                    ),
+                child: Text(
+                  numUnread,
+                  style: const TextStyle(
+                    color: MyColour.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
                   ),
                 )));
       }
