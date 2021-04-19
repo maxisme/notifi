@@ -15,7 +15,7 @@ import 'package:provider/single_child_widget.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  loadDotEnv();
+  await loadDotEnv();
 
   final DBProvider db = DBProvider('notifications.db');
   final List<NotificationUI> notifications = await db.getAll();

@@ -14,12 +14,12 @@ const MethodChannel platform = MethodChannel('max.me.uk/notifications');
 const String refKey = 'ref';
 const String messageKey = 'msg';
 
-bool isFlutterTest() {
+bool isTest() {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
 Future<dynamic> invokeMacMethod(String method) async {
-  if (Platform.isMacOS && !isFlutterTest()) {
+  if (Platform.isMacOS && !isTest()) {
     try {
       return await platform.invokeMethod(method);
     } on PlatformException catch (e) {

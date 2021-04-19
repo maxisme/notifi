@@ -22,7 +22,7 @@ class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
     _user = UserStruct();
     setNotifications(_notifications);
-    if (!isFlutterTest()) {
+    if (!isTest()) {
       _loadUser();
     }
   }
@@ -217,7 +217,7 @@ class User with ChangeNotifier {
 class UserStruct {
   UserStruct({this.uuid, this.credentialKey, this.credentials}) {
     _storage = const FlutterSecureStorage();
-    _key = 'notifi-${env['KEY_STORE']}';
+    if (!isTest()) _key = 'notifi-${env['KEY_STORE']}';
   }
 
   FlutterSecureStorage _storage;

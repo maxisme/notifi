@@ -46,7 +46,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isFlutterTest()) {
+    if (!isTest()) {
       getVersion().then((String version) {
         _version.value = version;
         getUpdateURL(version).then((String url) {
