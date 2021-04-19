@@ -251,8 +251,7 @@ class SettingOption extends StatelessWidget {
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
-                  shadowColor: MaterialStateProperty.all(MyColour.offWhite),
-                  overlayColor: MaterialStateProperty.all(MyColour.offWhite),
+                  overlayColor: MaterialStateProperty.all(MyColour.white),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
               child: Row(children: <Widget>[

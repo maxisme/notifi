@@ -62,6 +62,7 @@ class _MyAppState extends State<MyApp> {
             primaryColor: MyColour.offWhite,
             hoverColor: MyColour.transparent,
             focusColor: MyColour.transparent,
+            accentColor: MyColour.black,
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.grey,
             ).copyWith(),
