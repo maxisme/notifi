@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart' as i;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
@@ -160,19 +161,28 @@ class NotificationUIState extends State<NotificationUI> {
       // if image
       Widget image;
       if (widget.image != '') {
-        image = SizedBox(
-            width: 60,
-            child: GestureDetector(
-                onTap: () async {
-                  await openUrl(widget.image);
-                },
-                child: Container(
-                    padding: const EdgeInsets.only(right: 10.0),
+        image = MouseRegion(
+          cursor: SystemMouseCursors.alias,
+          child: GestureDetector(
+              onTap: () async {
+                await openUrl(widget.image);
+              },
+              child: Container(
+                padding: const EdgeInsets.only(right: 10.0, top: 3.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(2.0),
                     child: CachedNetworkImage(
-                        fadeInDuration: const Duration(seconds: 1),
                         imageUrl: widget.image,
                         width: 50,
-                        filterQuality: FilterQuality.high))));
+                        height: 50,
+                        fit: BoxFit.cover,
+                        errorWidget:
+                            (BuildContext context, String url, dynamic error) {
+                          return const SizedBox();
+                        },
+                        filterQuality: FilterQuality.medium)),
+              )),
+        );
       }
 
       titleStyle = TextStyle(
