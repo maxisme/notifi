@@ -76,7 +76,6 @@ jobs:
           fi
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
       - name: "Create .dmg"
-        continue-on-error: true
         run: |
           npm install --global create-dmg
           mkdir dmg
