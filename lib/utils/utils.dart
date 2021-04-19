@@ -14,12 +14,12 @@ const MethodChannel platform = MethodChannel('max.me.uk/notifications');
 const String refKey = 'ref';
 const String messageKey = 'msg';
 
-bool isFlutterTest() {
+bool isTest() {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
 Future<dynamic> invokeMacMethod(String method) async {
-  if (Platform.isMacOS && !isFlutterTest()) {
+  if (Platform.isMacOS && !isTest()) {
     try {
       return await platform.invokeMethod(method);
     } on PlatformException catch (e) {
@@ -29,14 +29,23 @@ Future<dynamic> invokeMacMethod(String method) async {
 }
 
 String currentIcon;
+bool hasErr = false;
 
 class MenuBarIcon {
   static Future<void> set(String icon) async {
+    if (!hasErr) {
+      await invokeMacMethod('${icon}_menu_icon');
+    }
     if (icon != 'error') currentIcon = icon;
-    await invokeMacMethod('${icon}_menu_icon');
   }
 
-  static Future<void> revert() async {
+  static Future<void> setErr() async {
+    hasErr = true;
+    set('error');
+  }
+
+  static Future<void> revertErr() async {
+    hasErr = false;
     String icon = currentIcon;
     if (currentIcon.isEmpty) icon = 'grey';
     set(icon);

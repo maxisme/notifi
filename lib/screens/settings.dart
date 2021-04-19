@@ -9,6 +9,7 @@ import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/screens/logs.dart';
 import 'package:notifi/screens/utils/alert.dart';
+import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -45,7 +46,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isFlutterTest()) {
+    if (!isTest()) {
       getVersion().then((String version) {
         _version.value = version;
         getUpdateURL(version).then((String url) {
@@ -70,10 +71,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pop(context);
               }),
           centerTitle: true,
-          title: SizedBox(
-              height: 50,
-              child: Image.asset('images/bell.png',
-                  filterQuality: FilterQuality.high)),
+          title: const MyAppBarTitle(60),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(

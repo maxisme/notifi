@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,7 +22,7 @@ class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
     _user = UserStruct();
     setNotifications(_notifications);
-    if (!isFlutterTest()) {
+    if (!isTest()) {
       _loadUser();
     }
   }
@@ -204,9 +203,9 @@ class User with ChangeNotifier {
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (_tmpErr == hasErr) {
         if (_tmpErr) {
-          MenuBarIcon.set('error');
+          MenuBarIcon.setErr();
         } else {
-          MenuBarIcon.revert();
+          MenuBarIcon.revertErr();
         }
         _hasError = _tmpErr;
         notifyListeners();
@@ -216,10 +215,13 @@ class User with ChangeNotifier {
 }
 
 class UserStruct {
-  UserStruct({this.uuid, this.credentialKey, this.credentials});
+  UserStruct({this.uuid, this.credentialKey, this.credentials}) {
+    _storage = const FlutterSecureStorage();
+    if (!isTest()) _key = 'notifi-${env['KEY_STORE']}';
+  }
 
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  static const String _key = 'user';
+  FlutterSecureStorage _storage;
+  String _key;
 
   String uuid;
   String credentialKey;
