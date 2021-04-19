@@ -100,7 +100,6 @@ class NotificationUIState extends State<NotificationUI> {
 
       // if expanded notification
       if (widget.isExpanded) {
-        // no limit on lines TODO must be a better way to handle this
         titleMaxLines = null;
         messageMaxLines = null;
       }
