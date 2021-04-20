@@ -3,8 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
-import 'package:notifi/screens/utils/animated_circle.dart';
-import 'package:notifi/user.dart';
+import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:provider/provider.dart';
@@ -19,47 +18,7 @@ class HomeScreen extends StatelessWidget {
           shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
-          title: Container(
-            padding: const EdgeInsets.only(right: leadingWidth),
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Container(
-                      alignment: const Alignment(0, 0),
-                      child: SizedBox(
-                          height: 50,
-                          child: Image.asset('images/bell.png',
-                              filterQuality: FilterQuality.high)),
-                    ),
-                    Container(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: const AnimatedCircle()),
-                  ],
-                ),
-                Consumer<User>(
-                    builder: (BuildContext context, User user, Widget child) {
-                  if (user.hasError()) {
-                    return Row(mainAxisAlignment: MainAxisAlignment.center,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: <Widget>[
-                          const Icon(
-                            Akaricons.circleAlert,
-                            color: MyColour.red,
-                            size: 13,
-                          ),
-                          const Text(' Network Error!',
-                              style: TextStyle(
-                                  color: MyColour.red,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600))
-                        ]);
-                  }
-                  return Container();
-                })
-              ],
-            ),
-          ),
+          title: const MyAppBarTitle(leadingWidth),
           leadingWidth: leadingWidth,
           leading: IconButton(
               icon: const Icon(
@@ -79,26 +38,35 @@ class HomeScreen extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        Provider.of<Notifications>(context, listen: false)
-                            .readAll();
-                      },
-                      child: const Icon(Akaricons.doubleCheck,
-                          color: MyColour.darkGrey, size: 45)),
-                  Container(color: MyColour.offGrey, width: 1),
-                  TextButton(
-                      onPressed: () {
-                        showAlert(context, 'Delete All Notifications?',
-                            'All notifications will be irretrievable.',
-                            onOkPressed: () {
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
                           Provider.of<Notifications>(context, listen: false)
-                              .deleteAll();
-                          Navigator.pop(context);
-                        });
-                      },
-                      child: const Icon(Akaricons.trash,
-                          color: MyColour.red, size: 30))
+                              .readAll();
+                        },
+                        child: const Icon(Akaricons.doubleCheck,
+                            color: MyColour.darkGrey, size: 45)),
+                  ),
+                  SizedBox(
+                      height: double.infinity,
+                      child: Container(color: MyColour.offGrey, width: 1)),
+                  Expanded(
+                    child: SizedBox(
+                      height: double.infinity,
+                      child: TextButton(
+                          onPressed: () {
+                            showAlert(context, 'Delete All Notifications?',
+                                'All notifications will be irretrievable.',
+                                onOkPressed: () {
+                              Provider.of<Notifications>(context, listen: false)
+                                  .deleteAll();
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: const Icon(Akaricons.trash,
+                              color: MyColour.red, size: 30)),
+                    ),
+                  )
                 ]),
           ),
         ));

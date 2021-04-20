@@ -16,7 +16,7 @@ import 'package:provider/single_child_widget.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  loadDotEnv();
+  await loadDotEnv();
 
   if (shouldUseFirebase()) {
     initFirebase();
@@ -65,12 +65,9 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
             fontFamily: 'Inconsolata',
             primaryColor: MyColour.offWhite,
-            highlightColor: MyColour.transparent,
             hoverColor: MyColour.transparent,
-            splashColor: MyColour.transparent,
-            accentColor: MyColour.black,
-            buttonColor: MyColour.red,
             focusColor: MyColour.transparent,
+            accentColor: MyColour.black,
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.grey,
             ).copyWith(),

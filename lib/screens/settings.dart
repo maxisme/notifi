@@ -9,6 +9,7 @@ import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/screens/logs.dart';
 import 'package:notifi/screens/utils/alert.dart';
+import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -45,7 +46,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isFlutterTest() && Platform.isMacOS) {
+    if (!isTest() && Platform.isMacOS) {
       getVersion().then((String version) {
         _version.value = version;
         getUpdateURL(version).then((String url) {
@@ -70,10 +71,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pop(context);
               }),
           centerTitle: true,
-          title: SizedBox(
-              height: 50,
-              child: Image.asset('images/bell.png',
-                  filterQuality: FilterQuality.high)),
+          title: const MyAppBarTitle(60),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
@@ -185,42 +183,41 @@ class SettingsScreenState extends State<SettingsScreen> {
                       )),
                 ])),
           ),
-          if (Platform.isMacOS)
-            // ignore: always_specify_types
-            ValueListenableBuilder(
-                valueListenable: _version,
-                // ignore: always_specify_types
-                builder: (BuildContext context, String version, Widget child) {
-                  return Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('version: $version',
-                            style: const TextStyle(
-                                color: MyColour.grey, fontSize: 12)),
-                        // ignore: always_specify_types
-                        ValueListenableBuilder(
-                            valueListenable: _downloadURL,
-                            builder: (BuildContext context, String upgradeURL,
-                                Widget child) {
-                              if (upgradeURL != '') {
-                                return TextButton(
-                                    onPressed: () {
-                                      launch(upgradeURL);
-                                    },
-                                    child: const Icon(
-                                      Akaricons.cloudDownload,
-                                      color: MyColour.red,
-                                      size: 18,
-                                    ));
-                              }
-                              return const SizedBox();
-                            })
-                      ],
-                    ),
-                  );
-                }),
+          // ignore: always_specify_types
+          ValueListenableBuilder(
+              valueListenable: _version,
+              // ignore: always_specify_types
+              builder: (BuildContext context, String version, Widget child) {
+                return Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('version: $version',
+                          style: const TextStyle(
+                              color: MyColour.grey, fontSize: 12)),
+                      // ignore: always_specify_types
+                      ValueListenableBuilder(
+                          valueListenable: _downloadURL,
+                          builder: (BuildContext context, String upgradeURL,
+                              Widget child) {
+                            if (upgradeURL != '') {
+                              return TextButton(
+                                  onPressed: () {
+                                    launch(upgradeURL);
+                                  },
+                                  child: const Icon(
+                                    Akaricons.cloudDownload,
+                                    color: MyColour.red,
+                                    size: 18,
+                                  ));
+                            }
+                            return const SizedBox();
+                          })
+                    ],
+                  ),
+                );
+              }),
         ]));
   }
 }
@@ -254,8 +251,7 @@ class SettingOption extends StatelessWidget {
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
-                  shadowColor: MaterialStateProperty.all(MyColour.offWhite),
-                  overlayColor: MaterialStateProperty.all(MyColour.offWhite),
+                  overlayColor: MaterialStateProperty.all(MyColour.white),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
               child: Row(children: <Widget>[
