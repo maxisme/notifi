@@ -163,11 +163,11 @@ jobs:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
         run: |
           cd ios
-          gem install fastlane
+          brew install fastlane
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
-            bundle exec fastlane appstore
+            fastlane appstore
           else
-            bundle exec fastlane tfdeploy
+            fastlane tfdeploy
           fi
