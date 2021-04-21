@@ -170,5 +170,5 @@ jobs:
           then
             bundle exec fastlane appstore
           else
-            bundle exec fastlane testflight
+            bundle exec fastlane tfdeploy
           fi
