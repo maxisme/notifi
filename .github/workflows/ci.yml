@@ -144,9 +144,11 @@ jobs:
           else
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
-          flutter build ios --release --no-codesign --build-name=${{ needs.version.outputs.version }}
+          cd ./ios
+          pod install
+          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
 
-      - name: "Setup codesign"
+      - name: "Setup codesign keychain"
         run: |
           echo ${{ secrets.MACOS_CERTIFICATE }} | base64 --decode > certificate.p12
           security create-keychain -p p4ssword build.keychain
@@ -161,10 +163,10 @@ jobs:
       - name: "Run fastlane"
         env:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
         run: |
           cd ios
-          brew install fastlane
-          fastlane setup --verbose
           gem install fastlane
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
