@@ -52,8 +52,11 @@ jobs:
           name: golden-failures
           path: test/failures
 
-  build:
-    name: "Build"
+  #########
+  # macos #
+  #########
+  build-macos:
+    name: "Build MacOS"
     runs-on: macos-latest
     needs: version
     steps:
@@ -96,11 +99,11 @@ jobs:
           path: dmg/
           if-no-files-found: error
 
-  deploy:
-    name: "Deploy"
+  deploy-macos:
+    name: "Deploy MacOS"
     if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
     runs-on: macos-latest
-    needs: [ checks, build, version ]
+    needs: [ checks, build-macos, version ]
     steps:
       - uses: actions/download-artifact@v2
         id: download
@@ -115,3 +118,57 @@ jobs:
           title: "Release ${{ needs.version.outputs.version }}"
           files: |
             ${{steps.download.outputs.download-path}}
+
+  #########
+  #  iOS  #
+  #########
+  build-ios:
+    name: "Build & Deploy iOS"
+    runs-on: macos-latest
+    needs: [ version ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+
+      - name: "Build"
+        run: |
+          flutter pub get
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
+          then
+            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+          else
+            echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          fi
+          flutter build ios --release --no-codesign --build-name=${{ needs.version.outputs.version }}
+
+      - name: "Setup codesign"
+        run: |
+          echo ${{ secrets.MACOS_CERTIFICATE }} | base64 --decode > certificate.p12
+          security create-keychain -p p4ssword build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p p4ssword build.keychain
+          security import certificate.p12 -k build.keychain -P ${{ secrets.MACOS_CERTIFICATE_PWD }} -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo ${{ secrets.PROVISIONING_PROFILE_DATA }} | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+
+      - name: "Run fastlane"
+        env:
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+        run: |
+          brew install fastlane
+
+          cd ios
+
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]
+          then
+            bundle exec fastlane appstore
+          else
+            bundle exec fastlane testflight
+          fi
