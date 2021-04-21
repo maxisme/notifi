@@ -165,6 +165,7 @@ jobs:
           cd ios
           brew install fastlane
           fastlane setup --verbose
+          gem install fastlane
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
