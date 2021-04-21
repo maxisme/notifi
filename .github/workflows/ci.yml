@@ -161,10 +161,10 @@ jobs:
       - name: "Run fastlane"
         env:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
         run: |
           cd ios
-          brew install fastlane
-          fastlane setup --verbose
           gem install fastlane
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
