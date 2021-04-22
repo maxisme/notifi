@@ -25,7 +25,7 @@ jobs:
           then
             echo ::set-output name=VERSION::${{ steps.bump_version.outputs.new_tag }}
           else
-            echo ::set-output name=VERSION::ci-$GITHUB_RUN_ID
+            echo ::set-output name=VERSION::$GITHUB_RUN_ID
           fi
 
   checks:
@@ -138,15 +138,23 @@ jobs:
       - name: "Build"
         run: |
           flutter pub get
-          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
+          if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+            cd ios
+
+            if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
+            then
+              xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+            else
+              xcrun agvtool new-version -all 0.0.$GITHUB_RUN_ID
+            fi
           else
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+            cd ios
+            xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
           fi
-          cd ./ios
           pod install
-          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
 
       - name: "Setup codesign keychain"
         run: |
