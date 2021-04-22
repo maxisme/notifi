@@ -12,18 +12,29 @@ jobs:
         with:
           fetch-depth: '0'
       - id: bump_version
-        if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_BRANCHES: master
           DRY_RUN: true
+      - id: bump_version_dev
+        if: ${{ (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_BRANCHES: develop
+          DRY_RUN: true
+          DEFAULT_BUMP: patch
       - id: version
         name: Create Version
         run: |
           if [ -n "${{ steps.bump_version.outputs.new_tag }}" ]
           then
             echo ::set-output name=VERSION::${{ steps.bump_version.outputs.new_tag }}
+          elif [ -n "${{ steps.bump_version_dev.outputs.new_tag }}" ]
+          then
+            echo ::set-output name=VERSION::${{ steps.bump_version_dev.outputs.new_tag }}
           else
             echo ::set-output name=VERSION::$GITHUB_RUN_ID
           fi
@@ -71,11 +82,11 @@ jobs:
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
-          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
-            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
-          else
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          else
+            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
           fi
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
       - name: "Codesign"
@@ -124,6 +135,7 @@ jobs:
   #########
   build-ios:
     name: "Build & Deploy iOS"
+    if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
     runs-on: macos-latest
     needs: [ version ]
     steps:
@@ -141,19 +153,16 @@ jobs:
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
-            cd ios
-
-            if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
-            then
-              xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
-            else
-              xcrun agvtool new-version -all 0.0.$GITHUB_RUN_ID
-            fi
           else
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
-            cd ios
-            xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
           fi
+
+          cd ios
+
+          # write version
+          xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+
           pod install
 
       - name: "Setup codesign keychain"
