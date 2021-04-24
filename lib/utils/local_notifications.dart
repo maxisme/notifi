@@ -7,7 +7,7 @@ Future<FlutterLocalNotificationsPlugin> initPushNotifications() async {
 
   const InitializationSettings settings = InitializationSettings(
       android: AndroidInitializationSettings('app_icon'),
-      iOS: IOSInitializationSettings(),
+      iOS: IOSInitializationSettings(defaultPresentAlert: false),
       macOS: MacOSInitializationSettings(
         defaultPresentAlert: false,
       ));

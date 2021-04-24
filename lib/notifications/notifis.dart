@@ -42,10 +42,6 @@ class Notifications extends ChangeNotifier {
       MenuBarIcon.set('grey');
     }
 
-    if (canBadge) {
-      FlutterAppBadger.updateBadgeCount(cnt);
-    }
-
     return cnt;
   }
 
@@ -76,6 +72,11 @@ class Notifications extends ChangeNotifier {
             .insertItem(0, duration: const Duration(seconds: 1));
       }
     }
+
+    if (canBadge) {
+      FlutterAppBadger.updateBadgeCount(unreadCnt);
+    }
+
     notifyListeners();
     return id;
   }

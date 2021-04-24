@@ -9,6 +9,10 @@ class AppDelegate: FlutterAppDelegate {
     ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
 
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+        }
+
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
         let notificationChannel = FlutterMethodChannel(name: "max.me.uk/notifications",
                 binaryMessenger: controller.binaryMessenger)
