@@ -22,7 +22,9 @@ platform :ios do
     upload_to_app_store(skip_binary_upload: true, skip_metadata: true)
   end
 
+  desc "Upload build to test flight"
   lane :tfdeploy do
+    get_push_certificate
     build_ios_app(
         export_method: "app-store",
         export_options: {
@@ -32,5 +34,19 @@ platform :ios do
         }
     )
     upload_to_testflight
+  end
+
+  desc "Upload build to app store"
+  lane :asdeploy do
+    get_push_certificate
+    build_ios_app(
+        export_method: "app-store",
+        export_options: {
+            provisioningProfiles: {
+                "it.notifi.notifi" => "iOS App Store"
+            }
+        }
+    )
+    upload_to_app_store
   end
 end
