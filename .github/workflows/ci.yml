@@ -97,6 +97,7 @@ jobs:
           security unlock-keychain -p p4ssword build.keychain
           security import certificate.p12 -k build.keychain -P ${{ secrets.MACOS_CERTIFICATE_PWD }} -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
+          security find-identity
           /usr/bin/codesign --force --deep -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
       - name: "Create .dmg"
         run: |
