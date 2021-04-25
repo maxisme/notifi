@@ -75,39 +75,52 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - name: "Setup Code signing"
+        env:
+          DEV_P12_CERT: ${{ secrets.DEV_P12_CERT }}
+          DIST_P12_CERT: ${{ secrets.DIST_P12_CERT }}
+          DEV_P12_PASS: ${{ secrets.DEV_P12_PASS }}
+          DIST_P12_PASS: ${{ secrets.DIST_P12_PASS }}
+          IOS_PROVISION: ${{ secrets.IOS_PROVISION }}
+          MAC_PROVISION: ${{ secrets.MAC_PROVISION }}
+        run: |
+          bash ~/.github/workflows/utils/set-keychain-certs.sh
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - name: "Build"
+      - name: "Create App"
+        env:
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
+
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           else
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
           fi
-          flutter build macos --release --build-name=${{ needs.version.outputs.version }}
-      - name: "Codesign"
-        continue-on-error: true
-        run: |
-          echo ${{ secrets.DEVELOPMENT_P12 }} | base64 --decode > certificate.p12
-          security create-keychain -p p4ssword build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p p4ssword build.keychain
-          security import certificate.p12 -k build.keychain -P ${{ secrets.DEVELOPMENT_P12_PASS }} -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
-          security find-identity
-          /usr/bin/codesign --deep --force --verbose --sign E4KXC49Y29 build/macos/Build/Products/Release/notifi.app
-          /usr/bin/codesign --verify -vvvv build/macos/Build/Products/Release/notifi.app
-          spctl -a -vvvv build/macos/Build/Products/Release/notifi.app
+
+          cd macos
+
+          # write version
+          xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+
+          pod install
+
+          gem install fastlane
+          fastlane mac build
+
       - name: "Create .dmg"
         continue-on-error: true
         run: |
           npm install --global create-dmg
           mkdir dmg
-          create-dmg build/macos/Build/Products/Release/notifi.app dmg/
+          create-dmg ./macos/notifi.app dmg/
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:
@@ -148,11 +161,25 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - name: "Setup Code signing"
+        env:
+          DEV_P12_CERT: ${{ secrets.DEV_P12_CERT }}
+          DIST_P12_CERT: ${{ secrets.DIST_P12_CERT }}
+          DEV_P12_PASS: ${{ secrets.DEV_P12_PASS }}
+          DIST_P12_PASS: ${{ secrets.DIST_P12_PASS }}
+          IOS_PROVISION: ${{ secrets.IOS_PROVISION }}
+          MAC_PROVISION: ${{ secrets.MAC_PROVISION }}
+        run: |
+          bash ~/.github/workflows/utils/set-keychain-certs.sh
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
 
-      - name: "Build"
+      - name: "Build & Deploy"
+        env:
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
         run: |
           flutter pub get
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
@@ -170,27 +197,7 @@ jobs:
 
           pod install
 
-      - name: "Setup codesign keychain"
-        run: |
-          echo ${{ secrets.MACOS_CERTIFICATE }} | base64 --decode > certificate.p12
-          security create-keychain -p p4ssword build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p p4ssword build.keychain
-          security import certificate.p12 -k build.keychain -P ${{ secrets.MACOS_CERTIFICATE_PWD }} -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
-
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo ${{ secrets.PROVISIONING_PROFILE_DATA }} | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
-
-      - name: "Run fastlane"
-        env:
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        run: |
-          cd ios
           gem install fastlane
-
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
             fastlane asdeploy

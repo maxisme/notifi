@@ -68,11 +68,7 @@ class Notifications extends ChangeNotifier {
       tableNotifier.reloadTable();
     } else {
       // scroll to top of table
-      tableController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.ease,
-      );
+      scrollToTop();
 
       // animate in notification
       if (tableKey.currentState != null) {
