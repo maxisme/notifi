@@ -13,33 +13,22 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:ios)
 
-platform :ios do
+default_platform(:mac)
+
+platform :mac do
   desc "Upload build to test flight"
-  lane :tfdeploy do
-    build_ios_app(
-        export_method: "app-store",
-        export_options: {
-            provisioningProfiles: {
-                "it.notifi.notifi" => "iOS App Store"
-            }
-        }
-    )
-    upload_to_testflight
-  end
+  lane :build do
 
-  desc "Upload build to app store"
-  lane :asdeploy do
-    get_push_certificate
-    build_ios_app(
-        export_method: "app-store",
+    # https://docs.fastlane.tools/actions/build_mac_app/
+    build_mac_app(
+        export_method: "mac-application",
         export_options: {
             provisioningProfiles: {
-                "it.notifi.notifi" => "iOS App Store"
+                "it.notifi.notifi" => "it.notifi.notifi AppStore"
             }
-        }
+        },
+        output_name: "notifi.ipa"
     )
-    upload_to_app_store
   end
 end

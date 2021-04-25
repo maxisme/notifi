@@ -15,17 +15,12 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
-## iOS
-### ios tfdeploy
+## Mac
+### mac build
 ```
-fastlane ios tfdeploy
+fastlane mac build
 ```
 Upload build to test flight
-### ios asdeploy
-```
-fastlane ios asdeploy
-```
-Upload build to app store
 
 ----
 
