@@ -26,6 +26,14 @@ class Notifications extends ChangeNotifier {
     return notifications[index];
   }
 
+  void scrollToTop() {
+    tableController.animateTo(
+      tableController.position.minScrollExtent,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+    );
+  }
+
   int get unreadCnt {
     int cnt = 0;
     if (notifications != null) {
