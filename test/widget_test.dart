@@ -19,7 +19,7 @@ void main() {
 
   group('Test Screens', () {
     testWidgets('No Notifications', (WidgetTester tester) async {
-      await pumpWidgetWithNotification(tester, null);
+      await pumpWidget(tester, null);
       // first page should show no notifications
       expect(find.text('No Notifications!'), findsOneWidget);
 
@@ -28,7 +28,7 @@ void main() {
     });
 
     testWidgets('Single Notification', (WidgetTester tester) async {
-      await pumpWidgetWithNotification(
+      await pumpWidget(
           tester,
           NotificationUI(
             title: 'title of notification',
@@ -43,7 +43,7 @@ void main() {
     });
 
     testWidgets('Test Settings Navigation', (WidgetTester tester) async {
-      await pumpWidgetWithNotification(tester, null);
+      await pumpWidget(tester, null);
 
       const MethodChannel channel =
           MethodChannel('plugins.flutter.io/path_provider');
@@ -107,7 +107,7 @@ void main() {
                 tester.binding.window.physicalSizeTestValue =
                     physicalSizeTestValue;
 
-                await pumpWidgetWithNotification(tester, n);
+                await pumpWidget(tester, n);
                 await tester.pump();
 
                 await expectLater(find.byType(NotificationUI),
@@ -126,11 +126,10 @@ void main() {
         message: '',
         uuid: '',
       );
-      await pumpWidgetWithNotification(tester, n);
+      await pumpWidget(tester, n);
       await tester.pump();
 
       expect(n.isRead, false);
-      expect(find.text('1'), findsOneWidget);
 
       // mock db call
       const MethodChannel channel = MethodChannel('com.tekartik.sqflite');
@@ -145,7 +144,6 @@ void main() {
       await tester.pump();
 
       expect(n.isRead, true);
-      expect(find.text('1'), findsNothing);
 
       await expectLater(find.byType(NotificationUI),
           matchesGoldenFile('golden-asserts/notification/is_read.png'));
@@ -158,13 +156,11 @@ void main() {
         time: time,
         uuid: '',
       );
-      await pumpWidgetWithNotification(tester, n);
+      await pumpWidget(tester, n);
       await tester.pump();
       await tester.pump();
 
       expect(n.isExpanded, false);
-      expect(n.isRead, false);
-      expect(find.text('1'), findsOneWidget);
 
       // mock db call (as expanding marks as read)
       const MethodChannel channel = MethodChannel('com.tekartik.sqflite');
@@ -179,8 +175,6 @@ void main() {
       await tester.pump();
 
       expect(n.isExpanded, true);
-      expect(n.isRead, true);
-      expect(find.text('1'), findsNothing);
 
       await expectLater(find.byType(NotificationUI),
           matchesGoldenFile('golden-asserts/notification/is_expanded.png'));
@@ -209,7 +203,7 @@ void main() {
       };
       inputsToBeExpected.forEach((String name, NotificationUI notification) {
         testWidgets(name, (WidgetTester tester) async {
-          await pumpWidgetWithNotification(tester, notification);
+          await pumpWidget(tester, notification);
           await tester.pump();
 
           expect(find.byIcon(Akaricons.enlarge), findsOneWidget);
@@ -240,7 +234,7 @@ void main() {
       };
       inputsToBeExpected.forEach((String name, NotificationUI notification) {
         testWidgets(name, (WidgetTester tester) async {
-          await pumpWidgetWithNotification(tester, notification);
+          await pumpWidget(tester, notification);
           await tester.pump();
 
           expect(find.byIcon(Akaricons.enlarge), findsNothing);
@@ -250,24 +244,21 @@ void main() {
   });
 }
 
-Future<void> pumpWidgetWithNotification(
+Future<void> pumpWidget(
     WidgetTester tester, NotificationUI notification) async {
   WidgetsFlutterBinding.ensureInitialized();
-
   final DBProvider db = DBProvider('test.db');
   final List<NotificationUI> notifications =
       List<NotificationUI>.empty(growable: true);
   if (notification != null) {
     notifications.add(notification);
   }
-
   await tester.pumpWidget(MultiProvider(
     providers: <SingleChildWidget>[
       ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
       ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (BuildContext context) => Notifications(
-            notifications, db, Provider.of<ReloadTable>(context, listen: false),
-            canBadge: false),
+        create: (BuildContext context) => Notifications(notifications, db,
+            Provider.of<ReloadTable>(context, listen: false)),
         update: (BuildContext context, ReloadTable tableNotifier,
                 Notifications user) =>
             user..setTableNotifier(tableNotifier),

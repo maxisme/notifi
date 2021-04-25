@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/utils.dart';
@@ -15,12 +14,8 @@ Future<IOWebSocketChannel> connectToWS(
     'Uuid': user.uuid,
     'Credentials': user.credentials,
     'Key': user.credentialKey,
-    'Version': await getVersion(),
+    'Version': await getVersionFromPubSpec(),
   };
-
-  if (shouldUseFirebase()) {
-    headers['Firebase-Token'] = await FirebaseMessaging.instance.getToken();
-  }
 
   L.d('Connecting to WS...');
   setErr(false);

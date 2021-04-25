@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
+import 'package:notifi/user.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
@@ -29,14 +29,11 @@ class NotificationTableState extends State<NotificationTable>
       final Notifications notifications =
           Provider.of<Notifications>(context, listen: false);
       if (notifications.notifications.isNotEmpty) {
-        return Scrollbar(
-          thickness: 4,
-          child: AnimatedList(
-              key: notifications.tableKey,
-              controller: notifications.tableController,
-              itemBuilder: _buildNotification,
-              initialItemCount: notifications.length),
-        );
+        return AnimatedList(
+            key: notifications.tableKey,
+            controller: notifications.tableController,
+            itemBuilder: _buildNotification,
+            initialItemCount: notifications.length);
       } else {
         // NO NOTIFICATIONS VIEW
         return Column(

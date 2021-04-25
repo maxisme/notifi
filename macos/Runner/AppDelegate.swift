@@ -2,7 +2,7 @@ import Cocoa
 import FlutterMacOS
 import UserNotifications
 
-let menuImageSize = NSSize(width: 23, height: 23)
+let menuImageSize = NSSize(width: 22, height: 22)
 
 extension NSImage.Name {
     static let grey = NSImage.Name("menu_icon")
@@ -34,7 +34,6 @@ class AppDelegate: FlutterAppDelegate {
                 binaryMessenger: flutterViewController.engine.binaryMessenger)
 
         var menuBarAnimater: Animater!
-
         notificationChannel.setMethodCallHandler { [self]
         (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             let menu_image: NSImage?
