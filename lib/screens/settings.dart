@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
+import 'package:notifi/screens/logs.dart';
+import 'package:notifi/screens/utils/alert.dart';
+import 'package:notifi/screens/utils/appbar_title.dart';
+import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/screens/logs.dart';
-import 'package:notifi/user.dart';
+import 'package:notifi/utils/version.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,37 +28,32 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   ValueNotifier<String> _version;
-  ValueNotifier<String> _remoteVersion;
+  ValueNotifier<String> _downloadURL;
 
   @override
   void initState() {
     _version = ValueNotifier<String>('');
-    _remoteVersion = ValueNotifier<String>('');
+    _downloadURL = ValueNotifier<String>('');
     super.initState();
   }
 
   @override
   void dispose() {
     _version.dispose();
-    _remoteVersion.dispose();
+    _downloadURL.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isFlutterTest()) {
-      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-        _version.value = packageInfo.buildNumber;
+    if (!isTest() && Platform.isMacOS) {
+      getVersion().then((String version) {
+        _version.value = version;
+        getUpdateURL(version).then((String url) {
+          _downloadURL.value = url;
+        });
       });
     }
-
-    http.get('https://notifi.it/version').then((http.Response value) {
-      if (value.statusCode == 200) {
-        _remoteVersion.value = value.body;
-      } else {
-        L.e('Problem getting /version from notifi.it');
-      }
-    });
 
     return Scaffold(
         backgroundColor: MyColour.offWhite,
@@ -68,16 +64,14 @@ class SettingsScreenState extends State<SettingsScreen> {
           leading: IconButton(
               icon: const Icon(
                 Akaricons.chevronLeft,
-                color: MyColour.grey,
+                color: MyColour.darkGrey,
+                size: 22,
               ),
               onPressed: () {
                 Navigator.pop(context);
               }),
           centerTitle: true,
-          title: SizedBox(
-              height: 50,
-              child: Image.asset('images/bell.png',
-                  filterQuality: FilterQuality.high)),
+          title: const MyAppBarTitle(60),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
@@ -189,41 +183,41 @@ class SettingsScreenState extends State<SettingsScreen> {
                       )),
                 ])),
           ),
-          // ignore: always_specify_types
-          ValueListenableBuilder(
-              valueListenable: _version,
-              // ignore: always_specify_types
-              builder: (BuildContext context, String version, Widget child) {
-                return Container(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('version: $version',
-                          style: const TextStyle(
-                              color: MyColour.grey, fontSize: 12)),
-                      // ignore: always_specify_types
-                      ValueListenableBuilder(
-                          valueListenable: _remoteVersion,
-                          builder: (BuildContext context, String remoteVersion,
-                              Widget child) {
-                            if (version != remoteVersion) {
-                              return TextButton(
-                                  onPressed: () {
-                                    launch('https://notifi.it/download');
-                                  },
-                                  child: const Icon(
-                                    Akaricons.cloudDownload,
-                                    color: MyColour.red,
-                                    size: 18,
-                                  ));
-                            }
-                            return const SizedBox();
-                          })
-                    ],
-                  ),
-                );
-              }),
+          if (!isTest() && Platform.isMacOS)
+            ValueListenableBuilder<String>(
+                valueListenable: _version,
+                // ignore: always_specify_types
+                builder: (BuildContext context, String version, Widget child) {
+                  return Container(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('version: $version',
+                            style: const TextStyle(
+                                color: MyColour.grey, fontSize: 12)),
+                        // ignore: always_specify_types
+                        ValueListenableBuilder(
+                            valueListenable: _downloadURL,
+                            builder: (BuildContext context, String upgradeURL,
+                                Widget child) {
+                              if (upgradeURL != '') {
+                                return TextButton(
+                                    onPressed: () {
+                                      launch(upgradeURL);
+                                    },
+                                    child: const Icon(
+                                      Akaricons.cloudDownload,
+                                      color: MyColour.red,
+                                      size: 18,
+                                    ));
+                              }
+                              return const SizedBox();
+                            })
+                      ],
+                    ),
+                  );
+                }),
         ]));
   }
 }
@@ -257,8 +251,7 @@ class SettingOption extends StatelessWidget {
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
-                  shadowColor: MaterialStateProperty.all(MyColour.offWhite),
-                  overlayColor: MaterialStateProperty.all(MyColour.offWhite),
+                  overlayColor: MaterialStateProperty.all(MyColour.white),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
               child: Row(children: <Widget>[

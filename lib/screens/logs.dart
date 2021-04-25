@@ -23,7 +23,8 @@ class _LogsScreenState extends State<LogsScreen> {
           leading: IconButton(
               icon: const Icon(
                 Akaricons.chevronLeft,
-                color: MyColour.grey,
+                color: MyColour.darkGrey,
+                size: 22,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -46,18 +47,15 @@ class _LogsScreenState extends State<LogsScreen> {
                 })
           ]),
         ),
-        body: Container(
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          child: FutureBuilder<ListView>(
-              future: logListView(),
-              // ignore: always_specify_types
-              builder: (BuildContext context, AsyncSnapshot f) {
-                if (f.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return f.data;
-              }),
-        ));
+        body: FutureBuilder<ListView>(
+            future: logListView(),
+            // ignore: always_specify_types
+            builder: (BuildContext context, AsyncSnapshot f) {
+              if (f.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Scrollbar(thickness: 4, child: f.data);
+            }));
   }
 
   Future<ListView> logListView() async {
@@ -68,7 +66,8 @@ class _LogsScreenState extends State<LogsScreen> {
     for (int i = logs.length - 1; i >= logs.length - _maxResults; i--) {
       final Log log = logs[i];
       rows.add(Container(
-        padding: const EdgeInsets.only(top: 5.0, bottom: 2.0),
+        padding:
+            const EdgeInsets.only(top: 5.0, bottom: 2.0, left: 10, right: 10),
         child: Row(
           children: <Widget>[
             Flexible(

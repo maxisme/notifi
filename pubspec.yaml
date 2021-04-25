@@ -25,8 +25,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^3.0.10
   f_logs: ^1.2.2
+  firebase_core: ^0.7.0
+  firebase_messaging: ^8.0.0-dev.15
   flutter:
     sdk: flutter
+  flutter_app_badger: ^1.2.0
   flutter_dotenv: ^3.1.0
   flutter_local_notifications: ^4.0.1
   flutter_secure_storage:

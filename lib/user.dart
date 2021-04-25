@@ -4,13 +4,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:notifi/local_notifications.dart';
+import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils/utils.dart';
@@ -24,7 +23,7 @@ class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
     _user = UserStruct();
     setNotifications(_notifications);
-    if (!isFlutterTest()) {
+    if (!isTest()) {
       _loadUser();
     }
   }
@@ -48,8 +47,6 @@ class User with ChangeNotifier {
   }
 
   Future<void> _loadUser() async {
-    await dot_env.load();
-
     _user = UserStruct();
     await _user.load();
 
@@ -76,6 +73,10 @@ class User with ChangeNotifier {
     if (!_user.isNull()) {
       postData['current_credential_key'] = _user.credentialKey;
       postData['current_credentials'] = _user.credentials;
+      if (shouldUseFirebase()) {
+        postData['firebase_token'] =
+            await FirebaseMessaging.instance.getToken();
+      }
       L.w('Replacing credentials: ${_user.credentials}');
     }
 
@@ -207,9 +208,9 @@ class User with ChangeNotifier {
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (_tmpErr == hasErr) {
         if (_tmpErr) {
-          MenuBarIcon.set('error');
+          MenuBarIcon.setErr();
         } else {
-          MenuBarIcon.revert();
+          MenuBarIcon.revertErr();
         }
         _hasError = _tmpErr;
         notifyListeners();
@@ -219,10 +220,13 @@ class User with ChangeNotifier {
 }
 
 class UserStruct {
-  UserStruct({this.uuid, this.credentialKey, this.credentials});
+  UserStruct({this.uuid, this.credentialKey, this.credentials}) {
+    _storage = const FlutterSecureStorage();
+    if (!isTest()) _key = 'notifi-${env['KEY_STORE']}';
+  }
 
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  static const String _key = 'user';
+  FlutterSecureStorage _storage;
+  String _key;
 
   String uuid;
   String credentialKey;
