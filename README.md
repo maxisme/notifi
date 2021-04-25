@@ -10,33 +10,15 @@
 # Install Flutter
 
 https://flutter.dev/docs/get-started/install
-```bash
-flutter channel master
-flutter upgrade
-```
-
-## create .env with the content
-```
-CODE_ENDPOINT=http://127.0.0.1:9081/code
-SERVER_KEY=Hu2J7b7xA8MndeNS
-WS_ENDPOINT=ws://127.0.0.1:9081/ws
-```
-
-## run the backend
-[Install docker](https://docs.docker.com/get-docker/)
-```
-git clone https://github.com/maxisme/notifi-backend
-cd notifi-backend
-docker-compose up --build app
-```
 
 ## MacOS build & run
 
 ```bash
+flutter channel master
+flutter upgrade
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 sudo xcodebuild -runFirstLaunch
 flutter doctor
-flutter config --enable-macos-desktop
 flutter build macos
 flutter run -d macos
 ```
@@ -62,12 +44,6 @@ bash ./test/set-asserts.sh
 ```bash
 ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
 chmod +x $(pwd)/.git/hooks/pre-commit
-```
-
-### Screenshot
-```bash
-brew update && brew install imagemagick
-pub global activate screenshots
 ```
 
 ### Jetbrains flutter plugin:

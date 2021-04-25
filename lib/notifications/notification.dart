@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart' as i;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
@@ -100,6 +99,7 @@ class NotificationUIState extends State<NotificationUI> {
 
       // if expanded notification
       if (widget.isExpanded) {
+        // no limit on lines TODO must be a better way to handle this
         titleMaxLines = null;
         messageMaxLines = null;
       }
@@ -160,28 +160,19 @@ class NotificationUIState extends State<NotificationUI> {
       // if image
       Widget image;
       if (widget.image != '') {
-        image = MouseRegion(
-          cursor: SystemMouseCursors.alias,
-          child: GestureDetector(
-              onTap: () async {
-                await openUrl(widget.image);
-              },
-              child: Container(
-                padding: const EdgeInsets.only(right: 10.0, top: 3.0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(2.0),
+        image = SizedBox(
+            width: 60,
+            child: GestureDetector(
+                onTap: () async {
+                  await openUrl(widget.image);
+                },
+                child: Container(
+                    padding: const EdgeInsets.only(right: 10.0),
                     child: CachedNetworkImage(
+                        fadeInDuration: const Duration(seconds: 1),
                         imageUrl: widget.image,
                         width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                        errorWidget:
-                            (BuildContext context, String url, dynamic error) {
-                          return const SizedBox();
-                        },
-                        filterQuality: FilterQuality.medium)),
-              )),
-        );
+                        filterQuality: FilterQuality.high))));
       }
 
       titleStyle = TextStyle(
@@ -194,7 +185,7 @@ class NotificationUIState extends State<NotificationUI> {
 
       return Container(
           color: Colors.transparent,
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: MyColour.offGrey),

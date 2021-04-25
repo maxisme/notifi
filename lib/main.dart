@@ -1,46 +1,31 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:notifi/utils/local_notifications.dart';
+import 'package:notifi/local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils/firebase.dart';
-import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await loadDotEnv();
-
-  if (shouldUseFirebase()) {
-    initFirebase();
-  }
-
   final DBProvider db = DBProvider('notifications.db');
   final List<NotificationUI> notifications = await db.getAll();
   final FlutterLocalNotificationsPlugin pushNotifications =
       await initPushNotifications();
-
-  bool canBadge = false;
-  if (Platform.isIOS) canBadge = await FlutterAppBadger.isAppBadgeSupported();
 
   runApp(MultiProvider(
     providers: <SingleChildWidget>[
       ChangeNotifierProvider<ReloadTable>(
           create: (BuildContext context) => ReloadTable()),
       ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (BuildContext context) => Notifications(
-            notifications, db, Provider.of<ReloadTable>(context, listen: false),
-            canBadge: canBadge),
+        create: (BuildContext context) => Notifications(notifications, db,
+            Provider.of<ReloadTable>(context, listen: false)),
         update: (BuildContext context, ReloadTable tableNotifier,
                 Notifications user) =>
             user..setTableNotifier(tableNotifier),
@@ -72,12 +57,12 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
             fontFamily: 'Inconsolata',
             primaryColor: MyColour.offWhite,
+            highlightColor: MyColour.transparent,
             hoverColor: MyColour.transparent,
-            focusColor: MyColour.transparent,
+            splashColor: MyColour.transparent,
             accentColor: MyColour.black,
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.grey,
-            ).copyWith(),
+            buttonColor: MyColour.red,
+            focusColor: MyColour.transparent,
             dialogTheme: DialogTheme(
                 elevation: 0,
                 shape: Border.all(width: 3),

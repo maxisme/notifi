@@ -1,0 +1,20 @@
+/home/maximilian/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/202.7319.72/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/maximilian/Documents/work/notifi/linux
+-- The CXX compiler identification is GNU 9.3.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ - works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Checking for module 'gtk+-3.0'
+--   Found gtk+-3.0, version 3.24.20
+-- Checking for module 'glib-2.0'
+--   Found glib-2.0, version 2.64.3
+-- Checking for module 'gio-2.0'
+--   Found gio-2.0, version 2.64.3
+-- Checking for module 'blkid'
+--   Found blkid, version 2.34.0
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/maximilian/Documents/work/notifi/linux/cmake-build-debug
