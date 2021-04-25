@@ -18,7 +18,6 @@ default_platform(:ios)
 platform :ios do
   desc "Upload build to test flight"
   lane :tfdeploy do
-    get_push_certificate
     build_ios_app(
         export_method: "app-store",
         export_options: {
@@ -32,7 +31,6 @@ platform :ios do
 
   desc "Upload build to app store"
   lane :asdeploy do
-    get_push_certificate
     build_ios_app(
         export_method: "app-store",
         export_options: {
