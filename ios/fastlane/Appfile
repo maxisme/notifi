@@ -1,0 +1,8 @@
+app_identifier("it.notifi.notifi") # The bundle identifier of your app
+apple_id("maxmitch@hotmail.co.uk") # Your Apple email address
+
+itc_team_id("81836802") # App Store Connect Team ID
+team_id("Z28DW76Y3W") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

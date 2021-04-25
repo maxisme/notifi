@@ -265,8 +265,9 @@ Future<void> pumpWidgetWithNotification(
     providers: <SingleChildWidget>[
       ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
       ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (BuildContext context) => Notifications(notifications, db,
-            Provider.of<ReloadTable>(context, listen: false)),
+        create: (BuildContext context) => Notifications(
+            notifications, db, Provider.of<ReloadTable>(context, listen: false),
+            canBadge: false),
         update: (BuildContext context, ReloadTable tableNotifier,
                 Notifications user) =>
             user..setTableNotifier(tableNotifier),

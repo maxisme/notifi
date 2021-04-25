@@ -2,12 +2,15 @@ import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 class Notifications extends ChangeNotifier {
-  Notifications(this.notifications, this.db, this.tableNotifier);
+  Notifications(this.notifications, this.db, this.tableNotifier,
+      {this.canBadge});
 
   ReloadTable tableNotifier;
   DBProvider db;
+  final bool canBadge; // is allowed to set badge on app icon
   List<NotificationUI> notifications = List<NotificationUI>.empty();
   GlobalKey<AnimatedListState> tableKey = GlobalKey<AnimatedListState>();
   ScrollController tableController = ScrollController();
@@ -63,9 +66,17 @@ class Notifications extends ChangeNotifier {
         curve: Curves.ease,
       );
 
-      // insert notification
-      tableKey.currentState.insertItem(0, duration: const Duration(seconds: 1));
+      // animate in notification
+      if (tableKey.currentState != null) {
+        tableKey.currentState
+            .insertItem(0, duration: const Duration(seconds: 1));
+      }
     }
+
+    if (canBadge) {
+      FlutterAppBadger.updateBadgeCount(unreadCnt);
+    }
+
     notifyListeners();
     return id;
   }

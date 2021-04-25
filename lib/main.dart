@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:notifi/local_notifications.dart';
+import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
+import 'package:notifi/utils/firebase.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -17,18 +21,26 @@ Future<void> main() async {
 
   await loadDotEnv();
 
+  if (shouldUseFirebase()) {
+    initFirebase();
+  }
+
   final DBProvider db = DBProvider('notifications.db');
   final List<NotificationUI> notifications = await db.getAll();
   final FlutterLocalNotificationsPlugin pushNotifications =
       await initPushNotifications();
+
+  bool canBadge = false;
+  if (Platform.isIOS) canBadge = await FlutterAppBadger.isAppBadgeSupported();
 
   runApp(MultiProvider(
     providers: <SingleChildWidget>[
       ChangeNotifierProvider<ReloadTable>(
           create: (BuildContext context) => ReloadTable()),
       ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (BuildContext context) => Notifications(notifications, db,
-            Provider.of<ReloadTable>(context, listen: false)),
+        create: (BuildContext context) => Notifications(
+            notifications, db, Provider.of<ReloadTable>(context, listen: false),
+            canBadge: canBadge),
         update: (BuildContext context, ReloadTable tableNotifier,
                 Notifications user) =>
             user..setTableNotifier(tableNotifier),

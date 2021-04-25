@@ -76,7 +76,11 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 
 Future<String> getDeviceUUID() async {
   L.d('fetching UUID');
-  return await invokeMacMethod('UUID');
+  return platform.invokeMethod('UUID');
+}
+
+bool shouldUseFirebase() {
+  return Platform.isIOS;
 }
 
 class L {

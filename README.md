@@ -64,6 +64,12 @@ ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
 chmod +x $(pwd)/.git/hooks/pre-commit
 ```
 
+### Screenshot
+```bash
+brew update && brew install imagemagick
+pub global activate screenshots
+```
+
 ### Jetbrains flutter plugin:
 
 https://plugins.jetbrains.com/plugin/9212-flutter/versions

@@ -13,7 +13,7 @@ import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/utils/update.dart';
+import 'package:notifi/utils/version.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
@@ -46,7 +46,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isTest()) {
+    if (!isTest() && Platform.isMacOS) {
       getVersion().then((String version) {
         _version.value = version;
         getUpdateURL(version).then((String url) {
@@ -183,41 +183,41 @@ class SettingsScreenState extends State<SettingsScreen> {
                       )),
                 ])),
           ),
-          // ignore: always_specify_types
-          ValueListenableBuilder(
-              valueListenable: _version,
-              // ignore: always_specify_types
-              builder: (BuildContext context, String version, Widget child) {
-                return Container(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('version: $version',
-                          style: const TextStyle(
-                              color: MyColour.grey, fontSize: 12)),
-                      // ignore: always_specify_types
-                      ValueListenableBuilder(
-                          valueListenable: _downloadURL,
-                          builder: (BuildContext context, String upgradeURL,
-                              Widget child) {
-                            if (upgradeURL != '') {
-                              return TextButton(
-                                  onPressed: () {
-                                    launch(upgradeURL);
-                                  },
-                                  child: const Icon(
-                                    Akaricons.cloudDownload,
-                                    color: MyColour.red,
-                                    size: 18,
-                                  ));
-                            }
-                            return const SizedBox();
-                          })
-                    ],
-                  ),
-                );
-              }),
+          if (!isTest() && Platform.isMacOS)
+            ValueListenableBuilder<String>(
+                valueListenable: _version,
+                // ignore: always_specify_types
+                builder: (BuildContext context, String version, Widget child) {
+                  return Container(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('version: $version',
+                            style: const TextStyle(
+                                color: MyColour.grey, fontSize: 12)),
+                        // ignore: always_specify_types
+                        ValueListenableBuilder(
+                            valueListenable: _downloadURL,
+                            builder: (BuildContext context, String upgradeURL,
+                                Widget child) {
+                              if (upgradeURL != '') {
+                                return TextButton(
+                                    onPressed: () {
+                                      launch(upgradeURL);
+                                    },
+                                    child: const Icon(
+                                      Akaricons.cloudDownload,
+                                      color: MyColour.red,
+                                      size: 18,
+                                    ));
+                              }
+                              return const SizedBox();
+                            })
+                      ],
+                    ),
+                  );
+                }),
         ]));
   }
 }

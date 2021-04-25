@@ -5,13 +5,12 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 7.3.0)
   - firebase_core (0.7.0):
-    - Firebase/CoreOnly (~> 7.3.0)
-    - FlutterMacOS
+    - Firebase/CoreOnly (= 7.3.0)
+    - Flutter
   - firebase_messaging (8.0.0-dev.15):
-    - Firebase/CoreOnly (~> 7.3.0)
-    - Firebase/Messaging (~> 7.3.0)
+    - Firebase/Messaging (= 7.3.0)
     - firebase_core
-    - FlutterMacOS
+    - Flutter
   - FirebaseCore (7.3.0):
     - FirebaseCoreDiagnostics (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
@@ -38,11 +37,13 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Reachability (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
+  - Flutter (1.0.0)
+  - flutter_app_badger (0.0.1):
+    - Flutter
   - flutter_local_notifications (0.0.1):
-    - FlutterMacOS
+    - Flutter
   - flutter_secure_storage (3.3.1):
-    - FlutterMacOS
-  - FlutterMacOS (1.0.0)
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -65,35 +66,36 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.2.2):
     - GoogleUtilities/Logger
-  - launch_at_login (0.0.3):
-    - FlutterMacOS
   - nanopb (2.30907.0):
     - nanopb/decode (= 2.30907.0)
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
   - package_info (0.0.1):
-    - FlutterMacOS
-  - path_provider_macos (0.0.1):
-    - FlutterMacOS
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - "permission_handler (4.4.0+hotfix.4)":
+    - Flutter
   - PromisesObjC (1.2.12)
   - sqflite (0.0.2):
-    - FlutterMacOS
+    - Flutter
     - FMDB (>= 2.7.5)
-  - url_launcher_macos (0.0.1):
-    - FlutterMacOS
+  - url_launcher (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
-  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
-  - firebase_messaging (from `Flutter/ephemeral/.symlinks/plugins/firebase_messaging/macos`)
-  - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
-  - flutter_secure_storage (from `Flutter/ephemeral/.symlinks/plugins/flutter_secure_storage/macos`)
-  - FlutterMacOS (from `Flutter/ephemeral`)
-  - launch_at_login (from `Flutter/ephemeral/.symlinks/plugins/launch_at_login/macos`)
-  - package_info (from `Flutter/ephemeral/.symlinks/plugins/package_info/macos`)
-  - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
-  - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
-  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_app_badger (from `.symlinks/plugins/flutter_app_badger/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
   trunk:
@@ -111,49 +113,52 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   firebase_core:
-    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
+    :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
-    :path: Flutter/ephemeral/.symlinks/plugins/firebase_messaging/macos
+    :path: ".symlinks/plugins/firebase_messaging/ios"
+  Flutter:
+    :path: Flutter
+  flutter_app_badger:
+    :path: ".symlinks/plugins/flutter_app_badger/ios"
   flutter_local_notifications:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_secure_storage:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_secure_storage/macos
-  FlutterMacOS:
-    :path: Flutter/ephemeral
-  launch_at_login:
-    :path: Flutter/ephemeral/.symlinks/plugins/launch_at_login/macos
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   package_info:
-    :path: Flutter/ephemeral/.symlinks/plugins/package_info/macos
-  path_provider_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+    :path: ".symlinks/plugins/package_info/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   sqflite:
-    :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
-  url_launcher_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
+    :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
-  firebase_core: 2385663692e232c6bb79fd8dd9c5df711b7ac55b
-  firebase_messaging: 85e6b1188d735f00d512b62e20481a8a7e19b30c
+  firebase_core: 91b27774a52f41f8b58484a75edf71197ac01c59
+  firebase_messaging: caf0273c76e54f0a10dfe5048ac47b89e75bb78a
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: ee1184d51da3293335b83355aad20f537acc24cf
   FirebaseInstallations: 6e4e77396559bc2ae0504823837ed737b1c7e47f
   FirebaseInstanceID: 5ad92c898e1328b66e8dd58811964d6fe4d334c3
   FirebaseMessaging: 68d1bcb14880189558a8ae57167abe0b7e417232
-  flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
-  flutter_secure_storage: 06c397200165bbea69a0071437f9d690f5e5c0a2
-  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_app_badger: 65de4d6f0c34a891df49e6cfb8a1c0496426fa68
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
-  launch_at_login: b8c03568bb38ccfa2dd82ac489444e5b9cab3f17
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
-  package_info: 6eba2fd8d3371dda2d85c8db6fe97488f24b74b2
-  path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
-  url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: c7161fcf45d4fd9025dc0f48a76d6e64e52f8176
+PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa
 
 COCOAPODS: 1.10.1
