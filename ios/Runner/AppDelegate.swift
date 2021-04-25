@@ -21,7 +21,7 @@ class AppDelegate: FlutterAppDelegate {
         (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             switch call.method {
             case "UUID":
-                let uuid = UIDevice.current.identifierForVendor?.uuidString;
+                let uuid = UIDevice.current.identifierForVendor?.uuidString
                 result(uuid)
                 return
             default:
