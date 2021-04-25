@@ -13,9 +13,10 @@ import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/utils/version.dart';
 import 'package:notifi/utils/utils.dart';
+import 'package:notifi/utils/version.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -77,21 +78,29 @@ class SettingsScreenState extends State<SettingsScreen> {
           Consumer<User>(
               builder: (BuildContext context, User user, Widget child) {
             final String credentials = user.getCredentials();
+
+            SettingOption credentialsSettingWidget = SettingOption(
+                'Copy Credentials $credentials', Akaricons.clipboard,
+                onTapCallback: () {
+              Clipboard.setData(ClipboardData(text: credentials));
+              showToast('Copied $credentials', context, gravity: Toast.CENTER);
+            });
+            if (Platform.isIOS) {
+              credentialsSettingWidget = SettingOption(
+                  'Share Credentials $credentials', Akaricons.clipboard,
+                  onTapCallback: () {
+                Share.share('notifi credentials: $credentials');
+              });
+            }
+
             return Column(children: <Widget>[
               Container(padding: const EdgeInsets.only(top: 20.0)),
-              if (credentials != null)
-                SettingOption(
-                    'How Do I Receive Notifications?', Akaricons.question,
-                    onTapCallback: () async {
-                  await openUrl('https://notifi.it?c=$credentials#how-to');
-                }),
               SettingOption(
-                  'Copy Credentials $credentials', Akaricons.clipboard,
-                  onTapCallback: () {
-                Clipboard.setData(ClipboardData(text: credentials));
-                showToast('Copied $credentials', context,
-                    gravity: Toast.CENTER);
-              })
+                  'How Do I Receive Notifications?', Akaricons.question,
+                  onTapCallback: () async {
+                await openUrl('https://notifi.it?c=$credentials#how-to');
+              }),
+              credentialsSettingWidget
             ]);
           }),
           SettingOption('Create New Credentials', Akaricons.arrowClockwise,
@@ -247,7 +256,7 @@ class SettingOption extends StatelessWidget {
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),

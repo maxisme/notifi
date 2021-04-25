@@ -23,23 +23,23 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>We don't access apple music</string>
+	<string>We don&apos;t access apple music</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
 	<key>NSCalendarsUsageDescription</key>
-	<string>We don't access your calendar</string>
+	<string>We don&apos;t access your calendar</string>
 	<key>NSContactsUsageDescription</key>
-	<string>We don't access your contacts</string>
+	<string>We don&apos;t access your contacts</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We don't use location data</string>
+	<string>We don&apos;t use location data</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We don't use location data</string>
+	<string>We don&apos;t use location data</string>
 	<key>NSMotionUsageDescription</key>
-	<string>We don't access motion</string>
+	<string>We don&apos;t access motion</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>We don't access speech recognition</string>
+	<string>We don&apos;t access speech recognition</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -63,5 +63,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>it.notifi.notifi</string>
+	</array>
 </dict>
 </plist>

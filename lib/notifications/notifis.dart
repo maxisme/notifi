@@ -50,6 +50,10 @@ class Notifications extends ChangeNotifier {
       MenuBarIcon.set('grey');
     }
 
+    if (canBadge) {
+      FlutterAppBadger.updateBadgeCount(cnt);
+    }
+
     return cnt;
   }
 
