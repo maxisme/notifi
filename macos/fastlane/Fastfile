@@ -13,22 +13,67 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-
+team_id("Z28DW76Y3W")
 default_platform(:mac)
 
 platform :mac do
-  desc "Upload build to test flight"
+  lane :keychain do
+
+    create_keychain(
+        name: "kc",
+        password: "p4ssword",
+        default_keychain: false,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+    )
+
+    app_store_connect_api_key(
+        key_id: "MK4628AYTK",
+        issuer_id: "69a6de80-d5bc-47e3-e053-5b8c7c11a4d1",
+        key_filepath: "../AuthKey_MK4628AYTK.p8",
+        duration: 1200
+    )
+
+    begin
+        match(type: "mac_installer_distribution", keychain_name: "kc", keychain_password: "p4ssword")
+    rescue => ex
+        UI.error(ex)
+    end
+    match(keychain_name: "kc", keychain_password: "p4ssword")
+
+  end
+
+
   lane :build do
+
+    create_keychain(
+        name: "my-keychain2",
+        password: "p4ssword",
+        default_keychain: false,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+    )
+
+    app_store_connect_api_key(
+        key_id: "MK4628AYTK",
+        issuer_id: "69a6de80-d5bc-47e3-e053-5b8c7c11a4d1",
+        key_filepath: "../AuthKey_MK4628AYTK.p8",
+        duration: 1200
+    )
+
+    match(type: "mac_installer_distribution", keychain_name: "my-keychain2", keychain_password: "p4ssword")
+
 
     # https://docs.fastlane.tools/actions/build_mac_app/
     build_mac_app(
-        export_method: "mac-application",
         export_options: {
-            provisioningProfiles: {
-                "it.notifi.notifi" => "it.notifi.notifi AppStore"
-            }
+            method: "app-store",
         },
-        output_name: "notifi.ipa"
+        export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
+
+    upload_to_app_store
   end
 end

@@ -16,11 +16,16 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Mac
+### mac keychain
+```
+fastlane mac keychain
+```
+
 ### mac build
 ```
 fastlane mac build
 ```
-Upload build to test flight
+
 
 ----
 
