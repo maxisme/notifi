@@ -90,6 +90,7 @@ jobs:
           fi
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
       - name: "Codesign"
+        continue-on-error: true
         run: |
           echo ${{ secrets.DEVELOPMENT_P12 }} | base64 --decode > certificate.p12
           security create-keychain -p p4ssword build.keychain
@@ -98,7 +99,7 @@ jobs:
           security import certificate.p12 -k build.keychain -P ${{ secrets.DEVELOPMENT_P12_PASS }} -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
           security find-identity
-          /usr/bin/codesign --deep --force --verbose --sign Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
+          /usr/bin/codesign --deep --force --verbose --sign E4KXC49Y29 build/macos/Build/Products/Release/notifi.app
           /usr/bin/codesign --verify -vvvv build/macos/Build/Products/Release/notifi.app
           spctl -a -vvvv build/macos/Build/Products/Release/notifi.app
       - name: "Create .dmg"
