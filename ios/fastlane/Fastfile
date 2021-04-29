@@ -37,8 +37,8 @@ platform :ios do
         duration: 1200
     )
 
-    match(type: "development", readonly: true, keychain_name: "kc", keychain_password: "p4ssword", skip_provisioning_profiles: true)
-    match(type: "appstore", readonly: true, keychain_name: "kc", keychain_password: "p4ssword", skip_provisioning_profiles: true)
+    match(type: "development", readonly: true, keychain_name: "kc", keychain_password: "p4ssword")
+    match(type: "appstore", readonly: true, keychain_name: "kc", keychain_password: "p4ssword")
     
     build_app(
       workspace: "Runner.xcworkspace",
