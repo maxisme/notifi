@@ -56,4 +56,4 @@ app.*.map.json
 /ios/fastlane/report.xml
 /macos/fastlane/report.xml
 AuthKey_MK4628AYTK.p8
-.env
+/.env
