@@ -109,7 +109,6 @@ jobs:
           mkdir dmg
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
       - name: "Notarize .dmg"
-        continue-on-error: true
         run: |
           /usr/bin/codesign --force --deep --strict -s Z28DW76Y3W dmg/*
           codesign --verify -vvvv build/macos/Build/Products/Release/notifi.app
