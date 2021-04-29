@@ -101,6 +101,11 @@ jobs:
           else
           echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
+
+          # write version
+          xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
           /usr/bin/codesign --force --deep --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
       - name: "Create .dmg"
