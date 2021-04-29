@@ -109,6 +109,7 @@ jobs:
           mkdir dmg
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
       - name: "Notarize .dmg"
+        continue-on-error: true
         run: |
           /usr/bin/codesign --force --deep -s Z28DW76Y3W dmg/*
           xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format xml --notarize-app -f dmg/* --apiKey MK4628AYTK --apiIssuer 69a6de80-d5bc-47e3-e053-5b8c7c11a4d1
