@@ -7,7 +7,7 @@ mv Your_App_Icon-assets/menu_red.png ../macos/Runner/Assets.xcassets/red_menu_ic
 # ios
 # brew install imagemagick
 mv Your_App_Icon-assets/AppIcon.appiconset/* ../ios/Runner/Assets.xcassets/AppIcon.appiconset/
-(cd ../ios/Runner/Assets.xcassets/AppIcon.appiconset/ && for file in *.png; do convert -flatten -alpha deactivate $file; done)
+(cd ../ios/Runner/Assets.xcassets/AppIcon.appiconset/ && for file in *.png; do convert -flatten -alpha deactivate $file $file; done)
 
 # flutter
 mv Your_App_Icon-assets/sad.png ../images/
