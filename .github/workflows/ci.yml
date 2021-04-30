@@ -123,14 +123,18 @@ jobs:
           mkdir /tmp/dmg/
           create-dmg build/macos/Build/Products/Release/notifi.app /tmp/dmg/
 
-          /usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "/tmp/dmg/*"
+          dmg_path="/tmp/dmg/notifi\ ${{ needs.version.outputs.version }}.dmg"
+
+          ls -l /tmp/dmg/
+
+          /usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
           echo "verify..."
           spctl -a -vv build/macos/Build/Products/Release/notifi.app
-          spctl -a -vv "/tmp/dmg/*"
+          spctl -a -vv "$dmg_path"
 
           echo "notarizing..."
-          notarize=$(xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f "/tmp/dmg/*" --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
+          notarize=$(xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f "$dmg_path" --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
           uuid=$(echo "$notarize" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-upload']['RequestUUID'])")
           echo "$uuid"
 
@@ -143,7 +147,7 @@ jobs:
           echo $status
 
           echo "staple..."
-          xcrun stapler staple -v "$DMG_PATH"
+          xcrun stapler staple -v "$dmg_path"
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:
