@@ -152,7 +152,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: notifi-dmg
-          path: /tmp/dmg/
+          path: dmg/
           if-no-files-found: error
 
   #########
