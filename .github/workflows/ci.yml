@@ -126,6 +126,7 @@ jobs:
           dmg_path="dmg/notifi\ ${{ needs.version.outputs.version }}.dmg"
 
           ls -l dmg/
+          ls -l "$dmg_path"
 
           /usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
