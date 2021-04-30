@@ -109,7 +109,7 @@ jobs:
           
           cd ../
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
-          /usr/bin/codesign --force --deep --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
+          /usr/bin/codesign --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
       - name: "Create .dmg"
         run: |
           npm install --global create-dmg
@@ -117,21 +117,12 @@ jobs:
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
       - name: "Notarize .dmg"
         continue-on-error: true
+        env:
+          APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          DMG_PATH: "dmg/*"
         run: |
-          /usr/bin/codesign --force --deep --strict -s Z28DW76Y3W dmg/*
-
-          echo "verify..."
-          spctl -a -vv build/macos/Build/Products/Release/notifi.app
-          spctl -a -vv -vvvv dmg/*
-
-          echo "notarize..."
-          xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f dmg/* --username ${{ secrets.APPLE_USERNAME }} --password ${{ secrets.APPLE_PASSWORD }}
-
-          echo "verify again ..."
-          spctl -a -vv -vvvv dmg/*
-
-          echo "staple..."
-          xcrun stapler staple -v dmg/*
+          bash .github/workflows/scripts/notarize.sh
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:
