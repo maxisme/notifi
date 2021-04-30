@@ -131,7 +131,7 @@ jobs:
           spctl -a -vv -vvvv dmg/*
 
           echo "staple..."
-          xcrun stapler staple dmg/*
+          xcrun stapler staple -v dmg/*
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:
