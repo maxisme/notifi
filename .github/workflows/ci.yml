@@ -120,13 +120,12 @@ jobs:
         run: |
           npm install --global create-dmg
 
-          mkdir /tmp/dmg/
-          create-dmg build/macos/Build/Products/Release/notifi.app /tmp/dmg/
+          mkdir dmg/
+          create-dmg build/macos/Build/Products/Release/notifi.app dmg/
 
-          dmg_path="/tmp/dmg/notifi ${{ needs.version.outputs.version }}.dmg"
+          dmg_path="dmg/*"
 
-          ls -l /tmp/dmg/
-          ls -l $dmg_path
+          ls -l dmg/
 
           /usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
