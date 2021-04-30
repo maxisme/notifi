@@ -113,21 +113,21 @@ jobs:
       - name: "Create .dmg"
         run: |
           npm install --global create-dmg
-          mkdir /dmg
-          create-dmg build/macos/Build/Products/Release/notifi.app /dmg/
+          mkdir /tmp
+          create-dmg build/macos/Build/Products/Release/notifi.app /tmp/
       - name: "Notarize .dmg"
         continue-on-error: true
         env:
           APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          DMG_PATH: "/dmg/*"
+          DMG_PATH: "/tmp/*"
         run: |
           bash .github/workflows/scripts/notarize.sh
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:
           name: notifi-dmg
-          path: /dmg/
+          path: /tmp/
           if-no-files-found: error
 
   #########
