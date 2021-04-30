@@ -123,7 +123,7 @@ jobs:
           mkdir dmg/
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
 
-          dmg_path="dmg/*"
+          dmg_path="dmg/notifi\ ${{ needs.version.outputs.version }}.dmg"
 
           ls -l dmg/
 
