@@ -15,6 +15,8 @@ flutter channel master
 flutter upgrade
 ```
 
+# Run locally
+
 ## create .env with the content
 ```
 CODE_ENDPOINT=http://127.0.0.1:9081/code
@@ -41,23 +43,23 @@ flutter build macos
 flutter run -d macos
 ```
 
-## Tests
+# Tests
 
-### Lint & Test
+## Lint & Test
 
 ```bash
 bash ./pre-commit.sh
 ```
 
-### Set screenshot asserts
+## Set screenshot asserts
 
 ```
 bash ./test/set-asserts.sh
 ```
 
-## Extras
+# Extras
 
-### Add pre-commit hook
+## Add pre-commit hook
 
 ```bash
 ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
@@ -65,13 +67,7 @@ chmod +x $(pwd)/.git/hooks/pre-commit
 ```
 
 ### fastlane
-#### provision profiles
-```
-fastlane sigh -p macos
-fastlane sigh -p ios
-```
 
-###
 
 ### Jetbrains flutter plugin:
 

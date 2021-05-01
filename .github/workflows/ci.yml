@@ -122,11 +122,9 @@ jobs:
 
           mkdir dmg/
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
+          mv dmg/* notifi.dmg
 
-          dmg_path="dmg/notifi\ ${{ needs.version.outputs.version }}.dmg"
-
-          ls -l dmg/
-          ls -l "$dmg_path"
+          dmg_path="notifi.dmg"
 
           /usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
@@ -149,7 +147,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: notifi-dmg
-          path: dmg/
+          path: notifi.dmg
           if-no-files-found: error
 
   #########
