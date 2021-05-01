@@ -135,6 +135,7 @@ jobs:
           sleep 60
 
           while true; do
+            sleep 10
             check=$(xcrun altool --notarization-info "$uuid" --output-format json --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
             echo $check
             status=$(echo "$check" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-info']['Status'])")
