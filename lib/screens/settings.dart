@@ -247,7 +247,7 @@ class SettingOption extends StatelessWidget {
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
