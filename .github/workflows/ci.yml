@@ -112,11 +112,9 @@ jobs:
           /usr/bin/codesign --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
 
       - name: "Create & Notarize .dmg"
-        continue-on-error: true
         env:
           APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          DMG_PATH: "/tmp/dmg/*"
         run: |
           npm install --global create-dmg
 
@@ -136,13 +134,18 @@ jobs:
           # wait for apple to notarize
           sleep 60
 
-          check=$(xcrun altool --notarization-info "$uuid" --output-format json --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
-          echo $check
-          status=$(echo "$check" | python3 -c "import sys, json; print(json.load(sys.stdin)['Status'])")
-          echo $status
-
-          echo "staple..."
-          xcrun stapler staple -v "$dmg_path"
+          while true; do
+            check=$(xcrun altool --notarization-info "$uuid" --output-format json --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
+            echo $check
+            status=$(echo "$check" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-info']['Status'])")
+            echo $status
+            if [ "$status" != "in progress" ]; then
+              echo "staple dmg..."
+              xcrun stapler staple -v "$dmg_path"
+              exit 0
+            fi
+          done
+          exit 1
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:

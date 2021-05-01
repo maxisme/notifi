@@ -1,22 +1,30 @@
 #!/bin/bash
+npm install --global create-dmg
 
-/usr/bin/codesign --force --deep --strict --options runtime -s "Developer ID Application: Max Mitchell (Z28DW76Y3W)" "$DMG_PATH"
+mkdir dmg/
+create-dmg build/macos/Build/Products/Release/notifi.app dmg/
+mv dmg/* notifi.dmg
 
-echo "verify..."
-spctl -a -vv build/macos/Build/Products/Release/notifi.app
-spctl -a -vv "$DMG_PATH"
+dmg_path="notifi.dmg"
+
+/usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
 echo "notarizing..."
-notarize=$(xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f "$DMG_PATH" --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
+notarize=$(xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f "$dmg_path" --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
 uuid=$(echo "$notarize" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-upload']['RequestUUID'])")
 echo "$uuid"
 
+# wait for apple to notarize
 sleep 60
 
-check=$(xcrun altool --notarization-info "$uuid" --output-format json --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
-echo $check
-status=$(echo "$check" | python3 -c "import sys, json; print(json.load(sys.stdin)['Status'])")
-echo $status
-
-echo "staple..."
-xcrun stapler staple -v "$DMG_PATH"
+while true; do
+  check=$(xcrun altool --notarization-info "$uuid" --output-format json --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
+  echo $check
+  status=$(echo "$check" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-info']['Status'])")
+  echo $status
+  if [ "$status" != "in progress" ]; then
+    echo "staple dmg..."
+    xcrun stapler staple -v "$dmg_path"
+    exit
+  fi
+done
