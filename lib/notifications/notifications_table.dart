@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 
 class NotificationTable extends StatefulWidget {
@@ -96,9 +99,13 @@ class NotificationTableState extends State<NotificationTable>
                   Container(padding: const EdgeInsets.only(top: 20.0)),
                   SelectableText(credentials, textAlign: TextAlign.center,
                       onTap: () {
-                    Clipboard.setData(ClipboardData(text: credentials));
-                    Toast.show('Copied $credentials', context,
-                        gravity: Toast.BOTTOM);
+                    if (Platform.isIOS) {
+                      Share.share('notifi credentials: $credentials');
+                    } else {
+                      Clipboard.setData(ClipboardData(text: credentials));
+                      Toast.show('Copied $credentials', context,
+                          gravity: Toast.BOTTOM);
+                    }
                   },
                       style: const TextStyle(
                           color: MyColour.red, fontWeight: FontWeight.w900))
