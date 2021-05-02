@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  app_settings: ^4.1.0
   cached_network_image: ^2.2.0+1
   cupertino_icons: ^1.0.2
   dio: ^3.0.10

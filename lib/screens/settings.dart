@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -119,6 +120,9 @@ class SettingsScreenState extends State<SettingsScreen> {
               }
             });
           }),
+          if (Platform.isIOS)
+            SettingOption('iOS App Settings...', Akaricons.gear,
+                onTapCallback: AppSettings.openNotificationSettings),
           SettingOption('About...', Akaricons.info, onTapCallback: () {
             openUrl('https://notifi.it');
           }),
