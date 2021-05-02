@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                             color: MyColour.darkGrey, size: 45)),
                   ),
                   SizedBox(
-                      height: double.infinity,
+                      height: 30,
                       child: Container(color: MyColour.offGrey, width: 1)),
                   Expanded(
                     child: SizedBox(

@@ -252,7 +252,6 @@ class SettingOption extends StatelessWidget {
         padding: const EdgeInsets.only(right: 10),
         child: Icon(icon, size: 20, color: MyColour.black));
 
-    // switch or link
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
@@ -270,7 +269,7 @@ class SettingOption extends StatelessWidget {
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 23, right: 7, top: 10),
+          padding: const EdgeInsets.only(left: 15, right: 7, top: 10),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

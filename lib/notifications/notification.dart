@@ -25,12 +25,14 @@ class NotificationUI extends StatefulWidget {
     this.link,
     this.id,
     this.read,
+    this.canExpand,
     Key key,
   }) : super(key: key) {
     message = message ?? '';
     image = image ?? '';
     link = link ?? '';
     read = read ?? false;
+    canExpand = canExpand ?? false;
   }
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
@@ -44,6 +46,7 @@ class NotificationUI extends StatefulWidget {
   String link;
   int id;
   bool read;
+  bool canExpand;
   bool isExpanded = false;
   int index;
   void Function(int id) toggleExpand;
@@ -230,7 +233,7 @@ class NotificationUIState extends State<NotificationUI> {
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
-                                  if (_canExpand)
+                                  if (widget.canExpand)
                                     InkWell(
                                         onTap: () {
                                           setState(() {
@@ -286,10 +289,12 @@ class NotificationUIState extends State<NotificationUI> {
                                       valueListenable: _timeStr,
                                       builder: (BuildContext context,
                                           String timeStr, Widget child) {
-                                        return SelectableText(timeStr,
-                                            style: const TextStyle(
-                                                color: MyColour.grey,
-                                                fontSize: 12));
+                                        return Expanded(
+                                          child: SelectableText(timeStr,
+                                              style: const TextStyle(
+                                                  color: MyColour.grey,
+                                                  fontSize: 12)),
+                                        );
                                       })
                                 ]),
 
@@ -315,8 +320,6 @@ class NotificationUIState extends State<NotificationUI> {
     super.dispose();
   }
 
-  bool _canExpand = false;
-
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
     // for title
@@ -332,7 +335,7 @@ class NotificationUIState extends State<NotificationUI> {
     }
 
     if (canExpand) {
-      _canExpand = true;
+      widget.canExpand = true;
       setState(() {});
     }
   }

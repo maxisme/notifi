@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -22,7 +23,8 @@ Future<void> main() async {
   await loadDotEnv();
 
   if (shouldUseFirebase()) {
-    initFirebase();
+    final AuthorizationStatus status = await initFirebase();
+    L.i(status.toString());
   }
 
   final DBProvider db = DBProvider('notifications.db');

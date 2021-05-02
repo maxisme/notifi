@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 class Notifications extends ChangeNotifier {
   Notifications(this.notifications, this.db, this.tableNotifier,
@@ -27,11 +27,13 @@ class Notifications extends ChangeNotifier {
   }
 
   void scrollToTop() {
-    tableController.animateTo(
-      tableController.position.minScrollExtent,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOut,
-    );
+    if (tableController.hasClients) {
+      tableController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   int get unreadCnt {

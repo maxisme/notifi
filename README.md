@@ -11,7 +11,7 @@
 
 https://flutter.dev/docs/get-started/install
 ```bash
-flutter channel master
+flutter channel dev
 flutter upgrade
 ```
 
