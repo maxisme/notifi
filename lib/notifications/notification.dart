@@ -126,20 +126,23 @@ class NotificationUIState extends State<NotificationUI> {
             fontSize: 10,
             letterSpacing: 0.2,
             height: 1.4);
-        messageRow = Row(key: _messageKey, children: <Widget>[
-          Flexible(
-              child: SelectableText(widget.message, onTap: () {
-            setState(() {
-              if (!widget.isExpanded) {
-                widget.toggleExpand(widget.index);
-              }
-            });
-          },
-                  scrollPhysics: const NeverScrollableScrollPhysics(),
-                  style: messageStyle,
-                  minLines: 1,
-                  maxLines: messageMaxLines)),
-        ]);
+        messageRow = Container(
+          padding: const EdgeInsets.only(top: 3),
+          child: Row(key: _messageKey, children: <Widget>[
+            Flexible(
+                child: SelectableText(widget.message, onTap: () {
+              setState(() {
+                if (!widget.isExpanded) {
+                  widget.toggleExpand(widget.index);
+                }
+              });
+            },
+                    scrollPhysics: const NeverScrollableScrollPhysics(),
+                    style: messageStyle,
+                    minLines: 1,
+                    maxLines: messageMaxLines)),
+          ]),
+        );
       } else {
         messageRow = const SizedBox();
       }
@@ -322,7 +325,7 @@ class NotificationUIState extends State<NotificationUI> {
 
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
-    // for title
+
     if (_columnKey.currentContext != null &&
         hasTextOverflow(widget.title, titleStyle,
             maxWidth: _columnKey.currentContext.size.width)) {

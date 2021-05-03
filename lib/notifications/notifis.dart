@@ -103,7 +103,7 @@ class Notifications extends ChangeNotifier {
           (BuildContext context, Animation<double> animation) {
         final Animation<Offset> _offsetAnimation = Tween<Offset>(
           begin: const Offset(0, 0.0),
-          end: const Offset(-0.8, 0),
+          end: const Offset(1, 0),
         ).animate(ReverseAnimation(animation));
 
         return SlideTransition(

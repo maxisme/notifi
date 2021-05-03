@@ -35,6 +35,8 @@ class NotificationTableState extends State<NotificationTable>
         return Scrollbar(
           thickness: 4,
           child: AnimatedList(
+              padding: const EdgeInsets.only(bottom: 10),
+              shrinkWrap: true,
               key: notifications.tableKey,
               controller: notifications.tableController,
               itemBuilder: _buildNotification,
@@ -153,7 +155,7 @@ class NotificationTableState extends State<NotificationTable>
           child: Slidable(
               key: Key(notification.id.toString()),
               actionPane: const SlidableDrawerActionPane(),
-              actionExtentRatio: 0.2,
+              actionExtentRatio: 0.15,
               actions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,
