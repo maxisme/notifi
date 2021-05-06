@@ -111,6 +111,8 @@ jobs:
           cd ../
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
           /usr/bin/codesign --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
+          # codesign sparkle auto update
+          /usr/bin/codesign --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app
 
       - name: "Create & Notarize .dmg"
         env:

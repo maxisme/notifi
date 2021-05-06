@@ -22,6 +22,8 @@ flutter upgrade
 CODE_ENDPOINT=http://127.0.0.1:9081/code
 SERVER_KEY=Hu2J7b7xA8MndeNS
 WS_ENDPOINT=ws://127.0.0.1:9081/ws
+VERSION_ENDPOINT=http://127.0.0.1:9081/version
+KEY_STORE=notifi-local
 ```
 
 ## run the backend

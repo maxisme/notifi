@@ -1,6 +1,7 @@
 import Cocoa
 import FlutterMacOS
 import UserNotifications
+import Sparkle
 
 let menuImageSize = NSSize(width: 23, height: 23)
 
@@ -26,6 +27,9 @@ class AppDelegate: FlutterAppDelegate {
             button.image = image
             button.action = #selector(togglePopover(_:))
         }
+
+        // sparkle update stuff
+        let sUUpdater = SUUpdater.shared()
 
         let flutterViewController = FlutterViewController.init()
 
@@ -56,6 +60,14 @@ class AppDelegate: FlutterAppDelegate {
                     menuBarAnimater.run()
                 }
                 menu_image = nil
+            case "update":
+                sUUpdater?.checkForUpdates(self)
+                return
+            case "set-sparkle-url":
+                if let args = call.arguments as? Dictionary<String, Any>, let url = args["url"] as? String {
+                    sUUpdater?.feedURL = URL(string: url)
+                }
+                return
             case "close_window":
                 closePopover(sender: nil)
                 return
@@ -86,9 +98,9 @@ class AppDelegate: FlutterAppDelegate {
         // very hacky: opens the popup out of the screen
         if let button = statusBarItem.button {
             popover.show(
-                relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0),
-                of: button,
-                preferredEdge: NSRectEdge.minY
+                    relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0),
+                    of: button,
+                    preferredEdge: NSRectEdge.minY
             )
         }
         closePopover(sender: nil)

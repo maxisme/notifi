@@ -73,7 +73,7 @@ class User with ChangeNotifier {
     if (!_user.isNull()) {
       postData['current_credential_key'] = _user.credentialKey;
       postData['current_credentials'] = _user.credentials;
-      if (shouldUseFirebase()) {
+      if (shouldUseFirebase) {
         postData['firebase_token'] =
             await FirebaseMessaging.instance.getToken();
       }

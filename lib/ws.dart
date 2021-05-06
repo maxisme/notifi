@@ -18,7 +18,7 @@ Future<IOWebSocketChannel> connectToWS(
     'Version': await getVersion(),
   };
 
-  if (shouldUseFirebase()) {
+  if (shouldUseFirebase) {
     headers['Firebase-Token'] = await FirebaseMessaging.instance.getToken();
   }
 

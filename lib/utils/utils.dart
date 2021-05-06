@@ -18,10 +18,10 @@ bool isTest() {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
-Future<dynamic> invokeMacMethod(String method) async {
+Future<dynamic> invokeMacMethod(String method, [dynamic arguments]) async {
   if (Platform.isMacOS && !isTest()) {
     try {
-      return await platform.invokeMethod(method);
+      return await platform.invokeMethod(method, arguments);
     } on PlatformException catch (e) {
       L.e("Failed to invoke method ($method): '${e.message}'.");
     }
@@ -79,7 +79,7 @@ Future<String> getDeviceUUID() async {
   return platform.invokeMethod('UUID');
 }
 
-bool shouldUseFirebase() {
+bool get shouldUseFirebase {
   return Platform.isIOS;
 }
 

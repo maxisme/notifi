@@ -30,29 +30,31 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   ValueNotifier<String> _version;
-  ValueNotifier<String> _downloadURL;
+  ValueNotifier<bool> _hasUpgrade;
 
   @override
   void initState() {
     _version = ValueNotifier<String>('');
-    _downloadURL = ValueNotifier<String>('');
+    _hasUpgrade = ValueNotifier<bool>(false);
     super.initState();
   }
 
   @override
   void dispose() {
     _version.dispose();
-    _downloadURL.dispose();
+    _hasUpgrade.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isTest() && Platform.isMacOS) {
+    const double leadingWidth = 60.0;
+
+    if (!isTest()) {
       getVersion().then((String version) {
         _version.value = version;
-        getUpdateURL(version).then((String url) {
-          _downloadURL.value = url;
+        hasUpgrade(version).then((bool hasUpgrade) {
+          _hasUpgrade.value = hasUpgrade;
         });
       });
     }
@@ -63,6 +65,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
+          leadingWidth: leadingWidth,
           leading: IconButton(
               icon: const Icon(
                 Akaricons.chevronLeft,
@@ -72,8 +75,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          centerTitle: true,
-          title: const MyAppBarTitle(60),
+          title: const MyAppBarTitle(leadingWidth),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
@@ -141,7 +143,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 SystemNavigator.pop();
               },
             ),
-          if (!Platform.isAndroid && !Platform.isIOS)
+          if (Platform.isMacOS)
             // ignore: always_specify_types
             FutureBuilder(
                 future: LaunchAtLogin.isEnabled,
@@ -196,7 +198,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       )),
                 ])),
           ),
-          if (!isTest() && Platform.isMacOS)
+          if (!isTest())
             ValueListenableBuilder<String>(
                 valueListenable: _version,
                 // ignore: always_specify_types
@@ -209,24 +211,24 @@ class SettingsScreenState extends State<SettingsScreen> {
                         Text('version: $version',
                             style: const TextStyle(
                                 color: MyColour.grey, fontSize: 12)),
-                        // ignore: always_specify_types
-                        ValueListenableBuilder(
-                            valueListenable: _downloadURL,
-                            builder: (BuildContext context, String upgradeURL,
-                                Widget child) {
-                              if (upgradeURL != '') {
-                                return TextButton(
-                                    onPressed: () {
-                                      launch(upgradeURL);
-                                    },
-                                    child: const Icon(
-                                      Akaricons.cloudDownload,
-                                      color: MyColour.red,
-                                      size: 18,
-                                    ));
-                              }
-                              return const SizedBox();
-                            })
+                        if (Platform.isMacOS)
+                          ValueListenableBuilder<bool>(
+                              valueListenable: _hasUpgrade,
+                              builder: (BuildContext context, bool hasUpgrade,
+                                  Widget child) {
+                                if (hasUpgrade) {
+                                  return TextButton(
+                                      onPressed: () {
+                                        invokeMacMethod('update');
+                                      },
+                                      child: const Icon(
+                                        Akaricons.cloudDownload,
+                                        color: MyColour.red,
+                                        size: 18,
+                                      ));
+                                }
+                                return const SizedBox();
+                              })
                       ],
                     ),
                   );
