@@ -34,7 +34,5 @@
 	<string>alert</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
-	<key>SUFeedURL</key>
-	<string>http://127.0.0.1:9081/appcast.xml</string>
 </dict>
 </plist>

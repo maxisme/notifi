@@ -106,13 +106,22 @@ jobs:
           # write version
           cd macos
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
-          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all $GITHUB_RUN_ID
           
           cd ../
+
+          # build .app
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
-          /usr/bin/codesign --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
+
+          # codesign .app
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
+
           # codesign sparkle auto update
-          /usr/bin/codesign --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app
+
+          # codesign binaries
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/MacOS/notifi
 
       - name: "Create & Notarize .dmg"
         env:
@@ -127,7 +136,7 @@ jobs:
 
           dmg_path="notifi.dmg"
 
-          /usr/bin/codesign --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
+          /usr/bin/codesign -vvv --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
           echo "notarizing..."
           notarize=$(xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f "$dmg_path" --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
@@ -196,7 +205,7 @@ jobs:
 
           # write version
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
-          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all $GITHUB_RUN_ID
 
           pod install
 
