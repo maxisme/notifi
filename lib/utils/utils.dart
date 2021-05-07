@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
-import 'package:package_info/package_info.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,11 +49,6 @@ class MenuBarIcon {
     if (currentIcon.isEmpty) icon = 'grey';
     set(icon);
   }
-}
-
-Future<String> getVersion() async {
-  final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo.buildNumber;
 }
 
 Future<void> loadDotEnv() async {
