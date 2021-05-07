@@ -16,6 +16,7 @@ import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:notifi/utils/version.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:toast/toast.dart';
@@ -29,19 +30,19 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  ValueNotifier<String> _version;
+  ValueNotifier<String> _versionString;
   ValueNotifier<bool> _hasUpgrade;
 
   @override
   void initState() {
-    _version = ValueNotifier<String>('');
+    _versionString = ValueNotifier<String>('');
     _hasUpgrade = ValueNotifier<bool>(false);
     super.initState();
   }
 
   @override
   void dispose() {
-    _version.dispose();
+    _versionString.dispose();
     _hasUpgrade.dispose();
     super.dispose();
   }
@@ -51,9 +52,9 @@ class SettingsScreenState extends State<SettingsScreen> {
     const double leadingWidth = 60.0;
 
     if (!isTest()) {
-      getVersion().then((String version) {
-        _version.value = version;
-        hasUpgrade(version).then((bool hasUpgrade) {
+      PackageInfo.fromPlatform().then((PackageInfo package) {
+        _versionString.value = '${package.version} (${package.buildNumber})';
+        hasUpgrade(package.version).then((bool hasUpgrade) {
           _hasUpgrade.value = hasUpgrade;
         });
       });
@@ -200,7 +201,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           ),
           if (!isTest())
             ValueListenableBuilder<String>(
-                valueListenable: _version,
+                valueListenable: _versionString,
                 // ignore: always_specify_types
                 builder: (BuildContext context, String version, Widget child) {
                   return Container(
