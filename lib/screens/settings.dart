@@ -53,7 +53,11 @@ class SettingsScreenState extends State<SettingsScreen> {
 
     if (!isTest()) {
       PackageInfo.fromPlatform().then((PackageInfo package) {
-        _versionString.value = '${package.version} (${package.buildNumber})';
+        if (Platform.isMacOS) {
+          _versionString.value = package.version;
+        } else {
+          _versionString.value = '${package.version} (${package.buildNumber})';
+        }
         hasUpgrade(package.version).then((bool hasUpgrade) {
           _hasUpgrade.value = hasUpgrade;
         });

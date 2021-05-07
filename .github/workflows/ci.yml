@@ -106,7 +106,7 @@ jobs:
           # write version
           cd macos
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
-          xcrun agvtool new-version -all $GITHUB_RUN_ID
+          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
           
           cd ../
 
