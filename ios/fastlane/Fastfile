@@ -80,6 +80,7 @@ platform :ios do
     upload_to_app_store(
         force: true,
         skip_screenshots: true,
+        precheck_include_in_app_purchases: false,
     )
   end
 end
