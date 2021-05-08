@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
@@ -21,8 +23,12 @@ Future<void> main() async {
 
   await loadDotEnv();
 
-  if (shouldUseFirebase()) {
-    initFirebase();
+  invokeMacMethod(
+      'set-sparkle-url', <String, String>{'url': env['VERSION_ENDPOINT']});
+
+  if (shouldUseFirebase) {
+    final AuthorizationStatus status = await initFirebase();
+    L.i(status.toString());
   }
 
   final DBProvider db = DBProvider('notifications.db');
@@ -75,6 +81,11 @@ class _MyAppState extends State<MyApp> {
             hoverColor: MyColour.transparent,
             focusColor: MyColour.transparent,
             accentColor: MyColour.black,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            buttonTheme: const ButtonThemeData(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent),
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.grey,
             ).copyWith(),

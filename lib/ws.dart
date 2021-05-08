@@ -4,21 +4,23 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/utils.dart';
+import 'package:package_info/package_info.dart';
 import 'package:web_socket_channel/io.dart';
 
 Future<IOWebSocketChannel> connectToWS(
     UserStruct user,
     Future<List<String>> Function(String) onMessage,
     Function(bool) setErr) async {
+  final PackageInfo package = await PackageInfo.fromPlatform();
   final Map<String, dynamic> headers = <String, dynamic>{
     'Sec-Key': env['SERVER_KEY'],
     'Uuid': user.uuid,
     'Credentials': user.credentials,
     'Key': user.credentialKey,
-    'Version': await getVersion(),
+    'Version': package.version,
   };
 
-  if (shouldUseFirebase()) {
+  if (shouldUseFirebase) {
     headers['Firebase-Token'] = await FirebaseMessaging.instance.getToken();
   }
 

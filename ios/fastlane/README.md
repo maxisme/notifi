@@ -16,16 +16,16 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
-### ios screenshots
-```
-fastlane ios screenshots
-```
-Generate new localized screenshots
 ### ios tfdeploy
 ```
 fastlane ios tfdeploy
 ```
-
+Upload build to test flight
+### ios asdeploy
+```
+fastlane ios asdeploy
+```
+Upload build to app store
 
 ----
 

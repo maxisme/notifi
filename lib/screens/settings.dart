@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,9 +14,11 @@ import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
-import 'package:notifi/utils/version.dart';
 import 'package:notifi/utils/utils.dart';
+import 'package:notifi/utils/version.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,30 +30,36 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  ValueNotifier<String> _version;
-  ValueNotifier<String> _downloadURL;
+  ValueNotifier<String> _versionString;
+  ValueNotifier<bool> _hasUpgrade;
 
   @override
   void initState() {
-    _version = ValueNotifier<String>('');
-    _downloadURL = ValueNotifier<String>('');
+    _versionString = ValueNotifier<String>('');
+    _hasUpgrade = ValueNotifier<bool>(false);
     super.initState();
   }
 
   @override
   void dispose() {
-    _version.dispose();
-    _downloadURL.dispose();
+    _versionString.dispose();
+    _hasUpgrade.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isTest() && Platform.isMacOS) {
-      getVersion().then((String version) {
-        _version.value = version;
-        getUpdateURL(version).then((String url) {
-          _downloadURL.value = url;
+    const double leadingWidth = 60.0;
+
+    if (!isTest()) {
+      PackageInfo.fromPlatform().then((PackageInfo package) {
+        if (Platform.isMacOS) {
+          _versionString.value = package.version;
+        } else {
+          _versionString.value = '${package.version} (${package.buildNumber})';
+        }
+        hasUpgrade(package.version).then((bool hasUpgrade) {
+          _hasUpgrade.value = hasUpgrade;
         });
       });
     }
@@ -61,6 +70,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
           elevation: 0.0,
           toolbarHeight: 80,
+          leadingWidth: leadingWidth,
           leading: IconButton(
               icon: const Icon(
                 Akaricons.chevronLeft,
@@ -70,28 +80,35 @@ class SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          centerTitle: true,
-          title: const MyAppBarTitle(60),
+          title: const MyAppBarTitle(leadingWidth),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
               builder: (BuildContext context, User user, Widget child) {
             final String credentials = user.getCredentials();
+
+            SettingOption credentialsSettingWidget = SettingOption(
+                'Copy Credentials $credentials', Akaricons.clipboard,
+                onTapCallback: () {
+              Clipboard.setData(ClipboardData(text: credentials));
+              showToast('Copied $credentials', context, gravity: Toast.CENTER);
+            });
+            if (Platform.isIOS) {
+              credentialsSettingWidget = SettingOption(
+                  'Share Credentials $credentials', Akaricons.clipboard,
+                  onTapCallback: () {
+                Share.share('notifi credentials: $credentials');
+              });
+            }
+
             return Column(children: <Widget>[
               Container(padding: const EdgeInsets.only(top: 20.0)),
-              if (credentials != null)
-                SettingOption(
-                    'How Do I Receive Notifications?', Akaricons.question,
-                    onTapCallback: () async {
-                  await openUrl('https://notifi.it?c=$credentials#how-to');
-                }),
               SettingOption(
-                  'Copy Credentials $credentials', Akaricons.clipboard,
-                  onTapCallback: () {
-                Clipboard.setData(ClipboardData(text: credentials));
-                showToast('Copied $credentials', context,
-                    gravity: Toast.CENTER);
-              })
+                  'How Do I Receive Notifications?', Akaricons.question,
+                  onTapCallback: () async {
+                await openUrl('https://notifi.it?c=$credentials#how-to');
+              }),
+              credentialsSettingWidget
             ]);
           }),
           SettingOption('Create New Credentials', Akaricons.arrowClockwise,
@@ -110,6 +127,9 @@ class SettingsScreenState extends State<SettingsScreen> {
               }
             });
           }),
+          if (Platform.isIOS)
+            SettingOption('iOS App Settings...', Akaricons.gear,
+                onTapCallback: AppSettings.openNotificationSettings),
           SettingOption('About...', Akaricons.info, onTapCallback: () {
             openUrl('https://notifi.it');
           }),
@@ -128,7 +148,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 SystemNavigator.pop();
               },
             ),
-          if (!Platform.isAndroid && !Platform.isIOS)
+          if (Platform.isMacOS)
             // ignore: always_specify_types
             FutureBuilder(
                 future: LaunchAtLogin.isEnabled,
@@ -183,9 +203,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                       )),
                 ])),
           ),
-          if (!isTest() && Platform.isMacOS)
+          if (!isTest())
             ValueListenableBuilder<String>(
-                valueListenable: _version,
+                valueListenable: _versionString,
                 // ignore: always_specify_types
                 builder: (BuildContext context, String version, Widget child) {
                   return Container(
@@ -196,24 +216,24 @@ class SettingsScreenState extends State<SettingsScreen> {
                         Text('version: $version',
                             style: const TextStyle(
                                 color: MyColour.grey, fontSize: 12)),
-                        // ignore: always_specify_types
-                        ValueListenableBuilder(
-                            valueListenable: _downloadURL,
-                            builder: (BuildContext context, String upgradeURL,
-                                Widget child) {
-                              if (upgradeURL != '') {
-                                return TextButton(
-                                    onPressed: () {
-                                      launch(upgradeURL);
-                                    },
-                                    child: const Icon(
-                                      Akaricons.cloudDownload,
-                                      color: MyColour.red,
-                                      size: 18,
-                                    ));
-                              }
-                              return const SizedBox();
-                            })
+                        if (Platform.isMacOS)
+                          ValueListenableBuilder<bool>(
+                              valueListenable: _hasUpgrade,
+                              builder: (BuildContext context, bool hasUpgrade,
+                                  Widget child) {
+                                if (hasUpgrade) {
+                                  return TextButton(
+                                      onPressed: () {
+                                        invokeMacMethod('update');
+                                      },
+                                      child: const Icon(
+                                        Akaricons.cloudDownload,
+                                        color: MyColour.red,
+                                        size: 18,
+                                      ));
+                                }
+                                return const SizedBox();
+                              })
                       ],
                     ),
                   );
@@ -243,11 +263,10 @@ class SettingOption extends StatelessWidget {
         padding: const EdgeInsets.only(right: 10),
         child: Icon(icon, size: 20, color: MyColour.black));
 
-    // switch or link
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
@@ -261,7 +280,7 @@ class SettingOption extends StatelessWidget {
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 23, right: 7, top: 10),
+          padding: const EdgeInsets.only(left: 15, right: 7, top: 10),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

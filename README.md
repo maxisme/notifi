@@ -11,15 +11,19 @@
 
 https://flutter.dev/docs/get-started/install
 ```bash
-flutter channel master
+flutter channel dev
 flutter upgrade
 ```
+
+# Run locally
 
 ## create .env with the content
 ```
 CODE_ENDPOINT=http://127.0.0.1:9081/code
 SERVER_KEY=Hu2J7b7xA8MndeNS
 WS_ENDPOINT=ws://127.0.0.1:9081/ws
+VERSION_ENDPOINT=http://127.0.0.1:9081/version
+KEY_STORE=notifi-local
 ```
 
 ## run the backend
@@ -41,34 +45,31 @@ flutter build macos
 flutter run -d macos
 ```
 
-## Tests
+# Tests
 
-### Lint & Test
+## Lint & Test
 
 ```bash
 bash ./pre-commit.sh
 ```
 
-### Set screenshot asserts
+## Set screenshot asserts
 
 ```
 bash ./test/set-asserts.sh
 ```
 
-## Extras
+# Extras
 
-### Add pre-commit hook
+## Add pre-commit hook
 
 ```bash
 ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
 chmod +x $(pwd)/.git/hooks/pre-commit
 ```
 
-### Screenshot
-```bash
-brew update && brew install imagemagick
-pub global activate screenshots
-```
+### fastlane
+
 
 ### Jetbrains flutter plugin:
 

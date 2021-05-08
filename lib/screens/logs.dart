@@ -17,45 +17,48 @@ class _LogsScreenState extends State<LogsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          leading: IconButton(
-              icon: const Icon(
-                Akaricons.chevronLeft,
-                color: MyColour.darkGrey,
-                size: 22,
+    return FutureBuilder<ListView>(
+        future: logListView(),
+        // ignore: always_specify_types
+        builder: (BuildContext context, AsyncSnapshot f) {
+          Widget widget = const Center(child: CircularProgressIndicator());
+          if (f.connectionState != ConnectionState.done || f.data == null) {
+            widget = const Center(child: CircularProgressIndicator());
+          } else {
+            widget = Scrollbar(thickness: 4, child: f.data);
+          }
+
+          return Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 80,
+                leading: IconButton(
+                    icon: const Icon(
+                      Akaricons.chevronLeft,
+                      color: MyColour.darkGrey,
+                      size: 22,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                title: Column(children: <Widget>[
+                  // ignore: always_specify_types
+                  DropdownButton(
+                      items: <DropdownMenuItem<LogLevel>>[
+                        _menuItem(LogLevel.DEBUG),
+                        _menuItem(LogLevel.INFO),
+                        _menuItem(LogLevel.WARNING),
+                        _menuItem(LogLevel.ERROR),
+                      ],
+                      value: _logLevel,
+                      onChanged: (LogLevel val) {
+                        setState(() {
+                          _logLevel = val;
+                        });
+                      })
+                ]),
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          title: Column(children: <Widget>[
-            const Text('Logs'),
-            // ignore: always_specify_types
-            DropdownButton(
-                items: <DropdownMenuItem<LogLevel>>[
-                  _menuItem(LogLevel.DEBUG),
-                  _menuItem(LogLevel.INFO),
-                  _menuItem(LogLevel.WARNING),
-                  _menuItem(LogLevel.ERROR),
-                ],
-                value: _logLevel,
-                onChanged: (LogLevel val) {
-                  setState(() {
-                    _logLevel = val;
-                  });
-                })
-          ]),
-        ),
-        body: FutureBuilder<ListView>(
-            future: logListView(),
-            // ignore: always_specify_types
-            builder: (BuildContext context, AsyncSnapshot f) {
-              if (f.connectionState != ConnectionState.done) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Scrollbar(thickness: 4, child: f.data);
-            }));
+              body: widget);
+        });
   }
 
   Future<ListView> logListView() async {

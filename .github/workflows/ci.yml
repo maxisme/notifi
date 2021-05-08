@@ -1,9 +1,34 @@
-name: MacOS
+name: CI
 on: [ push, pull_request ]
 
 jobs:
+  checks:
+    name: "Lint & Test"
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - name: "Lint"
+        run: |
+          touch .env
+          flutter analyze
+      - name: "Test"
+        run: flutter test
+      - name: "Upload Failure Screenshots"
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: golden-failures
+          path: test/failures
+
   version:
     name: "Get Version"
+    needs: checks
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
@@ -39,30 +64,6 @@ jobs:
             echo ::set-output name=VERSION::$GITHUB_RUN_ID
           fi
 
-  checks:
-    name: "Lint & Test"
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: 'dev'
-      - name: "Lint"
-        run: |
-          touch .env
-          flutter analyze
-      - name: "Test"
-        run: flutter test
-      - name: "Upload failure Screenshots"
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: golden-failures
-          path: test/failures
-
   #########
   # macos #
   #########
@@ -72,6 +73,19 @@ jobs:
     needs: version
     steps:
       - uses: actions/checkout@v2
+      - name: "Gen Keychain"
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        continue-on-error: true
+        run: |
+          echo "${{ secrets.APPLE_AUTH_KEY_P8 }}" | base64 --decode > AuthKey_MK4628AYTK.p8
+          mkdir ~/.private_keys
+          cp AuthKey_MK4628AYTK.p8 ~/.private_keys/
+          cd macos
+          gem install fastlane
+          fastlane keychain
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
@@ -82,53 +96,75 @@ jobs:
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
           then
-            echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
           else
-            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+          echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
+
+          # write version
+          cd macos
+          xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+          
+          cd ../
+
+          # build .app
           flutter build macos --release --build-name=${{ needs.version.outputs.version }}
-      - name: "Codesign"
-        run: |
-          echo ${{ secrets.MACOS_CERTIFICATE }} | base64 --decode > certificate.p12
-          security create-keychain -p p4ssword build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p p4ssword build.keychain
-          security import certificate.p12 -k build.keychain -P ${{ secrets.MACOS_CERTIFICATE_PWD }} -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
-          /usr/bin/codesign --force --deep -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
-      - name: "Create .dmg"
+
+          # codesign .app
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
+
+          # codesign sparkle auto update
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app
+
+          # codesign binaries
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/MacOS/notifi
+
+      - name: "Create & Notarize .dmg"
+        env:
+          APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
           npm install --global create-dmg
-          mkdir dmg
+
+          mkdir dmg/
           create-dmg build/macos/Build/Products/Release/notifi.app dmg/
+          mv dmg/* notifi.dmg
+
+          dmg_path="notifi.dmg"
+
+          /usr/bin/codesign -vvv --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
+
+          echo "notarizing..."
+          notarize=$(xcrun altool -t osx --primary-bundle-id it.notifi.notifi --output-format json --notarize-app -f "$dmg_path" --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
+          uuid=$(echo "$notarize" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-upload']['RequestUUID'])")
+          echo "$uuid"
+
+          # wait for apple to notarize
+          sleep 60
+
+          while true; do
+            check=$(xcrun altool --notarization-info "$uuid" --output-format json --username "$APPLE_USERNAME" --password "$APPLE_PASSWORD")
+            echo $check
+            status=$(echo "$check" | python3 -c "import sys, json; print(json.load(sys.stdin)['notarization-info']['Status'])")
+            echo $status
+            if [ "$status" != "in progress" ]; then
+              echo "staple dmg..."
+              xcrun stapler staple -v "$dmg_path"
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
       - name: "Store .dmg artifact"
         uses: actions/upload-artifact@v2
         with:
           name: notifi-dmg
-          path: dmg/
+          path: notifi.dmg
           if-no-files-found: error
-
-  deploy-macos:
-    name: "Deploy MacOS"
-    if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
-    runs-on: macos-latest
-    needs: [ checks, build-macos, version ]
-    steps:
-      - uses: actions/download-artifact@v2
-        id: download
-        with:
-          name: notifi-dmg
-      - name: "Deploy .dmg as GH release"
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: ${{ github.ref == 'refs/heads/develop' }}
-          automatic_release_tag: ${{ needs.version.outputs.version }}
-          title: "Release ${{ needs.version.outputs.version }}"
-          files: |
-            ${{steps.download.outputs.download-path}}
 
   #########
   #  iOS  #
@@ -143,11 +179,16 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
 
-      - name: "Build"
+      - name: "Build & Deploy"
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
           flutter pub get
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
@@ -157,33 +198,17 @@ jobs:
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
 
+          echo "${{ secrets.APPLE_AUTH_KEY_P8 }}" | base64 --decode > AuthKey_MK4628AYTK.p8
+
           cd ios
+          flutter pub get
 
           # write version
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
-          xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
+          xcrun agvtool new-version -all $GITHUB_RUN_ID
 
           pod install
 
-      - name: "Setup codesign keychain"
-        run: |
-          echo ${{ secrets.MACOS_CERTIFICATE }} | base64 --decode > certificate.p12
-          security create-keychain -p p4ssword build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p p4ssword build.keychain
-          security import certificate.p12 -k build.keychain -P ${{ secrets.MACOS_CERTIFICATE_PWD }} -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k p4ssword build.keychain
-
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo ${{ secrets.PROVISIONING_PROFILE_DATA }} | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
-
-      - name: "Run fastlane"
-        env:
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        run: |
-          cd ios
           gem install fastlane
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
@@ -192,3 +217,24 @@ jobs:
           else
             fastlane tfdeploy
           fi
+
+  # Create release
+  release:
+    name: "Release"
+    if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
+    runs-on: macos-latest
+    needs: [ checks, build-macos, build-ios, version ]
+    steps:
+      - uses: actions/download-artifact@v2
+        id: download
+        with:
+          name: notifi-dmg
+      - name: "Create Release"
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: ${{ github.ref == 'refs/heads/develop' }}
+          automatic_release_tag: ${{ needs.version.outputs.version }}
+          title: "Release ${{ needs.version.outputs.version }}"
+          files: |
+            ${{steps.download.outputs.download-path}}

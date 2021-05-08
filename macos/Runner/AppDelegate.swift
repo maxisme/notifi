@@ -1,6 +1,7 @@
 import Cocoa
 import FlutterMacOS
 import UserNotifications
+import Sparkle
 
 let menuImageSize = NSSize(width: 23, height: 23)
 
@@ -22,11 +23,13 @@ class AppDelegate: FlutterAppDelegate {
 
         if let button = statusBarItem.button {
             let image = NSImage(named: .red)
-            image?.isTemplate = true
             image?.size = menuImageSize
             button.image = image
             button.action = #selector(togglePopover(_:))
         }
+
+        // sparkle update stuff
+        let sUUpdater = SUUpdater.shared()
 
         let flutterViewController = FlutterViewController.init()
 
@@ -41,10 +44,13 @@ class AppDelegate: FlutterAppDelegate {
             switch call.method {
             case "red_menu_icon":
                 menu_image = NSImage(named: .red)
+                menu_image?.isTemplate = false
             case "grey_menu_icon":
                 menu_image = NSImage(named: .grey)
+                menu_image?.isTemplate = true
             case "error_menu_icon":
                 menu_image = NSImage(named: .error)
+                menu_image?.isTemplate = true
             case "animate":
                 if let button = self.statusBarItem.button {
                     if menuBarAnimater != nil {
@@ -54,6 +60,14 @@ class AppDelegate: FlutterAppDelegate {
                     menuBarAnimater.run()
                 }
                 menu_image = nil
+            case "update":
+                sUUpdater?.checkForUpdates(self)
+                return
+            case "set-sparkle-url":
+                if let args = call.arguments as? Dictionary<String, Any>, let url = args["url"] as? String {
+                    sUUpdater?.feedURL = URL(string: url)
+                }
+                return
             case "close_window":
                 closePopover(sender: nil)
                 return
@@ -66,7 +80,6 @@ class AppDelegate: FlutterAppDelegate {
             if (menu_image != nil) {
                 if let button = statusBarItem.button {
                     menu_image?.size = menuImageSize
-                    menu_image?.isTemplate = true
                     button.image = menu_image
                     result(0) // success
                 }
@@ -85,9 +98,9 @@ class AppDelegate: FlutterAppDelegate {
         // very hacky: opens the popup out of the screen
         if let button = statusBarItem.button {
             popover.show(
-                relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0),
-                of: button,
-                preferredEdge: NSRectEdge.minY
+                    relativeTo: NSRect(x: -1000, y: -1000, width: 0, height: 0),
+                    of: button,
+                    preferredEdge: NSRectEdge.minY
             )
         }
         closePopover(sender: nil)

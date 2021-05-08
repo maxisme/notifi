@@ -29,6 +29,7 @@ class Animater {
     @objc func _animateBell() {
         let icon = NSImage(named: .red)
         icon?.size = menuImageSize
+        icon?.isTemplate = false
 
         let angle = String(angles.popLast() ?? "")
         if angle != "" {

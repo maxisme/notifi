@@ -48,3 +48,13 @@ app.*.map.json
 /ios/Runner.app.dSYM.zip
 /ios/Runner.ipa
 /ios/fastlane/Preview.html
+/ios/production_it.notifi.notifi.p12
+/ios/production_it.notifi.notifi.pem
+/ios/production_it.notifi.notifi.pkey
+/macos/notifi.app.dSYM.zip
+/macos/notifi.app/
+/ios/fastlane/report.xml
+/macos/fastlane/report.xml
+AuthKey_MK4628AYTK.p8
+/.env
+/.env.prod

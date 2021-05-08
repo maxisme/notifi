@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 class Notifications extends ChangeNotifier {
   Notifications(this.notifications, this.db, this.tableNotifier,
@@ -26,6 +26,16 @@ class Notifications extends ChangeNotifier {
     return notifications[index];
   }
 
+  void scrollToTop() {
+    if (tableController.hasClients) {
+      tableController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
   int get unreadCnt {
     int cnt = 0;
     if (notifications != null) {
@@ -40,6 +50,10 @@ class Notifications extends ChangeNotifier {
       MenuBarIcon.set('red');
     } else {
       MenuBarIcon.set('grey');
+    }
+
+    if (canBadge) {
+      FlutterAppBadger.updateBadgeCount(cnt);
     }
 
     return cnt;
@@ -60,11 +74,7 @@ class Notifications extends ChangeNotifier {
       tableNotifier.reloadTable();
     } else {
       // scroll to top of table
-      tableController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.ease,
-      );
+      scrollToTop();
 
       // animate in notification
       if (tableKey.currentState != null) {
@@ -82,8 +92,7 @@ class Notifications extends ChangeNotifier {
   }
 
   Future<void> delete(int index) async {
-    final int id = notifications[index].id;
-    await db.delete(id);
+    await db.delete(notifications[index].id);
     notifications.removeAt(index);
     if (notifications.isEmpty) {
       tableNotifier.reloadTable();
@@ -92,13 +101,13 @@ class Notifications extends ChangeNotifier {
       tableKey.currentState.removeItem(index,
           (BuildContext context, Animation<double> animation) {
         final Animation<Offset> _offsetAnimation = Tween<Offset>(
-          begin: const Offset(0, 0.0),
-          end: const Offset(-0.8, 0),
+          begin: const Offset(-0.2, 0.0),
+          end: const Offset(-1, 0),
         ).animate(ReverseAnimation(animation));
 
         return SlideTransition(
           position: _offsetAnimation,
-          child: get(index),
+          child: notifications[index],
         );
       }, duration: const Duration(milliseconds: 300));
     }

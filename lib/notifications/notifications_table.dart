@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 
 class NotificationTable extends StatefulWidget {
@@ -32,6 +35,8 @@ class NotificationTableState extends State<NotificationTable>
         return Scrollbar(
           thickness: 4,
           child: AnimatedList(
+              padding: const EdgeInsets.only(bottom: 10),
+              shrinkWrap: true,
               key: notifications.tableKey,
               controller: notifications.tableController,
               itemBuilder: _buildNotification,
@@ -96,9 +101,13 @@ class NotificationTableState extends State<NotificationTable>
                   Container(padding: const EdgeInsets.only(top: 20.0)),
                   SelectableText(credentials, textAlign: TextAlign.center,
                       onTap: () {
-                    Clipboard.setData(ClipboardData(text: credentials));
-                    Toast.show('Copied $credentials', context,
-                        gravity: Toast.BOTTOM);
+                    if (Platform.isIOS) {
+                      Share.share('notifi credentials: $credentials');
+                    } else {
+                      Clipboard.setData(ClipboardData(text: credentials));
+                      Toast.show('Copied $credentials', context,
+                          gravity: Toast.BOTTOM);
+                    }
                   },
                       style: const TextStyle(
                           color: MyColour.red, fontWeight: FontWeight.w900))
@@ -136,6 +145,55 @@ class NotificationTableState extends State<NotificationTable>
       curve: Curves.fastLinearToSlowEaseIn,
     ));
 
+    // slide actions
+    List<Widget> actions = <Widget>[
+      IconSlideAction(
+        color: MyColour.offWhite,
+        icon: Akaricons.copy,
+        caption: 'Title',
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: notification.title));
+        },
+      ),
+      IconSlideAction(
+        color: MyColour.offWhite,
+        icon: Akaricons.copy,
+        caption: 'Message',
+        onTap: () async {
+          Clipboard.setData(ClipboardData(text: notification.message));
+        },
+      ),
+    ];
+
+    if (Platform.isIOS) {
+      actions = <Widget>[
+        IconSlideAction(
+          color: MyColour.offWhite,
+          icon: Akaricons.check,
+          caption: 'Read',
+          onTap: () {
+            Provider.of<Notifications>(context, listen: false)
+                .toggleRead(index);
+          },
+        ),
+      ];
+
+      if (notification.link != '') {
+        actions.add(IconSlideAction(
+          color: MyColour.offWhite,
+          icon: Akaricons.link,
+          caption: 'Link',
+          onTap: () async {
+            await openUrl(notification.link);
+            setState(() {
+              Provider.of<Notifications>(context, listen: false)
+                  .toggleRead(notification.index);
+            });
+          },
+        ));
+      }
+    }
+
     return SlideTransition(
       position: _offsetAnimation,
       child: AnimatedSize(
@@ -146,26 +204,8 @@ class NotificationTableState extends State<NotificationTable>
           child: Slidable(
               key: Key(notification.id.toString()),
               actionPane: const SlidableDrawerActionPane(),
-              actionExtentRatio: 0.2,
-              actions: <Widget>[
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Akaricons.copy,
-                  caption: 'Title',
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: notification.title));
-                  },
-                ),
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Akaricons.copy,
-                  caption: 'Message',
-                  onTap: () async {
-                    Clipboard.setData(
-                        ClipboardData(text: notification.message));
-                  },
-                ),
-              ],
+              actionExtentRatio: 0.15,
+              actions: actions,
               secondaryActions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,

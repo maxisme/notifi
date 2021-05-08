@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/animated_circle.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -18,8 +19,14 @@ class MyAppBarTitle extends StatelessWidget {
         children: <Widget>[
           Container(
             alignment: const Alignment(0, 0),
-            child: Image.asset('images/bell.png',
-                height: 70, filterQuality: FilterQuality.medium),
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<Notifications>(context, listen: false)
+                    .scrollToTop();
+              },
+              child: Image.asset('images/bell.png',
+                  height: 70, filterQuality: FilterQuality.medium),
+            ),
           ),
           Positioned(
             top: 9.8,

@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
-import 'package:package_info/package_info.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,10 +17,10 @@ bool isTest() {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
-Future<dynamic> invokeMacMethod(String method) async {
+Future<dynamic> invokeMacMethod(String method, [dynamic arguments]) async {
   if (Platform.isMacOS && !isTest()) {
     try {
-      return await platform.invokeMethod(method);
+      return await platform.invokeMethod(method, arguments);
     } on PlatformException catch (e) {
       L.e("Failed to invoke method ($method): '${e.message}'.");
     }
@@ -52,11 +51,6 @@ class MenuBarIcon {
   }
 }
 
-Future<String> getVersion() async {
-  final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo.buildNumber;
-}
-
 Future<void> loadDotEnv() async {
   await dot_env.load();
 }
@@ -79,7 +73,7 @@ Future<String> getDeviceUUID() async {
   return platform.invokeMethod('UUID');
 }
 
-bool shouldUseFirebase() {
+bool get shouldUseFirebase {
   return Platform.isIOS;
 }
 

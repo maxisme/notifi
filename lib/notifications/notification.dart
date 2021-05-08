@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart' as i;
@@ -25,12 +28,14 @@ class NotificationUI extends StatefulWidget {
     this.link,
     this.id,
     this.read,
+    this.canExpand,
     Key key,
   }) : super(key: key) {
     message = message ?? '';
     image = image ?? '';
     link = link ?? '';
     read = read ?? false;
+    canExpand = canExpand ?? false;
   }
 
   factory NotificationUI.fromJson(Map<String, dynamic> json) =>
@@ -44,6 +49,7 @@ class NotificationUI extends StatefulWidget {
   String link;
   int id;
   bool read;
+  bool canExpand;
   bool isExpanded = false;
   int index;
   void Function(int id) toggleExpand;
@@ -123,20 +129,23 @@ class NotificationUIState extends State<NotificationUI> {
             fontSize: 10,
             letterSpacing: 0.2,
             height: 1.4);
-        messageRow = Row(key: _messageKey, children: <Widget>[
-          Flexible(
-              child: SelectableText(widget.message, onTap: () {
-            setState(() {
-              if (!widget.isExpanded) {
-                widget.toggleExpand(widget.index);
-              }
-            });
-          },
-                  scrollPhysics: const NeverScrollableScrollPhysics(),
-                  style: messageStyle,
-                  minLines: 1,
-                  maxLines: messageMaxLines)),
-        ]);
+        messageRow = Container(
+          padding: const EdgeInsets.only(top: 3),
+          child: Row(key: _messageKey, children: <Widget>[
+            Flexible(
+                child: SelectableText(widget.message, onTap: () {
+              setState(() {
+                if (!widget.isExpanded) {
+                  widget.toggleExpand(widget.index);
+                }
+              });
+            },
+                    scrollPhysics: const NeverScrollableScrollPhysics(),
+                    style: messageStyle,
+                    minLines: 1,
+                    maxLines: messageMaxLines)),
+          ]),
+        );
       } else {
         messageRow = const SizedBox();
       }
@@ -147,6 +156,10 @@ class NotificationUIState extends State<NotificationUI> {
         linkBtn = InkWell(
             onTap: () async {
               await openUrl(widget.link);
+              setState(() {
+                Provider.of<Notifications>(context, listen: false)
+                    .toggleRead(widget.index);
+              });
             },
             child: Container(
                 padding: const EdgeInsets.only(top: 7.0),
@@ -165,6 +178,8 @@ class NotificationUIState extends State<NotificationUI> {
           child: GestureDetector(
               onTap: () async {
                 await openUrl(widget.image);
+                Provider.of<Notifications>(context, listen: false)
+                    .toggleRead(widget.index);
               },
               child: Container(
                 padding: const EdgeInsets.only(right: 10.0, top: 3.0),
@@ -192,21 +207,25 @@ class NotificationUIState extends State<NotificationUI> {
           fontSize: 14,
           fontWeight: FontWeight.w600);
 
-      return Container(
+      const double padding = 10.0;
+
+      final Container slideableNotification = Container(
           color: Colors.transparent,
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+          padding: const EdgeInsets.only(
+              left: padding, right: padding, top: padding),
           child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: MyColour.offGrey),
                   color: backgroundColour,
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(padding))),
               child: Container(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(padding),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          padding: const EdgeInsets.only(right: 10.0),
+                          padding: const EdgeInsets.only(right: padding),
                           child: SizedBox(
                             width: 15,
                             child: Column(
@@ -230,7 +249,7 @@ class NotificationUIState extends State<NotificationUI> {
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
-                                  if (_canExpand)
+                                  if (widget.canExpand)
                                     InkWell(
                                         onTap: () {
                                           setState(() {
@@ -286,10 +305,12 @@ class NotificationUIState extends State<NotificationUI> {
                                       valueListenable: _timeStr,
                                       builder: (BuildContext context,
                                           String timeStr, Widget child) {
-                                        return SelectableText(timeStr,
-                                            style: const TextStyle(
-                                                color: MyColour.grey,
-                                                fontSize: 12));
+                                        return Expanded(
+                                          child: SelectableText(timeStr,
+                                              style: const TextStyle(
+                                                  color: MyColour.grey,
+                                                  fontSize: 12)),
+                                        );
                                       })
                                 ]),
 
@@ -298,6 +319,27 @@ class NotificationUIState extends State<NotificationUI> {
                               ]),
                         ))
                       ]))));
+
+      if (Platform.isMacOS) {
+        return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          final double paddingArea = constraints.maxWidth - padding - 5;
+          return MouseRegion(
+              onHover: (PointerHoverEvent event) {
+                if (event.position.dx > paddingArea) {
+                  Slidable.of(context)
+                      .open(actionType: SlideActionType.secondary);
+                } else if (event.position.dx <= padding + 5) {
+                  Slidable.of(context)
+                      .open(actionType: SlideActionType.primary);
+                } else {
+                  Slidable.of(context).close();
+                }
+              },
+              child: slideableNotification);
+        });
+      }
+      return slideableNotification;
     });
   }
 
@@ -315,11 +357,9 @@ class NotificationUIState extends State<NotificationUI> {
     super.dispose();
   }
 
-  bool _canExpand = false;
-
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
-    // for title
+
     if (_columnKey.currentContext != null &&
         hasTextOverflow(widget.title, titleStyle,
             maxWidth: _columnKey.currentContext.size.width)) {
@@ -332,7 +372,7 @@ class NotificationUIState extends State<NotificationUI> {
     }
 
     if (canExpand) {
-      _canExpand = true;
+      widget.canExpand = true;
       setState(() {});
     }
   }
