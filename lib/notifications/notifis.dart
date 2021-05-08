@@ -92,8 +92,7 @@ class Notifications extends ChangeNotifier {
   }
 
   Future<void> delete(int index) async {
-    final int id = notifications[index].id;
-    await db.delete(id);
+    await db.delete(notifications[index].id);
     notifications.removeAt(index);
     if (notifications.isEmpty) {
       tableNotifier.reloadTable();
@@ -102,13 +101,13 @@ class Notifications extends ChangeNotifier {
       tableKey.currentState.removeItem(index,
           (BuildContext context, Animation<double> animation) {
         final Animation<Offset> _offsetAnimation = Tween<Offset>(
-          begin: const Offset(0, 0.0),
-          end: const Offset(1, 0),
+          begin: const Offset(-0.2, 0.0),
+          end: const Offset(-1, 0),
         ).animate(ReverseAnimation(animation));
 
         return SlideTransition(
           position: _offsetAnimation,
-          child: get(index),
+          child: notifications[index],
         );
       }, duration: const Duration(milliseconds: 300));
     }

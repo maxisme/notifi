@@ -145,6 +145,55 @@ class NotificationTableState extends State<NotificationTable>
       curve: Curves.fastLinearToSlowEaseIn,
     ));
 
+    // slide actions
+    List<Widget> actions = <Widget>[
+      IconSlideAction(
+        color: MyColour.offWhite,
+        icon: Akaricons.copy,
+        caption: 'Title',
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: notification.title));
+        },
+      ),
+      IconSlideAction(
+        color: MyColour.offWhite,
+        icon: Akaricons.copy,
+        caption: 'Message',
+        onTap: () async {
+          Clipboard.setData(ClipboardData(text: notification.message));
+        },
+      ),
+    ];
+
+    if (Platform.isIOS) {
+      actions = <Widget>[
+        IconSlideAction(
+          color: MyColour.offWhite,
+          icon: Akaricons.check,
+          caption: 'Read',
+          onTap: () {
+            Provider.of<Notifications>(context, listen: false)
+                .toggleRead(index);
+          },
+        ),
+      ];
+
+      if (notification.link != '') {
+        actions.add(IconSlideAction(
+          color: MyColour.offWhite,
+          icon: Akaricons.link,
+          caption: 'Link',
+          onTap: () async {
+            await openUrl(notification.link);
+            setState(() {
+              Provider.of<Notifications>(context, listen: false)
+                  .toggleRead(notification.index);
+            });
+          },
+        ));
+      }
+    }
+
     return SlideTransition(
       position: _offsetAnimation,
       child: AnimatedSize(
@@ -156,25 +205,7 @@ class NotificationTableState extends State<NotificationTable>
               key: Key(notification.id.toString()),
               actionPane: const SlidableDrawerActionPane(),
               actionExtentRatio: 0.15,
-              actions: <Widget>[
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Akaricons.copy,
-                  caption: 'Title',
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: notification.title));
-                  },
-                ),
-                IconSlideAction(
-                  color: MyColour.offWhite,
-                  icon: Akaricons.copy,
-                  caption: 'Message',
-                  onTap: () async {
-                    Clipboard.setData(
-                        ClipboardData(text: notification.message));
-                  },
-                ),
-              ],
+              actions: actions,
               secondaryActions: <Widget>[
                 IconSlideAction(
                   color: MyColour.offWhite,

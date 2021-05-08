@@ -17,8 +17,6 @@ import 'package:notifi/ws.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-const int requestNewUserCode = 551;
-
 class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
     _user = UserStruct();
