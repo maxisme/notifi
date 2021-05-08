@@ -38,7 +38,7 @@ platform :ios do
 
     match(type: "development", readonly: true, keychain_name: "kc", keychain_password: "p4ssword")
     match(type: "appstore", readonly: true, keychain_name: "kc", keychain_password: "p4ssword")
-    
+
     build_app(
       workspace: "Runner.xcworkspace",
       export_method: "app-store",
@@ -77,7 +77,9 @@ platform :ios do
         PROVISIONING_PROFILE_SPECIFIER: ENV["sigh_it.notifi.notifi_appstore"]
       }
     )
-
-    upload_to_app_store
+    upload_to_app_store(
+        force: true,
+        skip_screenshots: true,
+    )
   end
 end
