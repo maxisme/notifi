@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:notifi/notifications/notification.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-// import 'package:sqlite3/sqlite3.dart';
 
 class DBProvider {
   DBProvider(this.dbPath);
@@ -18,12 +19,12 @@ class DBProvider {
       return _db;
     }
 
-    return _db = await openDatabase(
-        // Set the path to the database. Note: Using the `join` function
-        //from the `path` package is best practice to ensure the path is
-        //correctly constructed for each platform.
-        join(await getDatabasesPath(), dbPath),
-        onCreate: (Database db, int version) {
+    Directory dir = await getLibraryDirectory();
+    dir ??= await getApplicationDocumentsDirectory();
+    final String path = join(join(dir.path, 'notifi/'), dbPath);
+    L.i('DB path: $path');
+
+    return _db = await openDatabase(path, onCreate: (Database db, int version) {
       return db.execute('''
         CREATE TABLE IF NOT EXISTS $_table (
           _id integer primary key autoincrement, 

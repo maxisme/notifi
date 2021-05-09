@@ -75,6 +75,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             fontFamily: 'Inconsolata',
             primaryColor: MyColour.offWhite,
@@ -86,6 +87,10 @@ class _MyAppState extends State<MyApp> {
             buttonTheme: const ButtonThemeData(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent),
+            textButtonTheme: const TextButtonThemeData(
+                style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+            )),
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.grey,
             ).copyWith(),

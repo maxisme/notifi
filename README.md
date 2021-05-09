@@ -68,7 +68,38 @@ ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
 chmod +x $(pwd)/.git/hooks/pre-commit
 ```
 
-### fastlane
+### screenshot on MacOS for iOS
+
+find simulator UUIDs:
+```
+$ xcrun simctl list devices
+```
+
+You want to find the UUIDs of:
+ - 6.5", iPhone 11 Pro Max, iPhone Xs Max
+ - 5.5", iPhone 8 Plus, iPhone 7 Plus, iPhone 6s Plus
+ - 12.9" iPad Pro
+
+1. open iOS simulator UUIDs:
+```
+xcrun simctl boot E1E8CFAC-3D2D-43C6-9A82-156108558D28
+xcrun simctl boot EA1A2006-B1C0-4369-8A95-D408C2597271
+xcrun simctl boot 63E2193A-B47B-48D6-8311-DA0BC150AAC1
+open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
+```
+
+2. open and run each of these in a new tab:
+```bash
+$ flutter run -d E1E8CFAC-3D2D-43C6-9A82-156108558D28
+$ flutter run -d EA1A2006-B1C0-4369-8A95-D408C2597271
+$ flutter run -d 63E2193A-B47B-48D6-8311-DA0BC150AAC1
+```
+
+3. Press `s` to take screen shot on each tab
+
+4. Create test notification using the `test-notifications.sh` helper
+
+5. Press `s` to take screen shots again
 
 
 ### Jetbrains flutter plugin:
