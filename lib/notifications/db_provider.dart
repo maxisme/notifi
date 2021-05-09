@@ -19,7 +19,8 @@ class DBProvider {
       return _db;
     }
 
-    final Directory dir = await getLibraryDirectory();
+    Directory dir = await getLibraryDirectory();
+    dir ??= await getApplicationDocumentsDirectory();
     final String path = join(join(dir.path, 'notifi/'), dbPath);
     L.i('DB path: $path');
 

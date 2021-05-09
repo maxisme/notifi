@@ -102,7 +102,7 @@ class NotificationTableState extends State<NotificationTable>
                   SelectableText(credentials, textAlign: TextAlign.center,
                       onTap: () {
                     if (Platform.isIOS) {
-                      Share.share('notifi credentials: $credentials');
+                      Share.share(credentials);
                     } else {
                       Clipboard.setData(ClipboardData(text: credentials));
                       Toast.show('Copied $credentials', context,

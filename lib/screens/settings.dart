@@ -97,7 +97,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               credentialsSettingWidget = SettingOption(
                   'Share Credentials $credentials', Akaricons.clipboard,
                   onTapCallback: () {
-                Share.share('notifi credentials: $credentials');
+                Share.share(credentials);
               });
             }
 

@@ -39,33 +39,29 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Expanded(
-                    child: TextButton(
-                        onPressed: () {
-                          Provider.of<Notifications>(context, listen: false)
-                              .readAll();
-                        },
-                        child: const Icon(Akaricons.doubleCheck,
-                            color: MyColour.darkGrey, size: 45)),
-                  ),
+                      child: TextButton(
+                          onPressed: () {
+                            Provider.of<Notifications>(context, listen: false)
+                                .readAll();
+                          },
+                          child: const Icon(Akaricons.doubleCheck,
+                              color: MyColour.darkGrey, size: 40))),
                   SizedBox(
                       height: 30,
                       child: Container(color: MyColour.offGrey, width: 1)),
                   Expanded(
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: TextButton(
-                          onPressed: () {
-                            showAlert(context, 'Delete All Notifications?',
-                                'All notifications will be irretrievable.',
-                                onOkPressed: () {
-                              Provider.of<Notifications>(context, listen: false)
-                                  .deleteAll();
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: const Icon(Akaricons.trash,
-                              color: MyColour.red, size: 30)),
-                    ),
+                    child: TextButton(
+                        onPressed: () {
+                          showAlert(context, 'Delete All Notifications?',
+                              'All notifications will be irretrievable.',
+                              onOkPressed: () {
+                            Provider.of<Notifications>(context, listen: false)
+                                .deleteAll();
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Icon(Akaricons.trash,
+                            color: MyColour.red, size: 30)),
                   )
                 ]),
           ),
