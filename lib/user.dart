@@ -80,16 +80,16 @@ class User with ChangeNotifier {
 
     final UserStruct newUser = await _newUserReq(postData);
     if (!newUser.isNull()) {
-      _user = newUser;
-
       // store user credentials
-      await newUser.store();
+      if (await newUser.store()) {
+        _user = newUser;
 
-      notifyListeners();
+        if (_ws != null) {
+          L.i('Reconnecting to ws...');
+          _ws.sink.close(status.normalClosure, 'new code!');
+        }
 
-      if (_ws != null) {
-        L.d('Reconnecting to ws...');
-        _ws.sink.close(status.normalClosure, 'new code!');
+        notifyListeners();
       }
     }
     return !newUser.isNull();
@@ -117,8 +117,11 @@ class User with ChangeNotifier {
           options: d.Options(headers: <String, dynamic>{
             'Sec-Key': env['SERVER_KEY'],
           }, contentType: d.Headers.formUrlEncodedContentType));
-    } catch (e) {
-      L.e('Problem fetching user code: $e');
+    } on DioError catch (e, _) {
+      // ignore: always_specify_types
+      final d.Response resp = e.response;
+      L.e('Problem fetching user code: ${resp.statusCode}');
+      L.e(resp.statusMessage);
       return UserStruct();
     }
 

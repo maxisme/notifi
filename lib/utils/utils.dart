@@ -39,15 +39,15 @@ class MenuBarIcon {
   }
 
   static Future<void> setErr() async {
+    await set('error');
     hasErr = true;
-    set('error');
   }
 
   static Future<void> revertErr() async {
     hasErr = false;
     String icon = currentIcon;
     if (currentIcon.isEmpty) icon = 'grey';
-    set(icon);
+    await set(icon);
   }
 }
 

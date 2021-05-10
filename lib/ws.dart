@@ -40,6 +40,8 @@ Future<IOWebSocketChannel> connectToWS(
   }, onError: (e) async {
     _wsError = true;
     L.w('Problem with WS: $e');
+    L.w('${ws.closeCode}');
+    L.w(ws.closeReason);
   }, onDone: () async {
     L.d('WS connection closed.');
     if (_wsError) {
