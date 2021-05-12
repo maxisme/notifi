@@ -59,8 +59,6 @@ class User with ChangeNotifier {
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
     }
-
-    await _initWSS(_user);
   }
 
   Future<bool> setNewUser() async {
@@ -84,10 +82,7 @@ class User with ChangeNotifier {
       if (await newUser.store()) {
         _user = newUser;
 
-        if (_ws != null) {
-          L.i('Reconnecting to ws...');
-          _ws.sink.close(status.normalClosure, 'new code!');
-        }
+        await _initWSS();
 
         notifyListeners();
       }
@@ -98,13 +93,12 @@ class User with ChangeNotifier {
   ////////
   // ws //
   ////////
-  Future<void> _initWSS(UserStruct user) async {
+  Future<void> _initWSS() async {
     if (_ws != null) {
       L.i('Closing already open WS...');
-      _ws.sink.close();
-      _ws = null;
+      await _ws.sink.close(status.normalClosure, 'new code!');
     }
-    _ws = await connectToWS(user, _handleMessage, setErr);
+    _ws = await connectToWS(_user, _handleMessage, setErr);
   }
 
   Future<UserStruct> _newUserReq(Map<String, dynamic> data) async {
