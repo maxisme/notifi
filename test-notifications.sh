@@ -12,7 +12,7 @@ LOREM="Lorem%20ipsum%20dolor%20sit%20amet,%20consectetur%20adipiscing%20elit.%20
 #curl "$URL?credentials=${CREDENTIALS}&title=hey&message=${LOREM}"
 #curl "$URL?credentials=${CREDENTIALS}&title=hey&message=hey"
 #curl "$URL?credentials=${CREDENTIALS}&title=1"
-curl "$URL?credentials=${CREDENTIALS}&title=Hacker%20News:%20Machine%20Learning%20101%20slidedeck:%202%20years%20of%20headbanging,%20so%20you%20don't%20have%20to%20&link=https://news.ycombinator.com/"s
+curl -i "$URL?credentials=${CREDENTIALS}&title=Hacker%20News:%20Machine%20Learning%20101%20slidedeck:%202%20years%20of%20headbanging,%20so%20you%20don't%20have%20to%20&link=https://news.ycombinator.com/"s
 curl "$URL?credentials=${CREDENTIALS}&title=BTC%20@%20£50,000"
 sleep 0.1
 curl "$URL?credentials=${CREDENTIALS}&title=Server%20Login&message=IP:%2035.177.218.15%20(London)"
