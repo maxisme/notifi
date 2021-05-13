@@ -85,13 +85,29 @@ Map<String, dynamic> _$NotificationToJson(NotificationUI notification) =>
     };
 
 class NotificationUIState extends State<NotificationUI> {
+  NotificationUIState();
+
   final GlobalKey _columnKey = GlobalKey();
   final GlobalKey _titleKey = GlobalKey();
   final GlobalKey _messageKey = GlobalKey();
-  TextStyle messageStyle;
-  TextStyle titleStyle;
   final ValueNotifier<String> _timeStr = ValueNotifier<String>('');
   Timer timer;
+  SlideActionType mouseSliderAction;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _canExpandHandler(context));
+    timer = Timer.periodic(const Duration(minutes: 1), (Timer t) => _setTime());
+  }
+
+  @override
+  void dispose() {
+    mouseSliderAction = null;
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,14 +137,6 @@ class NotificationUIState extends State<NotificationUI> {
       // if message
       Widget messageRow;
       if (widget.message != '') {
-        messageStyle = const TextStyle(
-            inherit: false,
-            textBaseline: TextBaseline.alphabetic,
-            fontFamily: 'Inconsolata',
-            color: MyColour.black,
-            fontSize: 10,
-            letterSpacing: 0.2,
-            height: 1.4);
         messageRow = Container(
           padding: const EdgeInsets.only(top: 3),
           child: Row(key: _messageKey, children: <Widget>[
@@ -141,7 +149,7 @@ class NotificationUIState extends State<NotificationUI> {
               });
             },
                     scrollPhysics: const NeverScrollableScrollPhysics(),
-                    style: messageStyle,
+                    style: Theme.of(context).textTheme.bodyText1,
                     minLines: 1,
                     maxLines: messageMaxLines)),
           ]),
@@ -199,23 +207,15 @@ class NotificationUIState extends State<NotificationUI> {
         );
       }
 
-      titleStyle = TextStyle(
-          inherit: false,
-          textBaseline: TextBaseline.alphabetic,
-          fontFamily: 'Inconsolata',
-          color: titleColour,
-          fontSize: 14,
-          fontWeight: FontWeight.w600);
-
       const double padding = 10.0;
 
-      final Container slideableNotification = Container(
+      final Container slideNotification = Container(
           color: Colors.transparent,
           padding: const EdgeInsets.only(
               left: padding, right: padding, top: padding),
           child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: MyColour.offGrey),
+                  border: Border.all(color: Theme.of(context).indicatorColor),
                   color: backgroundColour,
                   borderRadius:
                       const BorderRadius.all(Radius.circular(padding))),
@@ -230,8 +230,7 @@ class NotificationUIState extends State<NotificationUI> {
                             width: 15,
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                // ignore: always_specify_types
-                                children: [
+                                children: <Widget>[
                                   // mark as read
                                   InkWell(
                                       onTap: () {
@@ -293,7 +292,10 @@ class NotificationUIState extends State<NotificationUI> {
                                   },
                                       scrollPhysics:
                                           const NeverScrollableScrollPhysics(),
-                                      style: titleStyle,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline1
+                                          .copyWith(color: titleColour),
                                       textAlign: TextAlign.left,
                                       minLines: 1,
                                       maxLines: titleMaxLines),
@@ -321,52 +323,52 @@ class NotificationUIState extends State<NotificationUI> {
                       ]))));
 
       if (Platform.isMacOS) {
+        final void Function({SlideActionType actionType}) openSlider =
+            Slidable.of(context).open;
         return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           final double paddingArea = constraints.maxWidth - padding - 5;
           return MouseRegion(
               onHover: (PointerHoverEvent event) {
+                SlideActionType actionType;
                 if (event.position.dx > paddingArea) {
-                  Slidable.of(context)
-                      .open(actionType: SlideActionType.secondary);
+                  mouseSliderAction = actionType = SlideActionType.secondary;
                 } else if (event.position.dx <= padding + 5) {
-                  Slidable.of(context)
-                      .open(actionType: SlideActionType.primary);
+                  mouseSliderAction = actionType = SlideActionType.primary;
                 } else {
                   Slidable.of(context).close();
+                  mouseSliderAction = null;
                 }
+
+                // Add delay to make sure mouse is in area for a set amount of
+                // time
+                Future<dynamic>.delayed(const Duration(milliseconds: 100), () {
+                  if (mouseSliderAction != null &&
+                      mouseSliderAction == actionType) {
+                    openSlider(actionType: actionType);
+                  }
+                });
               },
-              child: slideableNotification);
+              onExit: (_) {
+                mouseSliderAction = null;
+              },
+              child: slideNotification);
         });
       }
-      return slideableNotification;
+      return slideNotification;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _canExpandHandler(context));
-    timer = Timer.periodic(const Duration(minutes: 1), (Timer t) => _setTime());
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
   }
 
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
 
     if (_columnKey.currentContext != null &&
-        hasTextOverflow(widget.title, titleStyle,
+        hasTextOverflow(widget.title, Theme.of(context).textTheme.headline1,
             maxWidth: _columnKey.currentContext.size.width)) {
       canExpand = true;
     } else if (_messageKey.currentContext != null &&
         widget.message != '' &&
-        hasTextOverflow(widget.message, messageStyle,
+        hasTextOverflow(widget.message, Theme.of(context).textTheme.bodyText1,
             maxWidth: _messageKey.currentContext.size.width, maxLines: 3)) {
       canExpand = true;
     }

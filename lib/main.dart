@@ -78,12 +78,40 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             fontFamily: 'Inconsolata',
-            primaryColor: MyColour.offWhite,
+            primaryColor: MyColour.black,
             hoverColor: MyColour.transparent,
             focusColor: MyColour.transparent,
-            accentColor: MyColour.black,
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
+            backgroundColor: MyColour.transparent,
+            appBarTheme: const AppBarTheme(
+                iconTheme: IconThemeData(
+                  color: MyColour.darkGrey,
+                  size: 22,
+                ),
+                centerTitle: true,
+                elevation: 0.0,
+                toolbarHeight: 80,
+                backgroundColor: MyColour.offWhite),
+            iconTheme: const IconThemeData(
+              color: MyColour.darkGrey,
+              size: 22,
+            ),
+            textTheme: const TextTheme(
+                headline1: TextStyle(
+                    inherit: false,
+                    textBaseline: TextBaseline.alphabetic,
+                    fontFamily: 'Inconsolata',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+                bodyText1: TextStyle(
+                    inherit: false,
+                    textBaseline: TextBaseline.alphabetic,
+                    fontFamily: 'Inconsolata',
+                    color: MyColour.darkGrey,
+                    fontSize: 10,
+                    letterSpacing: 0.2,
+                    height: 1.4)),
             buttonTheme: const ButtonThemeData(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent),
@@ -91,9 +119,11 @@ class _MyAppState extends State<MyApp> {
                 style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
             )),
+            indicatorColor: MyColour.offGrey,
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.grey,
-            ).copyWith(),
+              accentColor: MyColour.red,
+            ),
             dialogTheme: DialogTheme(
                 elevation: 0,
                 shape: Border.all(width: 3),

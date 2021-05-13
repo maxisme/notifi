@@ -5,27 +5,19 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/utils/icons.dart';
-import 'package:notifi/utils/pallete.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const double leadingWidth = 60.0;
     return Scaffold(
-        backgroundColor: MyColour.offWhite,
         appBar: AppBar(
-          shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
-          elevation: 0.0,
-          toolbarHeight: 80,
-          title: const MyAppBarTitle(leadingWidth),
-          leadingWidth: leadingWidth,
+          automaticallyImplyLeading: false,
+          shape: Border(
+              bottom: BorderSide(color: Theme.of(context).indicatorColor)),
+          title: const MyAppBarTitle(),
           leading: IconButton(
-              icon: const Icon(
-                Akaricons.gear,
-                color: MyColour.darkGrey,
-                size: 22,
-              ),
+              icon: const Icon(Akaricons.gear),
               onPressed: () async {
                 Navigator.pushNamed(context, '/settings');
               }),
@@ -44,11 +36,15 @@ class HomeScreen extends StatelessWidget {
                             Provider.of<Notifications>(context, listen: false)
                                 .readAll();
                           },
-                          child: const Icon(Akaricons.doubleCheck,
-                              color: MyColour.darkGrey, size: 40))),
+                          child: Icon(
+                            Akaricons.doubleCheck,
+                            size: 40,
+                            color: Theme.of(context).primaryColor,
+                          ))),
                   SizedBox(
                       height: 30,
-                      child: Container(color: MyColour.offGrey, width: 1)),
+                      child: Container(
+                          color: Theme.of(context).indicatorColor, width: 1)),
                   Expanded(
                     child: TextButton(
                         onPressed: () {
@@ -60,8 +56,9 @@ class HomeScreen extends StatelessWidget {
                             Navigator.pop(context);
                           });
                         },
-                        child: const Icon(Akaricons.trash,
-                            color: MyColour.red, size: 30)),
+                        child: Icon(Akaricons.trash,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 30)),
                   )
                 ]),
           ),

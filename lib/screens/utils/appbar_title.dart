@@ -6,14 +6,12 @@ import 'package:notifi/utils/pallete.dart';
 import 'package:provider/provider.dart';
 
 class MyAppBarTitle extends StatelessWidget {
-  const MyAppBarTitle(this._leadingWidth);
-
-  final double _leadingWidth;
+  const MyAppBarTitle();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(right: _leadingWidth),
+    return Padding(
+      padding: const EdgeInsets.only(right: 60),
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
