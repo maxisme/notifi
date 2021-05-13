@@ -11,9 +11,9 @@ Future<void> showAlert(BuildContext context, String title, String description,
         title: Column(children: <Widget>[
           Container(
             padding: const EdgeInsets.only(bottom: 10.0),
-            child: const Icon(
+            child: Icon(
               Akaricons.triangleAlert,
-              color: MyColour.red,
+              color: Theme.of(context).colorScheme.secondary,
               size: 40,
             ),
           ),

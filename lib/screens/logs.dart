@@ -32,11 +32,7 @@ class _LogsScreenState extends State<LogsScreen> {
               appBar: AppBar(
                 toolbarHeight: 80,
                 leading: IconButton(
-                    icon: const Icon(
-                      Akaricons.chevronLeft,
-                      color: MyColour.darkGrey,
-                      size: 22,
-                    ),
+                    icon: const Icon(Akaricons.chevronLeft),
                     onPressed: () {
                       Navigator.pop(context);
                     }),

@@ -24,7 +24,7 @@ Future<IOWebSocketChannel> connectToWS(
     headers['Firebase-Token'] = await FirebaseMessaging.instance.getToken();
   }
 
-  L.d('Connecting to WS...');
+  L.i('Connecting to WS...');
   setErr(false);
   IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
       headers: headers, pingInterval: const Duration(seconds: 3));
@@ -41,13 +41,12 @@ Future<IOWebSocketChannel> connectToWS(
     _wsError = true;
     L.w('Problem with WS: $e');
   }, onDone: () async {
-    L.d('WS connection closed.');
+    L.i('WS connection closed.');
     if (_wsError) {
       setErr(true);
       await Future<dynamic>.delayed(const Duration(seconds: 5));
     }
-    ws.sink.close();
-    ws = null; // not sure if needed
+    await ws.sink.close();
     ws = await connectToWS(user, onMessage, setErr);
   });
 

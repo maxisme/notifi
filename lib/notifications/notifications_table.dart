@@ -32,16 +32,13 @@ class NotificationTableState extends State<NotificationTable>
       final Notifications notifications =
           Provider.of<Notifications>(context, listen: false);
       if (notifications.notifications.isNotEmpty) {
-        return Scrollbar(
-          thickness: 4,
-          child: AnimatedList(
-              padding: const EdgeInsets.only(bottom: 10),
-              shrinkWrap: true,
-              key: notifications.tableKey,
-              controller: notifications.tableController,
-              itemBuilder: _buildNotification,
-              initialItemCount: notifications.length),
-        );
+        return AnimatedList(
+            padding: const EdgeInsets.only(bottom: 10),
+            shrinkWrap: true,
+            key: notifications.tableKey,
+            controller: notifications.tableController,
+            itemBuilder: _buildNotification,
+            initialItemCount: notifications.length);
       } else {
         // NO NOTIFICATIONS VIEW
         return Column(
@@ -78,8 +75,9 @@ class NotificationTableState extends State<NotificationTable>
                             mouseCursor: SystemMouseCursors.click,
                             inlineSpan: TextSpan(
                               text: 'HTTP Requests',
-                              style: const TextStyle(
-                                  color: MyColour.red,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: 'Inconsolata'),
                               recognizer: TapGestureRecognizer()
@@ -109,8 +107,9 @@ class NotificationTableState extends State<NotificationTable>
                           gravity: Toast.BOTTOM);
                     }
                   },
-                      style: const TextStyle(
-                          color: MyColour.red, fontWeight: FontWeight.w900))
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.w900))
                 ]);
               })
             ]);
@@ -148,17 +147,19 @@ class NotificationTableState extends State<NotificationTable>
     // slide actions
     List<Widget> actions = <Widget>[
       IconSlideAction(
-        color: MyColour.offWhite,
-        icon: Akaricons.copy,
         caption: 'Title',
+        color: MyColour.transparent,
+        foregroundColor: MyColour.grey,
+        icon: Akaricons.copy,
         onTap: () {
           Clipboard.setData(ClipboardData(text: notification.title));
         },
       ),
       IconSlideAction(
-        color: MyColour.offWhite,
-        icon: Akaricons.copy,
         caption: 'Message',
+        color: MyColour.transparent,
+        foregroundColor: MyColour.grey,
+        icon: Akaricons.copy,
         onTap: () async {
           Clipboard.setData(ClipboardData(text: notification.message));
         },
@@ -168,9 +169,10 @@ class NotificationTableState extends State<NotificationTable>
     if (Platform.isIOS) {
       actions = <Widget>[
         IconSlideAction(
-          color: MyColour.offWhite,
-          icon: Akaricons.check,
           caption: 'Read',
+          color: MyColour.transparent,
+          foregroundColor: MyColour.grey,
+          icon: Akaricons.check,
           onTap: () {
             Provider.of<Notifications>(context, listen: false)
                 .toggleRead(index);
@@ -180,9 +182,10 @@ class NotificationTableState extends State<NotificationTable>
 
       if (notification.link != '') {
         actions.add(IconSlideAction(
-          color: MyColour.offWhite,
-          icon: Akaricons.link,
           caption: 'Link',
+          color: MyColour.transparent,
+          foregroundColor: MyColour.grey,
+          icon: Akaricons.link,
           onTap: () async {
             await openUrl(notification.link);
             setState(() {
@@ -203,12 +206,14 @@ class NotificationTableState extends State<NotificationTable>
           curve: Curves.fastOutSlowIn,
           child: Slidable(
               key: Key(notification.id.toString()),
+              movementDuration: const Duration(milliseconds: 250),
               actionPane: const SlidableDrawerActionPane(),
               actionExtentRatio: 0.15,
               actions: actions,
               secondaryActions: <Widget>[
                 IconSlideAction(
-                  color: MyColour.offWhite,
+                  color: MyColour.transparent,
+                  foregroundColor: MyColour.grey,
                   icon: Akaricons.cross,
                   onTap: () {
                     Provider.of<Notifications>(context, listen: false)

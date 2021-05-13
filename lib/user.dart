@@ -59,8 +59,6 @@ class User with ChangeNotifier {
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
     }
-
-    await _initWSS(_user);
   }
 
   Future<bool> setNewUser() async {
@@ -80,16 +78,13 @@ class User with ChangeNotifier {
 
     final UserStruct newUser = await _newUserReq(postData);
     if (!newUser.isNull()) {
-      _user = newUser;
-
       // store user credentials
-      await newUser.store();
+      if (await newUser.store()) {
+        _user = newUser;
 
-      notifyListeners();
+        await _initWSS();
 
-      if (_ws != null) {
-        L.d('Reconnecting to ws...');
-        _ws.sink.close(status.normalClosure, 'new code!');
+        notifyListeners();
       }
     }
     return !newUser.isNull();
@@ -98,13 +93,12 @@ class User with ChangeNotifier {
   ////////
   // ws //
   ////////
-  Future<void> _initWSS(UserStruct user) async {
+  Future<void> _initWSS() async {
     if (_ws != null) {
       L.i('Closing already open WS...');
-      _ws.sink.close();
-      _ws = null;
+      await _ws.sink.close(status.normalClosure, 'new code!');
     }
-    _ws = await connectToWS(user, _handleMessage, setErr);
+    _ws = await connectToWS(_user, _handleMessage, setErr);
   }
 
   Future<UserStruct> _newUserReq(Map<String, dynamic> data) async {
@@ -117,8 +111,11 @@ class User with ChangeNotifier {
           options: d.Options(headers: <String, dynamic>{
             'Sec-Key': env['SERVER_KEY'],
           }, contentType: d.Headers.formUrlEncodedContentType));
-    } catch (e) {
-      L.e('Problem fetching user code: $e');
+    } on DioError catch (e, _) {
+      // ignore: always_specify_types
+      final d.Response resp = e.response;
+      L.e('Problem fetching user code: ${resp.statusCode}');
+      L.e(resp.statusMessage);
       return UserStruct();
     }
 

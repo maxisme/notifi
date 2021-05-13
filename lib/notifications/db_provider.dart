@@ -85,7 +85,6 @@ class DBProvider {
         List<NotificationUI>.empty(growable: true);
     final Database db = await initDB();
 
-    // language=SQLite
     final List<Map<String, dynamic>> rows = await db.rawQuery('''
     SELECT * FROM notifications ORDER BY _id DESC''');
 

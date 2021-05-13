@@ -49,8 +49,6 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double leadingWidth = 60.0;
-
     if (!isTest()) {
       PackageInfo.fromPlatform().then((PackageInfo package) {
         if (Platform.isMacOS) {
@@ -65,22 +63,15 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
 
     return Scaffold(
-        backgroundColor: MyColour.offWhite,
         appBar: AppBar(
-          shape: const Border(bottom: BorderSide(color: MyColour.offGrey)),
-          elevation: 0.0,
-          toolbarHeight: 80,
-          leadingWidth: leadingWidth,
+          shape: Border(
+              bottom: BorderSide(color: Theme.of(context).indicatorColor)),
           leading: IconButton(
-              icon: const Icon(
-                Akaricons.chevronLeft,
-                color: MyColour.darkGrey,
-                size: 22,
-              ),
+              icon: const Icon(Akaricons.chevronLeft),
               onPressed: () {
                 Navigator.pop(context);
               }),
-          title: const MyAppBarTitle(leadingWidth),
+          title: const MyAppBarTitle(),
         ),
         body: Column(children: <Widget>[
           Consumer<User>(
@@ -226,9 +217,11 @@ class SettingsScreenState extends State<SettingsScreen> {
                                       onPressed: () {
                                         invokeMacMethod('update');
                                       },
-                                      child: const Icon(
+                                      child: Icon(
                                         Akaricons.cloudDownload,
-                                        color: MyColour.red,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         size: 18,
                                       ));
                                 }
@@ -269,7 +262,8 @@ class SettingOption extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10),
           child: ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(MyColour.offWhite),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).backgroundColor),
                   overlayColor: MaterialStateProperty.all(MyColour.white),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
@@ -285,7 +279,10 @@ class SettingOption extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Row(children: <Widget>[iconWidget, Text(text, style: style)]),
-                Switch(value: switchValue, onChanged: switchCallback)
+                Switch(
+                    value: switchValue,
+                    onChanged: switchCallback,
+                    activeColor: Theme.of(context).colorScheme.secondary)
               ]));
     }
     return setting;
