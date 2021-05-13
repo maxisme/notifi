@@ -46,7 +46,7 @@ class User with ChangeNotifier {
 
   Future<void> _loadUser() async {
     _user = UserStruct();
-    await _user.load();
+    final bool hadUser = await _user.load();
 
     // create new credentials if any are missing
     while (_user.isNull()) {
@@ -58,6 +58,10 @@ class User with ChangeNotifier {
         L.w('Attempting to create user again...');
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
+    }
+
+    if (hadUser) {
+      await _initWSS();
     }
   }
 
