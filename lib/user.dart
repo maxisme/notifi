@@ -13,7 +13,7 @@ import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:notifi/ws.dart';
+import 'package:package_info/package_info.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
@@ -101,8 +101,55 @@ class User with ChangeNotifier {
     if (_ws != null) {
       L.i('Closing already open WS...');
       await _ws.sink.close(status.normalClosure, 'new code!');
+      _ws = null;
     }
-    _ws = await connectToWS(_user, _handleMessage, setErr);
+    _ws = await connectToWS();
+  }
+
+  Future<IOWebSocketChannel> connectToWS() async {
+    final PackageInfo package = await PackageInfo.fromPlatform();
+    final Map<String, dynamic> headers = <String, dynamic>{
+      'Sec-Key': env['SERVER_KEY'],
+      'Uuid': _user.uuid,
+      'Credentials': _user.credentials,
+      'Key': _user.credentialKey,
+      'Version': package.version,
+    };
+
+    if (shouldUseFirebase) {
+      headers['Firebase-Token'] = await FirebaseMessaging.instance.getToken();
+    }
+
+    L.i('Connecting to WS...');
+    setErr(true);
+    IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
+        headers: headers, pingInterval: const Duration(seconds: 3));
+
+    bool _wsError = false;
+    ws.stream.listen((dynamic streamData) async {
+      _wsError = false;
+
+      final List<String> receivedMsgUUIDs = await _handleMessage(streamData);
+      if (receivedMsgUUIDs != null) {
+        ws.sink.add(jsonEncode(receivedMsgUUIDs));
+      }
+      // ignore: always_specify_types
+    }, onError: (e) async {
+      _wsError = true;
+      L.w('Problem with WS: $e');
+    }, onDone: () async {
+      L.i('WS connection closed. ${_user.credentials} error: $_wsError');
+      if (_wsError) {
+        await Future<dynamic>.delayed(const Duration(seconds: 5));
+        if (_ws != null) {
+          _ws.sink.close();
+          _ws = null;
+        }
+      }
+      ws = await connectToWS();
+    });
+
+    return ws;
   }
 
   Future<UserStruct> _newUserReq(Map<String, dynamic> data) async {
@@ -146,6 +193,10 @@ class User with ChangeNotifier {
   }
 
   Future<List<String>> _handleMessage(dynamic msg) async {
+    setErr(false);
+
+    if (msg == '.') return <String>[];
+
     // json decode incoming ws message
     List<dynamic> notifications = <dynamic>[];
     try {
