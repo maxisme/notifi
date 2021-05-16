@@ -122,7 +122,7 @@ class User with ChangeNotifier {
 
     L.i('Connecting to WS...');
     setErr(true);
-    IOWebSocketChannel ws = IOWebSocketChannel.connect(env['WS_ENDPOINT'],
+    IOWebSocketChannel ws = IOWebSocketChannel.connect(wsEndpoint,
         headers: headers, pingInterval: const Duration(seconds: 3));
 
     bool _wsError = false;
@@ -157,7 +157,7 @@ class User with ChangeNotifier {
     final d.Dio dio = d.Dio();
     Response<dynamic> response;
     try {
-      response = await dio.post(env['CODE_ENDPOINT'],
+      response = await dio.post(codeEndpoint,
           data: data,
           options: d.Options(headers: <String, dynamic>{
             'Sec-Key': env['SERVER_KEY'],

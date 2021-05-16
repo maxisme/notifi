@@ -51,8 +51,39 @@ class MenuBarIcon {
   }
 }
 
-Future<void> loadDotEnv() async {
+Future<bool> loadDotEnv() async {
   await dot_env.load();
+  if (isTest()) return true;
+  return dot_env.isEveryDefined(
+      <String>['HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
+}
+
+String get wsEndpoint {
+  String protocol = 'ws://';
+  if (dot_env.env['TLS'] == 'true') {
+    protocol = 'wss://';
+  }
+  return '$protocol${dot_env.env['HOST']}/ws';
+}
+
+String get codeEndpoint {
+  String protocol = 'http://';
+  if (dot_env.env['TLS'] == 'true') {
+    protocol = 'https://';
+  }
+  return '$protocol${dot_env.env['HOST']}/code';
+}
+
+String get versionEndpoint {
+  String protocol = 'http://';
+  if (dot_env.env['TLS'] == 'true') {
+    protocol = 'https://';
+  }
+  String develop = '';
+  if (dot_env.env['DEV'] == 'true') {
+    develop = '?develop';
+  }
+  return '$protocol${dot_env.env['HOST']}/version$develop';
 }
 
 Future<void> openUrl(String url) async {

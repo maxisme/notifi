@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
@@ -21,10 +20,13 @@ import 'package:provider/single_child_widget.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await loadDotEnv();
+  if (!await loadDotEnv()) {
+    // ignore: avoid_print
+    print('MISSING REQUIRED ENV VARIABLES');
+    exit(1);
+  }
 
-  invokeMacMethod(
-      'set-sparkle-url', <String, String>{'url': env['VERSION_ENDPOINT']});
+  invokeMacMethod('set-sparkle-url', <String, String>{'url': versionEndpoint});
 
   if (shouldUseFirebase) {
     final AuthorizationStatus status = await initFirebase();
@@ -92,7 +94,7 @@ class _MyAppState extends State<MyApp> {
                 centerTitle: true,
                 elevation: 0.0,
                 toolbarHeight: 80,
-                backgroundColor: MyColour.offWhite),
+                backgroundColor: MyColour.white),
             iconTheme: const IconThemeData(
               color: MyColour.darkGrey,
               size: 22,
