@@ -97,7 +97,7 @@ $ flutter run -d 63E2193A-B47B-48D6-8311-DA0BC150AAC1
 
 3. Press `s` to take screen shot on each tab
 
-4. Create test notification using the `test-notifications.sh` helper
+4. cp ./template.db to the logged DB path of your device
 
 5. Press `s` to take screen shots again
 

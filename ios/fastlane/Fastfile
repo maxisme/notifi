@@ -84,6 +84,7 @@ platform :ios do
         automatic_release: true,
         precheck_include_in_app_purchases: false,
         submission_information: {
+          add_id_info_uses_idfa: false,
           export_compliance_platform: 'ios',
           export_compliance_compliance_required: false,
           export_compliance_encryption_updated: false,
