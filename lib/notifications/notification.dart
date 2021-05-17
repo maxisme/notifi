@@ -117,7 +117,6 @@ class NotificationUIState extends State<NotificationUI> {
       int messageMaxLines = 3;
       int titleMaxLines = 1;
 
-      // parse date
       _setTime();
 
       // if expanded notification
