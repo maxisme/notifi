@@ -322,8 +322,7 @@ class NotificationUIState extends State<NotificationUI> {
                       ]))));
 
       if (Platform.isMacOS) {
-        final void Function({SlideActionType actionType}) openSlider =
-            Slidable.of(context).open;
+        final SlidableState slider = Slidable.of(context);
         return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           final double paddingArea = constraints.maxWidth - padding - 5;
@@ -343,8 +342,9 @@ class NotificationUIState extends State<NotificationUI> {
                 // time
                 Future<dynamic>.delayed(const Duration(milliseconds: 100), () {
                   if (mouseSliderAction != null &&
-                      mouseSliderAction == actionType) {
-                    openSlider(actionType: actionType);
+                      mouseSliderAction == actionType &&
+                      slider != null) {
+                    slider.open(actionType: actionType);
                   }
                 });
               },
