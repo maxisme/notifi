@@ -88,7 +88,7 @@ String get versionEndpoint {
 
 Future<void> openUrl(String url) async {
   if (await canLaunch(url)) {
-    await launch(url);
+    await launch(url, forceSafariVC: false);
     invokeMacMethod('close_window');
   } else {
     L.w("Can't open: $url");
