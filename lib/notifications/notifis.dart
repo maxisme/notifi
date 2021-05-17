@@ -107,7 +107,7 @@ class Notifications extends ChangeNotifier {
 
         return SlideTransition(
           position: _offsetAnimation,
-          child: notifications[index],
+          child: notifications[index - 1],
         );
       }, duration: const Duration(milliseconds: 300));
     }
