@@ -21,6 +21,6 @@ curl "$URL?credentials=${CREDENTIALS}&title=Daily%20Image%20Inspiration&message=
 #curl "$URL?credentials=${CREDENTIALS}&title=Finished%20notifi%20CI&message=Took%205%20minutes%20and%2032%20seconds&link=https://github.com/maxisme/notifi/actions"
 sleep 0.1
 curl "$URL?credentials=${CREDENTIALS}&title=${LOREM}&message=${LOREM}"
-curl "$URL?credentials=${CREDENTIALS}&title=Sensor%20Alert!%20&message=Activity%20By%20The%20Front%20🚪"
+curl "$URL?credentials=${CREDENTIALS}&title=Sensor%20Alert!%20&message=Activity%20By%20The%20Front%20:door:"
 #curl "$URL?credentials=${CREDENTIALS}&title=Hacker%20News:%20The%20Unix%20Magic%20poster&message=I%20understand%20the%20classic%20UNIX%20Magic%20poster%20by%20Gary%20Overacre%20was%20distributed%20at%20past%20USENIX%20conferences,%20and%20I’ve%20known%20of%20it%20for%20years%20but%20now%20in%20confinement,%20I’ve%20decided%20I%20want%20one%20to%20hang%20in%20my%20office.&link=https://news.ycombinator.com/"
 curl "$URL?credentials=${CREDENTIALS}&title=Backup%20Finished&message=Took%20512%20seconds"

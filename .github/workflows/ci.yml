@@ -190,7 +190,6 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
-          flutter pub get
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env

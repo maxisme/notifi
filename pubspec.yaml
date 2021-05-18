@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   flutter_app_badger: ^1.2.0
   flutter_dotenv: ^3.1.0
+  flutter_emoji: ^2.2.1+1
   flutter_local_notifications: ^4.0.1
   flutter_secure_storage:
     git:
