@@ -117,8 +117,9 @@ class _MyAppState extends State<MyApp> {
             buttonTheme: const ButtonThemeData(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent),
-            textButtonTheme: const TextButtonThemeData(
+            textButtonTheme: TextButtonThemeData(
                 style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               splashFactory: NoSplash.splashFactory,
             )),
             indicatorColor: MyColour.offGrey,
