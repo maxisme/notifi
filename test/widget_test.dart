@@ -263,12 +263,12 @@ Future<void> pumpWidgetWithNotification(
 
   await tester.pumpWidget(MultiProvider(
     providers: <SingleChildWidget>[
-      ChangeNotifierProvider<ReloadTable>(create: (_) => ReloadTable()),
-      ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (BuildContext context) => Notifications(
-            notifications, db, Provider.of<ReloadTable>(context, listen: false),
+      ChangeNotifierProvider<TableNotifier>(create: (_) => TableNotifier()),
+      ChangeNotifierProxyProvider<TableNotifier, Notifications>(
+        create: (BuildContext context) => Notifications(notifications, db,
+            Provider.of<TableNotifier>(context, listen: false),
             canBadge: false),
-        update: (BuildContext context, ReloadTable tableNotifier,
+        update: (BuildContext context, TableNotifier tableNotifier,
                 Notifications user) =>
             user..setTableNotifier(tableNotifier),
       ),

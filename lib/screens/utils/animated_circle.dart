@@ -28,40 +28,42 @@ class _AnimatedCircleState extends State<AnimatedCircle>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Notifications>(
-        builder: (BuildContext context, Notifications notifi, Widget child) {
-      final int unreadCnt = notifi.unreadCnt;
+    final Notifications notifications =
+        Provider.of<Notifications>(context, listen: false);
+    return ValueListenableBuilder<int>(
+        valueListenable: notifications.notificationCnt,
+        // ignore: always_specify_types
+        builder: (BuildContext context, int notificationCnt, Widget child) {
+          if (notificationCnt != 0) {
+            String numUnread = notificationCnt.toString();
+            if (notificationCnt > 99) {
+              numUnread = '99+';
+            }
 
-      if (unreadCnt != 0) {
-        String numUnread = unreadCnt.toString();
-        if (unreadCnt > 99) {
-          numUnread = '99+';
-        }
+            _controller = AnimationController(
+              duration: const Duration(milliseconds: 700),
+              vsync: this,
+            )..forward();
 
-        _controller = AnimationController(
-          duration: const Duration(milliseconds: 700),
-          vsync: this,
-        )..forward();
+            return ScaleTransition(
+                scale: CurvedAnimation(
+                  parent: _controller,
+                  curve: Curves.bounceOut,
+                ),
+                child: CircleAvatar(
+                    backgroundColor: MyColour.transparent,
+                    radius: 8,
+                    child: Text(
+                      numUnread,
+                      style: const TextStyle(
+                        color: MyColour.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    )));
+          }
 
-        return ScaleTransition(
-            scale: CurvedAnimation(
-              parent: _controller,
-              curve: Curves.bounceOut,
-            ),
-            child: CircleAvatar(
-                backgroundColor: MyColour.transparent,
-                radius: 8,
-                child: Text(
-                  numUnread,
-                  style: const TextStyle(
-                    color: MyColour.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w900,
-                  ),
-                )));
-      }
-
-      return Container();
-    });
+          return Container();
+        });
   }
 }
