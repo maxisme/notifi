@@ -6,17 +6,26 @@ import 'package:notifi/utils/utils.dart';
 
 class Notifications extends ChangeNotifier {
   Notifications(this.notifications, this.db, this.tableNotifier,
-      {this.canBadge});
+      {this.canBadge}) {
+    setUnreadCnt();
+  }
 
-  ReloadTable tableNotifier;
+  TableNotifier tableNotifier;
   DBProvider db;
   final bool canBadge; // is allowed to set badge on app icon
   List<NotificationUI> notifications = List<NotificationUI>.empty();
   GlobalKey<AnimatedListState> tableKey = GlobalKey<AnimatedListState>();
   ScrollController tableController = ScrollController();
+  ValueNotifier<int> notificationCnt = ValueNotifier<int>(0);
+
+  @override
+  void dispose() {
+    notificationCnt.dispose();
+    super.dispose();
+  }
 
   // ignore: use_setters_to_change_properties
-  void setTableNotifier(ReloadTable tableNotifier) {
+  void setTableNotifier(TableNotifier tableNotifier) {
     this.tableNotifier = tableNotifier;
   }
 
@@ -36,7 +45,7 @@ class Notifications extends ChangeNotifier {
     }
   }
 
-  int get unreadCnt {
+  void setUnreadCnt() {
     int cnt = 0;
     if (notifications != null) {
       for (int i = 0; i < notifications.length; i++) {
@@ -56,7 +65,7 @@ class Notifications extends ChangeNotifier {
       FlutterAppBadger.updateBadgeCount(cnt);
     }
 
-    return cnt;
+    notificationCnt.value = cnt;
   }
 
   Future<int> add(NotificationUI notification) async {
@@ -71,7 +80,7 @@ class Notifications extends ChangeNotifier {
     notification.id = id;
     notifications.insert(0, notification);
     if (notifications.length == 1) {
-      tableNotifier.reloadTable();
+      tableNotifier.notify();
     } else {
       // scroll to top of table
       scrollToTop();
@@ -82,20 +91,18 @@ class Notifications extends ChangeNotifier {
             .insertItem(0, duration: const Duration(seconds: 1));
       }
     }
+    setUnreadCnt();
 
-    if (canBadge) {
-      FlutterAppBadger.updateBadgeCount(unreadCnt);
-    }
-
-    notifyListeners();
     return id;
   }
 
   Future<void> delete(int index) async {
-    await db.delete(notifications[index].id);
+    final NotificationUI notification = notifications[index];
+    await db.delete(notification.id);
     notifications.removeAt(index);
+    setUnreadCnt();
     if (notifications.isEmpty) {
-      tableNotifier.reloadTable();
+      tableNotifier.notify();
     } else {
       // animate out notification
       tableKey.currentState.removeItem(index,
@@ -107,32 +114,29 @@ class Notifications extends ChangeNotifier {
 
         return SlideTransition(
           position: _offsetAnimation,
-          child: notifications[index - 1],
+          child: notification,
         );
       }, duration: const Duration(milliseconds: 300));
     }
-    notifyListeners();
   }
 
   Future<void> deleteAll() async {
     await db.deleteAll();
     notifications.clear();
-    tableNotifier.reloadTable();
     tableKey = GlobalKey<AnimatedListState>();
-    notifyListeners();
-    tableNotifier.reloadTable();
+    tableNotifier.notify();
+    setUnreadCnt();
   }
 
   Future<void> markRead(int index, {bool isRead}) async {
     notifications[index].read = isRead;
     await db.markRead(notifications[index].id, isRead: isRead);
-    notifyListeners();
+    setUnreadCnt();
   }
 
   Future<void> toggleRead(int index) async {
     final NotificationUI notification = notifications[index];
     markRead(index, isRead: !notification.isRead);
-    notifyListeners();
   }
 
   Future<void> readAll() async {
@@ -140,12 +144,18 @@ class Notifications extends ChangeNotifier {
       notifications[i].read = true;
     }
     await db.markAllRead();
+    setUnreadCnt();
+  }
+}
+
+class TableNotifier extends ChangeNotifier {
+  void notify() {
     notifyListeners();
   }
 }
 
-class ReloadTable extends ChangeNotifier {
-  void reloadTable() {
+class UnreadCntNotifier extends ChangeNotifier {
+  void notify() {
     notifyListeners();
   }
 }

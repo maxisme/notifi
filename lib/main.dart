@@ -43,13 +43,13 @@ Future<void> main() async {
 
   runApp(MultiProvider(
     providers: <SingleChildWidget>[
-      ChangeNotifierProvider<ReloadTable>(
-          create: (BuildContext context) => ReloadTable()),
-      ChangeNotifierProxyProvider<ReloadTable, Notifications>(
-        create: (BuildContext context) => Notifications(
-            notifications, db, Provider.of<ReloadTable>(context, listen: false),
+      ChangeNotifierProvider<TableNotifier>(
+          create: (BuildContext context) => TableNotifier()),
+      ChangeNotifierProxyProvider<TableNotifier, Notifications>(
+        create: (BuildContext context) => Notifications(notifications, db,
+            Provider.of<TableNotifier>(context, listen: false),
             canBadge: canBadge),
-        update: (BuildContext context, ReloadTable tableNotifier,
+        update: (BuildContext context, TableNotifier tableNotifier,
                 Notifications user) =>
             user..setTableNotifier(tableNotifier),
       ),
