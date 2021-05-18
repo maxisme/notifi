@@ -1,5 +1,5 @@
 name: CI
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   checks:
@@ -171,7 +171,7 @@ jobs:
   #########
   build-ios:
     name: "Build & Deploy iOS"
-    if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
+    if: ${{ !github.event.issue.pull_request && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') }}
     runs-on: macos-latest
     needs: [ version ]
     steps:
@@ -221,7 +221,7 @@ jobs:
   # Create release
   release:
     name: "Release"
-    if: ${{ github.ref == 'refs/heads/master' || (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
+    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
     runs-on: macos-latest
     needs: [ checks, build-macos, build-ios, version ]
     steps:
