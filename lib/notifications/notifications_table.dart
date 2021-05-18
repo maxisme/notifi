@@ -27,8 +27,8 @@ class NotificationTableState extends State<NotificationTable>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ReloadTable>(
-        builder: (BuildContext context, ReloadTable reloadTable, Widget child) {
+    return Consumer<TableNotifier>(builder:
+        (BuildContext context, TableNotifier reloadTable, Widget child) {
       final Notifications notifications =
           Provider.of<Notifications>(context, listen: false);
       if (notifications.notifications.isNotEmpty) {

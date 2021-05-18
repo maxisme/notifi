@@ -27,7 +27,7 @@ Future<dynamic> invokeMacMethod(String method, [dynamic arguments]) async {
   }
 }
 
-String currentIcon;
+String currentIcon = '';
 bool hasErr = false;
 
 class MenuBarIcon {
