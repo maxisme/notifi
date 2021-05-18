@@ -5,7 +5,8 @@
 ## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
 
 [![style: lint](https://img.shields.io/badge/lint-flutter-4BC0F5)](https://pub.dev/packages/lint)
-[![MacOS](https://github.com/maxisme/notifi/actions/workflows/push.yml/badge.svg?branch=master)](https://github.com/maxisme/notifi/actions/workflows/push.yml)
+[![MacOS](https://github.com/maxisme/notifi/actions/workflows/ci.yml/badge.svg?branch=master
+)](https://github.com/maxisme/notifi/actions/workflows/push.yml)
 
 # Install Flutter
 
