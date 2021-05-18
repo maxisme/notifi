@@ -67,8 +67,8 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
       id: json['id'] as int,
       uuid: json['UUID'] as String,
       time: json['time'] as String,
-      title: json['title'] as String,
-      message: json['message'] as String,
+      title: eParser.emojify(json['title']),
+      message: eParser.emojify(json['message']),
       image: json['image'] as String,
       link: json['link'] as String);
 }
