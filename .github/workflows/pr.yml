@@ -1,0 +1,27 @@
+name: PR
+on: [ pull_request ]
+
+jobs:
+  checks:
+    name: "Lint & Test"
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - name: "Lint"
+        run: |
+          touch .env
+          flutter analyze
+      - name: "Test"
+        run: flutter test
+      - name: "Upload Failure Screenshots"
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: golden-failures
+          path: test/failures
