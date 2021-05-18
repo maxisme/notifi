@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -123,5 +124,13 @@ class L {
 
   static void e(String msg) {
     FLog.error(text: msg);
+  }
+}
+
+bool shouldPinWindow(SharedPreferences sp) {
+  try {
+    return sp.getBool('pin-window') || false;
+  } catch (_) {
+    return false;
   }
 }
