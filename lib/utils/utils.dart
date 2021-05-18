@@ -70,23 +70,23 @@ String get wsEndpoint {
 }
 
 String get codeEndpoint {
-  String protocol = 'http://';
-  if (dot_env.env['TLS'] == 'true') {
-    protocol = 'https://';
-  }
-  return '$protocol${dot_env.env['HOST']}/code';
+  return '$httpEndpoint/code';
 }
 
 String get versionEndpoint {
-  String protocol = 'http://';
-  if (dot_env.env['TLS'] == 'true') {
-    protocol = 'https://';
-  }
   String develop = '';
   if (dot_env.env['DEV'] == 'true') {
     develop = '?develop';
   }
-  return '$protocol${dot_env.env['HOST']}/version$develop';
+  return '$httpEndpoint/version$develop';
+}
+
+String get httpEndpoint {
+  String protocol = 'http://';
+  if (dot_env.env['TLS'] == 'true') {
+    protocol = 'https://';
+  }
+  return '$protocol${dot_env.env['HOST']}';
 }
 
 Future<void> openUrl(String url) async {
@@ -103,7 +103,6 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 }
 
 Future<String> getDeviceUUID() async {
-  L.d('fetching UUID');
   return platform.invokeMethod('UUID');
 }
 

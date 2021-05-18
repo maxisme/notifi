@@ -98,7 +98,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               SettingOption(
                   'How Do I Receive Notifications?', Akaricons.question,
                   onTapCallback: () async {
-                await openUrl('https://notifi.it?c=$credentials#how-to');
+                await openUrl(
+                    'https://notifi.it?c=$credentials&e=$httpEndpoint/api#how-to');
               }),
               credentialsSettingWidget
             ]);
