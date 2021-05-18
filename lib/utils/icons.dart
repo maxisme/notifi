@@ -27,4 +27,5 @@ class Akaricons {
   static const IconData circleAlert = IconData(0xe824, fontFamily: _kFontFam);
   static const IconData person = IconData(0xe825, fontFamily: _kFontFam);
   static const IconData doubleCheck = IconData(0xe814, fontFamily: _kFontFam);
+  static const IconData pin = IconData(0xe82a, fontFamily: _kFontFam);
 }

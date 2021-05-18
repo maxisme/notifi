@@ -16,6 +16,7 @@ import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,13 @@ Future<void> main() async {
     exit(1);
   }
 
-  invokeMacMethod('set-sparkle-url', <String, String>{'url': versionEndpoint});
+  if (Platform.isMacOS) {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    await invokeMacMethod(
+        'set-pin-window', <String, bool>{'transient': !shouldPinWindow(sp)});
+    invokeMacMethod(
+        'set-sparkle-url', <String, String>{'url': versionEndpoint});
+  }
 
   if (shouldUseFirebase) {
     final AuthorizationStatus status = await initFirebase();
