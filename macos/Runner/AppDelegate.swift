@@ -66,7 +66,9 @@ class AppDelegate: FlutterAppDelegate {
             case "set-sparkle-url":
                 if let args = call.arguments as? Dictionary<String, Any>, let url = args["url"] as? String {
                     sUUpdater?.feedURL = URL(string: url)
+                    result(true)
                 }
+                result(false)
                 return
             case "close_window":
                 closePopover(sender: nil)
@@ -74,6 +76,18 @@ class AppDelegate: FlutterAppDelegate {
             case "UUID":
                 result(hardwareUUID())
                 return
+            case "set-pin-window":
+                if let args = call.arguments as? Dictionary<String, Any>, let transient = args["transient"] as? Bool {
+                    if (transient) {
+                        // Close the popover when the user interacts with a user
+                        // interface element outside the popover
+                        popover.behavior = .transient
+                    } else {
+                        popover.behavior = .semitransient
+                    }
+                    return result(true)
+                }
+                return result(false)
             default:
                 return
             }
@@ -89,10 +103,6 @@ class AppDelegate: FlutterAppDelegate {
         RegisterGeneratedPlugins(registry: flutterViewController)
 
         popover.contentViewController = flutterViewController
-
-        // Close the popover when the user interacts with a user
-        // interface element outside the popover
-        popover.behavior = .transient
 
         // to connect to ws in background
         // very hacky: opens the popup out of the screen

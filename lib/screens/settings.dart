@@ -19,6 +19,7 @@ import 'package:notifi/utils/version.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -140,25 +141,53 @@ class SettingsScreenState extends State<SettingsScreen> {
               },
             ),
           if (Platform.isMacOS)
-            // ignore: always_specify_types
-            FutureBuilder(
-                future: LaunchAtLogin.isEnabled,
+            Container(
+              padding: const EdgeInsets.only(top: 5),
+              child: FutureBuilder<bool>(
+                  future: LaunchAtLogin.isEnabled,
+                  // ignore: always_specify_types
+                  builder: (BuildContext context, AsyncSnapshot f) {
+                    if (f.connectionState == ConnectionState.none &&
+                        f.hasData == null) {
+                      return const CircularProgressIndicator();
+                    }
+                    return SettingOption(
+                      'Open notifi at Login',
+                      Akaricons.person,
+                      switchValue: f.data as bool,
+                      switchCallback: (_) async {
+                        final bool enabled = await LaunchAtLogin.isEnabled;
+                        if (enabled) {
+                          await LaunchAtLogin.disable;
+                        } else {
+                          await LaunchAtLogin.enable;
+                        }
+                        setState(() {});
+                      },
+                    );
+                  }),
+            ),
+          if (Platform.isMacOS)
+            FutureBuilder<SharedPreferences>(
+                future: SharedPreferences.getInstance(),
                 // ignore: always_specify_types
                 builder: (BuildContext context, AsyncSnapshot f) {
-                  if (f.connectionState == ConnectionState.none &&
-                      f.hasData == null) {
+                  if (f.connectionState == ConnectionState.none ||
+                      f.hasData == null ||
+                      f.data == null) {
                     return const CircularProgressIndicator();
                   }
+                  final SharedPreferences sp = f.data;
                   return SettingOption(
-                    'Open notifi at Login',
-                    Akaricons.person,
-                    switchValue: f.data as bool,
-                    switchCallback: (_) async {
-                      final bool enabled = await LaunchAtLogin.isEnabled;
-                      if (enabled) {
-                        await LaunchAtLogin.disable;
-                      } else {
-                        await LaunchAtLogin.enable;
+                    'Pin window',
+                    Akaricons.pin,
+                    switchValue: shouldPinWindow(sp),
+                    switchCallback: (bool shouldPin) async {
+                      final bool success = await invokeMacMethod(
+                          'set-pin-window',
+                          <String, bool>{'transient': !shouldPin});
+                      if (success) {
+                        sp.setBool('pin-window', shouldPin);
                       }
                       setState(() {});
                     },
@@ -274,7 +303,7 @@ class SettingOption extends StatelessWidget {
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 15, right: 7, top: 10),
+          padding: const EdgeInsets.only(left: 16, right: 7),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
