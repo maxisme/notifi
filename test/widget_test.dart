@@ -246,11 +246,7 @@ Future<void> pumpWidgetWithNotification(
   });
 
   const MethodChannel('vibration')
-      .setMockMethodCallHandler((MethodCall methodCall) async {
-    if (methodCall.method == 'getDatabasesPath') {
-      return '';
-    }
-  });
+      .setMockMethodCallHandler((MethodCall methodCall) async {});
   // finished MOCKS
 
   final DBProvider db = DBProvider('test.db');

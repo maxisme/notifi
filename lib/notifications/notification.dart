@@ -165,7 +165,7 @@ class NotificationUIState extends State<NotificationUI> {
               await openUrl(widget.link);
               setState(() {
                 Provider.of<Notifications>(context, listen: false)
-                    .toggleRead(widget.index);
+                    .markRead(widget.index, isRead: true);
               });
             },
             child: Container(

@@ -3,7 +3,7 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:vibration/vibration.dart';
+import 'package:flutter/services.dart';
 
 class Notifications extends ChangeNotifier {
   Notifications(this.notifications, this.db, this.tableNotifier,
@@ -122,6 +122,7 @@ class Notifications extends ChangeNotifier {
   }
 
   Future<void> deleteAll() async {
+    HapticFeedback.vibrate();
     await db.deleteAll();
     notifications.clear();
     tableKey = GlobalKey<AnimatedListState>();
@@ -130,10 +131,10 @@ class Notifications extends ChangeNotifier {
   }
 
   Future<void> markRead(int index, {bool isRead}) async {
+    HapticFeedback.lightImpact();
     notifications[index].read = isRead;
     await db.markRead(notifications[index].id, isRead: isRead);
     setUnreadCnt();
-    Vibration.vibrate();
   }
 
   Future<void> toggleRead(int index) async {
@@ -142,13 +143,18 @@ class Notifications extends ChangeNotifier {
   }
 
   Future<void> readAll() async {
+    bool hasMarkedRead = false;
     for (int i = 0; i < notifications.length; i++) {
+      if (!notifications[i].read) hasMarkedRead = true;
       notifications[i].read = true;
     }
-    await db.markAllRead();
-    setUnreadCnt();
-    Vibration.vibrate();
-    notifyListeners(); // redraw all notifications
+
+    if (hasMarkedRead) {
+      HapticFeedback.heavyImpact();
+      await db.markAllRead();
+      setUnreadCnt();
+      notifyListeners(); // redraw all notifications
+    }
   }
 }
 
