@@ -9,9 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:package_info/package_info.dart';
 import 'package:web_socket_channel/io.dart';
@@ -186,7 +186,7 @@ class User with ChangeNotifier {
     }
 
     return UserStruct(
-      uuid: data['UUID'],
+      uuid: data['UUID'] as String,
       credentials: credentialsMap['credentials'] as String,
       credentialKey: credentialsMap['credential_key'] as String,
     );
@@ -212,7 +212,8 @@ class User with ChangeNotifier {
     for (int i = 0; i < notifications.length; i++) {
       Map<String, dynamic> jsonMessage;
       try {
-        jsonMessage = Map<String, dynamic>.from(notifications[i]);
+        jsonMessage =
+            Map<String, dynamic>.from(notifications[i] as Map<String, dynamic>);
       } catch (e) {
         L.e('Ignoring un-parsable WS message: $msg: $e');
         return <String>[];
@@ -309,9 +310,9 @@ class UserStruct {
       final Map<String, dynamic> userJson =
           jsonDecode(userJsonString) as Map<String, dynamic>;
 
-      uuid = userJson['UUID'];
-      credentials = userJson['credentials'];
-      credentialKey = userJson['credentialKey'];
+      uuid = userJson['UUID'] as String;
+      credentials = userJson['credentials'] as String;
+      credentialKey = userJson['credentialKey'] as String;
     } catch (error) {
       L.e(error.toString());
       return false;
