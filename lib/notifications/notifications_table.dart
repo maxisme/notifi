@@ -190,7 +190,7 @@ class NotificationTableState extends State<NotificationTable>
             await openUrl(notification.link);
             setState(() {
               Provider.of<Notifications>(context, listen: false)
-                  .toggleRead(notification.index);
+                  .markRead(notification.index, isRead: true);
             });
           },
         ));

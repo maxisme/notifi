@@ -54,7 +54,6 @@ dependencies:
   toast: ^0.1.5
   url_launcher: ^5.5.0
   uuid: ^2.2.2
-  vibration: ^1.7.3
   web_socket_channel: ^1.1.0
 
 dev_dependencies:
@@ -71,7 +70,7 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
+  uses-material-design: false
 
   assets:
     - images/bell.png
