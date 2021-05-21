@@ -45,14 +45,6 @@ void main() {
     testWidgets('Test Settings Navigation', (WidgetTester tester) async {
       await pumpWidgetWithNotification(tester, null);
 
-      const MethodChannel channel =
-          MethodChannel('plugins.flutter.io/path_provider');
-      channel.setMockMethodCallHandler((MethodCall methodCall) async {
-        if (methodCall.method == 'getApplicationDocumentsDirectory') {
-          return '';
-        }
-      });
-
       // open settings
       await tester.tap(find.byIcon(Akaricons.gear));
       await tester.pump();
@@ -132,14 +124,6 @@ void main() {
       expect(n.isRead, false);
       expect(find.text('1'), findsOneWidget);
 
-      // mock db call
-      const MethodChannel channel = MethodChannel('com.tekartik.sqflite');
-      channel.setMockMethodCallHandler((MethodCall methodCall) async {
-        if (methodCall.method == 'getDatabasesPath') {
-          return '';
-        }
-      });
-
       // mark read
       await tester.tap(find.byIcon(Akaricons.check));
       await tester.pump();
@@ -165,14 +149,6 @@ void main() {
       expect(n.isExpanded, false);
       expect(n.isRead, false);
       expect(find.text('1'), findsOneWidget);
-
-      // mock db call (as expanding marks as read)
-      const MethodChannel channel = MethodChannel('com.tekartik.sqflite');
-      channel.setMockMethodCallHandler((MethodCall methodCall) async {
-        if (methodCall.method == 'getDatabasesPath') {
-          return '';
-        }
-      });
 
       // expand
       await tester.tap(find.byIcon(Akaricons.enlarge));
@@ -253,6 +229,29 @@ void main() {
 Future<void> pumpWidgetWithNotification(
     WidgetTester tester, NotificationUI notification) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // CHANNEL MOCKS
+  const MethodChannel('plugins.flutter.io/path_provider')
+      .setMockMethodCallHandler((MethodCall methodCall) async {
+    if (methodCall.method == 'getApplicationDocumentsDirectory') {
+      return '';
+    }
+  });
+
+  const MethodChannel('com.tekartik.sqflite')
+      .setMockMethodCallHandler((MethodCall methodCall) async {
+    if (methodCall.method == 'getDatabasesPath') {
+      return '';
+    }
+  });
+
+  const MethodChannel('vibration')
+      .setMockMethodCallHandler((MethodCall methodCall) async {
+    if (methodCall.method == 'getDatabasesPath') {
+      return '';
+    }
+  });
+  // finished MOCKS
 
   final DBProvider db = DBProvider('test.db');
   final List<NotificationUI> notifications =
