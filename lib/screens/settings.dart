@@ -178,7 +178,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       f.data == null) {
                     return const CircularProgressIndicator();
                   }
-                  final SharedPreferences sp = f.data;
+                  final SharedPreferences sp = f.data as SharedPreferences;
                   return SettingOption(
                     'Pin window',
                     Akaricons.pin,
@@ -186,7 +186,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     switchCallback: (bool shouldPin) async {
                       final bool success = await invokeMacMethod(
                           'set-pin-window',
-                          <String, bool>{'transient': !shouldPin});
+                          <String, bool>{'transient': !shouldPin}) as bool;
                       if (success) {
                         sp.setBool('pin-window', shouldPin);
                       }
