@@ -3,6 +3,7 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
+import 'package:vibration/vibration.dart';
 
 class Notifications extends ChangeNotifier {
   Notifications(this.notifications, this.db, this.tableNotifier,
@@ -132,6 +133,7 @@ class Notifications extends ChangeNotifier {
     notifications[index].read = isRead;
     await db.markRead(notifications[index].id, isRead: isRead);
     setUnreadCnt();
+    Vibration.vibrate();
   }
 
   Future<void> toggleRead(int index) async {
@@ -145,6 +147,8 @@ class Notifications extends ChangeNotifier {
     }
     await db.markAllRead();
     setUnreadCnt();
+    Vibration.vibrate();
+    notifyListeners(); // redraw all notifications
   }
 }
 
