@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart' as i;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
@@ -67,8 +67,8 @@ NotificationUI _$NotificationFromJson(Map<String, dynamic> json) {
       id: json['id'] as int,
       uuid: json['UUID'] as String,
       time: json['time'] as String,
-      title: eParser.emojify(json['title']),
-      message: eParser.emojify(json['message']),
+      title: eParser.emojify(json['title'] as String),
+      message: eParser.emojify(json['message'] as String),
       image: json['image'] as String,
       link: json['link'] as String);
 }

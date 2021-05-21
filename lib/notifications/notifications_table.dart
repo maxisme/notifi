@@ -201,7 +201,6 @@ class NotificationTableState extends State<NotificationTable>
       position: _offsetAnimation,
       child: AnimatedSize(
           // to animate expand
-          vsync: this,
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
           child: Slidable(

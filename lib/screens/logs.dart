@@ -25,7 +25,7 @@ class _LogsScreenState extends State<LogsScreen> {
           if (f.connectionState != ConnectionState.done || f.data == null) {
             widget = const Center(child: CircularProgressIndicator());
           } else {
-            widget = Scrollbar(thickness: 4, child: f.data);
+            widget = Scrollbar(thickness: 4, child: f.data as ListView);
           }
 
           return Scaffold(
