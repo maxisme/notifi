@@ -31,7 +31,7 @@ Future<void> main() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     await invokeMacMethod(
         'set-pin-window', <String, bool>{'transient': !shouldPinWindow(sp)});
-    invokeMacMethod(
+    await invokeMacMethod(
         'set-sparkle-url', <String, String>{'url': versionEndpoint});
   }
 
