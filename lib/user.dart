@@ -61,7 +61,7 @@ class User with ChangeNotifier {
     }
 
     if (hadUser) {
-      await _initWSS();
+      await initWSS();
     }
   }
 
@@ -86,7 +86,7 @@ class User with ChangeNotifier {
       if (await newUser.store()) {
         _user = newUser;
 
-        await _initWSS();
+        await initWSS();
 
         notifyListeners();
       }
@@ -97,7 +97,7 @@ class User with ChangeNotifier {
   ////////
   // ws //
   ////////
-  Future<void> _initWSS() async {
+  Future<void> initWSS() async {
     if (_ws != null) {
       L.i('Closing already open WS...');
       await _ws.sink.close(status.normalClosure, 'new code!');
@@ -193,9 +193,11 @@ class User with ChangeNotifier {
   }
 
   Future<List<String>> _handleMessage(dynamic msg) async {
-    setErr(false);
-
-    if (msg == '.') return <String>[];
+    if (msg == '.') {
+      L.i('Connected to ws.');
+      setErr(false);
+      return <String>[];
+    }
 
     // json decode incoming ws message
     List<dynamic> notifications = <dynamic>[];
