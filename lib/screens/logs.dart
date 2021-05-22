@@ -37,8 +37,8 @@ class _LogsScreenState extends State<LogsScreen> {
                     }),
                 title: Column(children: <Widget>[
                   DropdownButton<LogLevel>(
+                      icon: Container(),
                       items: <DropdownMenuItem<LogLevel>>[
-                        _menuItem(LogLevel.DEBUG),
                         _menuItem(LogLevel.INFO),
                         _menuItem(LogLevel.WARNING),
                         _menuItem(LogLevel.ERROR),
