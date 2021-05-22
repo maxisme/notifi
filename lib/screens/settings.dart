@@ -146,8 +146,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.only(top: 5),
               child: FutureBuilder<bool>(
                   future: LaunchAtLogin.isEnabled,
-                  // ignore: always_specify_types
-                  builder: (BuildContext context, AsyncSnapshot f) {
+                  builder: (BuildContext context, AsyncSnapshot<bool> f) {
                     if (f.connectionState == ConnectionState.none &&
                         f.hasData == null) {
                       return const CircularProgressIndicator();
@@ -155,7 +154,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     return SettingOption(
                       'Open notifi at Login',
                       Akaricons.person,
-                      switchValue: f.data as bool,
+                      switchValue: f.data,
                       switchCallback: (_) async {
                         final bool enabled = await LaunchAtLogin.isEnabled;
                         if (enabled) {
@@ -198,8 +197,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.only(top: 30),
             child: RichText(
                 textAlign: TextAlign.center,
-                // ignore: always_specify_types
-                text: TextSpan(children: [
+                text: TextSpan(children: <InlineSpan>[
                   const TextSpan(
                     text: 'Made by \n',
                     style: TextStyle(
@@ -227,7 +225,6 @@ class SettingsScreenState extends State<SettingsScreen> {
           if (!isTest())
             ValueListenableBuilder<String>(
                 valueListenable: _versionString,
-                // ignore: always_specify_types
                 builder: (BuildContext context, String version, Widget child) {
                   return Container(
                     padding: const EdgeInsets.only(top: 10),
