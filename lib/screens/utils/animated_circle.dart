@@ -32,7 +32,6 @@ class _AnimatedCircleState extends State<AnimatedCircle>
         Provider.of<Notifications>(context, listen: false);
     return ValueListenableBuilder<int>(
         valueListenable: notifications.notificationCnt,
-        // ignore: always_specify_types
         builder: (BuildContext context, int notificationCnt, Widget child) {
           if (notificationCnt != 0) {
             String numUnread = notificationCnt.toString();
