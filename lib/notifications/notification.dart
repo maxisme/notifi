@@ -354,7 +354,14 @@ class NotificationUIState extends State<NotificationUI> {
               child: slideNotification);
         });
       }
-      return slideNotification;
+      return GestureDetector(
+          onLongPress: () {
+            setState(() {
+              Provider.of<Notifications>(context, listen: false)
+                  .toggleRead(widget.index);
+            });
+          },
+          child: slideNotification);
     });
   }
 
