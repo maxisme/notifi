@@ -19,13 +19,12 @@ class _LogsScreenState extends State<LogsScreen> {
   Widget build(BuildContext context) {
     return FutureBuilder<ListView>(
         future: logListView(),
-        // ignore: always_specify_types
-        builder: (BuildContext context, AsyncSnapshot f) {
-          Widget widget = const Center(child: CircularProgressIndicator());
+        builder: (BuildContext context, AsyncSnapshot<ListView> f) {
+          Widget widget;
           if (f.connectionState != ConnectionState.done || f.data == null) {
             widget = const Center(child: CircularProgressIndicator());
           } else {
-            widget = Scrollbar(thickness: 4, child: f.data as ListView);
+            widget = Scrollbar(thickness: 4, child: f.data);
           }
 
           return Scaffold(
@@ -37,8 +36,7 @@ class _LogsScreenState extends State<LogsScreen> {
                       Navigator.pop(context);
                     }),
                 title: Column(children: <Widget>[
-                  // ignore: always_specify_types
-                  DropdownButton(
+                  DropdownButton<LogLevel>(
                       items: <DropdownMenuItem<LogLevel>>[
                         _menuItem(LogLevel.DEBUG),
                         _menuItem(LogLevel.INFO),
