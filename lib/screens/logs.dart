@@ -12,7 +12,7 @@ class LogsScreen extends StatefulWidget {
 }
 
 class _LogsScreenState extends State<LogsScreen> {
-  LogLevel _logLevel = LogLevel.INFO;
+  LogLevel _logLevel = LogLevel.WARNING;
   final int _maxResults = 100;
 
   @override
