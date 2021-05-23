@@ -44,3 +44,37 @@ Future<void> showAlert(BuildContext context, String title, String description,
     },
   );
 }
+
+void showAlertSnackBar(BuildContext context, String message) {
+  final SnackBar snackBar = SnackBar(
+      duration: const Duration(days: 1),
+      backgroundColor: MyColour.transparent,
+      elevation: 0,
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(5.0),
+            decoration: const BoxDecoration(
+              color: MyColour.black,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                const Icon(
+                  Akaricons.triangleAlert,
+                  color: MyColour.white,
+                  size: 10,
+                ),
+                Text(' $message',
+                    style: const TextStyle(
+                        color: MyColour.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400)),
+              ],
+            ),
+          ),
+        ],
+      ));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
