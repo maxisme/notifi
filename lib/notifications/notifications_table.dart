@@ -203,6 +203,7 @@ class NotificationTableState extends State<NotificationTable>
           // to animate expand
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
+          vsync: this,
           child: Slidable(
               key: Key(notification.id.toString()),
               movementDuration: const Duration(milliseconds: 250),
