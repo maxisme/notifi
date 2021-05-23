@@ -15,7 +15,12 @@ jobs:
           channel: 'dev'
       - name: "Lint"
         run: |
-          touch .env
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]
+          then
+            echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          else
+            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+          fi
           flutter analyze
       - name: "Test"
         run: flutter test
@@ -25,6 +30,19 @@ jobs:
         with:
           name: golden-failures
           path: test/failures
+      - name: "build"
+        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
+          flutter build macos --release --build-name=${{ needs.version.outputs.version }}
+      - name: "Store MacOS .app artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: notifi-app
+          path: build/macos/Build/Products/Release/notifi.app
+          if-no-files-found: error
+
 
   version:
     name: "Get Version"
@@ -70,7 +88,10 @@ jobs:
           fi
 
           changelog=$(git log --pretty=format:"* %s" "HEAD...${{ steps.bump_version_dev.outputs.tag }}" | uniq)
-          echo ::set-output name=CHANGELOG::$changelog
+          changelog="${changelog//'%'/'%25'}"
+          changelog="${changelog//$'\n'/'%0A'}"
+          changelog="${changelog//$'\r'/'%0D'}"
+          echo "::set-output name=CHANGELOG::$changelog"
 
   #########
   # macos #
@@ -100,15 +121,15 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - name: "Build"
+      - name: "Codesign"
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
           if [[ "${{ github.ref }}" == "refs/heads/develop" ]]
           then
-          echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
           else
-          echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+            echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
 
           # write version
@@ -232,18 +253,18 @@ jobs:
     runs-on: macos-latest
     needs: [ checks, build-macos, build-ios, version ]
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
         id: download
         with:
           name: notifi-dmg
       - name: "Create Release"
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        uses: ncipollo/release-action@v1
         with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
           name: "Release ${{ needs.version.outputs.version }}"
           body: "${{ needs.version.outputs.changelog }}"
           prerelease: ${{ github.ref == 'refs/heads/develop' }}
-          tag_name: ${{ needs.version.outputs.version }}
-          files: |
-            ${{steps.download.outputs.download-path}}
+          tag: ${{ needs.version.outputs.version }}
+          artifacts: "${{steps.download.outputs.download-path}}/*"
+          artifactErrorsFailBuild: true
