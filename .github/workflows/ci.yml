@@ -39,14 +39,14 @@ jobs:
           fetch-depth: '0'
       - id: bump_version
         if: ${{ github.ref == 'refs/heads/master' }}
-        uses: maxisme/github-tag-action@1.26.0
+        uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_BRANCHES: master
           DRY_RUN: true
       - id: bump_version_dev
         if: ${{ (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
-        uses: maxisme/github-tag-action@1.26.0
+        uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_BRANCHES: develop
