@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/screens/utils/loading_gif.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -57,8 +58,26 @@ class NotificationTableState extends State<NotificationTable>
               Container(padding: const EdgeInsets.only(top: 20.0)),
               Consumer<User>(
                   builder: (BuildContext context, User user, Widget child) {
-                String credentials = user.getCredentials();
-                credentials ??= '...';
+                final String credentials = user.getCredentials();
+                Widget credentialsWidget;
+                if (credentials != null) {
+                  credentialsWidget = SelectableText(credentials,
+                      textAlign: TextAlign.center, onTap: () {
+                    if (Platform.isIOS) {
+                      Share.share(credentials);
+                    } else {
+                      Clipboard.setData(ClipboardData(text: credentials));
+                      Toast.show('Copied $credentials', context,
+                          gravity: Toast.BOTTOM);
+                    }
+                  },
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.w900));
+                } else {
+                  credentialsWidget = LoadingGif();
+                }
+
                 return Column(children: <Widget>[
                   RichText(
                     textAlign: TextAlign.center,
@@ -97,19 +116,7 @@ class NotificationTableState extends State<NotificationTable>
                     ),
                   ),
                   Container(padding: const EdgeInsets.only(top: 20.0)),
-                  SelectableText(credentials, textAlign: TextAlign.center,
-                      onTap: () {
-                    if (Platform.isIOS) {
-                      Share.share(credentials);
-                    } else {
-                      Clipboard.setData(ClipboardData(text: credentials));
-                      Toast.show('Copied $credentials', context,
-                          gravity: Toast.BOTTOM);
-                    }
-                  },
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.w900))
+                  credentialsWidget
                 ]);
               })
             ]);
