@@ -6,11 +6,13 @@ import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
+import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:package_info/package_info.dart';
@@ -21,18 +23,15 @@ class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
     _user = UserStruct();
     setNotifications(_notifications);
-    if (!isTest()) {
-      _loadUser();
-    }
   }
 
   UserStruct _user;
-  bool _hasError = false;
   String flutterToken;
+  IOWebSocketChannel _ws;
+  BuildContext _snackContext;
 
   Notifications _notifications;
 
-  IOWebSocketChannel _ws;
   final FlutterLocalNotificationsPlugin _pushNotifications;
 
   // ignore: use_setters_to_change_properties
@@ -44,7 +43,7 @@ class User with ChangeNotifier {
     return _user.credentials;
   }
 
-  Future<void> _loadUser() async {
+  Future<void> loadUser() async {
     _user = UserStruct();
     final bool hadUser = await _user.load();
 
@@ -196,7 +195,7 @@ class User with ChangeNotifier {
     if (msg == '.') {
       L.i('Connected to ws.');
       setErr(false);
-      return <String>[];
+      return null;
     }
 
     // json decode incoming ws message
@@ -244,11 +243,9 @@ class User with ChangeNotifier {
     return msgUUIDs;
   }
 
-  ///////////
-  // error //
-  ///////////
-  bool hasError() {
-    return _hasError;
+  // ignore: use_setters_to_change_properties
+  void setSnackContext(BuildContext context) {
+    _snackContext = context;
   }
 
   bool _tmpErr;
@@ -262,11 +259,11 @@ class User with ChangeNotifier {
       if (_tmpErr == hasErr) {
         if (_tmpErr) {
           MenuBarIcon.setErr();
+          showAlertSnackBar(_snackContext, 'Network Error!');
         } else {
           MenuBarIcon.revertErr();
+          ScaffoldMessenger.of(_snackContext).clearSnackBars();
         }
-        _hasError = _tmpErr;
-        notifyListeners();
       }
     });
   }

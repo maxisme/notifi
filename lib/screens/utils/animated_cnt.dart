@@ -3,15 +3,14 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
-class AnimatedCircle extends StatefulWidget {
-  const AnimatedCircle({Key key}) : super(key: key);
+class AnimatedCnt extends StatefulWidget {
+  const AnimatedCnt({Key key}) : super(key: key);
 
   @override
-  _AnimatedCircleState createState() => _AnimatedCircleState();
+  _AnimatedCntState createState() => _AnimatedCntState();
 }
 
-class _AnimatedCircleState extends State<AnimatedCircle>
+class _AnimatedCntState extends State<AnimatedCnt>
     with TickerProviderStateMixin {
   AnimationController _controller;
 

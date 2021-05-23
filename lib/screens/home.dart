@@ -15,6 +15,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<User>(context, listen: false).setSnackContext(context);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,

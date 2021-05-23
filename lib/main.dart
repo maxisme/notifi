@@ -83,6 +83,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<User>(context, listen: false).loadUser();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

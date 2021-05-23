@@ -66,10 +66,9 @@ class AppDelegate: FlutterAppDelegate {
             case "set-sparkle-url":
                 if let args = call.arguments as? Dictionary<String, Any>, let url = args["url"] as? String {
                     sUUpdater?.feedURL = URL(string: url)
-                    result(true)
+                    return result(true)
                 }
-                result(false)
-                return
+                return result(false)
             case "close_window":
                 closePopover(sender: nil)
                 return
