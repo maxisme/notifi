@@ -19,7 +19,7 @@ cocoapods(
 
 platform :ios do
   desc "Upload build to test flight"
-  lane :tfdeploy do
+  lane :tfdeploy do |options|
     create_keychain(
         name: "kc",
         password: "p4ssword",
@@ -46,11 +46,13 @@ platform :ios do
         PROVISIONING_PROFILE_SPECIFIER: ENV["sigh_it.notifi.notifi_appstore"]
       }
     )
-    upload_to_testflight
+    upload_to_testflight(
+        changelog: options[:changelog]
+    )
   end
 
   desc "Upload build to app store"
-  lane :asdeploy do
+  lane :asdeploy do |options|
     create_keychain(
         name: "kc",
         password: "p4ssword",
@@ -83,6 +85,7 @@ platform :ios do
         submit_for_review: true,
         automatic_release: true,
         precheck_include_in_app_purchases: false,
+        release_notes: options[:changelog],
         submission_information: {
           add_id_info_uses_idfa: false,
           export_compliance_platform: 'ios',

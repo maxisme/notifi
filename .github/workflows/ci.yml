@@ -32,20 +32,21 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
+      last_version: ${{ steps.version.outputs.LAST_VERSION }}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
       - id: bump_version
         if: ${{ github.ref == 'refs/heads/master' }}
-        uses: anothrNick/github-tag-action@1.26.0
+        uses: maxisme/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_BRANCHES: master
           DRY_RUN: true
       - id: bump_version_dev
         if: ${{ (!github.event.issue.pull_request && github.ref == 'refs/heads/develop') }}
-        uses: anothrNick/github-tag-action@1.26.0
+        uses: maxisme/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_BRANCHES: develop
@@ -57,11 +58,14 @@ jobs:
           if [ -n "${{ steps.bump_version.outputs.new_tag }}" ]
           then
             echo ::set-output name=VERSION::${{ steps.bump_version.outputs.new_tag }}
+            echo ::set-output name=LAST_VERSION::${{ steps.bump_version.outputs.ag }}
           elif [ -n "${{ steps.bump_version_dev.outputs.new_tag }}" ]
           then
             echo ::set-output name=VERSION::${{ steps.bump_version_dev.outputs.new_tag }}
+            echo ::set-output name=LAST_VERSION::${{ steps.bump_version_dev.outputs.tag }}
           else
             echo ::set-output name=VERSION::$GITHUB_RUN_ID
+            echo ::set-output name=LAST_VERSION::$GITHUB_RUN_ID
           fi
 
   #########
@@ -210,11 +214,14 @@ jobs:
 
           gem install fastlane
 
+          changelog=$(git log --pretty=format:"* %s" "HEAD...${{ needs.version.outputs.last_version }}" | uniq)
+          echo $changelog
+
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
-            fastlane asdeploy
+            fastlane asdeploy "changelog:$changelog"
           else
-            fastlane tfdeploy
+            fastlane tfdeploy "changelog:$changelog"
           fi
 
   # Create release
