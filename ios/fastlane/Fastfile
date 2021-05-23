@@ -47,7 +47,12 @@ platform :ios do
       }
     )
     upload_to_testflight(
-        changelog: options[:changelog]
+        changelog: options[:changelog],
+        localized_build_info: {
+            "default": {
+                whats_new: options[:changelog],
+            }
+        }
     )
   end
 
