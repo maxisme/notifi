@@ -4,6 +4,7 @@ import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/appbar_title.dart';
+import 'package:notifi/screens/utils/loading_gif.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
@@ -32,18 +33,7 @@ class HomeScreen extends StatelessWidget {
                 // if (mode == RefreshStatus.completed) {
                 //   _refreshController.refreshToIdle();
                 // }
-                return const SizedBox(
-                  height: 40.0,
-                  width: 40.0,
-                  child: Center(
-                    child: SizedBox(
-                        height: 20.0,
-                        width: 20.0,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 1,
-                        )),
-                  ),
-                );
+                return LoadingGif();
               },
             ),
             controller: _refreshController,
