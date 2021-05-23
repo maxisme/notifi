@@ -33,6 +33,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.VERSION }}
       last_version: ${{ steps.version.outputs.LAST_VERSION }}
+      changelog: ${{ steps.version.outputs.CHANGELOG }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -67,6 +68,9 @@ jobs:
             echo ::set-output name=VERSION::$GITHUB_RUN_ID
             echo ::set-output name=LAST_VERSION::$GITHUB_RUN_ID
           fi
+
+          changelog=$(git log --pretty=format:"* %s" "HEAD...${{ steps.bump_version_dev.outputs.tag }}" | uniq)
+          echo ::set-output name=CHANGELOG::$changelog
 
   #########
   # macos #
@@ -214,14 +218,11 @@ jobs:
 
           gem install fastlane
 
-          changelog=$(git log --pretty=format:"* %s" "HEAD...${{ needs.version.outputs.last_version }}" | uniq)
-          echo $changelog
-
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
-            fastlane asdeploy "changelog:$changelog"
+            fastlane asdeploy "changelog:${{ needs.version.outputs.changelog }}"
           else
-            fastlane tfdeploy "changelog:$changelog"
+            fastlane tfdeploy "changelog:${{ needs.version.outputs.changelog }}"
           fi
 
   # Create release
@@ -236,11 +237,13 @@ jobs:
         with:
           name: notifi-dmg
       - name: "Create Release"
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          name: "Release ${{ needs.version.outputs.version }}"
+          body: "${{ needs.version.outputs.changelog }}"
           prerelease: ${{ github.ref == 'refs/heads/develop' }}
-          automatic_release_tag: ${{ needs.version.outputs.version }}
-          title: "Release ${{ needs.version.outputs.version }}"
+          tag_name: ${{ needs.version.outputs.version }}
           files: |
             ${{steps.download.outputs.download-path}}
