@@ -12,7 +12,7 @@ class LoadingGif extends StatelessWidget {
               height: 20.0,
               width: 20.0,
               child: CircularProgressIndicator(
-                strokeWidth: 1,
+                strokeWidth: 2,
               )),
         ));
   }
