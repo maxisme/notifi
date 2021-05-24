@@ -239,6 +239,10 @@ jobs:
         id: download
         with:
           name: notifi-dmg
+      - name: ls
+        run: |
+          ls "${{steps.download.outputs.download-path}}"
+          ls "${{steps.download.outputs.download-path}}/"
       - name: "Create Release"
         uses: ncipollo/release-action@v1
         with:
@@ -248,5 +252,5 @@ jobs:
           body: "${{ needs.version.outputs.changelog }}"
           prerelease: ${{ github.ref == 'refs/heads/develop' }}
           tag: ${{ needs.version.outputs.version }}
-          artifacts: "${{steps.download.outputs.download-path}}/*"
+          artifacts: "${{steps.download.outputs.download-path}}/*.dmg"
           artifactErrorsFailBuild: true
