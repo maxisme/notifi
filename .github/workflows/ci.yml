@@ -30,19 +30,6 @@ jobs:
         with:
           name: golden-failures
           path: test/failures
-      - name: "build"
-        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
-        run: |
-          flutter config --enable-macos-desktop
-          flutter pub get
-          flutter build macos --release --build-name=${{ needs.version.outputs.version }}
-      - name: "Store MacOS .app artifact"
-        uses: actions/upload-artifact@v2
-        with:
-          name: notifi-app
-          path: build/macos/Build/Products/Release/notifi.app
-          if-no-files-found: error
-
 
   version:
     name: "Get Version"
@@ -136,7 +123,7 @@ jobs:
           cd macos
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
           xcrun agvtool new-version -all ${{ needs.version.outputs.version }}
-          
+
           cd ../
 
           # build .app
@@ -268,3 +255,4 @@ jobs:
           tag: ${{ needs.version.outputs.version }}
           artifacts: "${{steps.download.outputs.download-path}}/*"
           artifactErrorsFailBuild: true
+          commit: $GITHUB_SHA
