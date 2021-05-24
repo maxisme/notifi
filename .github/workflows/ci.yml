@@ -57,10 +57,6 @@ jobs:
     needs: [ version ]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        id: download
-        with:
-          name: notifi-dmg
       - name: "Create Release"
         uses: ncipollo/release-action@v1
         with:
