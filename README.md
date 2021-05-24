@@ -38,11 +38,7 @@ docker-compose up --build app
 ## MacOS build & run
 
 ```bash
-sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-sudo xcodebuild -runFirstLaunch
-flutter doctor
 flutter config --enable-macos-desktop
-flutter build macos
 flutter run -d macos
 ```
 
