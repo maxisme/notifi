@@ -218,9 +218,7 @@ jobs:
           flutter pub get
 
           # write release notes
-#          changelog=$(git log --pretty=format:"* %s" "HEAD...${{ needs.version.outputs.last_version }}" | awk '{print tolower($0)}' | uniq | grep "resolves" )
-#          echo -e "$changelog" > fastlane/metadata/default/release_notes.txt
-          echo -e "release_notes({'default' => \"${{ needs.version.outputs.changelog }}\"})" > fastlane/Deliverfile
+          echo -e "release_notes({'default' => \"${{ needs.version.outputs.changelog }}\", 'en-GB' => \"${{ needs.version.outputs.changelog }}\"})" > fastlane/Deliverfile
 
           # write version
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
