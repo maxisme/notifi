@@ -15,7 +15,6 @@ import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
-import 'package:toast/toast.dart';
 
 class NotificationTable extends StatefulWidget {
   const NotificationTable({Key key}) : super(key: key);
@@ -66,9 +65,7 @@ class NotificationTableState extends State<NotificationTable>
                     if (Platform.isIOS) {
                       Share.share(credentials);
                     } else {
-                      Clipboard.setData(ClipboardData(text: credentials));
-                      Toast.show('Copied $credentials', context,
-                          gravity: Toast.BOTTOM);
+                      copyText(credentials, context);
                     }
                   },
                       style: TextStyle(
@@ -156,19 +153,19 @@ class NotificationTableState extends State<NotificationTable>
       IconSlideAction(
         caption: 'Title',
         color: MyColour.transparent,
-        foregroundColor: MyColour.grey,
+        foregroundColor: MyColour.darkGrey,
         icon: Akaricons.copy,
         onTap: () {
-          Clipboard.setData(ClipboardData(text: notification.title));
+          copyText(notification.title, context);
         },
       ),
       IconSlideAction(
         caption: 'Message',
         color: MyColour.transparent,
-        foregroundColor: MyColour.grey,
+        foregroundColor: MyColour.darkGrey,
         icon: Akaricons.copy,
         onTap: () async {
-          Clipboard.setData(ClipboardData(text: notification.message));
+          copyText(notification.message, context);
         },
       ),
     ];

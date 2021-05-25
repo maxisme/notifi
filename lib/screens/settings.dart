@@ -20,7 +20,6 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -82,8 +81,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             SettingOption credentialsSettingWidget = SettingOption(
                 'Copy Credentials $credentials', Akaricons.clipboard,
                 onTapCallback: () {
-              Clipboard.setData(ClipboardData(text: credentials));
-              showToast('Copied $credentials', context, gravity: Toast.CENTER);
+              copyText(credentials, context);
             });
             if (Platform.isIOS) {
               credentialsSettingWidget = SettingOption(
