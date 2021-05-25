@@ -65,7 +65,7 @@ ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
 chmod +x $(pwd)/.git/hooks/pre-commit
 ```
 
-### screenshot on MacOS for iOS
+## screenshot on MacOS for iOS
 
 find simulator UUIDs:
 ```
@@ -91,15 +91,15 @@ $ open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
 Press `s` to take screen shots on each tab
 
 
-### Jetbrains flutter plugin:
+## Jetbrains flutter plugin:
 
 https://plugins.jetbrains.com/plugin/9212-flutter/versions
 
-### Db path
+## Db path
 
 ~/Library/Containers/uk.me.max.notifi/Data/Documents/notifications.db
 
-### GH .env secret to base64 string
+## GH .env secret to base64 string
 
 cat .env | openssl base64
 

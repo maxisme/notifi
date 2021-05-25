@@ -10,6 +10,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: /Users/runner/hostedtoolcache/flutter
+          key: flutter-dev
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
@@ -104,6 +109,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: /Users/runner/hostedtoolcache/flutter
+          key: flutter-dev
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
@@ -196,6 +206,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: /Users/runner/hostedtoolcache/flutter
+          key: flutter-dev
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
@@ -217,24 +232,21 @@ jobs:
           cd ios
           flutter pub get
 
-          # write release notes
-          echo -e "release_notes({'default' => \"${{ needs.version.outputs.changelog }}\", 'en-GB' => \"${{ needs.version.outputs.changelog }}\"})" > fastlane/Deliverfile
-
           # write version
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
           xcrun agvtool new-version -all $GITHUB_RUN_ID
 
-          pod install
-
           gem install fastlane
+          fastlane --version
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
-            # app store release
+            # write release notes
+            echo -e "release_notes({'default' => \"${{ needs.version.outputs.changelog }}\", 'en-GB' => \"${{ needs.version.outputs.changelog }}\"})" > fastlane/Deliverfile
+
             fastlane asdeploy
           else
-            # testflight release
-            fastlane tfdeploy "changelog:${{ needs.version.outputs.changelog }}"
+            fastlane ios tfdeploy "changelog:${{ needs.version.outputs.changelog }}"
           fi
 
   release:
