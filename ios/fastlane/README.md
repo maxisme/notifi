@@ -20,12 +20,12 @@ or alternatively using `brew install fastlane`
 ```
 fastlane ios tfdeploy
 ```
-Upload build to test flight
+Upload build to Test Flight
 ### ios asdeploy
 ```
 fastlane ios asdeploy
 ```
-Upload build to app store
+Upload build to App Store
 
 ----
 
