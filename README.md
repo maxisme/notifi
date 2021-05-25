@@ -77,26 +77,18 @@ You want to find the UUIDs of:
  - 5.5", iPhone 8 Plus, iPhone 7 Plus, iPhone 6s Plus
  - 12.9" iPad Pro
 
-1. open iOS simulator UUIDs:
+1. In a new tab run each of the following
 ```
-xcrun simctl boot E1E8CFAC-3D2D-43C6-9A82-156108558D28
-xcrun simctl boot EA1A2006-B1C0-4369-8A95-D408C2597271
-xcrun simctl boot 63E2193A-B47B-48D6-8311-DA0BC150AAC1
-open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
-```
+$ xcrun simctl boot "iPhone 11 Pro Max"; flutter run -d "iPhone 11 Pro Max" --dart-define=LOAD_TEMPLATE_DB=1
 
-2. open and run each of these in a new tab:
-```bash
-$ flutter run -d E1E8CFAC-3D2D-43C6-9A82-156108558D28
-$ flutter run -d EA1A2006-B1C0-4369-8A95-D408C2597271
-$ flutter run -d 63E2193A-B47B-48D6-8311-DA0BC150AAC1
+$ xcrun simctl boot "iPhone 8 Plus"; flutter run -d "iPhone 8 Plus" --dart-define=LOAD_TEMPLATE_DB=1
+
+$ xcrun simctl boot "iPad Pro (12.9-inch) (5th generation)" && flutter run -d "iPad Pro (12.9-inch) (5th generation)" --dart-define=LOAD_TEMPLATE_DB=1
+
+$ open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
 ```
 
-3. Press `s` to take screen shot on each tab
-
-4. cp ./template.db to the logged DB path of your device
-
-5. Press `s` to take screen shots again
+Press `s` to take screen shots on each tab
 
 
 ### Jetbrains flutter plugin:

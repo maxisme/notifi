@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:path/path.dart';
@@ -19,9 +20,23 @@ class DBProvider {
       return _db;
     }
 
-    Directory dir = await getLibraryDirectory();
-    dir ??= await getApplicationDocumentsDirectory();
-    final String path = join(join(dir.path, 'notifi/'), dbPath);
+    const String loadTemplateDB =
+        String.fromEnvironment('LOAD_TEMPLATE_DB', defaultValue: 'false');
+    String path;
+    if (loadTemplateDB != 'false') {
+      // write asset to file in app
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final ByteData data = await rootBundle.load('template.db');
+      final List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      path = join(directory.path, 'template.db');
+      await File(path).writeAsBytes(bytes);
+    } else {
+      Directory dir = await getLibraryDirectory();
+      dir ??= await getApplicationDocumentsDirectory();
+      path = join(join(dir.path, 'notifi/'), dbPath);
+    }
     L.i('DB path: $path');
 
     return _db = await openDatabase(path, onCreate: (Database db, int version) {
