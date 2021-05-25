@@ -56,20 +56,22 @@ jobs:
       - id: version
         name: Create Version
         run: |
+          latest_version=$(curl -s "https://api.github.com/repos/maxisme/notifi/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
           if [ -n "${{ steps.bump_version.outputs.new_tag }}" ]
           then
             echo ::set-output name=VERSION::${{ steps.bump_version.outputs.new_tag }}
-            echo ::set-output name=LAST_VERSION::${{ steps.bump_version.outputs.ag }}
           elif [ -n "${{ steps.bump_version_dev.outputs.new_tag }}" ]
           then
             echo ::set-output name=VERSION::${{ steps.bump_version_dev.outputs.new_tag }}
-            echo ::set-output name=LAST_VERSION::${{ steps.bump_version_dev.outputs.tag }}
+            latest_version=$(jq -r 'map(select(.prerelease)) | first | .tag_name' <<< $(curl -s https://api.github.com/repos/maxisme/notifi/releases))
           else
             echo ::set-output name=VERSION::$GITHUB_RUN_ID
-            echo ::set-output name=LAST_VERSION::$GITHUB_RUN_ID
           fi
 
-          changelog=$(git log --pretty=format:"* %s" "HEAD...${{ steps.bump_version_dev.outputs.tag }}" | uniq)
+          echo ::set-output name=LAST_VERSION::$latest_version
+
+          changelog=$(git log --pretty=format:"* %s" "HEAD...$latest_version" | uniq)
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
           changelog="${changelog//$'\r'/'%0D'}"
@@ -187,14 +189,14 @@ jobs:
     needs: [ version ]
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-
       - name: "Build & Deploy"
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -213,6 +215,9 @@ jobs:
           cd ios
           flutter pub get
 
+          # write release notes
+          echo -e "release_notes({'default' => '${{ needs.version.outputs.changelog }}'})" > fastlane/Deliverfile
+
           # write version
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
           xcrun agvtool new-version -all $GITHUB_RUN_ID
@@ -223,8 +228,10 @@ jobs:
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
-            fastlane asdeploy "changelog:${{ needs.version.outputs.changelog }}"
+            # app store release
+            fastlane asdeploy
           else
+            # testflight release
             fastlane tfdeploy "changelog:${{ needs.version.outputs.changelog }}"
           fi
 
