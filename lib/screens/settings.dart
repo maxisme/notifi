@@ -274,9 +274,6 @@ class SettingOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle style = TextStyle(
-        fontSize: 15, color: MyColour.black, fontWeight: FontWeight.w400);
-
     final Container iconWidget = Container(
         padding: const EdgeInsets.only(right: 10),
         child: Icon(icon, size: 20, color: MyColour.black));
@@ -294,7 +291,11 @@ class SettingOption extends StatelessWidget {
               onPressed: onTapCallback,
               child: Row(children: <Widget>[
                 iconWidget,
-                Text(text, style: style),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3.0),
+                  child:
+                      Text(text, style: Theme.of(context).textTheme.bodyText2),
+                ),
               ])));
     } else {
       switchValue ??= false;
@@ -303,7 +304,10 @@ class SettingOption extends StatelessWidget {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(children: <Widget>[iconWidget, Text(text, style: style)]),
+                Row(children: <Widget>[
+                  iconWidget,
+                  Text(text, style: Theme.of(context).textTheme.bodyText2)
+                ]),
                 Switch(
                     value: switchValue,
                     onChanged: switchCallback,

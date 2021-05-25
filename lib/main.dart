@@ -84,6 +84,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).loadUser();
+
+    double defaultFontSize = 14;
+    double bodyText1FontSize = 10;
+    if (Platform.isIOS) {
+      defaultFontSize = 17;
+      bodyText1FontSize = 14;
+    }
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -106,19 +114,28 @@ class _MyAppState extends State<MyApp> {
               color: MyColour.darkGrey,
               size: 22,
             ),
-            textTheme: const TextTheme(
+            textTheme: TextTheme(
                 headline1: TextStyle(
                     inherit: false,
                     textBaseline: TextBaseline.alphabetic,
                     fontFamily: 'Inconsolata',
-                    fontSize: 14,
+                    fontSize: defaultFontSize,
                     fontWeight: FontWeight.w600),
                 bodyText1: TextStyle(
                     inherit: false,
                     textBaseline: TextBaseline.alphabetic,
                     fontFamily: 'Inconsolata',
                     color: MyColour.darkGrey,
-                    fontSize: 10,
+                    fontSize: bodyText1FontSize,
+                    letterSpacing: 0.2,
+                    height: 1.4),
+                bodyText2: const TextStyle(
+                    fontSize: 15,
+                    color: MyColour.black,
+                    fontWeight: FontWeight.w400,
+                    inherit: false,
+                    textBaseline: TextBaseline.alphabetic,
+                    fontFamily: 'Inconsolata',
                     letterSpacing: 0.2,
                     height: 1.4)),
             buttonTheme: const ButtonThemeData(
