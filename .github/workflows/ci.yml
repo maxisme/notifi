@@ -71,7 +71,9 @@ jobs:
 
           echo ::set-output name=LAST_VERSION::$latest_version
 
-          changelog=$(git log --pretty=format:"* %s" "HEAD...$latest_version" | uniq)
+          SINGLE=$(echo -ne '\u00B4\u2018\u2019')
+          DOUBLE=$(echo -ne '\u201C\u201D')
+          changelog=$(git log --pretty=format:"* %s" "HEAD...$latest_version" | awk '{print tolower($0)}' | uniq | sed "s/[$SINGLE]/'/g; s/[$DOUBLE]/\"/g")
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
           changelog="${changelog//$'\r'/'%0D'}"
@@ -216,7 +218,9 @@ jobs:
           flutter pub get
 
           # write release notes
-          echo -e "release_notes({'default' => '${{ needs.version.outputs.changelog }}'})" > fastlane/Deliverfile
+#          changelog=$(git log --pretty=format:"* %s" "HEAD...${{ needs.version.outputs.last_version }}" | awk '{print tolower($0)}' | uniq | grep "resolves" )
+#          echo -e "$changelog" > fastlane/metadata/default/release_notes.txt
+          echo -e "release_notes({'default' => \"${{ needs.version.outputs.changelog }}\"})" > fastlane/Deliverfile
 
           # write version
           xcrun agvtool new-marketing-version ${{ needs.version.outputs.version }}
