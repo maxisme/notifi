@@ -135,3 +135,8 @@ bool shouldPinWindow(SharedPreferences sp) {
     return false;
   }
 }
+
+void copyText(String text, BuildContext context) {
+  Clipboard.setData(ClipboardData(text: text));
+  Toast.show('Copied: $text', context, gravity: Toast.BOTTOM);
+}
