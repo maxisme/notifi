@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
@@ -20,6 +21,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // disable status bar
+  // ignore: always_specify_types
+  SystemChrome.setEnabledSystemUIOverlays([]);
 
   if (!await loadDotEnv()) {
     // ignore: avoid_print
@@ -109,7 +114,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 centerTitle: true,
                 elevation: 0.0,
-                toolbarHeight: 80,
+                toolbarHeight: 70,
                 backgroundColor: MyColour.white),
             iconTheme: const IconThemeData(
               color: MyColour.darkGrey,
@@ -137,7 +142,6 @@ class _MyAppState extends State<MyApp> {
                     inherit: false,
                     textBaseline: TextBaseline.alphabetic,
                     fontFamily: 'Inconsolata',
-                    letterSpacing: 0.2,
                     height: 1.4)),
             buttonTheme: const ButtonThemeData(
                 highlightColor: Colors.transparent,

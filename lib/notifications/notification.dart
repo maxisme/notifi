@@ -136,23 +136,20 @@ class NotificationUIState extends State<NotificationUI> {
       // if message
       Widget messageRow;
       if (widget.message != '') {
-        messageRow = Container(
-          padding: const EdgeInsets.only(top: 3),
-          child: Row(key: _messageKey, children: <Widget>[
-            Flexible(
-                child: SelectableText(widget.message, onTap: () {
-              setState(() {
-                if (!widget.isExpanded) {
-                  widget.toggleExpand(widget.index);
-                }
-              });
-            },
-                    scrollPhysics: const NeverScrollableScrollPhysics(),
-                    style: Theme.of(context).textTheme.bodyText1,
-                    minLines: 1,
-                    maxLines: messageMaxLines)),
-          ]),
-        );
+        messageRow = Row(key: _messageKey, children: <Widget>[
+          Flexible(
+              child: SelectableText(widget.message, onTap: () {
+            setState(() {
+              if (!widget.isExpanded) {
+                widget.toggleExpand(widget.index);
+              }
+            });
+          },
+                  scrollPhysics: const NeverScrollableScrollPhysics(),
+                  style: Theme.of(context).textTheme.bodyText1,
+                  minLines: 1,
+                  maxLines: messageMaxLines)),
+        ]);
       } else {
         messageRow = const SizedBox();
       }
@@ -279,26 +276,23 @@ class NotificationUIState extends State<NotificationUI> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 // TITLE
-                                Container(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: SelectableText(widget.title,
-                                      key: _titleKey, onTap: () {
-                                    setState(() {
-                                      if (!widget.isExpanded) {
-                                        widget.toggleExpand(widget.index);
-                                      }
-                                    });
-                                  },
-                                      scrollPhysics:
-                                          const NeverScrollableScrollPhysics(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1
-                                          .copyWith(color: titleColour),
-                                      textAlign: TextAlign.left,
-                                      minLines: 1,
-                                      maxLines: titleMaxLines),
-                                ),
+                                SelectableText(widget.title, key: _titleKey,
+                                    onTap: () {
+                                  setState(() {
+                                    if (!widget.isExpanded) {
+                                      widget.toggleExpand(widget.index);
+                                    }
+                                  });
+                                },
+                                    scrollPhysics:
+                                        const NeverScrollableScrollPhysics(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1
+                                        .copyWith(color: titleColour),
+                                    textAlign: TextAlign.left,
+                                    minLines: 1,
+                                    maxLines: titleMaxLines),
 
                                 // TIME
                                 Row(children: <Widget>[
