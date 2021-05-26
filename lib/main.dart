@@ -109,6 +109,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 centerTitle: true,
                 elevation: 0.0,
+                toolbarHeight: 80,
                 backgroundColor: MyColour.white),
             iconTheme: const IconThemeData(
               color: MyColour.darkGrey,

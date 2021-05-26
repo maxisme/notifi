@@ -79,11 +79,11 @@ You want to find the UUIDs of:
 
 1. In a new tab run each of the following
 ```
-$ xcrun simctl boot "iPhone 11 Pro Max"; flutter run -d "iPhone 11 Pro Max" --dart-define=LOAD_TEMPLATE_DB=1
+$ xcrun simctl boot 'iPhone 11 Pro Max'; flutter run -d 'iPhone 11 Pro Max' --dart-define=LOAD_TEMPLATE_DB=1
 
-$ xcrun simctl boot "iPhone 8 Plus"; flutter run -d "iPhone 8 Plus" --dart-define=LOAD_TEMPLATE_DB=1
+$ xcrun simctl boot 'iPhone 8 Plus'; flutter run -d 'iPhone 8 Plus' --dart-define=LOAD_TEMPLATE_DB=1
 
-$ xcrun simctl boot "iPad Pro (12.9-inch) (5th generation)" && flutter run -d "iPad Pro (12.9-inch) (5th generation)" --dart-define=LOAD_TEMPLATE_DB=1
+$ xcrun simctl boot 'iPad Pro (12.9-inch) (4th generation)' && flutter run -d 'iPad Pro (12.9-inch) (4th generation)' --dart-define=LOAD_TEMPLATE_DB=1
 
 $ open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
 ```
