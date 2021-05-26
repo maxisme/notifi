@@ -5,6 +5,7 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/screens/utils/loading_gif.dart';
+import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
@@ -16,18 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).setSnackContext(context);
-    return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          shape: Border(
-              bottom: BorderSide(color: Theme.of(context).indicatorColor)),
-          title: const MyAppBarTitle(),
-          leading: IconButton(
-              icon: const Icon(Akaricons.gear),
-              onPressed: () async {
-                Navigator.pushNamed(context, '/settings');
-              }),
-        ),
+    return MyScaffold(
         body: SmartRefresher(
             header: CustomHeader(
               builder: (_, RefreshStatus mode) {
