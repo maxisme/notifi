@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
-import 'package:notifi/screens/utils/appbar_title.dart';
 import 'package:notifi/screens/utils/loading_gif.dart';
 import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
@@ -18,6 +17,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).setSnackContext(context);
     return MyScaffold(
+        leading: IconButton(
+            icon: const Icon(Akaricons.gear),
+            onPressed: () async {
+              Navigator.pushNamed(context, '/settings');
+            }),
         body: SmartRefresher(
             header: CustomHeader(
               builder: (_, RefreshStatus mode) {
@@ -34,8 +38,16 @@ class HomeScreen extends StatelessWidget {
             },
             child: const NotificationTable()),
         bottomNavigationBar: BottomAppBar(
+          elevation: 0,
           // ignore: prefer_const_literals_to_create_immutables
-          child: SizedBox(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                  top: BorderSide(
+                      color: Theme.of(context)
+                          .indicatorColor) // red as border color
+                  ),
+            ),
             height: 50,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

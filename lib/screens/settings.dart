@@ -10,7 +10,7 @@ import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/screens/logs.dart';
 import 'package:notifi/screens/utils/alert.dart';
-import 'package:notifi/screens/utils/appbar_title.dart';
+import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -62,17 +62,12 @@ class SettingsScreenState extends State<SettingsScreen> {
       });
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          shape: Border(
-              bottom: BorderSide(color: Theme.of(context).indicatorColor)),
-          leading: IconButton(
-              icon: const Icon(Akaricons.chevronLeft),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          title: const MyAppBarTitle(),
-        ),
+    return MyScaffold(
+        leading: IconButton(
+            icon: const Icon(Akaricons.chevronLeft),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         body: Column(children: <Widget>[
           Consumer<User>(
               builder: (BuildContext context, User user, Widget child) {
@@ -85,8 +80,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             });
             if (Platform.isIOS) {
               credentialsSettingWidget = SettingOption(
-                  'Share Credentials $credentials', Akaricons.clipboard,
-                  onTapCallback: () {
+                  'Share Credentials', Akaricons.clipboard, onTapCallback: () {
                 Share.share(credentials);
               });
             }
