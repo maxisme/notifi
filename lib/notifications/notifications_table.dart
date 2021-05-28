@@ -121,12 +121,13 @@ class NotificationTableState extends State<NotificationTable>
     });
   }
 
-  void toggleExpand(int index) {
+  void toggleExpand(BuildContext context, int index) {
     final NotificationUI notification =
         Provider.of<Notifications>(context, listen: false).get(index);
 
     notification.isExpanded = !notification.isExpanded;
-    Scrollable.ensureVisible(context);
+    Scrollable.ensureVisible(context,
+        duration: const Duration(milliseconds: 100));
 
     // mark read
     Provider.of<Notifications>(context, listen: false)

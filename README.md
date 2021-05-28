@@ -58,6 +58,9 @@ bash ./test/set-asserts.sh
 
 # Extras
 
+latest version iOS:
+http://itunes.apple.com/lookup?bundleId=it.notifi.notifi
+
 ## Add pre-commit hook
 
 ```bash
