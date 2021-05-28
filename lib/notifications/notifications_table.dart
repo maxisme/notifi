@@ -126,8 +126,6 @@ class NotificationTableState extends State<NotificationTable>
         Provider.of<Notifications>(context, listen: false).get(index);
 
     notification.isExpanded = !notification.isExpanded;
-    Scrollable.ensureVisible(context,
-        duration: const Duration(milliseconds: 100));
 
     // mark read
     Provider.of<Notifications>(context, listen: false)

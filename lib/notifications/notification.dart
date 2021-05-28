@@ -53,6 +53,8 @@ class NotificationUI extends StatefulWidget {
   bool isExpanded = false;
   int index;
   void Function(BuildContext context, int id) toggleExpand;
+  String shrinkTitle;
+  String shrinkMessage;
 
   bool get isRead => read != null && read;
 
@@ -114,6 +116,8 @@ class NotificationUIState extends State<NotificationUI> {
     return Consumer<Notifications>(builder:
         (BuildContext context, Notifications reloadTable, Widget child) {
       const double iconSize = 15.0;
+      String title = widget.title;
+      String message = widget.message;
       int messageMaxLines = 3;
       int titleMaxLines = 1;
 
@@ -123,6 +127,13 @@ class NotificationUIState extends State<NotificationUI> {
       if (widget.isExpanded) {
         titleMaxLines = null;
         messageMaxLines = null;
+      } else {
+        if (widget.shrinkTitle != null) {
+          title = widget.shrinkTitle;
+        }
+        if (widget.shrinkMessage != null) {
+          message = widget.shrinkMessage;
+        }
       }
 
       // if read notification
@@ -138,7 +149,7 @@ class NotificationUIState extends State<NotificationUI> {
       if (widget.message != '') {
         messageRow = Row(key: _messageKey, children: <Widget>[
           Flexible(
-              child: SelectableText(widget.message, onTap: () {
+              child: SelectableText(message, onTap: () {
             setState(() {
               if (!widget.isExpanded) {
                 widget.toggleExpand(context, widget.index);
@@ -277,7 +288,7 @@ class NotificationUIState extends State<NotificationUI> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 // TITLE
-                                SelectableText(widget.title, key: _titleKey,
+                                SelectableText(title, key: _titleKey,
                                     onTap: () {
                                   setState(() {
                                     if (!widget.isExpanded) {
@@ -372,11 +383,18 @@ class NotificationUIState extends State<NotificationUI> {
         hasTextOverflow(widget.title, Theme.of(context).textTheme.headline1,
             maxWidth: _columnKey.currentContext.size.width)) {
       canExpand = true;
-    } else if (_messageKey.currentContext != null &&
+      widget.shrinkTitle = getEclipsedText(
+          widget.title, Theme.of(context).textTheme.headline1,
+          maxWidth: _columnKey.currentContext.size.width);
+    }
+    if (_messageKey.currentContext != null &&
         widget.message != '' &&
         hasTextOverflow(widget.message, Theme.of(context).textTheme.bodyText1,
             maxWidth: _messageKey.currentContext.size.width, maxLines: 3)) {
       canExpand = true;
+      widget.shrinkMessage = getEclipsedText(
+          widget.message, Theme.of(context).textTheme.bodyText1,
+          maxWidth: _messageKey.currentContext.size.width, maxLines: 3);
     }
 
     if (canExpand) {
@@ -390,17 +408,5 @@ class NotificationUIState extends State<NotificationUI> {
         i.DateFormat('yyyy-MM-dd HH:mm:ss').parse(widget.time, true).toLocal();
     final String friendlyDttm = i.DateFormat('MMM d, y HH:mm:ss').format(dttm);
     _timeStr.value = '$friendlyDttm - ${timeago.format(dttm)}';
-  }
-
-  bool hasTextOverflow(String text, TextStyle style,
-      {double maxWidth = double.infinity, int maxLines = 1}) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: maxLines,
-      textDirection: TextDirection.ltr,
-      textWidthBasis: TextWidthBasis.longestLine,
-    )..layout(minWidth: 0, maxWidth: maxWidth - 1);
-    // not really sure why I have to -1
-    return textPainter.didExceedMaxLines;
   }
 }
