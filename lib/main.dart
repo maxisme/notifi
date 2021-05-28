@@ -120,6 +120,10 @@ class _MyAppState extends State<MyApp> {
               color: MyColour.darkGrey,
               size: 22,
             ),
+            scrollbarTheme: ScrollbarThemeData(
+              thickness: MaterialStateProperty.all(4.0),
+              showTrackOnHover: false,
+            ),
             textTheme: TextTheme(
                 headline1: TextStyle(
                     inherit: false,
