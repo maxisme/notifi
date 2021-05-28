@@ -127,6 +127,10 @@ class _MyAppState extends State<MyApp> {
                     fontFamily: 'Inconsolata',
                     fontSize: defaultFontSize,
                     fontWeight: FontWeight.w600),
+                subtitle1: const TextStyle(
+                    color: MyColour.grey,
+                    fontSize: 10,
+                    fontFamily: 'Inconsolata'),
                 bodyText1: TextStyle(
                     inherit: false,
                     textBaseline: TextBaseline.alphabetic,
@@ -134,15 +138,14 @@ class _MyAppState extends State<MyApp> {
                     color: MyColour.darkGrey,
                     fontSize: bodyText1FontSize,
                     letterSpacing: 0.2,
-                    height: 1.4),
+                    height: 1.2),
                 bodyText2: const TextStyle(
                     fontSize: 15,
                     color: MyColour.black,
                     fontWeight: FontWeight.w400,
                     inherit: false,
                     textBaseline: TextBaseline.alphabetic,
-                    fontFamily: 'Inconsolata',
-                    height: 1.4)),
+                    fontFamily: 'Inconsolata')),
             buttonTheme: const ButtonThemeData(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent),

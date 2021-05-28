@@ -52,7 +52,7 @@ class NotificationUI extends StatefulWidget {
   bool canExpand;
   bool isExpanded = false;
   int index;
-  void Function(int id) toggleExpand;
+  void Function(BuildContext context, int id) toggleExpand;
 
   bool get isRead => read != null && read;
 
@@ -141,7 +141,7 @@ class NotificationUIState extends State<NotificationUI> {
               child: SelectableText(widget.message, onTap: () {
             setState(() {
               if (!widget.isExpanded) {
-                widget.toggleExpand(widget.index);
+                widget.toggleExpand(context, widget.index);
               }
             });
           },
@@ -248,7 +248,8 @@ class NotificationUIState extends State<NotificationUI> {
                                     InkWell(
                                         onTap: () {
                                           setState(() {
-                                            widget.toggleExpand(widget.index);
+                                            widget.toggleExpand(
+                                                context, widget.index);
                                           });
                                         },
                                         child: Container(
@@ -280,7 +281,8 @@ class NotificationUIState extends State<NotificationUI> {
                                     onTap: () {
                                   setState(() {
                                     if (!widget.isExpanded) {
-                                      widget.toggleExpand(widget.index);
+                                      widget.toggleExpand(
+                                          context, widget.index);
                                     }
                                   });
                                 },
@@ -295,19 +297,23 @@ class NotificationUIState extends State<NotificationUI> {
                                     maxLines: titleMaxLines),
 
                                 // TIME
-                                Row(children: <Widget>[
-                                  ValueListenableBuilder<String>(
-                                      valueListenable: _timeStr,
-                                      builder: (BuildContext context,
-                                          String timeStr, Widget child) {
-                                        return Expanded(
-                                          child: SelectableText(timeStr,
-                                              style: const TextStyle(
-                                                  color: MyColour.grey,
-                                                  fontSize: 12)),
-                                        );
-                                      })
-                                ]),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 2.0, bottom: 2.0),
+                                  child: Row(children: <Widget>[
+                                    ValueListenableBuilder<String>(
+                                        valueListenable: _timeStr,
+                                        builder: (BuildContext context,
+                                            String timeStr, Widget child) {
+                                          return Expanded(
+                                            child: SelectableText(timeStr,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1),
+                                          );
+                                        })
+                                  ]),
+                                ),
 
                                 // MESSAGE
                                 messageRow
