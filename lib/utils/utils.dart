@@ -140,3 +140,27 @@ void copyText(String text, BuildContext context) {
   Clipboard.setData(ClipboardData(text: text));
   Toast.show('Copied: $text', context, gravity: Toast.BOTTOM);
 }
+
+bool hasTextOverflow(String text, TextStyle style,
+    {double maxWidth = double.infinity, int maxLines = 1}) {
+  final TextPainter textPainter = TextPainter(
+    text: TextSpan(text: text, style: style),
+    maxLines: maxLines,
+    textDirection: TextDirection.ltr,
+    textWidthBasis: TextWidthBasis.longestLine,
+  )..layout(minWidth: 0, maxWidth: maxWidth - 1);
+  // not really sure why I have to -1
+  return textPainter.didExceedMaxLines;
+}
+
+String getEclipsedText(String text, TextStyle style,
+    {double maxWidth = double.infinity, int maxLines = 1}) {
+  for (int i = 5; i < text.length; i++) {
+    final String eclipsedText = '${text.substring(0, i)}...';
+    if (hasTextOverflow(eclipsedText, style,
+        maxWidth: maxWidth, maxLines: maxLines)) {
+      return '${text.substring(0, i - 1)}...';
+    }
+  }
+  throw Exception('width too short to eclipse');
+}
