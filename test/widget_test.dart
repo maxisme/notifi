@@ -69,7 +69,6 @@ void main() {
     const List<String> messages = <String>[
       '',
       'message of notification',
-      // ignore: no_adjacent_strings_in_list
       'notification '
           'message of notification  message of notification message '
           'of notification message of notification message of notification of '
@@ -151,7 +150,7 @@ void main() {
       expect(find.text('1'), findsOneWidget);
 
       // expand
-      await tester.tap(find.byIcon(Akaricons.enlarge));
+      await tester.tap(find.byKey(Key('toggle-expand')));
       await tester.pump();
 
       expect(n.isExpanded, true);

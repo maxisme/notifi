@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main() async {
+Future<void> main({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // disable status bar
@@ -40,15 +40,18 @@ Future<void> main() async {
         'set-sparkle-url', <String, String>{'url': versionEndpoint});
   }
 
-  if (shouldUseFirebase) {
+  if (shouldUseFirebase && !integration) {
     final AuthorizationStatus status = await initFirebase();
     L.i(status.toString());
   }
 
-  final DBProvider db = DBProvider('notifications.db');
+  final DBProvider db = DBProvider('notifications.db', templateDB: integration);
   final List<NotificationUI> notifications = await db.getAll();
-  final FlutterLocalNotificationsPlugin pushNotifications =
-      await initPushNotifications();
+
+  FlutterLocalNotificationsPlugin pushNotifications;
+  if (!integration) {
+    pushNotifications = await initPushNotifications();
+  }
 
   bool canBadge = false;
   if (Platform.isIOS) canBadge = await FlutterAppBadger.isAppBadgeSupported();

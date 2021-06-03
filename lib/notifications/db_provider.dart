@@ -9,28 +9,27 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
-  DBProvider(this.dbPath);
+  DBProvider(this.dbPath, {this.templateDB: false});
 
   final String _table = 'notifications';
   final String dbPath;
   Database _db;
+  bool templateDB;
 
   Future<Database> initDB() async {
     if (_db != null) {
       return _db;
     }
 
-    const String loadTemplateDB =
-        String.fromEnvironment('LOAD_TEMPLATE_DB', defaultValue: 'false');
     String path;
-    if (loadTemplateDB != 'false') {
-      // write asset to file in app
+    if (templateDB) {
+      // write template db asset to file in app
       final Directory directory = await getApplicationDocumentsDirectory();
       final ByteData data = await rootBundle.load('template.db');
       final List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
-      path = join(directory.path, 'template.db');
+      path = join(directory.path, 'local.db');
       await File(path).writeAsBytes(bytes);
     } else {
       Directory dir = await getLibraryDirectory();

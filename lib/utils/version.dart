@@ -9,6 +9,6 @@ Future<bool> hasUpgrade(String version) async {
     endpoint += '?';
   }
   endpoint += 'version=$version';
-  final http.Response response = await http.get(endpoint);
+  final http.Response response = await http.get(Uri.parse(endpoint));
   return response.statusCode == 200;
 }

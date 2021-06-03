@@ -257,6 +257,7 @@ class NotificationUIState extends State<NotificationUI> {
                                           ))),
                                   if (widget.canExpand)
                                     InkWell(
+                                        key: Key('toggle-expand'),
                                         onTap: () {
                                           setState(() {
                                             widget.toggleExpand(
