@@ -37,6 +37,7 @@ Future<void> showAlert(BuildContext context, String title, String description,
               onPressed: onOkPressed,
               child: const Text(
                 'Ok',
+                key: Key('ok'),
                 style: TextStyle(color: MyColour.black),
               )),
         ],

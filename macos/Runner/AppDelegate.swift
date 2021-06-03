@@ -136,7 +136,7 @@ class AppDelegate: FlutterAppDelegate {
         if let screen = NSScreen.main {
             let rect = screen.frame
             let height = rect.size.height * 0.7  // 70% of window
-            popover.contentSize = NSSize(width: 400, height: height)
+            popover.contentSize = NSSize(width: height * 0.563, height: height)
             if let button = statusBarItem.button {
                 popover.show(
                         relativeTo: button.bounds,

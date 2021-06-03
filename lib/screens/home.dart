@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
@@ -16,19 +18,23 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).setSnackContext(context);
+    double doubleCheckPosition = -7;
+    if (Platform.isMacOS) {
+      doubleCheckPosition = 0;
+    }
     return MyScaffold(
         leading: IconButton(
-            icon: const Icon(Akaricons.gear),
+            icon: const Icon(Akaricons.gear, key: Key('cog')),
             onPressed: () async {
               Navigator.pushNamed(context, '/settings');
             }),
         body: SmartRefresher(
             header: CustomHeader(
               builder: (_, RefreshStatus mode) {
-                // if (mode == RefreshStatus.completed) {
-                //   _refreshController.refreshToIdle();
-                // }
-                return LoadingGif();
+                if (mode != RefreshStatus.idle) {
+                  return LoadingGif();
+                }
+                return SizedBox();
               },
             ),
             controller: _refreshController,
@@ -58,10 +64,18 @@ class HomeScreen extends StatelessWidget {
                             Provider.of<Notifications>(context, listen: false)
                                 .readAll();
                           },
-                          child: Icon(
-                            Akaricons.doubleCheck,
-                            size: 40,
-                            color: Theme.of(context).primaryColor,
+                          child: Stack(
+                            alignment: AlignmentDirectional.topCenter,
+                            children: <Widget>[
+                              Positioned(
+                                top: doubleCheckPosition,
+                                child: Icon(
+                                  Akaricons.doubleCheck,
+                                  size: 47,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              )
+                            ],
                           ))),
                   SizedBox(
                       height: 30,
@@ -79,6 +93,7 @@ class HomeScreen extends StatelessWidget {
                           });
                         },
                         child: Icon(Akaricons.trash,
+                            key: Key('delete-all'),
                             color: Theme.of(context).colorScheme.secondary,
                             size: 30)),
                   )
