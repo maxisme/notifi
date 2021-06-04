@@ -11,7 +11,7 @@ mv Your_App_Icon-assets/AppIcon.appiconset/* ../ios/Runner/Assets.xcassets/AppIc
 
 # flutter
 mv Your_App_Icon-assets/sad.png ../images/
-mv Your_App_Icon-assets/bell.png ../images/
+cp Your_App_Icon-assets/logo.png ../images/bell.png
 
 
 # TODO splash screen

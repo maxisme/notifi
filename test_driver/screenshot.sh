@@ -74,5 +74,5 @@ for filename in "${IOS_SS_PATH}"*_framed.png; do
     "${IOS_SS_PATH}${out}"
 done
 
-# delete frames
-#rm "$IOS_SS_PATH*_frame.png"
+# delete framed images
+rm "$IOS_SS_PATH"*"framed.png"
