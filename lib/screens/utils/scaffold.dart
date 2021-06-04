@@ -49,14 +49,14 @@ class MyScaffold extends StatelessWidget {
                                   .scrollToTop();
                             },
                             child: Image.asset('images/bell.png',
-                                height: 70,
+                                height: 50,
                                 filterQuality: FilterQuality.medium),
                           ),
                         ),
                         Positioned(
-                          top: 9.6,
+                          top: 0,
                           child: Container(
-                              padding: const EdgeInsets.only(left: 20),
+                              padding: const EdgeInsets.only(left: 21),
                               child: const AnimatedCnt()),
                         ),
                       ],
