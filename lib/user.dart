@@ -58,6 +58,7 @@ class User with ChangeNotifier {
         await Future<dynamic>.delayed(const Duration(seconds: 5));
       }
     }
+    notifyListeners();
 
     if (hadUser) {
       await initWSS();
