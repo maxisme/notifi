@@ -18,7 +18,6 @@ void main() {
     });
 
     test('SS screens', () async {
-      // SerializableFinder cog = find.byValueKey('cog');
       SerializableFinder deleteAll = find.byValueKey('delete-all');
       SerializableFinder ok = find.byValueKey('ok');
       SerializableFinder toggleExpand = find.byValueKey('toggle-expand');
@@ -34,10 +33,6 @@ void main() {
       await driver.waitFor(ok);
       await driver.tap(ok);
       await screenshot(driver, 'screenshots/ios/2.png');
-
-      // // ss settings
-      // await driver.tap(cog);
-      // await screenshot(driver, 'screenshots/settings.png');
     });
   });
 }
