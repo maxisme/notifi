@@ -78,7 +78,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 onTapCallback: () {
               copyText(credentials, context);
             });
-            if (Platform.isIOS) {
+            if (Platform.isIOS || Platform.isAndroid) {
               credentialsSettingWidget = SettingOption(
                   'Share Credentials', Akaricons.clipboard, onTapCallback: () {
                 Share.share(credentials);
