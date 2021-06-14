@@ -5,18 +5,26 @@ cd "$(dirname "$0")"
 IOS_SS_PATH="../ios/fastlane/screenshots/en-GB/"
 TMP_SS_PATH="../screenshots/ios/"
 
-devices=("iPhone 11 Pro Max" "iPad Pro (12.9-inch) (5th generation)" "iPhone 8 Plus")
+devices=("iPhone 11 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
 device_paths=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
+
+# print simulator devices
+xcrun simctl list
 
 for i in "${!devices[@]}"; do
   device="${devices[$i]}"
   device_path="${device_paths[$i]}"
 
   # start simulator
-  xcrun simctl boot "$device"
+  if ! xcrun simctl boot "$device"; then
+    exit 1
+  fi
 
   # run integration test with screenshots
   (cd ../ && flutter drive --target=test_driver/app.dart -d "$device")
+
+  # stop simulator
+  xcrun simctl shutdown "$device"
 
   # convert screenshots to appstore file names
   for path in $(echo "$device_path" | tr "," "\n"); do
