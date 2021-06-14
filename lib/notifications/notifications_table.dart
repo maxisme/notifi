@@ -41,82 +41,88 @@ class NotificationTableState extends State<NotificationTable>
             initialItemCount: notifications.length);
       } else {
         // NO NOTIFICATIONS VIEW
-        return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              Image.asset('images/sad.png',
-                  height: 150, filterQuality: FilterQuality.high),
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              const SelectableText('No Notifications!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: MyColour.black,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 35)),
-              Container(padding: const EdgeInsets.only(top: 20.0)),
-              Consumer<User>(
-                  builder: (BuildContext context, User user, Widget child) {
-                final String credentials = user.getCredentials();
-                Widget credentialsWidget;
-                if (credentials != null) {
-                  credentialsWidget = SelectableText(credentials,
-                      textAlign: TextAlign.center, onTap: () {
-                    if (Platform.isIOS) {
-                      Share.share(credentials);
-                    } else {
-                      copyText(credentials, context);
-                    }
-                  },
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.w900));
-                } else {
-                  credentialsWidget = LoadingGif();
-                }
-
-                return Column(children: <Widget>[
-                  RichText(
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset('images/sad.png',
+                    height: 150, filterQuality: FilterQuality.high),
+                Container(padding: const EdgeInsets.only(top: 10.0)),
+                const Text('No Notifications...',
                     textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: <InlineSpan>[
-                        const TextSpan(
-                          text: 'To receive notifications use ',
-                          style: TextStyle(
-                              color: MyColour.grey,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Inconsolata'),
-                        ),
-                        MouseRegionSpan(
-                            mouseCursor: SystemMouseCursors.click,
-                            inlineSpan: TextSpan(
-                              text: 'HTTP Requests',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Inconsolata'),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  openUrl(
-                                      'https://notifi.it?c=$credentials#how-to');
-                                },
-                            )),
-                        const TextSpan(
-                          text: ' with your credentials...',
-                          style: TextStyle(
-                              color: MyColour.grey,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Inconsolata'),
-                        ),
-                      ],
+                    style: TextStyle(
+                        color: MyColour.offGrey,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 28)),
+                Container(padding: const EdgeInsets.only(top: 20.0)),
+                Consumer<User>(
+                    builder: (BuildContext context, User user, Widget child) {
+                  final String credentials = user.getCredentials();
+                  String howToLink = 'https://notifi.it#how-to';
+                  Color howToColour = Theme.of(context).colorScheme.primary;
+                  Widget credentialsWidget;
+                  if (credentials != null) {
+                    howToLink = 'https://notifi.it?c=$credentials#how-to';
+                    howToColour = Theme.of(context).colorScheme.secondary;
+                    credentialsWidget = SelectableText(credentials,
+                        textAlign: TextAlign.center, onTap: () {
+                      if (Platform.isIOS) {
+                        Share.share(credentials);
+                      } else {
+                        copyText(credentials, context);
+                      }
+                    },
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18));
+                  } else {
+                    credentialsWidget = LoadingGif();
+                  }
+
+                  return Column(children: <Widget>[
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: <InlineSpan>[
+                          const TextSpan(
+                            text: 'To receive notifications send ',
+                            style: TextStyle(
+                                color: MyColour.darkGrey,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Inconsolata'),
+                          ),
+                          MouseRegionSpan(
+                              mouseCursor: SystemMouseCursors.click,
+                              inlineSpan: TextSpan(
+                                text: 'HTTP Requests',
+                                style: TextStyle(
+                                    color: howToColour,
+                                    fontWeight: FontWeight.w800,
+                                    fontFamily: 'Inconsolata'),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    openUrl(howToLink);
+                                  },
+                              )),
+                          const TextSpan(
+                            text: ' with your unique credentials...',
+                            style: TextStyle(
+                                color: MyColour.darkGrey,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Inconsolata'),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(padding: const EdgeInsets.only(top: 20.0)),
-                  credentialsWidget
-                ]);
-              })
-            ]);
+                    Container(padding: const EdgeInsets.only(top: 20.0)),
+                    credentialsWidget
+                  ]);
+                })
+              ]),
+        );
       }
     });
   }

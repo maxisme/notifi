@@ -285,7 +285,11 @@ class SettingOption extends StatelessWidget {
               onPressed: onTapCallback,
               child: Row(children: <Widget>[
                 iconWidget,
-                Text(text, style: Theme.of(context).textTheme.bodyText2),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 1.5),
+                  child:
+                      Text(text, style: Theme.of(context).textTheme.bodyText2),
+                ),
               ])));
     } else {
       switchValue ??= false;
