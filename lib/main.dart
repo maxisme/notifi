@@ -49,7 +49,7 @@ Future<void> main({bool integration: false}) async {
   final List<NotificationUI> notifications = await db.getAll();
 
   FlutterLocalNotificationsPlugin pushNotifications;
-  if (!integration && !Platform.isAndroid) {
+  if (!integration) {
     pushNotifications = await initPushNotifications();
   }
 
