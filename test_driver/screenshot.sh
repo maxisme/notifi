@@ -76,3 +76,6 @@ done
 
 # delete framed images
 rm "$IOS_SS_PATH"*"framed.png"
+
+# run macos screenshot setup
+bash ../screenshots/macos/generate.sh

@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                 bodyText2: const TextStyle(
                     fontSize: 15,
                     color: MyColour.black,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                     inherit: false,
                     textBaseline: TextBaseline.alphabetic,
                     fontFamily: 'Inconsolata')),
@@ -161,7 +161,7 @@ class _MyAppState extends State<MyApp> {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               splashFactory: NoSplash.splashFactory,
             )),
-            indicatorColor: MyColour.offGrey,
+            indicatorColor: MyColour.offOffGrey,
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.grey,
               accentColor: MyColour.red,
