@@ -29,7 +29,7 @@ jobs:
 
             gem install fastlane
             brew install imagemagick
-            
+
             pwd
             bash test_driver/screenshot.sh
 
