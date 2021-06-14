@@ -107,7 +107,7 @@ Future<String> getDeviceUUID() async {
 }
 
 bool get shouldUseFirebase {
-  return Platform.isIOS;
+  return Platform.isIOS || Platform.isAndroid;
 }
 
 class L {

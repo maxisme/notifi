@@ -231,7 +231,9 @@ class User with ChangeNotifier {
 
         if (id != -1) {
           // send push notification
-          sendLocalNotification(_pushNotifications, id, notification);
+          if(!Platform.isAndroid) {
+            sendLocalNotification(_pushNotifications, id, notification);
+          }
           hasNotification = true;
         }
         msgUUIDs.add(notification.uuid);
