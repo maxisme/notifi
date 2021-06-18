@@ -33,5 +33,17 @@ jobs:
           branch: automated-screenshots
           committer: ScreenShot Bot <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          body: >
+            iPad:
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/0_APP_IPAD_PRO_129_0.png?raw=true" width="200">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/1_APP_IPAD_PRO_129_1.png?raw=true" width="200">
+            55:<br>
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/0_APP_IPHONE_55_0.png?raw=true" width="200">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_55_1.png?raw=true" width="200">
+            65:<br>
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/0_APP_IPHONE_65_0.png?raw=true" width="200">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_65_1.png?raw=true" width="200">
+            Macos:<br>
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/screenshots/macos/macos.png?raw=true" width="500">
           commit-message: Add device screenshots [bot]
           delete-branch: true
