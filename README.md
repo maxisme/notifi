@@ -101,6 +101,10 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 cat .env | openssl base64
 
 
+## Create android icons
+Follow [Run Image Asset Studio](https://developer.android.com/studio/write/image-asset-studio#access). With the icon from `ios/Runner/Assets.xcassets/AppIcon.appiconset/1024.png`
+
+
 ### Add new icons
 
 https://www.fluttericon.com/
