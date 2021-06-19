@@ -101,7 +101,13 @@ https://plugins.jetbrains.com/plugin/9212-flutter/versions
 cat .env | openssl base64
 
 
-### Add new icons
+## Generate launcher icons
+```
+flutter pub get
+flutter pub run flutter_launcher_icons:main
+```
+
+## Add new icons
 
 https://www.fluttericon.com/
 
