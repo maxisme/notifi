@@ -42,6 +42,8 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# custom
 /test/failures/
 /flog.db
 /.dev.env

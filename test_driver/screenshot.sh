@@ -11,6 +11,8 @@ device_paths=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
 # print simulator devices
 xcrun simctl list
 
+/Users/runner/Library/Android/sdk/emulator/emulator -list-avds
+
 for i in "${!devices[@]}"; do
   device="${devices[$i]}"
   device_path="${device_paths[$i]}"

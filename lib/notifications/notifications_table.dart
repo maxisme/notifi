@@ -41,22 +41,23 @@ class NotificationTableState extends State<NotificationTable>
             initialItemCount: notifications.length);
       } else {
         // NO NOTIFICATIONS VIEW
+        double imageWidth = windowWidth(context) * 0.7;
         return Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset('images/sad.png',
-                    height: 150, filterQuality: FilterQuality.high),
-                Container(padding: const EdgeInsets.only(top: 10.0)),
+                    width: imageWidth, filterQuality: FilterQuality.high),
+                Container(padding: const EdgeInsets.only(top: 30.0)),
                 const Text('No Notifications...',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: MyColour.offGrey,
+                        color: MyColour.offOffGrey,
                         fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 28)),
-                Container(padding: const EdgeInsets.only(top: 20.0)),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 35)),
+                Container(padding: const EdgeInsets.only(top: 40.0)),
                 Consumer<User>(
                     builder: (BuildContext context, User user, Widget child) {
                   final String credentials = user.getCredentials();
@@ -76,43 +77,39 @@ class NotificationTableState extends State<NotificationTable>
                     },
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                             fontSize: 18));
                   } else {
                     credentialsWidget = LoadingGif();
                   }
 
+                  TextStyle textStyle = TextStyle(
+                      color: MyColour.grey,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      fontFamily: 'Inconsolata');
                   return Column(children: <Widget>[
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         children: <InlineSpan>[
-                          const TextSpan(
+                          TextSpan(
                             text: 'To receive notifications send ',
-                            style: TextStyle(
-                                color: MyColour.darkGrey,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Inconsolata'),
+                            style: textStyle,
                           ),
                           MouseRegionSpan(
                               mouseCursor: SystemMouseCursors.click,
                               inlineSpan: TextSpan(
-                                text: 'HTTP Requests',
-                                style: TextStyle(
-                                    color: howToColour,
-                                    fontWeight: FontWeight.w800,
-                                    fontFamily: 'Inconsolata'),
+                                text: 'HTTP requests',
+                                style: textStyle.copyWith(color: howToColour),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     openUrl(howToLink);
                                   },
                               )),
-                          const TextSpan(
+                          TextSpan(
                             text: ' with your unique credentials...',
-                            style: TextStyle(
-                                color: MyColour.darkGrey,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Inconsolata'),
+                            style: textStyle,
                           ),
                         ],
                       ),
