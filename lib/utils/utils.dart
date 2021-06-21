@@ -165,6 +165,6 @@ String getEclipsedText(String text, TextStyle style,
   throw Exception('width too short to eclipse');
 }
 
-double windowWidth(BuildContext context){
+double windowWidth(BuildContext context) {
   return MediaQuery.of(context).size.width;
 }
