@@ -8,6 +8,7 @@ SS_DIR="../screenshots/"
 ###########
 
 (cd ../ && flutter drive --target=test_driver/app.dart -d "emulator-5554")
+mkdir "${SS_DIR}android/"
 mv ${SS_DIR}*.png "${SS_DIR}android/"
 
 # put device frames round screenshots
