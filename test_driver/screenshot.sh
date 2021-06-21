@@ -1,21 +1,29 @@
 #!/bin/bash
 # shellcheck disable=SC2164
 cd "$(dirname "$0")"
+SS_PATH="../screenshots/"
 
+###########
+# android #
+###########
+
+(cd ../ && flutter drive --target=test_driver/app.dart -d "emulator-5554")
+mv ${SS_PATH}*.png "${SS_PATH}android/"
+
+########
+## iOS #
+########
 IOS_SS_PATH="../ios/fastlane/screenshots/en-GB/"
-TMP_SS_PATH="../screenshots/ios/"
 
-devices=("iPhone 11 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
-device_paths=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
+IOS_DEVICES=("iPhone 11 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
+IOS_DEVICE_PATHS=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
 
-# print simulator devices
+# print simulator IOS_DEVICES
 xcrun simctl list
 
-/Users/runner/Library/Android/sdk/emulator/emulator -list-avds
-
-for i in "${!devices[@]}"; do
-  device="${devices[$i]}"
-  device_path="${device_paths[$i]}"
+for i in "${!IOS_DEVICES[@]}"; do
+  device="${IOS_DEVICES[$i]}"
+  device_path="${IOS_DEVICE_PATHS[$i]}"
 
   # start simulator
   if ! xcrun simctl boot "$device"; then
@@ -24,6 +32,7 @@ for i in "${!devices[@]}"; do
 
   # run integration test with screenshots
   (cd ../ && flutter drive --target=test_driver/app.dart -d "$device")
+  mv ${SS_PATH}*.png "${SS_PATH}ios/"
 
   # stop simulator
   xcrun simctl shutdown "$device"
@@ -31,7 +40,7 @@ for i in "${!devices[@]}"; do
   # convert screenshots to appstore file names
   for path in $(echo "$device_path" | tr "," "\n"); do
     cnt=0
-    for filename in "$TMP_SS_PATH"*.png; do
+    for filename in "${SS_PATH}ios/"*.png; do
       cp "$filename" "${IOS_SS_PATH}${cnt}_APP_${path}_${cnt}.png"
       ((cnt = cnt + 1))
     done

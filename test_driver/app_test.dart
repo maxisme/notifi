@@ -26,13 +26,13 @@ void main() {
       await driver.waitFor(toggleExpand);
       await driver.tap(toggleExpand);
       await sleep(Duration(seconds: 1));
-      await screenshot(driver, 'screenshots/ios/1.png');
+      await screenshot(driver, 'screenshots/1.png');
 
       // ss no notifications
       await driver.tap(deleteAll);
       await driver.waitFor(ok);
       await driver.tap(ok);
-      await screenshot(driver, 'screenshots/ios/2.png');
+      await screenshot(driver, 'screenshots/2.png');
     });
   });
 }
