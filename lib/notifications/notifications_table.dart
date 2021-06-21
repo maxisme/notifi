@@ -41,7 +41,7 @@ class NotificationTableState extends State<NotificationTable>
             initialItemCount: notifications.length);
       } else {
         // NO NOTIFICATIONS VIEW
-        double imageWidth = windowWidth(context) * 0.7;
+        double imageWidth = 150;
         return Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
@@ -50,14 +50,6 @@ class NotificationTableState extends State<NotificationTable>
                 Image.asset('images/sad.png',
                     width: imageWidth, filterQuality: FilterQuality.high),
                 Container(padding: const EdgeInsets.only(top: 30.0)),
-                const Text('No Notifications...',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColour.offOffGrey,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 35)),
-                Container(padding: const EdgeInsets.only(top: 40.0)),
                 Consumer<User>(
                     builder: (BuildContext context, User user, Widget child) {
                   final String credentials = user.getCredentials();
@@ -78,7 +70,7 @@ class NotificationTableState extends State<NotificationTable>
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontWeight: FontWeight.w800,
-                            fontSize: 18));
+                            fontSize: 17));
                   } else {
                     credentialsWidget = LoadingGif();
                   }
@@ -86,13 +78,19 @@ class NotificationTableState extends State<NotificationTable>
                   TextStyle textStyle = TextStyle(
                       color: MyColour.grey,
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
+                      fontSize: 15,
                       fontFamily: 'Inconsolata');
                   return Column(children: <Widget>[
                     RichText(
+                      key: Key('no-notifications'),
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         children: <InlineSpan>[
+                          TextSpan(
+                            text: 'No Notifications...\n\n',
+                            style:
+                                textStyle.copyWith(fontStyle: FontStyle.italic),
+                          ),
                           TextSpan(
                             text: 'To receive notifications send ',
                             style: textStyle,

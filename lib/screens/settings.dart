@@ -74,8 +74,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             final String credentials = user.getCredentials();
 
             SettingOption credentialsSettingWidget = SettingOption(
-                'Copy Credentials $credentials', Akaricons.clipboard,
-                onTapCallback: () {
+                'Copy Credentials', Akaricons.clipboard, onTapCallback: () {
               copyText(credentials, context);
             });
             if (Platform.isIOS || Platform.isAndroid) {
