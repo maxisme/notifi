@@ -24,7 +24,7 @@ jobs:
           script: |
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
 
-            cd ./test_driver/
+            cd test_driver/
 
             flutter devices
 
