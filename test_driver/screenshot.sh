@@ -1,19 +1,22 @@
 #!/bin/bash
 # shellcheck disable=SC2164
 cd "$(dirname "$0")"
-SS_PATH="../screenshots/"
+SS_DIR="../screenshots/"
 
 ###########
 # android #
 ###########
 
 (cd ../ && flutter drive --target=test_driver/app.dart -d "emulator-5554")
-mv ${SS_PATH}*.png "${SS_PATH}android/"
+mv ${SS_DIR}*.png "${SS_DIR}android/"
+
+# put device frames round screenshots
+(cd "${SS_DIR}android/" && fastlane frameit)
 
 ########
 ## iOS #
 ########
-IOS_SS_PATH="../ios/fastlane/screenshots/en-GB/"
+IOS_SS_DIR="../ios/fastlane/screenshots/en-GB/"
 
 IOS_DEVICES=("iPhone 11 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
 IOS_DEVICE_PATHS=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
@@ -32,7 +35,7 @@ for i in "${!IOS_DEVICES[@]}"; do
 
   # run integration test with screenshots
   (cd ../ && flutter drive --target=test_driver/app.dart -d "$device")
-  mv ${SS_PATH}*.png "${SS_PATH}ios/"
+  mv ${SS_DIR}*.png "${SS_DIR}ios/"
 
   # stop simulator
   xcrun simctl shutdown "$device"
@@ -40,18 +43,18 @@ for i in "${!IOS_DEVICES[@]}"; do
   # convert screenshots to appstore file names
   for path in $(echo "$device_path" | tr "," "\n"); do
     cnt=0
-    for filename in "${SS_PATH}ios/"*.png; do
-      cp "$filename" "${IOS_SS_PATH}${cnt}_APP_${path}_${cnt}.png"
+    for filename in "${SS_DIR}ios/"*.png; do
+      cp "$filename" "${IOS_SS_DIR}${cnt}_APP_${path}_${cnt}.png"
       ((cnt = cnt + 1))
     done
   done
 done
 
 # put device frames round screenshots
-(cd ../ios/ && fastlane frameit)
+(cd "${SS_DIR}ios/" && fastlane frameit)
 
 # wrap screenshot frames with text
-for filename in "${IOS_SS_PATH}"*_framed.png; do
+for filename in "${IOS_SS_DIR}"*_framed.png; do
 
   height_red=0.8
   padding=40
@@ -90,11 +93,8 @@ for filename in "${IOS_SS_PATH}"*_framed.png; do
     -font "../fonts/Inconsolata.ttf" -pointsize "$font_size2" -fill "#fff" -annotate "+0+$desc_h" 'Receive push notifications' \
     -font "../fonts/Inconsolata.ttf" -pointsize "$font_size2" -fill "#fff" -annotate "+0+$desc_h2" 'over HTTP(s).' \
     -bordercolor "#bc2122" -border "${padding}x${padding}" \
-    "${IOS_SS_PATH}${out}"
+    "${IOS_SS_DIR}${out}"
 done
-
-# delete framed images
-rm "$IOS_SS_PATH"*"framed.png"
 
 # run macos screenshot setup
 bash ../screenshots/macos/generate.sh
