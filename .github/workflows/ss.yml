@@ -4,6 +4,7 @@ on:
     paths:
       - 'test/golden-asserts**'
       - '.github/workflows/ss.yml'
+      - 'test_driver/**'
 
 jobs:
   screenshot:
