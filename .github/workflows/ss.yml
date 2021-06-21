@@ -24,14 +24,12 @@ jobs:
           script: |
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
 
-            cd test_driver/
-
             flutter devices
 
             gem install fastlane
             brew install imagemagick
 
-            bash screenshot.sh
+            bash test_driver/screenshot.sh
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
