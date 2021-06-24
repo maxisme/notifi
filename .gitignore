@@ -61,3 +61,5 @@ AuthKey_MK4628AYTK.p8
 /.env
 /.env.prod
 pubspec.lock
+/android/key.json
+*.jks
