@@ -184,7 +184,7 @@ jobs:
   #########
   #  iOS  #
   #########
-  build-ios:
+  ios:
     name: "Build & Deploy iOS"
     if: ${{ !github.event.issue.pull_request && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') }}
     runs-on: macos-latest
@@ -222,7 +222,6 @@ jobs:
           xcrun agvtool new-version -all $GITHUB_RUN_ID
 
           gem install fastlane
-          fastlane --version
 
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]
           then
@@ -234,21 +233,74 @@ jobs:
             fastlane ios tfdeploy "changelog:${{ needs.version.outputs.changelog }}"
           fi
 
+  #############
+  #  android  #
+  #############
+  android:
+    name: "Build & Deploy Android"
+    if: ${{ !github.event.issue.pull_request && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') }}
+    runs-on: macos-latest
+    needs: [ version ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - name: "Build & Deploy"
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: |
+          if [[ "${{ github.ref }}" != "refs/heads/master" ]]
+          then
+            echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+          else
+            echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+          fi
+
+          cd android
+
+          echo "${{ secrets.PLAY_STORE_JSON_KEY }}" | base64 --decode > key.json
+          echo "${{ secrets.PLAY_STORE_KEYSTORE }}" | base64 --decode > upload-keystore.jks
+          echo "${{ secrets.PLAY_STORE_KEYPROPS }}" > key.properties
+
+          flutter pub get
+          gem install fastlane
+
+          # write version
+          flutter build apk --build-name=${{ needs.version.outputs.version }} --build-number=$GITHUB_RUN_ID --release
+
+          # write changelog
+          echo ${{ needs.version.outputs.changelog }} > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
+
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]
+          then
+            fastlane supply --apk ../build/app/outputs/flutter-apk/app-release.apk --track beta
+          else
+            fastlane supply --apk ../build/app/outputs/flutter-apk/app-release.apk
+          fi
+
+  ###########
+  # release #
+  ###########
   release:
     name: "Release"
     if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
     runs-on: macos-latest
-    needs: [ checks, build-macos, build-ios, version ]
+    needs: [ checks, build-macos, ios, android, version ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
+        name: "Download MacOS DMG for release"
         id: download
         with:
           name: notifi-dmg
-      - name: ls
-        run: |
-          ls "${{steps.download.outputs.download-path}}"
-          ls "${{steps.download.outputs.download-path}}/"
       - name: "Create Release"
         uses: ncipollo/release-action@v1
         with:
