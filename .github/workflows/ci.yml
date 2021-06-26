@@ -274,12 +274,12 @@ jobs:
           gem install fastlane
 
           # write version
-          flutter build apk --build-name=${{ needs.version.outputs.version }} --build-number=$GITHUB_RUN_ID --release
+          flutter build appbundle --build-name=${{ needs.version.outputs.version }} --build-number=$GITHUB_RUN_ID
 
           # write changelog
-          echo ${{ needs.version.outputs.changelog }} > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
+          echo "${{ needs.version.outputs.changelog }}" > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
 
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]
+          if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
             fastlane supply --apk ../build/app/outputs/flutter-apk/app-release.apk --track beta
           else
