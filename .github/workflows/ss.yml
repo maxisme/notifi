@@ -20,7 +20,7 @@ jobs:
       - name: Take Screenshot
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
           profile: pixel
           script: |
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env

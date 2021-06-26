@@ -19,7 +19,7 @@ mv ${SS_DIR}*.png "${SS_DIR}android/"
 ########
 IOS_SS_DIR="../ios/fastlane/screenshots/en-GB/"
 
-IOS_DEVICES=("iPhone 11 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
+IOS_DEVICES=("iPhone 12 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 12 mini")
 IOS_DEVICE_PATHS=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
 
 # print simulator IOS_DEVICES
@@ -52,7 +52,7 @@ for i in "${!IOS_DEVICES[@]}"; do
 done
 
 # put device frames round screenshots
-(cd "${SS_DIR}ios/" && fastlane frameit)
+(cd "${IOS_SS_DIR}" && fastlane frameit)
 
 # wrap screenshot frames with text
 for filename in "${IOS_SS_DIR}"*_framed.png; do
@@ -80,7 +80,7 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
   width=$(echo "$width-($padding*2)" | bc)
 
   resize_h=$(echo "$height"*$height_red | bc)
-  logo_h=$(echo "$resize_h+250" | bc)
+  logo_h=$(echo "$resize_h+300" | bc)
   desc_h=$(echo "$logo_h-120" | bc)
   desc_h2=$(echo "$desc_h-80" | bc)
 
@@ -98,4 +98,4 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
 done
 
 # run macos screenshot setup
-bash ../screenshots/macos/generate.sh
+#bash ../screenshots/macos/generate.sh
