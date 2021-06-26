@@ -73,7 +73,7 @@ jobs:
 
           SINGLE=$(echo -ne '\u00B4\u2018\u2019')
           DOUBLE=$(echo -ne '\u201C\u201D')
-          changelog=$(git log --pretty=format:"* %s" "HEAD...$latest_version" | awk '{print tolower($0)}' | uniq | sed "s/[$SINGLE]/'/g; s/[$DOUBLE]/\"/g")
+          changelog=$(git log --pretty=format:"* %s" "HEAD...$latest_version" | awk '{print tolower($0)}' | sed "s/[$SINGLE]/'/g; s/[$DOUBLE]/\"/g" | uniq)
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
           changelog="${changelog//$'\r'/'%0D'}"
@@ -277,7 +277,7 @@ jobs:
           flutter build appbundle --build-name=${{ needs.version.outputs.version }} --build-number=$GITHUB_RUN_ID
 
           # write changelog
-          echo "${{ needs.version.outputs.changelog }}" > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
+          echo "${{ needs.version.outputs.changelog }}" | cut -c 1-500 > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
 
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
