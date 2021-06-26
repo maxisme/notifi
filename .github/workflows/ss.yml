@@ -33,7 +33,6 @@ jobs:
             pwd
             bash test_driver/screenshot.sh
 
-      - uses: actions/checkout@v2
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
