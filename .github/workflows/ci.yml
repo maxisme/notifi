@@ -277,7 +277,7 @@ jobs:
           flutter build appbundle --build-name=${{ needs.version.outputs.version }} --build-number=$GITHUB_RUN_ID
 
           # write changelog
-          echo "${{ needs.version.outputs.changelog }}" | cut -c 1-500 > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
+          echo "${{ needs.version.outputs.changelog }}" | head -c 500 > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
 
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
