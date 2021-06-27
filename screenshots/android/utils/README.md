@@ -1,0 +1,1 @@
+https://design.facebook.com/toolsandresources/devices?category=device-details-phone
