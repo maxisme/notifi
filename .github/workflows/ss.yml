@@ -22,7 +22,7 @@ jobs:
         with:
           api-level: 29
           arch: x86_64
-          profile: Nexus 6
+          profile: Nexus 6P
           script: |
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
 
@@ -37,7 +37,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           title: Add device screenshots
-          branch: "automated-screenshots-${{ github.head_ref }}"
+          branch: automated-screenshots-${{ github.head_ref }}
           committer: ScreenShot Bot <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           body: >
