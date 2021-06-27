@@ -21,7 +21,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-#          profile: pixel
+          arch: x86_64
+          profile: Nexus 6
           script: |
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
 
@@ -30,14 +31,13 @@ jobs:
             gem install fastlane
             brew install imagemagick
 
-            pwd
             bash test_driver/screenshot.sh
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           title: Add device screenshots
-          branch: automated-screenshots
+          branch: "automated-screenshots-${{ github.head_ref }}"
           committer: ScreenShot Bot <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           body: >
