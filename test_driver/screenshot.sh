@@ -64,12 +64,12 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
   width=2048
   font_size=120
   if [[ "$filename" == *"IPHONE_65"* ]]; then
-    width=1242
-    height=2688
+    width=1284
+    height=2778
     font_size=110
   elif [[ "$filename" == *"IPHONE_55"* ]]; then
-    width=1125
-    height=2436
+    width=1242
+    height=2208
     font_size=100
   fi
 

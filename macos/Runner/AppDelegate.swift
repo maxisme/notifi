@@ -71,10 +71,13 @@ class AppDelegate: FlutterAppDelegate {
                 return result(false)
             case "close_window":
                 closePopover(sender: nil)
-                return
+                return result(true)
+            case "open_window":
+                showPopover(sender: nil)
+                return result(true)
             case "UUID":
                 result(hardwareUUID())
-                return
+                return result(true)
             case "set-pin-window":
                 if let args = call.arguments as? Dictionary<String, Any>, let transient = args["transient"] as? Bool {
                     if (transient) {
@@ -128,7 +131,6 @@ class AppDelegate: FlutterAppDelegate {
                 center.removeAllDeliveredNotifications()
             }
             showPopover(sender: sender)
-            NSApp.activate(ignoringOtherApps: true)
         }
     }
 
@@ -145,6 +147,7 @@ class AppDelegate: FlutterAppDelegate {
                 )
             }
         }
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     func closePopover(sender: Any?) {
