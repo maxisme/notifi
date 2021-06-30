@@ -63,3 +63,4 @@ AuthKey_MK4628AYTK.p8
 pubspec.lock
 /android/key.json
 *.jks
+/android/fastlane/key.json

@@ -74,8 +74,9 @@ platform :ios do
     )
     upload_to_app_store(
         force: true,
+        overwrite_screenshots: true,
+        reject_if_possible: true, # rejects any previous non reviewed releases
         metadata_path: "./metadata",
-        skip_screenshots: true,
         submit_for_review: true,
         automatic_release: true,
         precheck_include_in_app_purchases: false,
