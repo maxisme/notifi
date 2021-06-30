@@ -229,9 +229,6 @@ jobs:
             echo -e "release_notes({'default' => \"${{ needs.version.outputs.changelog }}\", 'en-GB' => \"${{ needs.version.outputs.changelog }}\"})" > fastlane/Deliverfile
 
             fastlane asdeploy
-
-            # upload meta
-            fastlane deliver
           else
             fastlane ios tfdeploy "changelog:${{ needs.version.outputs.changelog }}"
           fi
