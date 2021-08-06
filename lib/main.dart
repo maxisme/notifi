@@ -22,10 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // disable status bar
-  // ignore: always_specify_types
-  SystemChrome.setEnabledSystemUIOverlays([]);
-
   if (!await loadDotEnv()) {
     // ignore: avoid_print
     print('MISSING REQUIRED ENV VARIABLES');
