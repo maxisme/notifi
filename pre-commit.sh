@@ -1,5 +1,7 @@
 #!/bin/bash
 
+flutter upgrade
+
 # format
 if ! flutter format lib --set-exit-if-changed; then
   exit 1
