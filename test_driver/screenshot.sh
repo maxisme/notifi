@@ -19,7 +19,7 @@ mv ${SS_DIR}*.png "${SS_DIR}android/"
 IOS_SS_DIR="../ios/fastlane/screenshots/en-GB/"
 
 IOS_DEVICES=("iPhone 12 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
-IOS_DEVICE_PATHS=("IPHONE_65" "IPAD_PRO_129,IPAD_PRO_3GEN_129" "IPHONE_55")
+IOS_DEVICE_PATHS=("IPHONE_65" "IPAD_PRO_129,ipadPro129-3rd-gen" "IPHONE_55")
 
 # print simulator IOS_DEVICES
 xcrun simctl list
