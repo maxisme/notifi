@@ -124,7 +124,6 @@ void main() {
       await tester.pump();
 
       expect(n.isRead, false);
-      expect(find.text('1'), findsOneWidget);
 
       // mark read
       await tester.tap(find.byIcon(Akaricons.check));
@@ -246,8 +245,8 @@ Future<void> pumpWidgetWithNotification(
     if (methodCall.method == 'openDatabase') {
       return await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
     }
-    if (methodCall.method == 'getDatabasesPath') {
-      return '';
+    if (methodCall.method == 'openDatabase') {
+      return await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
     }
   });
 

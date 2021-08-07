@@ -336,7 +336,7 @@ class NotificationUIState extends State<NotificationUI> {
                         ))
                       ]))));
 
-      if (Platform.isMacOS) {
+      if (Platform.isMacOS || Platform.isLinux) {
         final SlidableState slider = Slidable.of(context);
         return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {

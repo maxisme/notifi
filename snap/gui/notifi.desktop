@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=notifi
+Comment=Send push notifications to your Linux machine over HTTP
+Exec=notifi
+Icon=${SNAP}/meta/gui/icon.png
+Terminal=false
+Type=Application
+Categories=Utilities;

@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).setSnackContext(context);
     double doubleCheckOffset = -7;
-    if (Platform.isMacOS) {
+    if (Platform.isMacOS || Platform.isLinux) {
       doubleCheckOffset = 0;
     }
     return MyScaffold(
