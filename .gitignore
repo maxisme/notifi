@@ -64,3 +64,5 @@ pubspec.lock
 /android/key.json
 *.jks
 /android/fastlane/key.json
+/linux/cmake-build-debug/
+/ios/build/

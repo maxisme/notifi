@@ -15,7 +15,7 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/utils/utils.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
@@ -166,8 +166,10 @@ class User with ChangeNotifier {
     } on DioError catch (e, _) {
       // ignore: always_specify_types
       final d.Response resp = e.response;
-      L.e('Problem fetching user code: ${resp.statusCode}');
-      L.e(resp.statusMessage);
+      if (resp != null) {
+        L.e('Problem fetching user code: ${resp.statusCode}');
+        L.e(resp.statusMessage);
+      }
       return UserStruct();
     }
 

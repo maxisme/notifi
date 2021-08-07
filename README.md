@@ -87,6 +87,15 @@ $ osascript screenshots/OpenSimulators.scpt
 
 Press `cmd+s` to save screen shots in emulators
 
+## linux setup
+```bash
+sudo apt install libsecret-1-dev libjsoncpp-dev libsecret-1-0 libjsoncpp1
+```
+
+Get SNAPCRAFT_TOKEN for ci
+```bash
+snapcraft export-login --snaps notifi --channels stable,candidate -
+```
 
 ## Jetbrains flutter plugin:
 
