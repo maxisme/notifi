@@ -33,14 +33,15 @@ class DBProvider {
       await File(path).writeAsBytes(bytes);
     } else {
       Directory dir;
-      if (Platform.isAndroid) {
+      if (isTest()) {
+        dir = Directory('/');
+      } else if (Platform.isAndroid) {
         dir = await getApplicationSupportDirectory();
       } else if (Platform.isLinux) {
         dir = await getApplicationDocumentsDirectory();
       } else {
         dir = await getLibraryDirectory();
       }
-      dir ??= await getApplicationDocumentsDirectory();
       path = join(join(dir.path, 'notifi/'), dbPath);
     }
     L.i('DB path: $path');

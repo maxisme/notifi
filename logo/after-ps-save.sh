@@ -17,6 +17,7 @@ cp Your_App_Icon-assets/logo.png ../android/app/src/main/res/drawable/app_icon.p
 
 # play store App Icon
 convert -resize 512x ../ios/Runner/Assets.xcassets/AppIcon.appiconset/1024.png ../android/fastlane/metadata/android/en-GB/images/icon.png
+cp ../android/fastlane/metadata/android/en-GB/images/icon.png ../snap/gui/icon.png
 # play store Feature Graphic
 convert ../ios/Runner/Assets.xcassets/AppIcon.appiconset/1024.png -resize 40% -gravity center -background "#bc2122" -extent 1024x500 ../android/fastlane/metadata/android/en-GB/images/featureGraphic.jpeg
 
