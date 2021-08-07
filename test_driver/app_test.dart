@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 
 void main() {
-  group('SS', () {
+  group('Screen Shot', () {
     FlutterDriver driver;
 
     // Connect to the Flutter driver before running any tests.
@@ -20,7 +20,9 @@ void main() {
       exit(0);
     });
 
-    test('Screenshot preset notifications', () async {
+    test('SS screens', () async {
+      SerializableFinder deleteAll = find.byValueKey('delete-all');
+      SerializableFinder ok = find.byValueKey('ok');
       SerializableFinder toggleExpand = find.byValueKey('toggle-expand');
 
       // ss notifications
