@@ -17,9 +17,19 @@ import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
 Future<void> main({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // initialise db for linux
+  if (Platform.isWindows || Platform.isLinux) {
+    // Initialize FFI
+    sqfliteFfiInit();
+    // Change the default factory
+    databaseFactory = databaseFactoryFfi;
+  }
 
   if (!await loadDotEnv()) {
     // ignore: avoid_print

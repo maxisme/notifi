@@ -110,7 +110,7 @@ class User with ChangeNotifier {
   Future<IOWebSocketChannel> connectToWS() async {
     final PackageInfo package = await PackageInfo.fromPlatform();
     final Map<String, dynamic> headers = <String, dynamic>{
-      'Sec-Key': env['SERVER_KEY'],
+      'Sec-Key': dotenv.env['SERVER_KEY'],
       'Uuid': _user.uuid,
       'Credentials': _user.credentials,
       'Key': _user.credentialKey,
@@ -161,7 +161,7 @@ class User with ChangeNotifier {
       response = await dio.post(codeEndpoint,
           data: data,
           options: d.Options(headers: <String, dynamic>{
-            'Sec-Key': env['SERVER_KEY'],
+            'Sec-Key': dotenv.env['SERVER_KEY'],
           }, contentType: d.Headers.formUrlEncodedContentType));
     } on DioError catch (e, _) {
       // ignore: always_specify_types
@@ -276,7 +276,7 @@ class User with ChangeNotifier {
 class UserStruct {
   UserStruct({this.uuid, this.credentialKey, this.credentials}) {
     _storage = const FlutterSecureStorage();
-    if (!isTest()) _key = 'notifi-${env['KEY_STORE']}';
+    if (!isTest()) _key = 'notifi-${dotenv.env['KEY_STORE']}';
   }
 
   FlutterSecureStorage _storage;

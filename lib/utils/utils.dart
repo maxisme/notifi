@@ -5,7 +5,7 @@ import 'package:f_logs/model/flog/flog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -55,18 +55,18 @@ class MenuBarIcon {
 }
 
 Future<bool> loadDotEnv() async {
-  await dot_env.load();
+  await dotenv.load();
   if (isTest()) return true;
-  return dot_env.isEveryDefined(
+  return dotenv.isEveryDefined(
       <String>['HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
 }
 
 String get wsEndpoint {
   String protocol = 'ws://';
-  if (dot_env.env['TLS'] == 'true') {
+  if (dotenv.env['TLS'] == 'true') {
     protocol = 'wss://';
   }
-  return '$protocol${dot_env.env['HOST']}/ws';
+  return '$protocol${dotenv.env['HOST']}/ws';
 }
 
 String get codeEndpoint {
@@ -75,7 +75,7 @@ String get codeEndpoint {
 
 String get versionEndpoint {
   String develop = '';
-  if (dot_env.env['DEV'] == 'true') {
+  if (dotenv.env['DEV'] == 'true') {
     develop = '?develop';
   }
   return '$httpEndpoint/version$develop';
@@ -83,10 +83,10 @@ String get versionEndpoint {
 
 String get httpEndpoint {
   String protocol = 'http://';
-  if (dot_env.env['TLS'] == 'true') {
+  if (dotenv.env['TLS'] == 'true') {
     protocol = 'https://';
   }
-  return '$protocol${dot_env.env['HOST']}';
+  return '$protocol${dotenv.env['HOST']}';
 }
 
 Future<void> openUrl(String url) async {
