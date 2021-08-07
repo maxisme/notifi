@@ -235,6 +235,9 @@ Future<void> pumpWidgetWithNotification(
     if (methodCall.method == 'getApplicationDocumentsDirectory') {
       return '';
     }
+    if (methodCall.method == 'getLibraryDirectory') {
+      return '';
+    }
   });
 
   const MethodChannel('com.tekartik.sqflite')
