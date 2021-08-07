@@ -4,7 +4,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('SS', () {
+  group('Screen Shot', () {
     FlutterDriver driver;
 
     // Connect to the Flutter driver before running any tests.
@@ -17,7 +17,7 @@ void main() {
       driver.close();
     });
 
-    test('SS screens', () async {
+    test('screens', () async {
       SerializableFinder deleteAll = find.byValueKey('delete-all');
       SerializableFinder ok = find.byValueKey('ok');
       SerializableFinder toggleExpand = find.byValueKey('toggle-expand');

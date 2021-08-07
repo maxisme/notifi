@@ -8,6 +8,7 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 const MethodChannel platform = MethodChannel('max.me.uk/notifications');
 const String refKey = 'ref';
@@ -53,10 +54,14 @@ class MenuBarIcon {
 }
 
 Future<bool> loadDotEnv() async {
-  await dotenv.load();
-  if (isTest()) return true;
-  return dotenv.isEveryDefined(
-      <String>['HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
+  if (isTest()) {
+    await dotenv.testLoad();
+    return true;
+  } else {
+    await dotenv.load();
+    return dotenv.isEveryDefined(
+        <String>['HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
+  }
 }
 
 String get wsEndpoint {
@@ -101,6 +106,10 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 }
 
 Future<String> getDeviceUUID() async {
+  if (Platform.isLinux) {
+    Uuid uuid = Uuid();
+    return uuid.v4();
+  }
   return platform.invokeMethod('UUID');
 }
 

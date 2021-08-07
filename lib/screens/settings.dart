@@ -16,7 +16,7 @@ import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:notifi/utils/version.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +44,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     if (!isTest()) {
       PackageInfo.fromPlatform().then((PackageInfo package) {
-        if (Platform.isMacOS) {
+        if (Platform.isMacOS || Platform.isLinux) {
           _versionString.value = package.version;
         } else {
           _versionString.value = '${package.version} (${package.buildNumber})';
@@ -278,7 +278,7 @@ class SettingOption extends StatelessWidget {
         child: Icon(icon, size: 20, color: MyColour.black));
 
     double settingPadding = 0;
-    if (Platform.isMacOS) {
+    if (Platform.isMacOS || Platform.isLinux) {
       settingPadding = 3;
     }
     Widget setting;

@@ -23,8 +23,8 @@ import 'package:sqflite/sqflite.dart';
 Future<void> main({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // initialise db for linux
-  if (Platform.isWindows || Platform.isLinux) {
+  // initialise db for linux & windows
+  if (!isTest() && (Platform.isWindows || Platform.isLinux)) {
     // Initialize FFI
     sqfliteFfiInit();
     // Change the default factory

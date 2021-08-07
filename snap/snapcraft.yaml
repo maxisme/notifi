@@ -1,0 +1,34 @@
+name: notifi
+version: 0.1.0
+summary: Push notifications over HTTP
+description: A multi platform app to receive push notifications over simple HTTP(s) requests you can embed anywhere.
+
+confinement: strict
+base: core18
+grade: stable
+
+slots:
+  dbus-notifi:
+    interface: dbus
+    bus: session
+    name: it.notifi
+
+apps:
+  super-cool-app:
+    command: super_cool_app
+    extensions: [flutter-master]
+    plugs:
+      - network
+    slots:
+      - dbus-notifi
+parts:
+  notifi:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart
+    build-packages:
+      - libsecret-1-dev
+      - libjsoncpp-dev
+    stage-packages:
+      - libsecret-1-dev
+      - libjsoncpp1

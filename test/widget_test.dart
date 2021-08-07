@@ -11,6 +11,8 @@ import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   const String time = '2006-01-02 15:04:05';
@@ -122,14 +124,12 @@ void main() {
       await tester.pump();
 
       expect(n.isRead, false);
-      expect(find.text('1'), findsOneWidget);
 
       // mark read
       await tester.tap(find.byIcon(Akaricons.check));
       await tester.pump();
 
       expect(n.isRead, true);
-      expect(find.text('1'), findsNothing);
 
       await expectLater(find.byType(NotificationUI),
           matchesGoldenFile('golden-asserts/notification/is_read.png'));
@@ -156,7 +156,6 @@ void main() {
 
       expect(n.isExpanded, true);
       expect(n.isRead, true);
-      expect(find.text('1'), findsNothing);
 
       await expectLater(find.byType(NotificationUI),
           matchesGoldenFile('golden-asserts/notification/is_expanded.png'));
@@ -240,8 +239,8 @@ Future<void> pumpWidgetWithNotification(
 
   const MethodChannel('com.tekartik.sqflite')
       .setMockMethodCallHandler((MethodCall methodCall) async {
-    if (methodCall.method == 'getDatabasesPath') {
-      return '';
+    if (methodCall.method == 'openDatabase') {
+      return await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
     }
   });
 
