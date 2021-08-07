@@ -35,6 +35,8 @@ class DBProvider {
       Directory dir;
       if (Platform.isAndroid) {
         dir = await getApplicationSupportDirectory();
+      } else if (Platform.isLinux) {
+        dir = await getApplicationDocumentsDirectory();
       } else {
         dir = await getLibraryDirectory();
       }
