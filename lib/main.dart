@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_app_icon_badge/flutter_app_icon_badge.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
@@ -56,8 +56,12 @@ Future<void> main({bool integration: false}) async {
   final FlutterLocalNotificationsPlugin pushNotifications =
       await initPushNotifications();
 
-  bool canBadge = false;
-  if (Platform.isIOS) canBadge = await FlutterAppBadger.isAppBadgeSupported();
+  bool canBadge;
+  try {
+    canBadge = await FlutterAppIconBadge.isAppBadgeSupported();
+  } catch (_) {
+    canBadge = false;
+  }
 
   runApp(MultiProvider(
     providers: <SingleChildWidget>[
