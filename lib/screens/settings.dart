@@ -292,14 +292,20 @@ class SettingOption extends StatelessWidget {
                   overlayColor: MaterialStateProperty.all(MyColour.white),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: onTapCallback,
-              child: Row(children: <Widget>[
-                iconWidget,
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 1.5),
-                  child:
-                      Text(text, style: Theme.of(context).textTheme.bodyText2),
-                ),
-              ])));
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(children: <Widget>[
+                      iconWidget,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 1.5),
+                        child: Text(text,
+                            style: Theme.of(context).textTheme.bodyText2),
+                      )
+                    ]),
+                    Icon(Akaricons.chevronRight,
+                        size: 15, color: MyColour.black)
+                  ])));
     } else {
       switchValue ??= false;
       setting = Container(
