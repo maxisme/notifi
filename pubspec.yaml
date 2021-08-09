@@ -28,7 +28,7 @@ dependencies:
   firebase_messaging: ^10.0.6
   flutter:
     sdk: flutter
-  flutter_app_badger: ^1.2.0
+  flutter_app_icon_badge: ^2.0.0
   flutter_dotenv: ^5.0.0
   flutter_emoji: ^2.2.1+1
   flutter_local_notifications: ^8.1.1+2
@@ -37,7 +37,7 @@ dependencies:
   intl: ^0.17.0
   json_serializable: ^4.1.4
   launch_at_login: ^0.0.3
-  package_info_plus:
+  package_info_plus: ^1.0.4
   launch_review: ^3.0.1
   package_info: ^2.0.0
   path_provider: ^2.0.3

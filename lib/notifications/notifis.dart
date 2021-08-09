@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_app_icon_badge/flutter_app_icon_badge.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
@@ -63,7 +63,7 @@ class Notifications extends ChangeNotifier {
     }
 
     if (canBadge) {
-      FlutterAppBadger.updateBadgeCount(cnt);
+      FlutterAppIconBadge.updateBadge(cnt);
     }
 
     notificationCnt.value = cnt;
