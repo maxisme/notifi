@@ -14,8 +14,8 @@ slots:
     name: it.notifi
 
 apps:
-  super-cool-app:
-    command: super_cool_app
+  notifi:
+    command: notifi
     extensions: [flutter-master]
     plugs:
       - network
