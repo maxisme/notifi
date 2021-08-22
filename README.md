@@ -107,6 +107,20 @@ Follow [Run Image Asset Studio](https://developer.android.com/studio/write/image
 
 ### Add new icons
 
+https://github.com/artcoholic/akar-icons-app/tree/main/src/svg
+
+#### inkscape
+
+```
+    Select all
+    Path -> Stroke to path
+    Object -> Ungroup
+    Path -> Union
+    Path -> Combine
+    File -> Vacuum Defs (or Clean up document)
+    Save as -> Plain SVG
+```
+
 https://www.fluttericon.com/
 
 
