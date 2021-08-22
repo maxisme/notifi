@@ -64,3 +64,4 @@ pubspec.lock
 /android/key.json
 *.jks
 /android/fastlane/key.json
+/ios/build/Pods.build

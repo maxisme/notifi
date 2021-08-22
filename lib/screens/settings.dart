@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:launch_review/launch_review.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -124,6 +125,12 @@ class SettingsScreenState extends State<SettingsScreen> {
                   builder: (BuildContext context) => const LogsScreen()),
             );
           }),
+          if (Platform.isAndroid || Platform.isIOS)
+            SettingOption('Review app...', Akaricons.star,
+                onTapCallback: () => LaunchReview.launch(
+                      androidAppId: 'it.notifi.notifi',
+                      iOSAppId: '1563961135',
+                    )),
           if (Platform.isMacOS)
             SettingOption(
               'Quit notifi',
