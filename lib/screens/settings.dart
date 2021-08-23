@@ -42,13 +42,6 @@ class SettingsScreenState extends State<SettingsScreen> {
   }
 
   @override
-  void dispose() {
-    _versionString.dispose();
-    _hasUpgrade.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (!isTest()) {
       PackageInfo.fromPlatform().then((PackageInfo package) {
@@ -86,7 +79,6 @@ class SettingsScreenState extends State<SettingsScreen> {
             }
 
             return Column(children: <Widget>[
-              Container(padding: const EdgeInsets.only(top: 20.0)),
               SettingOption(
                   'How Do I Receive Notifications?', Akaricons.question,
                   onTapCallback: () async {
@@ -117,7 +109,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 onTapCallback: AppSettings.openNotificationSettings),
           SettingOption('About...', Akaricons.info,
               onTapCallback: () => openUrl('https://notifi.it')),
-          SettingOption('Share App...', Akaricons.share,
+          SettingOption('Other Platforms...', Akaricons.share,
               onTapCallback: () => openUrl('https://notifi.it#downloads')),
           SettingOption('Logs...', Akaricons.file, onTapCallback: () {
             Navigator.push(
@@ -279,10 +271,14 @@ class SettingOption extends StatelessWidget {
         padding: const EdgeInsets.only(right: 10),
         child: Icon(icon, size: 20, color: MyColour.black));
 
+    double settingPadding = 0;
+    if (Platform.isMacOS) {
+      settingPadding = 3;
+    }
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: const EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: 15 + settingPadding),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
@@ -301,7 +297,7 @@ class SettingOption extends StatelessWidget {
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: const EdgeInsets.only(left: 16, right: 7),
+          padding: EdgeInsets.only(left: 16, right: 7, top: settingPadding),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
