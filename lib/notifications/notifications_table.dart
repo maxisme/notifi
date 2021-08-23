@@ -205,7 +205,7 @@ class NotificationTableState extends State<NotificationTable>
       position: _offsetAnimation,
       child: AnimatedSize(
           // to animate expand
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 250),
           curve: Curves.fastOutSlowIn,
           child: Slidable(
               key: Key(notification.id.toString()),
