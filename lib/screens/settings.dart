@@ -115,9 +115,10 @@ class SettingsScreenState extends State<SettingsScreen> {
           if (Platform.isIOS)
             SettingOption('iOS App Settings...', Akaricons.gear,
                 onTapCallback: AppSettings.openNotificationSettings),
-          SettingOption('About...', Akaricons.info, onTapCallback: () {
-            openUrl('https://notifi.it');
-          }),
+          SettingOption('About...', Akaricons.info,
+              onTapCallback: () => openUrl('https://notifi.it')),
+          SettingOption('Share App...', Akaricons.share,
+              onTapCallback: () => openUrl('https://notifi.it#downloads')),
           SettingOption('Logs...', Akaricons.file, onTapCallback: () {
             Navigator.push(
               context,
