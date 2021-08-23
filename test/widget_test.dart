@@ -43,6 +43,7 @@ void main() {
     });
 
     testWidgets('Test Settings Navigation', (WidgetTester tester) async {
+      tester.binding.window.physicalSizeTestValue = Size(2200, 4200);
       await pumpWidgetWithNotification(tester, null);
 
       // open settings
