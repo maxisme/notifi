@@ -15,6 +15,7 @@ import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:toast/toast.dart';
 
 @JsonSerializable()
 // ignore: must_be_immutable
@@ -175,6 +176,9 @@ class NotificationUIState extends State<NotificationUI> {
                 Provider.of<Notifications>(context, listen: false)
                     .markRead(widget.index, isRead: true);
               });
+            },
+            onLongPress: () {
+              Toast.show(widget.link, context, gravity: Toast.BOTTOM);
             },
             child: Container(
                 padding: const EdgeInsets.only(top: 7.0),
