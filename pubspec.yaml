@@ -24,7 +24,6 @@ dependencies:
   app_settings: ^4.1.0
   cached_network_image: ^2.2.0+1
   dio: ^4.0.0
-  f_logs: ^1.2.2
   firebase_core: ^0.7.0
   firebase_messaging: ^8.0.0-dev.15
   flutter:
