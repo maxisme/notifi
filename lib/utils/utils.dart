@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:f_logs/f_logs.dart';
-import 'package:f_logs/model/flog/flog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,19 +110,23 @@ bool get shouldUseFirebase {
 
 class L {
   static void d(String msg) {
-    FLog.debug(text: msg);
+    // ignore: avoid_print
+    print(msg);
   }
 
   static void i(String msg) {
-    FLog.info(text: msg);
+    // ignore: avoid_print
+    print(msg);
   }
 
   static void w(String msg) {
-    FLog.warning(text: msg);
+    // ignore: avoid_print
+    print(msg);
   }
 
   static void e(String msg) {
-    FLog.error(text: msg);
+    // ignore: avoid_print
+    print(msg);
   }
 }
 

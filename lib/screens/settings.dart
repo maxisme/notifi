@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:launch_at_login/launch_at_login.dart';
 import 'package:notifi/notifications/notifications_table.dart';
-import 'package:notifi/screens/logs.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
@@ -111,13 +110,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               onTapCallback: () => openUrl('https://notifi.it')),
           SettingOption('Other Platforms...', Akaricons.share,
               onTapCallback: () => openUrl('https://notifi.it#downloads')),
-          SettingOption('Logs...', Akaricons.file, onTapCallback: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute<StatelessWidget>(
-                  builder: (BuildContext context) => const LogsScreen()),
-            );
-          }),
           if (Platform.isAndroid || Platform.isIOS)
             SettingOption('Review app...', Akaricons.star,
                 onTapCallback: () => LaunchReview.launch(
