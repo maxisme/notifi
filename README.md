@@ -105,6 +105,12 @@ cat .env | openssl base64
 Follow [Run Image Asset Studio](https://developer.android.com/studio/write/image-asset-studio#access). With the icon from `ios/Runner/Assets.xcassets/AppIcon.appiconset/1024.png`
 
 
+### [Splash screen](https://pub.dev/packages/flutter_native_splash)
+
+```bash
+$ flutter pub run flutter_native_splash:create
+```
+
 ### Add new icons
 
 https://github.com/artcoholic/akar-icons-app/tree/main/src/svg
@@ -121,6 +127,9 @@ https://github.com/artcoholic/akar-icons-app/tree/main/src/svg
     Save as -> Plain SVG
 ```
 
-https://www.fluttericon.com/
+#### generate
+Import `flutter-icons-*.zip` into:
+https://www.fluttericon.com/ 
+
 
 
