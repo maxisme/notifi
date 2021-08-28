@@ -50,12 +50,12 @@ class _AnimatedCntState extends State<AnimatedCnt>
                 ),
                 child: CircleAvatar(
                     backgroundColor: MyColour.transparent,
-                    radius: 8,
+                    radius: 7.5,
                     child: Text(
                       numUnread,
                       style: const TextStyle(
                         color: MyColour.white,
-                        fontSize: 10,
+                        fontSize: 9,
                         fontWeight: FontWeight.w900,
                       ),
                     )));
