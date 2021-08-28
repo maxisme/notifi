@@ -18,9 +18,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).setSnackContext(context);
-    double doubleCheckPosition = -7;
+    double doubleCheckOffset = -7;
     if (Platform.isMacOS) {
-      doubleCheckPosition = 0;
+      doubleCheckOffset = 0;
     }
     return MyScaffold(
         leading: IconButton(
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                             alignment: AlignmentDirectional.topCenter,
                             children: <Widget>[
                               Positioned(
-                                top: doubleCheckPosition,
+                                top: doubleCheckOffset,
                                 child: Icon(
                                   Akaricons.doubleCheck,
                                   size: 47,
