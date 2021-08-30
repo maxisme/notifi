@@ -117,14 +117,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                       iOSAppId: '1563961135',
                     )),
           if (Platform.isMacOS)
-            SettingOption(
-              'Quit notifi',
-              Akaricons.signOut,
-              onTapCallback: () {
-                SystemNavigator.pop();
-              },
-            ),
-          if (Platform.isMacOS)
             Container(
               padding: const EdgeInsets.only(top: 5),
               child: FutureBuilder<bool>(
@@ -241,7 +233,24 @@ class SettingsScreenState extends State<SettingsScreen> {
                     ),
                   );
                 }),
-        ]));
+        ]),
+        bottomNavigationBar: Container(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    SystemNavigator.pop();
+                  },
+                  child: Icon(
+                    Akaricons.signOut,
+                    color: MyColour.black,
+                    size: 25,
+                  ),
+                ),
+              ],
+            )));
   }
 }
 

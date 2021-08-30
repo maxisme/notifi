@@ -83,7 +83,6 @@ class Notifications extends ChangeNotifier {
     if (notifications.length == 1) {
       tableNotifier.notify();
     } else {
-      // scroll to top of table
       scrollToTop();
 
       // animate in notification
