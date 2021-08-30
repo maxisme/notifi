@@ -56,7 +56,7 @@ class MyScaffold extends StatelessWidget {
                         Positioned(
                           top: 0,
                           child: Container(
-                              padding: const EdgeInsets.only(left: 20.7),
+                              padding: const EdgeInsets.only(left: 21.4),
                               child: const AnimatedCnt()),
                         ),
                       ],
