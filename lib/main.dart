@@ -163,7 +163,7 @@ class _MyAppState extends State<MyApp> {
             ),
             dialogTheme: DialogTheme(
                 elevation: 0,
-                shape: Border.all(width: 3),
+                shape: Border.all(width: 0, color: MyColour.offOffGrey),
                 contentTextStyle: const TextStyle(
                   fontFamily: 'Inconsolata',
                   color: MyColour.black,
@@ -173,7 +173,7 @@ class _MyAppState extends State<MyApp> {
                     fontFamily: 'Inconsolata',
                     color: MyColour.black,
                     fontWeight: FontWeight.w900,
-                    fontSize: 35))),
+                    fontSize: 30))),
         routes: <String, Widget Function(BuildContext)>{
           '/': (BuildContext context) => HomeScreen(),
           '/settings': (BuildContext context) => const SettingsScreen(),

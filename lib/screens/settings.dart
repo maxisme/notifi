@@ -55,6 +55,27 @@ class SettingsScreenState extends State<SettingsScreen> {
       });
     }
 
+    Widget bottomNavigationBar = SizedBox();
+    if (Platform.isMacOS) {
+      bottomNavigationBar = Container(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  SystemNavigator.pop();
+                },
+                child: Icon(
+                  Akaricons.signOut,
+                  color: MyColour.black,
+                  size: 25,
+                ),
+              ),
+            ],
+          ));
+    }
+
     return MyScaffold(
         leading: IconButton(
             icon: const Icon(Akaricons.chevronLeft),
@@ -234,23 +255,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   );
                 }),
         ]),
-        bottomNavigationBar: Container(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    SystemNavigator.pop();
-                  },
-                  child: Icon(
-                    Akaricons.signOut,
-                    color: MyColour.black,
-                    size: 25,
-                  ),
-                ),
-              ],
-            )));
+        bottomNavigationBar: bottomNavigationBar);
   }
 }
 
