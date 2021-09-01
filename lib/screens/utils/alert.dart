@@ -38,7 +38,8 @@ Future<void> showAlert(BuildContext context, String title, String description,
               child: const Text(
                 'Ok',
                 key: Key('ok'),
-                style: TextStyle(color: MyColour.black),
+                style: TextStyle(
+                    color: MyColour.black, fontWeight: FontWeight.w900),
               )),
         ],
       );

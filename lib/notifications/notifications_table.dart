@@ -87,11 +87,6 @@ class NotificationTableState extends State<NotificationTable>
                       text: TextSpan(
                         children: <InlineSpan>[
                           TextSpan(
-                            text: 'No Notifications...\n\n',
-                            style:
-                                textStyle.copyWith(fontStyle: FontStyle.italic),
-                          ),
-                          TextSpan(
                             text: 'To receive notifications send ',
                             style: textStyle,
                           ),
@@ -112,7 +107,7 @@ class NotificationTableState extends State<NotificationTable>
                         ],
                       ),
                     ),
-                    Container(padding: const EdgeInsets.only(top: 20.0)),
+                    Container(padding: const EdgeInsets.only(top: 10.0)),
                     credentialsWidget
                   ]);
                 })
