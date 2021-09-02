@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/utils/pallete.dart';
@@ -38,8 +40,13 @@ class _AnimatedCntState extends State<AnimatedCnt>
               numUnread = '99+';
             }
 
+            int animateMilliseconds = 700;
+            if (Platform.isLinux){
+              animateMilliseconds = 0;
+            }
+
             _controller = AnimationController(
-              duration: const Duration(milliseconds: 700),
+              duration: Duration(milliseconds: animateMilliseconds),
               vsync: this,
             )..forward();
 
