@@ -41,7 +41,7 @@ class _AnimatedCntState extends State<AnimatedCnt>
             }
 
             int animateMilliseconds = 700;
-            if (Platform.isLinux){
+            if (Platform.isLinux) {
               animateMilliseconds = 0;
             }
 
