@@ -31,7 +31,7 @@ dependencies:
   flutter_app_icon_badge: ^2.0.0
   flutter_dotenv: ^5.0.0
   flutter_emoji: ^2.2.1+1
-  flutter_local_notifications: ^8.1.1+2
+  flutter_local_notifications: ^8.1.1
   flutter_secure_storage: 5.0.0-beta.1
   flutter_slidable: ^0.6.0
   intl: ^0.17.0
