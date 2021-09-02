@@ -57,6 +57,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
     Widget bottomNavigationBar = SizedBox();
     if (Platform.isMacOS || Platform.isLinux) {
+      print("hi");
       bottomNavigationBar = Container(
           padding: const EdgeInsets.only(bottom: 5),
           child: Row(
@@ -254,7 +255,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                     ),
                   );
                 }),
-        ]));
+        ]),
+    bottomNavigationBar: bottomNavigationBar);
   }
 }
 
