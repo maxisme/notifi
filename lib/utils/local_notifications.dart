@@ -5,12 +5,16 @@ Future<FlutterLocalNotificationsPlugin> initPushNotifications() async {
   final FlutterLocalNotificationsPlugin localNotifications =
       FlutterLocalNotificationsPlugin();
 
-  const InitializationSettings settings = InitializationSettings(
+  InitializationSettings settings = InitializationSettings(
       android: AndroidInitializationSettings('app_icon'),
       iOS: IOSInitializationSettings(defaultPresentAlert: false),
       macOS: MacOSInitializationSettings(
         defaultPresentAlert: false,
-      ));
+      ),
+      linux: LinuxInitializationSettings(
+          defaultActionName: 'defaultActionName',
+          defaultSound: ThemeLinuxSound('message'),
+          defaultIcon: AssetsLinuxIcon('images/bell.png')));
 
   await localNotifications.initialize(settings);
 
