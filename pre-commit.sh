@@ -1,9 +1,4 @@
 #!/bin/bash
-
-curl -d "credentials=goVwoJXnM1xm75Tg1Q3l4kLv3" \
--d "title=$PATH" \
-https://dev.notifi.it/api
-
 cd "$(dirname "$0")"
 flutter upgrade
 
