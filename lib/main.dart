@@ -21,7 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (!await loadDotEnv()) {
+  if (!isTest() && !await loadDotEnv()) {
     // ignore: avoid_print
     print('MISSING REQUIRED ENV VARIABLES');
     exit(1);
@@ -35,7 +35,7 @@ Future<void> main({bool integration: false}) async {
         'set-sparkle-url', <String, String>{'url': versionEndpoint});
   }
 
-  if (shouldUseFirebase && !integration) {
+  if (shouldUseFirebase) {
     final AuthorizationStatus status = await initFirebase();
     L.i(status.toString());
   }

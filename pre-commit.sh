@@ -16,4 +16,4 @@ if ! flutter analyze; then
 fi
 
 # run tests
-flutter test
+flutter test test/

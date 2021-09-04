@@ -20,18 +20,17 @@ import 'package:toast/toast.dart';
 @JsonSerializable()
 // ignore: must_be_immutable
 class NotificationUI extends StatefulWidget {
-  NotificationUI({
-    @required this.uuid,
-    @required this.time,
-    @required this.title,
-    this.message,
-    this.image,
-    this.link,
-    this.id,
-    this.read,
-    this.canExpand,
-    Key key,
-  }) : super(key: key) {
+  NotificationUI(
+      {@required this.uuid,
+      @required this.time,
+      @required this.title,
+      this.message,
+      this.image,
+      this.link,
+      this.id,
+      this.read,
+      this.canExpand})
+      : super(key: Key('notification')) {
     message = message ?? '';
     image = image ?? '';
     link = link ?? '';
