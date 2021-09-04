@@ -33,13 +33,19 @@ jobs:
 
             bash test_driver/screenshot.sh
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           title: Add device screenshots
-          branch: automated-screenshots
+          branch: "automated-screenshots-${{ steps.extract_branch.outputs.branch }}"
           committer: ScreenShot Bot <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          delete-branch: true
           body: >
             <h3>iPad</h3>
             <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots/ios/fastlane/screenshots/en-GB/0_APP_IPAD_PRO_129_0.png?raw=true" width="300">
