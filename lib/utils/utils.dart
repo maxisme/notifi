@@ -140,7 +140,7 @@ bool shouldPinWindow(SharedPreferences sp) {
 
 void copyText(String text, BuildContext context) {
   Clipboard.setData(ClipboardData(text: text));
-  Toast.show('Copied: $text', context, gravity: Toast.BOTTOM);
+  Toast.show('📋 $text', context, gravity: Toast.BOTTOM);
 }
 
 bool hasTextOverflow(String text, TextStyle style,
