@@ -61,7 +61,7 @@ class User with ChangeNotifier {
 
     notifyListeners();
 
-    if (hadUser) {
+    if (hadUser && !isTest()) {
       await initWSS();
     }
   }
