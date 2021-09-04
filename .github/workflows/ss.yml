@@ -48,17 +48,17 @@ jobs:
           delete-branch: true
           body: >
             <h3>iPad</h3>
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/0_APP_IPAD_PRO_129_0.png?raw=true" width="300">
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPAD_PRO_129_1.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/0_APP_IPAD_PRO_129_0.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPAD_PRO_129_1.png?raw=true" width="300">
             <h3>55"</h3>
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/0_APP_IPHONE_55_0.png?raw=true" width="300">
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_55_1.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/0_APP_IPHONE_55_0.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_55_1.png?raw=true" width="300">
             <h3>65"</h3>
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/0_APP_IPHONE_65_0.png?raw=true" width="300">
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_65_1.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/0_APP_IPHONE_65_0.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_65_1.png?raw=true" width="300">
             <h3>MacOS</h3>
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/macos.png?raw=true" width="500">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/macos.png?raw=true" width="500">
             <h3>Android</h3>
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/android/fastlane/metadata/android/en-GB/images/phoneScreenshots/1_en-GB.png?raw=true" width="300">
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/aomated-screenshots-${{ steps.extract_branch.outputs.branch }}/android/fastlane/metadata/android/en-GB/images/phoneScreenshots/2_en-GB.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/android/fastlane/metadata/android/en-GB/images/phoneScreenshots/1_en-GB.png?raw=true" width="300">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/android/fastlane/metadata/android/en-GB/images/phoneScreenshots/2_en-GB.png?raw=true" width="300">
           commit-message: Add device screenshots [bot]
