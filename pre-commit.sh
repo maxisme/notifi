@@ -23,4 +23,4 @@ then
 fi
 
 # run tests
-flutter test
+flutter test .

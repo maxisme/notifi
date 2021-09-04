@@ -106,7 +106,7 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 }
 
 Future<String> getDeviceUUID() async {
-  if (Platform.isLinux) {
+  if (Platform.isLinux || isTest()) {
     Uuid uuid = Uuid();
     return uuid.v4();
   }
