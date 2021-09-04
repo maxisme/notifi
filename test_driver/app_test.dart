@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+import 'package:http/http.dart' as http;
+
 
 void main() {
   group('SS', () {
@@ -15,6 +17,7 @@ void main() {
     // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
       driver.close();
+      exit(0);
     });
 
     test('SS screens', () async {
@@ -33,6 +36,25 @@ void main() {
       await driver.waitFor(ok);
       await driver.tap(ok);
       await screenshot(driver, 'screenshots/2.png');
+
+      // Send & Receive notifications
+
+      // get credentials
+      SerializableFinder credentials = find.byValueKey('credentials');
+      String creds = await driver.getText(credentials);
+
+      // send request
+      http.Response req = await http.get(Uri.parse('https://dev.notifi.it/api?credentials=$creds&title=1Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
+      // ignore: avoid_print
+      print(req.statusCode);
+      req = await http.get(Uri.parse('https://dev.notifi.it/api?credentials=$creds&title=2Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
+      req = await http.get(Uri.parse('https://dev.notifi.it/api?credentials=$creds&title=3Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
+      // ignore: avoid_print
+      print(req.statusCode);
+
+      // wait for notification to appear
+      SerializableFinder notification = find.byValueKey('notification');
+      await driver.waitFor(notification);
     });
   });
 }

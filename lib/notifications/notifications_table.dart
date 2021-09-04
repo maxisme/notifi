@@ -60,18 +60,21 @@ class NotificationTableState extends State<NotificationTable>
                   if (credentials != null) {
                     howToLink = 'https://notifi.it?c=$credentials#how-to';
                     howToColour = Theme.of(context).colorScheme.secondary;
-                    credentialsWidget = SelectableText(credentials,
-                        textAlign: TextAlign.center, onTap: () {
-                      if (Platform.isIOS) {
-                        Share.share(credentials);
-                      } else {
-                        copyText(credentials, context);
-                      }
-                    },
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 17));
+                    credentialsWidget = InkWell(
+                        child: Text(credentials,
+                            key: Key('credentials'),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 17),
+                            textAlign: TextAlign.center),
+                        onTap: () {
+                          if (Platform.isIOS) {
+                            Share.share(credentials);
+                          } else {
+                            copyText(credentials, context);
+                          }
+                        });
                   } else {
                     credentialsWidget = LoadingGif();
                   }

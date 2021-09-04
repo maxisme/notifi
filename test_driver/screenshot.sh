@@ -3,6 +3,8 @@
 cd "$(dirname "$0")"
 SS_DIR="../screenshots/"
 
+ls -n /Applications/ | grep Xcode
+
 ###########
 # android #
 ###########
@@ -81,4 +83,5 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
 done
 
 # run macos screenshot setup
-#bash ../screenshots/macos/generate.sh
+(cd ../ && flutter drive --target=test_driver/app.dart -d "macos")
+bash ../screenshots/macos/generate.sh
