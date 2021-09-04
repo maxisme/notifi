@@ -178,7 +178,7 @@ class NotificationUIState extends State<NotificationUI> {
               });
             },
             onLongPress: () {
-              Toast.show(widget.link, context, gravity: Toast.BOTTOM);
+              Toast.show(widget.link, context, gravity: Toast.CENTER);
             },
             child: Container(
                 padding: const EdgeInsets.only(top: 7.0),

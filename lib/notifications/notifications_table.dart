@@ -15,6 +15,7 @@ import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:toast/toast.dart';
 
 class NotificationTable extends StatefulWidget {
   const NotificationTable({Key key}) : super(key: key);
@@ -165,7 +166,7 @@ class NotificationTableState extends State<NotificationTable>
       ),
     ];
 
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isAndroid) {
       actions = <Widget>[
         IconSlideAction(
           caption: 'Read',
@@ -184,14 +185,21 @@ class NotificationTableState extends State<NotificationTable>
           caption: 'Link',
           color: MyColour.transparent,
           foregroundColor: MyColour.grey,
-          icon: Akaricons.link,
-          onTap: () async {
-            await openUrl(notification.link);
-            setState(() {
-              Provider.of<Notifications>(context, listen: false)
-                  .markRead(notification.index, isRead: true);
-            });
-          },
+          iconWidget: InkWell(
+              onTap: () async {
+                await openUrl(notification.link);
+                setState(() {
+                  Provider.of<Notifications>(context, listen: false)
+                      .markRead(notification.index, isRead: true);
+                });
+              },
+              onLongPress: () {
+                Toast.show(notification.link, context, gravity: Toast.CENTER);
+              },
+              child: Icon(
+                Akaricons.link,
+                color: MyColour.grey,
+              )),
         ));
       }
     }
