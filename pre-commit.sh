@@ -1,5 +1,6 @@
 #!/bin/bash
 
+flutter channel stable
 flutter upgrade
 
 # format

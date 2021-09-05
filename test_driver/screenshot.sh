@@ -83,5 +83,5 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
 done
 
 # run macos screenshot setup
-(cd ../ && flutter drive --target=test_driver/app.dart -d "macos")
-bash ../screenshots/macos/generate.sh
+#(cd ../ && flutter drive --target=test_driver/app.dart -d "macos")
+#bash ../screenshots/macos/generate.sh

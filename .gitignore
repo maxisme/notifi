@@ -65,5 +65,4 @@ pubspec.lock
 *.jks
 /android/fastlane/key.json
 /ios/build/Pods.build
-/screenshots/1.png
-/screenshots/2.png
+/screenshots/*.png

@@ -20,9 +20,7 @@ void main() {
       exit(0);
     });
 
-    test('SS screens', () async {
-      SerializableFinder deleteAll = find.byValueKey('delete-all');
-      SerializableFinder ok = find.byValueKey('ok');
+    test('Screenshot preset notifications', () async {
       SerializableFinder toggleExpand = find.byValueKey('toggle-expand');
 
       // ss notifications
@@ -30,31 +28,41 @@ void main() {
       await driver.tap(toggleExpand);
       await sleep(Duration(seconds: 1));
       await screenshot(driver, 'screenshots/1.png');
+    });
 
+    test('Screenshot after deleting notifications', () async {
+      SerializableFinder deleteAll = find.byValueKey('delete-all');
+      SerializableFinder ok = find.byValueKey('ok');
       // ss no notifications
       await driver.tap(deleteAll);
       await driver.waitFor(ok);
       await driver.tap(ok);
       await screenshot(driver, 'screenshots/2.png');
+    });
 
+    test('Screenshot after receiving notifications', () async {
       // Send & Receive notifications
 
       // get credentials
       SerializableFinder credentials = find.byValueKey('credentials');
       String creds = await driver.getText(credentials);
 
+      // ignore: avoid_print
+      print(creds);
+
       // send request
-      http.Response req = await http.get(Uri.parse('https://dev.notifi.it/api?credentials=$creds&title=1Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
-      // ignore: avoid_print
-      print(req.statusCode);
-      req = await http.get(Uri.parse('https://dev.notifi.it/api?credentials=$creds&title=2Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
-      req = await http.get(Uri.parse('https://dev.notifi.it/api?credentials=$creds&title=3Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
-      // ignore: avoid_print
-      print(req.statusCode);
+      for (int i = 1; i <= 5; i++) {
+        http.Response req = await http.get(Uri.parse(
+            'https://dev.notifi.it/api?credentials=$creds&title=${i} Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
+        // ignore: avoid_print
+        print(req.statusCode);
+      }
 
       // wait for notification to appear
       SerializableFinder notification = find.byValueKey('notification');
       await driver.waitFor(notification);
+
+      await screenshot(driver, 'screenshots/3.png');
     });
   });
 }
