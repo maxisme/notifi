@@ -1,0 +1,36 @@
+name: Integration Tests
+on:
+  schedule:
+    - cron:  '15 * * * *'
+
+jobs:
+  tests:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        branch: ["master", "develop"]
+        device: ["emulator-5554", "iPhone 12 Pro Max"]
+    steps:
+      - uses: actions/checkout@v2
+        ref: "refs/heads/${{ matrix.branch }}"
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - name: Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          arch: x86_64
+          profile: Nexus 6P
+          script: |
+            if [[ "${{ matrix.branch }}" == "master" ]]
+            then
+              echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
+            else
+              echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
+            fi
+
+            flutter drive --target=test_driver/app.dart -d "${{ matrix.device }}"
