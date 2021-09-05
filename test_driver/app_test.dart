@@ -16,7 +16,7 @@ void main() {
 
     // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
-      driver.close();
+      await driver.close();
       exit(0);
     });
 
@@ -26,7 +26,7 @@ void main() {
       // ss notifications
       await driver.waitFor(toggleExpand);
       await driver.tap(toggleExpand);
-      await sleep(Duration(seconds: 1));
+      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
       await screenshot(driver, 'screenshots/1.png');
     });
 
@@ -37,6 +37,7 @@ void main() {
       await driver.tap(deleteAll);
       await driver.waitFor(ok);
       await driver.tap(ok);
+      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
       await screenshot(driver, 'screenshots/2.png');
     });
 
@@ -61,6 +62,7 @@ void main() {
       // wait for notification to appear
       SerializableFinder notification = find.byValueKey('notification');
       await driver.waitFor(notification);
+
 
       await screenshot(driver, 'screenshots/3.png');
     });
