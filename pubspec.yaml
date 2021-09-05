@@ -38,7 +38,7 @@ dependencies:
       ref: feature/macos_support
   flutter_slidable: ^0.6.0
   intl: ^0.17.0
-  json_serializable: ^5.0.0
+  json_serializable: ^4.1.4
   launch_at_login: ^0.0.3
   launch_review: ^3.0.1
   package_info: ^2.0.0

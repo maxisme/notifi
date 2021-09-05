@@ -32,6 +32,7 @@ class MyScaffold extends StatelessWidget {
             padding: EdgeInsets.only(top: paddingTop, bottom: paddingBottom),
             child: Scaffold(
                 appBar: AppBar(
+                  toolbarHeight: 70,
                   automaticallyImplyLeading: false,
                   shape: Border(
                       bottom:

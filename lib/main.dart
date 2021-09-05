@@ -43,10 +43,8 @@ Future<void> main({bool integration: false}) async {
   final DBProvider db = DBProvider('notifications.db', templateDB: integration);
   final List<NotificationUI> notifications = await db.getAll();
 
-  FlutterLocalNotificationsPlugin pushNotifications;
-  if (!integration) {
-    pushNotifications = await initPushNotifications();
-  }
+  final FlutterLocalNotificationsPlugin pushNotifications =
+      await initPushNotifications();
 
   bool canBadge = false;
   if (Platform.isIOS) canBadge = await FlutterAppBadger.isAppBadgeSupported();
@@ -112,7 +110,6 @@ class _MyAppState extends State<MyApp> {
                 ),
                 centerTitle: true,
                 elevation: 0.0,
-                toolbarHeight: 70,
                 backgroundColor: MyColour.white),
             iconTheme: const IconThemeData(
               color: MyColour.darkGrey,
