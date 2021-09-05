@@ -278,13 +278,15 @@ class SettingOption extends StatelessWidget {
         child: Icon(icon, size: 20, color: MyColour.black));
 
     double settingPadding = 0;
+    double leftPadding = 0;
     if (Platform.isMacOS) {
       settingPadding = 3;
+      leftPadding = 9;
     }
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: EdgeInsets.only(top: 15 + settingPadding),
+          padding: EdgeInsets.only(top: 15 + settingPadding, left: leftPadding),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
