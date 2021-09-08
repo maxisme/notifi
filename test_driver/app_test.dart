@@ -21,8 +21,6 @@ void main() {
     });
 
     test('SS screens', () async {
-      SerializableFinder deleteAll = find.byValueKey('delete-all');
-      SerializableFinder ok = find.byValueKey('ok');
       SerializableFinder toggleExpand = find.byValueKey('toggle-expand');
 
       // ss notifications
