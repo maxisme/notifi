@@ -15,12 +15,12 @@ const String refKey = 'ref';
 const String messageKey = 'msg';
 final EmojiParser eParser = EmojiParser();
 
-bool isTest() {
+bool get isTest {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
 
 Future<dynamic> invokeMacMethod(String method, [dynamic arguments]) async {
-  if (Platform.isMacOS && !isTest()) {
+  if (Platform.isMacOS && !isTest) {
     try {
       return await platform.invokeMethod(method, arguments);
     } on PlatformException catch (e) {
@@ -54,7 +54,7 @@ class MenuBarIcon {
 }
 
 Future<bool> loadDotEnv() async {
-  if (isTest()) {
+  if (isTest) {
     await dotenv.testLoad();
     return true;
   } else {

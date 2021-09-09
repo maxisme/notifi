@@ -61,7 +61,7 @@ class User with ChangeNotifier {
 
     notifyListeners();
 
-    if (hadUser && !isTest()) {
+    if (hadUser && !isTest) {
       await initWSS();
     }
   }
@@ -278,7 +278,7 @@ class User with ChangeNotifier {
 class UserStruct {
   UserStruct({this.uuid, this.credentialKey, this.credentials}) {
     _storage = const FlutterSecureStorage();
-    if (!isTest()) _key = 'notifi-${dotenv.env['KEY_STORE']}';
+    if (!isTest) _key = 'notifi-${dotenv.env['KEY_STORE']}';
   }
 
   FlutterSecureStorage _storage;
