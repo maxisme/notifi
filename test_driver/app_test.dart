@@ -29,7 +29,7 @@ void main() {
       await screenshot(driver, 'screenshots/1.png');
     });
 
-    test('Screenshot after deleting notifications', () async {
+    test('Screenshot no notifications', () async {
       SerializableFinder deleteAll = find.byValueKey('delete-all');
       SerializableFinder ok = find.byValueKey('ok');
       // ss no notifications
@@ -40,7 +40,36 @@ void main() {
       await screenshot(driver, 'screenshots/2.png');
     });
 
-    test('Screenshot after receiving notifications', () async {
+    test('Test new credentials', () async {
+      SerializableFinder credentials = find.byValueKey('credentials');
+      SerializableFinder cog = find.byValueKey('cog');
+      SerializableFinder back = find.byValueKey('back-button');
+      SerializableFinder newCredentials = find.byValueKey('new-credentials');
+      SerializableFinder ok = find.byValueKey('ok');
+
+
+      await driver.waitFor(credentials);
+      String initialCreds = await driver.getText(credentials);
+
+      await driver.waitFor(cog);
+      await driver.tap(cog);
+
+      await driver.waitFor(newCredentials);
+      await driver.tap(newCredentials);
+
+      await driver.waitFor(ok);
+      await driver.tap(ok);
+
+      await driver.waitFor(back);
+      await driver.tap(back);
+
+      await driver.waitFor(credentials);
+      String updatedCreds = await driver.getText(credentials);
+
+      expect(updatedCreds != initialCreds, true);
+    });
+
+    test('Test receiving notifications and scroll', () async {
       // Send & Receive notifications
 
       // get credentials
@@ -51,17 +80,19 @@ void main() {
       print(creds);
 
       // send request
-      for (int i = 1; i <= 5; i++) {
+      for (int i = 1; i <= 10; i++) {
         http.Response req = await http.get(Uri.parse(
             'https://dev.notifi.it/api?credentials=$creds&title=${i} Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
         // ignore: avoid_print
         print(req.statusCode);
       }
 
-      // wait for notification to appear
-      SerializableFinder notification = find.byValueKey('notification');
-      await driver.waitFor(notification);
+      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
 
+      // wait for notification to appear
+      SerializableFinder notification = find.text('1');
+      await driver.waitFor(notification);
+      driver.scrollIntoView(notification);
 
       await screenshot(driver, 'screenshots/3.png');
     });
