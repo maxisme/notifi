@@ -100,13 +100,15 @@ class NotificationUIState extends State<NotificationUI>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _canExpandHandler(context));
     WidgetsBinding.instance.addObserver(this);
     timer = Timer.periodic(const Duration(minutes: 1), (Timer t) => _setTime());
   }
 
   @override
   void didChangeMetrics() {
-    _canExpandHandler(context);
+    if (!isTest) _canExpandHandler(context);
   }
 
   @override

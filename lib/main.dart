@@ -35,7 +35,7 @@ Future<void> main({bool integration: false}) async {
   if (!isTest && !await loadDotEnv()) {
     // ignore: avoid_print
     print('MISSING REQUIRED ENV VARIABLES');
-    // exit(1);
+    exit(1);
   }
 
   if (Platform.isMacOS) {

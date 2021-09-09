@@ -24,8 +24,8 @@ dependencies:
   app_settings: ^4.1.0
   cached_network_image: ^3.1.0
   dio: ^4.0.0
-  firebase_core: ^1.4.0
-  firebase_messaging: ^10.0.4
+  firebase_core: ^1.6.0
+  firebase_messaging: ^10.0.7
   flutter:
     sdk: flutter
   flutter_app_icon_badge: ^2.0.0
@@ -35,7 +35,7 @@ dependencies:
   flutter_secure_storage: ^5.0.0-beta.5
   flutter_slidable: ^0.6.0
   intl: ^0.17.0
-  json_serializable: ^5.0.0
+  json_serializable: ^4.1.4
   launch_at_login: ^0.0.3
   package_info_plus: ^1.0.4
   launch_review: ^3.0.1
