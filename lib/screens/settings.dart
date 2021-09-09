@@ -78,6 +78,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
     return MyScaffold(
         leading: IconButton(
+            key: Key('back-button'),
             icon: const Icon(Akaricons.chevronLeft),
             onPressed: () {
               Navigator.pop(context);
@@ -109,7 +110,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             ]);
           }),
           SettingOption('Create New Credentials', Akaricons.arrowClockwise,
-              onTapCallback: () {
+              key: Key('new-credentials'), onTapCallback: () {
             showAlert(
                 context,
                 'Replace Credentials?',
