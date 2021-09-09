@@ -42,7 +42,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isTest()) {
+    if (!isTest) {
       PackageInfo.fromPlatform().then((PackageInfo package) {
         if (Platform.isMacOS || Platform.isLinux) {
           _versionString.value = package.version;
@@ -218,7 +218,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       )),
                 ])),
           ),
-          if (!isTest())
+          if (!isTest)
             ValueListenableBuilder<String>(
                 valueListenable: _versionString,
                 builder: (BuildContext context, String version, Widget child) {

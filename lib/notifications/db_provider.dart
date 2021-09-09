@@ -33,7 +33,7 @@ class DBProvider {
       await File(path).writeAsBytes(bytes);
     } else {
       Directory dir;
-      if (isTest()) {
+      if (isTest) {
         dir = Directory('/');
       } else if (Platform.isAndroid) {
         dir = await getApplicationSupportDirectory();
