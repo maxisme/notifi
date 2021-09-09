@@ -86,7 +86,8 @@ Map<String, dynamic> _$NotificationToJson(NotificationUI notification) =>
       'read': notification.isRead,
     };
 
-class NotificationUIState extends State<NotificationUI> {
+class NotificationUIState extends State<NotificationUI>
+    with WidgetsBindingObserver {
   NotificationUIState();
 
   final GlobalKey _columnKey = GlobalKey();
@@ -99,9 +100,13 @@ class NotificationUIState extends State<NotificationUI> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _canExpandHandler(context));
+    WidgetsBinding.instance.addObserver(this);
     timer = Timer.periodic(const Duration(minutes: 1), (Timer t) => _setTime());
+  }
+
+  @override
+  void didChangeMetrics() {
+    _canExpandHandler(context);
   }
 
   @override
@@ -390,7 +395,10 @@ class NotificationUIState extends State<NotificationUI> {
       widget.shrinkTitle = getEclipsedText(
           widget.title, Theme.of(context).textTheme.headline1,
           maxWidth: _columnKey.currentContext.size.width);
+    } else {
+      widget.shrinkTitle = widget.title;
     }
+
     if (_messageKey.currentContext != null &&
         widget.message != '' &&
         hasTextOverflow(widget.message, Theme.of(context).textTheme.bodyText1,
@@ -399,12 +407,13 @@ class NotificationUIState extends State<NotificationUI> {
       widget.shrinkMessage = getEclipsedText(
           widget.message, Theme.of(context).textTheme.bodyText1,
           maxWidth: _messageKey.currentContext.size.width, maxLines: 3);
+    } else {
+      widget.shrinkMessage = widget.message;
     }
 
-    if (canExpand) {
-      widget.canExpand = true;
-      setState(() {});
-    }
+    widget.canExpand = canExpand;
+    if (!mounted) return;
+    setState(() {});
   }
 
   void _setTime() {

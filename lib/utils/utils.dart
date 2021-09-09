@@ -169,7 +169,7 @@ String getEclipsedText(String text, TextStyle style,
   for (int i = 5; i < text.length; i++) {
     final String eclipsedText = '${text.substring(0, i)}...';
     if (hasTextOverflow(eclipsedText, style,
-        maxWidth: maxWidth, maxLines: maxLines)) {
+        maxWidth: maxWidth - 1, maxLines: maxLines)) {
       return '${text.substring(0, i - 1)}...';
     }
   }
