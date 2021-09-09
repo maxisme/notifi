@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:desktop_window/desktop_window.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_icon_badge/flutter_app_icon_badge.dart';
@@ -43,6 +44,9 @@ Future<void> main({bool integration: false}) async {
         'set-pin-window', <String, bool>{'transient': !shouldPinWindow(sp)});
     await invokeMacMethod(
         'set-sparkle-url', <String, String>{'url': versionEndpoint});
+  } else if (Platform.isLinux) {
+    // see my_application.cc for window size
+    await DesktopWindow.setMinWindowSize(Size(425, 720));
   }
 
   if (shouldUseFirebase) {
