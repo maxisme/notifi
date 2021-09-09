@@ -82,17 +82,17 @@ void main() {
       // send request
       for (int i = 1; i <= 10; i++) {
         http.Response req = await http.get(Uri.parse(
-            'https://dev.notifi.it/api?credentials=$creds&title=${i} Lorem ipsum dolor.&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
+            'https://dev.notifi.it/api?credentials=$creds&title=${i} f&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
         // ignore: avoid_print
         print(req.statusCode);
       }
 
       await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
 
-      // wait for notification to appear
-      SerializableFinder notification = find.text('1');
-      await driver.waitFor(notification);
-      driver.scrollIntoView(notification);
+      // // wait for notification to appear
+      // SerializableFinder notification = find.text('1');
+      // await driver.waitFor(notification);
+      // driver.scrollIntoView(notification);
 
       await screenshot(driver, 'screenshots/3.png');
     });
