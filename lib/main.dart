@@ -25,17 +25,17 @@ Future<void> main({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialise db for linux & windows
-  if (!isTest() && (Platform.isWindows || Platform.isLinux)) {
+  if (!isTest && (Platform.isWindows || Platform.isLinux)) {
     // Initialize FFI
     sqfliteFfiInit();
     // Change the default factory
     databaseFactory = databaseFactoryFfi;
   }
 
-  if (!isTest() && !await loadDotEnv()) {
+  if (!isTest && !await loadDotEnv()) {
     // ignore: avoid_print
     print('MISSING REQUIRED ENV VARIABLES');
-    exit(1);
+    // exit(1);
   }
 
   if (Platform.isMacOS) {
