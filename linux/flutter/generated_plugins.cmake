@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  desktop_window
   flutter_app_icon_badge
   flutter_secure_storage_linux
   url_launcher_linux
