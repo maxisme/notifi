@@ -37,7 +37,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.4)
     - nanopb (~> 2.30908.0)
   - Flutter (1.0.0)
-  - flutter_app_badger (0.0.1):
+  - flutter_app_icon_badge (0.0.1):
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -76,6 +76,8 @@ PODS:
   - nanopb/encode (2.30908.0)
   - package_info (0.0.1):
     - Flutter
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (2.0.0)
@@ -94,11 +96,12 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
-  - flutter_app_badger (from `.symlinks/plugins/flutter_app_badger/ios`)
+  - flutter_app_icon_badge (from `.symlinks/plugins/flutter_app_icon_badge/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -127,8 +130,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
-  flutter_app_badger:
-    :path: ".symlinks/plugins/flutter_app_badger/ios"
+  flutter_app_icon_badge:
+    :path: ".symlinks/plugins/flutter_app_icon_badge/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_secure_storage:
@@ -137,6 +140,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/launch_review/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   share_plus:
@@ -157,8 +162,8 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 3721920bde3a9a6d5aa093c1d25e9d3e47f694af
   FirebaseInstallations: 0ede6ffcd215b8f93c19d9b06c1c54e2d4107e98
   FirebaseMessaging: ce0a5ee974f7bfe83b6cc5acce88c2d969e37c41
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_app_badger: 65de4d6f0c34a891df49e6cfb8a1c0496426fa68
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_app_icon_badge: 844847adbd7a1c6f325d6b41b942428981b839cc
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -167,6 +172,7 @@ SPEC CHECKSUMS:
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
