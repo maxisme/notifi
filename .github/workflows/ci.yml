@@ -27,7 +27,7 @@ jobs:
           path: test/failures
 
   turnstyle:
-    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
+    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/linux' }}
     name: "Wait to release"
     runs-on: ubuntu-latest
     needs: checks
@@ -307,10 +307,10 @@ jobs:
             fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
           fi
 
-  ############
-  #  ubuntu  #
-  ############
-  ubuntu:
+  ##########
+  #  snap  #
+  ##########
+  snap:
     name: "Build & Deploy Snap"
     if: ${{ !github.event.issue.pull_request && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/linux') }}
     runs-on: ubuntu-latest
@@ -340,12 +340,12 @@ jobs:
 
           snapcraft --use-lxd
 
-#          if [[ "${{ github.ref }}" != "refs/heads/master" ]]
-#          then
-#            snapcraft upload --release=candidate <file>.snap
-#          else
-#            snapcraft upload --release=stable <file>.snap
-#          fi
+          if [[ "${{ github.ref }}" != "refs/heads/master" ]]
+          then
+            snapcraft upload --release=candidate notifi*.snap
+          else
+            snapcraft upload --release=stable notifi*.snap
+          fi
 
   ###########
   # release #
