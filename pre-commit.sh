@@ -16,12 +16,5 @@ if ! flutter analyze; then
   exit 1
 fi
 
-# don't run tests if linux device
-if [[ $(uname -s) == "Linux" ]]
-then
-  echo "skipping tests"
-  exit 0
-fi
-
 # run tests
 flutter test test/
