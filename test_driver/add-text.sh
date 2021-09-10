@@ -26,6 +26,6 @@ convert "$filename" \
   -resize "x$resize_h" -extent "${width}x${height}" \
   -font "../fonts/Inconsolata-Bold.ttf" -pointsize $font_size -fill "#fff" -annotate "+0+$logo_h" 'notifi' \
   -font "../fonts/Inconsolata.ttf" -pointsize "$font_size2" -fill "#fff" -annotate "+0+$desc_h" 'Receive push notifications' \
-  -font "../fonts/Inconsolata.ttf" -pointsize "$font_size2" -fill "#fff" -annotate "+0+$desc_h2" 'over HTTP(s).' \
+  -font "../fonts/Inconsolata.ttf" -pointsize "$font_size2" -fill "#fff" -annotate "+0+$desc_h2" 'over HTTP.' \
   -bordercolor "#bc2122" -border "${padding}x${padding}" \
   "$out"

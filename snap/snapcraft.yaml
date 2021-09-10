@@ -1,7 +1,7 @@
 name: notifi
 version: 0.1.0
 summary: Push notifications over HTTP
-description: A multi platform app to receive push notifications over simple HTTP(s) requests you can embed anywhere.
+description: A multi platform app to receive push notifications over simple HTTP requests you can embed anywhere.
 
 confinement: strict
 base: core18
