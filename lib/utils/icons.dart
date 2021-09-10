@@ -31,4 +31,6 @@ class Akaricons {
   static const IconData star = IconData(0xe816, fontFamily: _kFontFam);
   static const IconData share = IconData(0xe817, fontFamily: _kFontFam);
   static const IconData shoppingBag = IconData(0xe818, fontFamily: _kFontFam);
+  static const IconData laptop_device = IconData(0xe819, fontFamily: _kFontFam);
+  static const IconData mobile_device = IconData(0xe81a, fontFamily: _kFontFam);
 }
