@@ -16,8 +16,10 @@ import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/utils/local_notifications.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:path/path.dart';
 
 class User with ChangeNotifier {
   User(this._notifications, this._pushNotifications) {
@@ -293,6 +295,13 @@ class UserStruct {
   }
 
   Future<bool> store() async {
+    if (Platform.isLinux) {
+      Directory dir = await getApplicationSupportDirectory();
+      File file = File(join(dir.path, _key));
+      file.writeAsString(_toJson());
+      return true;
+    }
+
     try {
       await _storage.write(key: _key, value: _toJson());
     } catch (e) {
@@ -304,11 +313,22 @@ class UserStruct {
 
   Future<bool> load() async {
     String userJsonString;
-    try {
-      userJsonString = await _storage.read(key: _key);
-    } catch (e) {
-      L.e(e.toString());
-      return false;
+
+    if (Platform.isLinux) {
+      Directory dir = await getApplicationSupportDirectory();
+      File file = File(join(dir.path, _key));
+      try {
+        userJsonString = await file.readAsString();
+      } catch (_) {
+        return false;
+      }
+    } else {
+      try {
+        userJsonString = await _storage.read(key: _key);
+      } catch (e) {
+        L.e(e.toString());
+        return false;
+      }
     }
 
     try {
