@@ -2,7 +2,7 @@ name: notifi
 version: 0.1.0
 summary: Push notifications over HTTP
 description: A multi platform app to receive push notifications over simple HTTP requests you can embed anywhere.
-
+issues: https://github.com/maxisme/notifi/issues
 confinement: strict
 base: core18
 grade: stable
@@ -16,11 +16,12 @@ slots:
 apps:
   notifi:
     command: notifi
-    extensions: [flutter-master]
+    extensions: [flutter-dev]
     plugs:
       - network
     slots:
       - dbus-notifi
+
 parts:
   notifi:
     source: .
@@ -30,5 +31,8 @@ parts:
       - libsecret-1-dev
       - libjsoncpp-dev
     stage-packages:
+      # packages required to run
       - libsecret-1-dev
       - libjsoncpp1
+      - libsqlite3-0
+      - libsqlite3-dev

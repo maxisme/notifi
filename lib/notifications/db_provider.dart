@@ -35,14 +35,14 @@ class DBProvider {
       Directory dir;
       if (isTest) {
         dir = Directory('/');
-      } else if (Platform.isAndroid) {
+      } else if (Platform.isAndroid || Platform.isLinux) {
         dir = await getApplicationSupportDirectory();
-      } else if (Platform.isLinux) {
-        dir = await getApplicationDocumentsDirectory();
       } else {
         dir = await getLibraryDirectory();
       }
-      path = join(join(dir.path, 'notifi/'), dbPath);
+      dir = Directory(join(dir.path, 'notifi/'));
+      dir.create(recursive: true);
+      path = join(dir.path, dbPath);
     }
     L.i('DB path: $path');
 
