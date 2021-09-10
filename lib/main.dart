@@ -21,7 +21,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
 
-Future<void> main({bool integration: false}) async {
+Future<void> main() => mainImpl();
+
+Future<void> mainImpl({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialise db for linux & windows

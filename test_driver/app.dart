@@ -4,5 +4,5 @@ import '../lib/main.dart' as app;
 
 void main() async {
   enableFlutterDriverExtension();
-  await app.main(integration: true);
+  await app.mainImpl(integration: true);
 }
