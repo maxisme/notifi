@@ -338,6 +338,8 @@ jobs:
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
 
+          sed -i 's/0.1.0/${{ needs.version.outputs.version }}/g' snap/snapcraft.yaml
+
           snapcraft --use-lxd
 
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
