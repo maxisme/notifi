@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,8 +27,8 @@ void main() {
       // first page should show no notifications
       expect(find.byKey(Key('no-notifications')), findsOneWidget);
 
-      await expectLater(find.byType(HomeScreen),
-          matchesGoldenFile('golden-asserts/screen/no-notifications.png'));
+      await goldenAssert(
+          find.byType(HomeScreen), 'screen/no-notifications.png');
     });
 
     testWidgets('Single Notification', (WidgetTester tester) async {
@@ -40,8 +42,7 @@ void main() {
       // first page should show no notifications
       expect(find.text('title of notification'), findsOneWidget);
 
-      await expectLater(find.byType(HomeScreen),
-          matchesGoldenFile('golden-asserts/screen/notification.png'));
+      await goldenAssert(find.byType(HomeScreen), 'screen/notification.png');
     });
 
     testWidgets('Test Settings Navigation', (WidgetTester tester) async {
@@ -57,8 +58,7 @@ void main() {
       // should show that there are new credentials
       expect(find.text('Create New Credentials'), findsOneWidget);
 
-      await expectLater(find.byType(SettingsScreen),
-          matchesGoldenFile('golden-asserts/screen/settings.png'));
+      await goldenAssert(find.byType(SettingsScreen), 'screen/settings.png');
     });
 
     // TODO test log navigation
@@ -104,8 +104,8 @@ void main() {
                 await pumpWidgetWithNotification(tester, n);
                 await tester.pump();
 
-                await expectLater(find.byType(NotificationUI),
-                    matchesGoldenFile('golden-asserts/notification/$name.png'));
+                await goldenAssert(
+                    find.byType(NotificationUI), 'notification/$name.png');
               });
             }
           }
@@ -132,8 +132,8 @@ void main() {
 
       expect(n.isRead, true);
 
-      await expectLater(find.byType(NotificationUI),
-          matchesGoldenFile('golden-asserts/notification/is_read.png'));
+      await goldenAssert(
+          find.byType(NotificationUI), 'notification/is_read.png');
     });
 
     testWidgets('Test Expand Action', (WidgetTester tester) async {
@@ -158,8 +158,8 @@ void main() {
       expect(n.isExpanded, true);
       expect(n.isRead, true);
 
-      await expectLater(find.byType(NotificationUI),
-          matchesGoldenFile('golden-asserts/notification/is_expanded.png'));
+      await goldenAssert(
+          find.byType(NotificationUI), 'notification/is_expanded.png');
     });
 
     group('Test Expand Combinations', () {
@@ -224,6 +224,17 @@ void main() {
       });
     });
   });
+}
+
+Future<void> goldenAssert(Finder finder, String imagePath) async {
+  if (!Platform.isMacOS) {
+    // ignore: avoid_print
+    print('Skipping $imagePath assert');
+    return;
+  }
+
+  return await expectLater(
+      finder, matchesGoldenFile('golden-asserts/${imagePath}'));
 }
 
 Future<void> pumpWidgetWithNotification(
