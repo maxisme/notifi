@@ -76,6 +76,11 @@ class SettingsScreenState extends State<SettingsScreen> {
           ));
     }
 
+    IconData otherPlatformsIcon = Akaricons.laptop_device;
+    if (Platform.isLinux || Platform.isMacOS) {
+      otherPlatformsIcon = Akaricons.mobile_device;
+    }
+
     return MyScaffold(
         leading: IconButton(
             key: Key('back-button'),
@@ -94,7 +99,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             });
             if (Platform.isIOS || Platform.isAndroid) {
               credentialsSettingWidget = SettingOption(
-                  'Share Credentials', Akaricons.clipboard, onTapCallback: () {
+                  'Share Credentials', Akaricons.share, onTapCallback: () {
                 Share.share(credentials);
               });
             }
@@ -130,7 +135,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 onTapCallback: AppSettings.openNotificationSettings),
           SettingOption('About...', Akaricons.info,
               onTapCallback: () => openUrl('https://notifi.it')),
-          SettingOption('Other Platforms...', Akaricons.share,
+          SettingOption('Other Platforms...', otherPlatformsIcon,
               onTapCallback: () => openUrl('https://notifi.it#downloads')),
           if (Platform.isAndroid || Platform.isIOS)
             SettingOption('Review app...', Akaricons.star,
