@@ -59,8 +59,10 @@ Future<void> mainImpl({bool integration: false}) async {
   final DBProvider db = DBProvider('notifications.db', templateDB: integration);
   final List<NotificationUI> notifications = await db.getAll();
 
-  final FlutterLocalNotificationsPlugin pushNotifications =
-      await initPushNotifications();
+  FlutterLocalNotificationsPlugin pushNotifications = null;
+  if (!integration) {
+    pushNotifications = await initPushNotifications();
+  }
 
   bool canBadge;
   try {

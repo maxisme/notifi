@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -77,12 +76,7 @@ class User with ChangeNotifier {
       postData['current_credential_key'] = _user.credentialKey;
       postData['current_credentials'] = _user.credentials;
       if (shouldUseFirebase) {
-        try {
-          postData['firebase_token'] =
-              await FirebaseMessaging.instance.getToken();
-        } catch (e) {
-          L.e(e);
-        }
+        postData['firebase_token'] = await getFirebaseToken();
       }
       L.w('Replacing credentials: ${_user.credentials}');
     }
@@ -124,7 +118,7 @@ class User with ChangeNotifier {
     };
 
     if (shouldUseFirebase) {
-      headers['Firebase-Token'] = await FirebaseMessaging.instance.getToken();
+      headers['Firebase-Token'] = await getFirebaseToken();
     }
 
     L.i('Connecting to WS...');
@@ -239,7 +233,7 @@ class User with ChangeNotifier {
 
         if (id != -1) {
           // send push notification
-          if (!Platform.isAndroid) {
+          if (!Platform.isAndroid && _pushNotifications != null) {
             sendLocalNotification(_pushNotifications, id, notification);
           }
           hasNotification = true;
