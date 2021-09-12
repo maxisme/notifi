@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -178,4 +179,13 @@ String getEclipsedText(String text, TextStyle style,
 
 double windowWidth(BuildContext context) {
   return MediaQuery.of(context).size.width;
+}
+
+Future<String> getFirebaseToken() async {
+  try {
+    return await FirebaseMessaging.instance.getToken();
+  } catch (e) {
+    L.e(e.toString());
+  }
+  return '';
 }
