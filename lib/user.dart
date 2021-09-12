@@ -81,7 +81,7 @@ class User with ChangeNotifier {
           postData['firebase_token'] =
               await FirebaseMessaging.instance.getToken();
         } catch (e) {
-          L.e(e);
+          L.e(e.toString());
         }
       }
       L.w('Replacing credentials: ${_user.credentials}');
