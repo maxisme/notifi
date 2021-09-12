@@ -172,6 +172,7 @@ jobs:
 
           dmg_path="notifi.dmg"
 
+          # codesign
           /usr/bin/codesign -vvv --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
           echo "notarizing..."

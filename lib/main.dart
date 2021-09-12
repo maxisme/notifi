@@ -51,7 +51,7 @@ Future<void> mainImpl({bool integration: false}) async {
     await DesktopWindow.setMinWindowSize(Size(425, 720));
   }
 
-  if (shouldUseFirebase) {
+  if (!integration && shouldUseFirebase) {
     final AuthorizationStatus status = await initFirebase();
     L.i(status.toString());
   }

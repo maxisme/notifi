@@ -8,7 +8,6 @@ ls -n /Applications/ | grep Xcode
 ###########
 # android #
 ###########
-
 (cd ../ && flutter drive --target=test_driver/app.dart -d "emulator-5554")
 if [ $? -eq 1 ]; then
   exit 1
