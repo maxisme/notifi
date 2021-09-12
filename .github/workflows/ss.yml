@@ -26,6 +26,7 @@ jobs:
           script: |
             echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
 
+            flutter config --enable-macos-desktop
             flutter devices
 
             gem install fastlane

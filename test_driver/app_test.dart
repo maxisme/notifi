@@ -63,6 +63,8 @@ void main() {
       await driver.waitFor(back);
       await driver.tap(back);
 
+      await Future<Duration>.delayed(Duration(seconds: 2));
+
       await driver.waitFor(credentials);
       String updatedCreds = await driver.getText(credentials);
 
