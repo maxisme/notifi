@@ -339,6 +339,7 @@ jobs:
         with:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
       - name: "Build & Deploy"
+        continue-on-error: true
         run: |
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
@@ -358,11 +359,6 @@ jobs:
             snapcraft upload --release=candidate notifi*.snap
           else
             snapcraft upload --release=stable notifi*.snap
-          fi
-
-          # ignore user review error
-          if [ $? -eq 2 ]; then
-            exit 0
           fi
 
       - name: "Store .snap artifact"
