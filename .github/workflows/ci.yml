@@ -103,7 +103,7 @@ jobs:
   #########
   # macos #
   #########
-  build-macos:
+  macos:
     name: "Build MacOS"
     runs-on: macos-latest
     needs: version
@@ -172,7 +172,6 @@ jobs:
 
           dmg_path="notifi.dmg"
 
-          # codesign
           /usr/bin/codesign -vvv --force --deep --strict --options runtime -s "Z28DW76Y3W" "$dmg_path"
 
           echo "notarizing..."
@@ -301,12 +300,21 @@ jobs:
           # write changelog
           echo "${{ needs.version.outputs.changelog }}" | head -c 500 > fastlane/metadata/android/en-GB/changelogs/$GITHUB_RUN_ID.txt
 
+          mv ../build/app/outputs/bundle/release/app-release.aab ../notifi.aab
+
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
-            fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab --track beta
+            fastlane supply --aab ../notifi.aab --track beta
           else
-            fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
+            fastlane supply --aab ../notifi.aab
           fi
+
+      - name: "Store .aab artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: notifi-aab
+          path: notifi.aab
+          if-no-files-found: error
 
   ##########
   #  snap  #
@@ -343,12 +351,26 @@ jobs:
 
           snapcraft --use-lxd
 
+          mv notifi*.snap notifi.snap
+
           if [[ "${{ github.ref }}" != "refs/heads/master" ]]
           then
             snapcraft upload --release=candidate notifi*.snap
           else
             snapcraft upload --release=stable notifi*.snap
           fi
+
+          # ignore user review error
+          if [ $? -eq 2 ]; then
+            exit 0
+          fi
+
+      - name: "Store .snap artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: notifi-snap
+          path: notifi.snap
+          if-no-files-found: error
 
   ###########
   # release #
@@ -357,12 +379,22 @@ jobs:
     name: "Release"
     if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
     runs-on: macos-latest
-    needs: [ checks, build-macos, version ]
+    needs: [ checks, macos, android, snap, ios, version ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
-        name: "Download MacOS DMG for release"
-        id: download
+        name: "Download notifi-aab"
+        id: download-aab
+        with:
+          name: notifi-aab
+      - uses: actions/download-artifact@v2
+        name: "Download notifi-snap"
+        id: download-snap
+        with:
+          name: notifi-snap
+      - uses: actions/download-artifact@v2
+        name: "Download notifi-dmg"
+        id: download-dmg
         with:
           name: notifi-dmg
       - name: "Create Release"
@@ -374,5 +406,5 @@ jobs:
           body: "${{ needs.version.outputs.changelog }}"
           prerelease: ${{ github.ref == 'refs/heads/develop' }}
           tag: ${{ needs.version.outputs.version }}
-          artifacts: "${{steps.download.outputs.download-path}}/*.dmg"
+          artifacts: "${{steps.download-dmg.outputs.download-path}}/*.dmg,${{steps.download-aab.outputs.download-path}}/*.aab,${{steps.download-snap.outputs.download-path}}/*.snap"
           artifactErrorsFailBuild: true
