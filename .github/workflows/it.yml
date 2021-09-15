@@ -1,7 +1,7 @@
 name: Integration Tests
 on:
   schedule:
-    - cron:  '15 * * * *'
+    - cron:  '35 * * * *'
 
 jobs:
   tests:
@@ -12,7 +12,8 @@ jobs:
         device: ["emulator-5554", "iPhone 12 Pro Max"]
     steps:
       - uses: actions/checkout@v2
-        ref: "refs/heads/${{ matrix.branch }}"
+        with:
+          ref: "refs/heads/${{ matrix.branch }}"
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
@@ -25,12 +26,4 @@ jobs:
           api-level: 29
           arch: x86_64
           profile: Nexus 6P
-          script: |
-            if [[ "${{ matrix.branch }}" == "master" ]]
-            then
-              echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
-            else
-              echo "${{ secrets.B64_DEV_ENV }}" | base64 --decode > .env
-            fi
-
-            flutter drive --target=test_driver/app.dart -d "${{ matrix.device }}"
+          script: ./test_driver/test.sh "${{ matrix.device }}" "${{ matrix.branch }}" "${{ secrets.B64_ENV }}" "${{ secrets.B64_DEV_ENV }}"
