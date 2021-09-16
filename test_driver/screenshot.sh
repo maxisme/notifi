@@ -77,9 +77,10 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
   fi
 
   bash add-text.sh "$filename" "$out" $font_size $height $width
-  rm "$filename"
+  mv "$filename" ../screenshots/ios/
 done
 
 # run macos screenshot setup
-#(cd ../ && flutter drive --target=test_driver/app.dart -d "macos")
-#bash ../screenshots/macos/generate.sh
+(cd ../ && flutter drive --target=test_driver/app.dart -d "macos")
+mv ${SS_DIR}*.png "${SS_DIR}macos/"
+(cd "${SS_DIR}macos/" && bash generate.sh)
