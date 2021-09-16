@@ -76,8 +76,7 @@ class AppDelegate: FlutterAppDelegate {
                 showPopover(sender: nil)
                 return result(true)
             case "UUID":
-                result(hardwareUUID())
-                return result(true)
+                return result(hardwareUUID())
             case "set-pin-window":
                 if let args = call.arguments as? Dictionary<String, Any>, let transient = args["transient"] as? Bool {
                     if (transient) {
