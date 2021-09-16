@@ -390,6 +390,8 @@ class NotificationUIState extends State<NotificationUI>
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
 
+    if (Platform.isMacOS && _columnKey.currentContext.size.width <= 123) return;
+
     if (_columnKey.currentContext != null &&
         hasTextOverflow(widget.title, Theme.of(context).textTheme.headline1,
             maxWidth: _columnKey.currentContext.size.width)) {

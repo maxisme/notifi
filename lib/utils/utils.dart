@@ -160,7 +160,7 @@ bool hasTextOverflow(String text, TextStyle style,
     maxLines: maxLines,
     textDirection: TextDirection.ltr,
     textWidthBasis: TextWidthBasis.longestLine,
-  )..layout(minWidth: 0, maxWidth: maxWidth - 1);
+  )..layout(minWidth: 0, maxWidth: maxWidth);
   // not really sure why I have to -1
   return textPainter.didExceedMaxLines;
 }
