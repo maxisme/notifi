@@ -30,6 +30,7 @@ jobs:
             flutter devices
 
             gem install fastlane
+            brew install imagemagick
 
             bash test_driver/screenshot.sh
 
