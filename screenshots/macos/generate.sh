@@ -4,6 +4,9 @@ cd "$(dirname "$0")"
 
 # convert -list font | grep Font:
 
-convert "template.png" \
-  \( ../ios/1.png -resize x1245 \) -geometry +1203+80 -composite \
-  "macos.png"
+for filename in *.png; do
+  out=$(basename "$filename" | sed 's/.png//g')
+  convert "template.png" \
+    \( "$filename" -resize x1245 \) -geometry +1203+80 -composite \
+    "${out}_framed.png"
+done
