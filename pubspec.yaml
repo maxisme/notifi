@@ -32,7 +32,10 @@ dependencies:
   flutter_dotenv: ^5.0.0
   flutter_emoji: ^2.2.1+1
   flutter_local_notifications: ^9.0.0-dev.2
-  flutter_secure_storage: ^5.0.0-beta.5
+  flutter_secure_storage:
+    git:
+      url: git://github.com/openresearch/flutter_secure_storage.git
+      ref: feature/macos_support
   flutter_slidable: ^0.6.0
   intl: ^0.17.0
   json_serializable: ^4.1.4
