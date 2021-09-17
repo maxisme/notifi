@@ -21,8 +21,8 @@ mv ${SS_DIR}*.png "${SS_DIR}android/"
 ## iOS #
 ########
 IOS_SS_DIR="../ios/fastlane/screenshots/en-GB/"
-IOS_DEVICES=("iPhone 12 Pro Max" "iPad Pro (12.9-inch) (4th generation)" "iPhone 8 Plus")
-IOS_DEVICE_PATHS=("IPHONE_65" "IPAD_PRO_129,ipadPro129-3rd-gen" "IPHONE_55")
+IOS_DEVICES=("iPad Pro (12.9-inch) (4th generation)" "iPhone 12 Pro Max" "iPhone 8 Plus")
+IOS_DEVICE_PATHS=("IPAD_PRO_129,ipadPro129-3rd-gen" "IPHONE_65" "IPHONE_55")
 
 # print simulator IOS_DEVICES
 xcrun simctl list
@@ -59,25 +59,28 @@ done
 # wrap screenshot frames with text
 for filename in "${IOS_SS_DIR}"*_framed.png; do
 
-  out=$(basename "$filename" | sed 's/_framed//g')
-  out="${IOS_SS_DIR}${out}"
+  num=$(basename "$filename" | sed 's/_framed//g')
+  out="${IOS_SS_DIR}${num}"
 
   # calc positions
   height=2732
   width=2048
   font_size=120
+  device="ipad"
   if [[ "$filename" == *"IPHONE_65"* ]]; then
     width=1284
     height=2778
     font_size=110
+    device="65"
   elif [[ "$filename" == *"IPHONE_55"* ]]; then
     width=1242
     height=2208
     font_size=100
+    device="55"
   fi
 
   bash add-text.sh "$filename" "$out" $font_size $height $width
-  mv "$filename" ../screenshots/ios/
+  mv "$filename" "${SS_DIR}ios/framed/$device/${num}.png"
 done
 
 # run macos screenshot setup

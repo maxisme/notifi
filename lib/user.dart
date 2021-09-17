@@ -263,7 +263,7 @@ class User with ChangeNotifier {
     _tmpErr = hasErr;
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (_tmpErr == hasErr) {
-        if (_tmpErr) {
+        if (_tmpErr && !Globals.isIntegration) {
           MenuBarIcon.setErr();
           showAlertSnackBar(_snackContext, 'Network Error!');
         } else {

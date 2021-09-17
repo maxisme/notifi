@@ -61,9 +61,9 @@ jobs:
             <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/1_APP_IPHONE_65_1.png?raw=true" width="300">
             <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/ios/fastlane/screenshots/en-GB/2_APP_IPHONE_65_1.png?raw=true" width="300">
             <h3>MacOS</h3>
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/1_framed.png?raw=true" width="500">
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/2_framed.png?raw=true" width="500">
-            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/3_framed.png?raw=true" width="500">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/framed/1.png?raw=true" width="500">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/framed/2.png?raw=true" width="500">
+            <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/screenshots/macos/framed/3.png?raw=true" width="500">
             <h3>Android</h3>
             <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/android/fastlane/metadata/android/en-GB/images/phoneScreenshots/1_en-GB.png?raw=true" width="300">
             <img src="https://raw.githubusercontent.com/maxisme/notifi/automated-screenshots-${{ steps.extract_branch.outputs.branch }}/android/fastlane/metadata/android/en-GB/images/phoneScreenshots/2_en-GB.png?raw=true" width="300">
