@@ -18,6 +18,10 @@ const String refKey = 'ref';
 const String messageKey = 'msg';
 final EmojiParser eParser = EmojiParser();
 
+class Globals {
+  static bool isIntegration = false;
+}
+
 bool get isTest {
   return Platform.environment.containsKey('FLUTTER_TEST');
 }
@@ -109,7 +113,7 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 }
 
 Future<String> getDeviceUUID() async {
-  if (Platform.isLinux) {
+  if (Platform.isLinux || Globals.isIntegration) {
     Uuid uuid = Uuid();
     return uuid.v4();
   }
