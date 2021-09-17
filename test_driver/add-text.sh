@@ -11,7 +11,6 @@ font_size=$3
 height=$4
 width=$5
 
-
 font_size2=$(echo "$font_size-50" | bc)
 height=$(echo "$height-($padding*2)" | bc)
 width=$(echo "$width-($padding*2)" | bc)
