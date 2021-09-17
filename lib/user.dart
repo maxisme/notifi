@@ -263,7 +263,7 @@ class User with ChangeNotifier {
     _tmpErr = hasErr;
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (_tmpErr == hasErr) {
-        if (_tmpErr) {
+        if (_tmpErr && !Globals.isIntegration) {
           MenuBarIcon.setErr();
           showAlertSnackBar(_snackContext, 'Network Error!');
         } else {
@@ -277,8 +277,10 @@ class User with ChangeNotifier {
 
 class UserStruct {
   UserStruct({this.uuid, this.credentialKey, this.credentials}) {
-    _storage = const FlutterSecureStorage();
-    if (!isTest) _key = 'notifi-${dotenv.env['KEY_STORE']}';
+    if (!Platform.isLinux) {
+      _storage = const FlutterSecureStorage();
+      if (!isTest) _key = 'notifi-${dotenv.env['KEY_STORE']}';
+    }
   }
 
   FlutterSecureStorage _storage;
