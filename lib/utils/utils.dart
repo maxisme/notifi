@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -188,4 +190,22 @@ Future<String> getFirebaseToken() async {
     L.e(e.toString());
   }
   return '';
+}
+
+Future<Directory> _getHomeDir() async {
+  Directory dir = await getApplicationSupportDirectory();
+  return dir.parent.parent.parent;
+}
+
+Future<File> getOpenOnLinuxLoginSnapDesktopFilePath() async {
+  Directory userDir = await _getHomeDir();
+  final Directory userDataPath =
+      Directory(join(userDir.path, '.config/autostart/')).absolute;
+  return File(join(userDataPath.path, 'notifi.desktop'));
+}
+
+Future<bool> linuxDoesAutoLogin() async {
+  File path = await getOpenOnLinuxLoginSnapDesktopFilePath();
+  // ignore: avoid_slow_async_io
+  return path.exists();
 }

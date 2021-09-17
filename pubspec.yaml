@@ -79,6 +79,7 @@ flutter:
     - .env
     - pubspec.yaml
     - template.db
+    - snap/gui/notifi.desktop
 
   fonts:
     - family: Inconsolata
