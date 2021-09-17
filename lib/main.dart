@@ -24,6 +24,7 @@ import 'package:sqflite/sqflite.dart';
 Future<void> main() => mainImpl();
 
 Future<void> mainImpl({bool integration: false}) async {
+  Globals.isIntegration = integration;
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialise db for linux & windows
