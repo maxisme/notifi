@@ -90,6 +90,7 @@ void main() {
             'https://dev.notifi.it/api?credentials=$creds&title=${i}&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
         // ignore: avoid_print
         print(req.statusCode);
+        await Future<Duration>.delayed(Duration(milliseconds: 600));
       }
 
       await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));

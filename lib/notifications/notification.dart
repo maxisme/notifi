@@ -98,6 +98,13 @@ class NotificationUIState extends State<NotificationUI>
   SlideActionType mouseSliderAction;
 
   @override
+  void setState(Function fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance
@@ -108,7 +115,7 @@ class NotificationUIState extends State<NotificationUI>
 
   @override
   void didChangeMetrics() {
-    if (!isTest) _canExpandHandler(context);
+    if (!isTest && mounted) _canExpandHandler(context);
   }
 
   @override
@@ -416,7 +423,6 @@ class NotificationUIState extends State<NotificationUI>
     }
 
     widget.canExpand = canExpand;
-    if (!mounted) return;
     setState(() {});
   }
 

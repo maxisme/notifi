@@ -66,6 +66,5 @@ pubspec.lock
 /android/fastlane/key.json
 /linux/cmake-build-debug/
 /ios/build/
-/ios/build/Pods.build
 /screenshots/*.png
 *.snap
