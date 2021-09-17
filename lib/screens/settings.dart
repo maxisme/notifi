@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 
 import 'package:launch_review/launch_review.dart';
 import 'package:app_settings/app_settings.dart';
@@ -169,6 +169,35 @@ class SettingsScreenState extends State<SettingsScreen> {
                     );
                   }),
             ),
+          if (Platform.isLinux)
+            Container(
+              padding: const EdgeInsets.only(top: 5),
+              child: FutureBuilder<bool>(
+                  future: linuxDoesAutoLogin(),
+                  builder: (BuildContext context, AsyncSnapshot<bool> f) {
+                    if (f.connectionState == ConnectionState.none &&
+                        f.hasData == null) {
+                      return const CircularProgressIndicator();
+                    }
+                    return SettingOption(
+                      'Open notifi at Login',
+                      Akaricons.person,
+                      switchValue: f.data,
+                      switchCallback: (_) async {
+                        File desktopPath =
+                            await getOpenOnLinuxLoginSnapDesktopFilePath();
+                        File localSnapDesktopPath =
+                            File('snap/gui/notifi.desktop');
+                        if (f.data) {
+                          await desktopPath.delete();
+                        } else {
+                          localSnapDesktopPath.copy(desktopPath.path);
+                        }
+                        setState(() {});
+                      },
+                    );
+                  }),
+            ),
           if (Platform.isMacOS)
             FutureBuilder<SharedPreferences>(
                 future: SharedPreferences.getInstance(),
@@ -283,16 +312,10 @@ class SettingOption extends StatelessWidget {
         padding: const EdgeInsets.only(right: 10),
         child: Icon(icon, size: 20, color: MyColour.black));
 
-    double settingPadding = 0;
-    double leftPadding = 0;
-    if (Platform.isMacOS || Platform.isLinux) {
-      settingPadding = 3;
-      leftPadding = 9;
-    }
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: EdgeInsets.only(top: 15 + settingPadding, left: leftPadding),
+          padding: EdgeInsets.only(top: 15),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
@@ -317,7 +340,7 @@ class SettingOption extends StatelessWidget {
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: EdgeInsets.only(left: 16, right: 7, top: settingPadding),
+          padding: EdgeInsets.only(left: 16, right: 7),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
