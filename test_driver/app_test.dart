@@ -97,7 +97,8 @@ void main() {
       // wait for notification to appear
       SerializableFinder notification = find.text('1');
       await driver.waitFor(notification);
-      driver.scrollIntoView(notification);
+      await driver.scrollIntoView(notification);
+      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
     });
   });
 }
