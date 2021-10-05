@@ -53,7 +53,7 @@ class User with ChangeNotifier {
       // Create new credentials as the user does not have any.
       await setNewUser();
 
-      setErr(_user.isNull());
+      setErr(hasErr: _user.isNull());
       if (_user.isNull()) {
         L.w('Attempting to create user again...');
         await Future<dynamic>.delayed(const Duration(seconds: 5));
@@ -68,17 +68,18 @@ class User with ChangeNotifier {
   }
 
   Future<bool> setNewUser() async {
-    final Map<String, dynamic> postData = <String, String>{
-      'UUID': await getDeviceUUID()
-    };
+    Map<String, dynamic> postData = <String, String>{};
 
     if (!_user.isNull()) {
+      postData['UUID'] = _user.uuid;
       postData['current_credential_key'] = _user.credentialKey;
       postData['current_credentials'] = _user.credentials;
       if (shouldUseFirebase) {
         postData['firebase_token'] = await getFirebaseToken();
       }
       L.w('Replacing credentials: ${_user.credentials}');
+    } else {
+      postData['UUID'] = await getDeviceUUID();
     }
 
     final UserStruct newUser = await _newUserReq(postData);
@@ -86,10 +87,9 @@ class User with ChangeNotifier {
       // store user credentials
       if (await newUser.store()) {
         _user = newUser;
-
-        await initWSS();
-
         notifyListeners();
+
+        initWSS();
       }
     }
     return !newUser.isNull();
@@ -99,15 +99,12 @@ class User with ChangeNotifier {
   // ws //
   ////////
   Future<void> initWSS() async {
-    if (_ws != null) {
-      L.i('Closing already open WS...');
-      await _ws.sink.close(status.normalClosure, 'new code!');
-      _ws = null;
-    }
-    _ws = await connectToWS();
+    await closeWS();
+    await connectToWS();
+    _ws.sink.add('.');
   }
 
-  Future<IOWebSocketChannel> connectToWS() async {
+  Future<void> connectToWS() async {
     final PackageInfo package = await PackageInfo.fromPlatform();
     final Map<String, dynamic> headers = <String, dynamic>{
       'Sec-Key': dotenv.env['SERVER_KEY'],
@@ -115,6 +112,7 @@ class User with ChangeNotifier {
       'Credentials': _user.credentials,
       'Key': _user.credentialKey,
       'Version': package.version,
+      'OS': Platform.operatingSystem,
     };
 
     if (shouldUseFirebase) {
@@ -122,35 +120,39 @@ class User with ChangeNotifier {
     }
 
     L.i('Connecting to WS...');
-    setErr(true);
-    IOWebSocketChannel ws = IOWebSocketChannel.connect(wsEndpoint,
+    _ws = IOWebSocketChannel.connect(wsEndpoint,
         headers: headers, pingInterval: const Duration(seconds: 3));
 
+    setErr(hasErr: false);
     bool _wsError = false;
-    ws.stream.listen((dynamic streamData) async {
+    _ws.stream.listen((dynamic streamData) async {
       _wsError = false;
 
       final List<String> receivedMsgUUIDs = await _handleMessage(streamData);
       if (receivedMsgUUIDs != null) {
-        ws.sink.add(jsonEncode(receivedMsgUUIDs));
+        _ws.sink.add(jsonEncode(receivedMsgUUIDs));
       }
       // ignore: always_specify_types
     }, onError: (e) async {
+      setErr(hasErr: true);
       _wsError = true;
       L.w('Problem with WS: $e');
     }, onDone: () async {
       L.i('WS connection closed. ${_user.credentials} error: $_wsError');
-      if (_wsError) {
-        await Future<dynamic>.delayed(const Duration(seconds: 5));
-        if (_ws != null) {
-          _ws.sink.close();
-          _ws = null;
-        }
-      }
-      ws = await connectToWS();
-    });
+      setErr(hasErr: true);
+      await closeWS(shouldDelay: true);
+      await connectToWS();
+    }, cancelOnError: true);
+  }
 
-    return ws;
+  Future<void> closeWS({bool shouldDelay = false}) async {
+    if (_ws != null) {
+      L.i('Closing already open WS...');
+      await _ws.sink.close(status.normalClosure, 'new code!');
+      _ws = null;
+      if (shouldDelay)
+        await Future<dynamic>.delayed(const Duration(seconds: 2));
+    }
   }
 
   Future<UserStruct> _newUserReq(Map<String, dynamic> data) async {
@@ -196,11 +198,7 @@ class User with ChangeNotifier {
   }
 
   Future<List<String>> _handleMessage(dynamic msg) async {
-    if (msg == '.') {
-      L.i('Connected to ws.');
-      setErr(false);
-      return null;
-    }
+    setErr(hasErr: false);
 
     // json decode incoming ws message
     List<dynamic> notifications = <dynamic>[];
@@ -256,8 +254,7 @@ class User with ChangeNotifier {
 
   bool _tmpErr;
 
-  // ignore: avoid_positional_boolean_parameters
-  void setErr(bool hasErr) {
+  void setErr({bool hasErr}) {
     // wait for 1 second to make sure hasErr hasn't changed.
     // To prevent from stuttering.
     _tmpErr = hasErr;
