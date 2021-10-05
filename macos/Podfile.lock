@@ -1,34 +1,34 @@
 PODS:
   - desktop_window (0.0.1):
     - FlutterMacOS
-  - Firebase/CoreOnly (8.6.1):
-    - FirebaseCore (= 8.6.1)
-  - Firebase/Messaging (8.6.1):
+  - Firebase/CoreOnly (8.7.0):
+    - FirebaseCore (= 8.7.0)
+  - Firebase/Messaging (8.7.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.6.0)
-  - firebase_core (1.6.0):
-    - Firebase/CoreOnly (~> 8.6.0)
+    - FirebaseMessaging (~> 8.7.0)
+  - firebase_core (1.7.0):
+    - Firebase/CoreOnly (~> 8.7.0)
     - FlutterMacOS
-  - firebase_messaging (10.0.7):
-    - Firebase/CoreOnly (~> 8.6.0)
-    - Firebase/Messaging (~> 8.6.0)
+  - firebase_messaging (10.0.8):
+    - Firebase/CoreOnly (~> 8.7.0)
+    - Firebase/Messaging (~> 8.7.0)
     - firebase_core
     - FlutterMacOS
-  - FirebaseCore (8.6.1):
+  - FirebaseCore (8.7.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.7.0):
+  - FirebaseCoreDiagnostics (8.8.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.7.0):
+  - FirebaseInstallations (8.8.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseMessaging (8.6.0):
+  - FirebaseMessaging (8.7.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleDataTransport (~> 9.0)
@@ -86,7 +86,7 @@ PODS:
     - FlutterMacOS
   - shared_preferences_macos (0.0.1):
     - FlutterMacOS
-  - Sparkle (1.26.0)
+  - Sparkle (1.27.0)
   - sqflite (0.0.2):
     - FlutterMacOS
     - FMDB (>= 2.7.5)
@@ -159,13 +159,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
-  Firebase: e84d95f6d3a91f634abc384f0751c434cb3aecfa
-  firebase_core: 9a84b9f2d3a597a3ddc716942bc7e47d6eb85649
-  firebase_messaging: 49f57ae8674d95e1f8796e1e0e40b19307a23739
-  FirebaseCore: a753c231801f04f5ccd10cc92119ad1b12a61165
-  FirebaseCoreDiagnostics: b63732f581a1c6a453ec7241f9ab60b3a5bd3450
-  FirebaseInstallations: ede6fb72bb6337914e5888b399271259d0c4910c
-  FirebaseMessaging: ce0a5ee974f7bfe83b6cc5acce88c2d969e37c41
+  Firebase: bc9325d5ee2041524bac78a5213d0e530c651309
+  firebase_core: 9b4e9961fbb05a0c25b20f69b96221e3f3c23159
+  firebase_messaging: 67e702b1c1c6ede0df033250afdcce9b2f6ff96c
+  FirebaseCore: f4804c1d3f4bbbefc88904d15653038f2c99ddf7
+  FirebaseCoreDiagnostics: fe77f42da6329d6d83d21fd9d621a6b704413bfc
+  FirebaseInstallations: 2563cb18a723ef9c6ef18318a49519b75dce613c
+  FirebaseMessaging: 93227dd71d7888e200baef65043f81acb2b6596e
   flutter_app_icon_badge: 099b018a4b36109fb73874411fb4e8b5febac20e
   flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
   flutter_secure_storage: 06c397200165bbea69a0071437f9d690f5e5c0a2
@@ -181,7 +181,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   share_plus_macos: 853ee48e7dce06b633998ca0735d482dd671ade4
   shared_preferences_macos: 480ce071d0666e37cef23fe6c702293a3d21799e
-  Sparkle: d56d028f4b0c123577825f5d1004f6140d77f90e
+  Sparkle: e1245ce5ba951c60183444a13a2c7d227778205d
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
   url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
 
