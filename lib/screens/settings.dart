@@ -20,6 +20,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -121,12 +122,15 @@ class SettingsScreenState extends State<SettingsScreen> {
                 'Replace Credentials?',
                 'Are you sure? You will never be able to use your '
                     'current credentials again!', onOkPressed: () async {
-              Navigator.pop(context);
               final bool gotUser =
                   await Provider.of<User>(context, listen: false).setNewUser();
+              Navigator.pop(context);
               if (!gotUser) {
-                // TODO show error
-                L.i('Unable to fetch new user!');
+                Toast.show(
+                    'Problem fetching new credentials. '
+                    'Please try again later...',
+                    context,
+                    gravity: Toast.CENTER);
               }
             });
           }),
@@ -312,10 +316,12 @@ class SettingOption extends StatelessWidget {
         padding: const EdgeInsets.only(right: 10),
         child: Icon(icon, size: 20, color: MyColour.black));
 
+    double verticalPadding = 0;
+    if (Platform.isLinux || Platform.isMacOS) verticalPadding = 10;
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
-          padding: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(top: 15 + verticalPadding),
           child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
@@ -340,7 +346,7 @@ class SettingOption extends StatelessWidget {
     } else {
       switchValue ??= false;
       setting = Container(
-          padding: EdgeInsets.only(left: 16, right: 7),
+          padding: EdgeInsets.only(left: 16, right: 7, top: verticalPadding),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
