@@ -84,10 +84,19 @@ void main() {
       // ignore: avoid_print
       print(creds);
 
+      // get host from .env
+      String host;
+      String file = await File('.env').readAsString();
+      file.split('\n').forEach((String ln){
+        if(ln.startsWith('HOST=')){
+          host = ln.replaceAll('HOST=', '');
+        }
+      });
+
       // send request
       for (int i = 1; i <= 10; i++) {
         http.Response req = await http.get(Uri.parse(
-            'https://dev.notifi.it/api?credentials=$creds&title=${i}&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
+            'https://$host/api?credentials=$creds&title=${i}&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
         // ignore: avoid_print
         print(req.statusCode);
         await Future<Duration>.delayed(Duration(milliseconds: 600));

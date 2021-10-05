@@ -67,16 +67,12 @@ Future<bool> loadDotEnv() async {
   } else {
     await dotenv.load();
     return dotenv.isEveryDefined(
-        <String>['HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
+        <String>['HOST', 'WS_HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
   }
 }
 
 String get wsEndpoint {
-  String protocol = 'ws://';
-  if (dotenv.env['TLS'] == 'true') {
-    protocol = 'wss://';
-  }
-  return '$protocol${dotenv.env['HOST']}/ws';
+  return 'wss://${dotenv.env['WS_HOST']}/';
 }
 
 String get codeEndpoint {
