@@ -129,7 +129,7 @@ class User with ChangeNotifier {
       _wsError = false;
 
       final List<String> receivedMsgUUIDs = await _handleMessage(streamData);
-      if (receivedMsgUUIDs != null) {
+      if (receivedMsgUUIDs != null && _ws != null) {
         _ws.sink.add(jsonEncode(receivedMsgUUIDs));
       }
       // ignore: always_specify_types
@@ -139,7 +139,6 @@ class User with ChangeNotifier {
       L.w('Problem with WS: $e');
     }, onDone: () async {
       L.i('WS connection closed. ${_user.credentials} error: $_wsError');
-      setErr(hasErr: true);
       await closeWS(shouldDelay: true);
       await connectToWS();
     }, cancelOnError: true);
@@ -169,8 +168,7 @@ class User with ChangeNotifier {
       // ignore: always_specify_types
       final d.Response resp = e.response;
       if (resp != null) {
-        L.e('Problem fetching user code: ${resp.statusCode}');
-        L.e(resp.statusMessage);
+        L.e('Problem fetching user code: ${resp.statusCode} ${resp}');
       }
       return UserStruct();
     }
@@ -186,7 +184,7 @@ class User with ChangeNotifier {
       credentialsMap =
           json.decode(response.data as String) as Map<String, dynamic>;
     } catch (e) {
-      L.e('Problem decoding new code from server: $e - ${response.data}');
+      L.e('Problem decoding new code from server: $e - ${response}');
       return UserStruct();
     }
 
