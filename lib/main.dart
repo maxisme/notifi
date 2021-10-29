@@ -24,8 +24,9 @@ import 'package:sqflite/sqflite.dart';
 Future<void> main() => mainImpl();
 
 Future<void> mainImpl({bool integration: false}) async {
-  Globals.isIntegration = integration;
   WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences sp = await SharedPreferences.getInstance();
+  Globals.isIntegration = integration;
 
   // initialise db for linux & windows
   if (!isTest && (Platform.isWindows || Platform.isLinux)) {
@@ -42,7 +43,6 @@ Future<void> mainImpl({bool integration: false}) async {
   }
 
   if (Platform.isMacOS) {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
     await invokeMacMethod(
         'set-pin-window', <String, bool>{'transient': !shouldPinWindow(sp)});
     await invokeMacMethod(
