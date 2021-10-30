@@ -110,8 +110,7 @@ void showToast(String msg, BuildContext context, {int duration, int gravity}) {
 
 Future<String> getDeviceUUID() async {
   if (Platform.isLinux || Globals.isIntegration) {
-    Uuid uuid = Uuid();
-    return uuid.v4();
+    return Uuid().v4();
   }
   return platform.invokeMethod('UUID');
 }
@@ -122,23 +121,24 @@ bool get shouldUseFirebase {
 
 class L {
   static void d(String msg) {
-    // ignore: avoid_print
-    print(msg);
+    _print(msg);
   }
 
   static void i(String msg) {
-    // ignore: avoid_print
-    print(msg);
+    _print(msg);
   }
 
   static void w(String msg) {
-    // ignore: avoid_print
-    print(msg);
+    _print(msg);
   }
 
   static void e(String msg) {
+    _print(msg);
+  }
+
+  static void _print(String msg) {
     // ignore: avoid_print
-    print(msg);
+    print(DateTime.now().toString() + ': ' + msg);
   }
 }
 
