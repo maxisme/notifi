@@ -98,8 +98,8 @@ class User with ChangeNotifier {
   ////////
   // ws //
   ////////
-  Future<void> initWSS() async {
-    await closeWS();
+  Future<void> initWSS({bool shouldDelay = false}) async {
+    await closeWS(shouldDelay: shouldDelay);
     await connectToWS();
     _ws.sink.add('.');
   }
@@ -124,10 +124,7 @@ class User with ChangeNotifier {
         headers: headers, pingInterval: const Duration(seconds: 3));
 
     setErr(hasErr: false);
-    bool _wsError = false;
     _ws.stream.listen((dynamic streamData) async {
-      _wsError = false;
-
       final List<String> receivedMsgUUIDs = await _handleMessage(streamData);
       if (receivedMsgUUIDs != null && _ws != null) {
         _ws.sink.add(jsonEncode(receivedMsgUUIDs));
@@ -135,22 +132,20 @@ class User with ChangeNotifier {
       // ignore: always_specify_types
     }, onError: (e) async {
       setErr(hasErr: true);
-      _wsError = true;
       L.w('Problem with WS: $e');
+      await initWSS(shouldDelay: true);
     }, onDone: () async {
-      L.i('WS connection closed. ${_user.credentials} error: $_wsError');
-      await closeWS(shouldDelay: true);
-      await connectToWS();
+      L.i('WS connection closed. ${_user.credentials}');
+      setErr(hasErr: true);
     }, cancelOnError: true);
   }
 
-  Future<void> closeWS({bool shouldDelay = false}) async {
+  Future<void> closeWS({bool shouldDelay}) async {
     if (_ws != null) {
       L.i('Closing already open WS...');
-      await _ws.sink.close(status.normalClosure, 'new code!');
+      _ws.sink.close(status.normalClosure, 'new code!');
       _ws = null;
-      if (shouldDelay)
-        await Future<dynamic>.delayed(const Duration(seconds: 2));
+      await Future<dynamic>.delayed(Duration(seconds: shouldDelay ? 5 : 1));
     }
   }
 
@@ -258,9 +253,9 @@ class User with ChangeNotifier {
     _tmpErr = hasErr;
     Future<dynamic>.delayed(const Duration(seconds: 1), () {
       if (_tmpErr == hasErr) {
-        if (_tmpErr && !Globals.isIntegration) {
+        if (_tmpErr) {
           MenuBarIcon.setErr();
-          showAlertSnackBar(_snackContext, 'Network Error!');
+          showAlertSnackBar(_snackContext, 'Network Error! Tap to try again.');
         } else {
           MenuBarIcon.revertErr();
           ScaffoldMessenger.of(_snackContext).clearSnackBars();

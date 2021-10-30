@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
+import 'package:provider/provider.dart';
 
 Future<void> showAlert(BuildContext context, String title, String description,
     {int duration, int gravity, VoidCallback onOkPressed}) {
@@ -52,31 +54,37 @@ void showAlertSnackBar(BuildContext context, String message) {
       duration: const Duration(days: 1),
       backgroundColor: MyColour.transparent,
       elevation: 0,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(5.0),
-            decoration: const BoxDecoration(
-              color: MyColour.black,
+      content: Listener(
+        onPointerDown: (_) async {
+          await Provider.of<User>(context, listen: false).initWSS();
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(5.0),
+              decoration: const BoxDecoration(
+                color: MyColour.black,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  const Icon(
+                    Akaricons.triangleAlert,
+                    color: MyColour.white,
+                    size: 13,
+                  ),
+                  Text(' $message',
+                      style: const TextStyle(
+                          color: MyColour.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400)),
+                ],
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                const Icon(
-                  Akaricons.triangleAlert,
-                  color: MyColour.white,
-                  size: 10,
-                ),
-                Text(' $message',
-                    style: const TextStyle(
-                        color: MyColour.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w400)),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ));
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
