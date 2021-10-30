@@ -107,13 +107,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    Provider.of<User>(context, listen: false).loadUser();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Provider.of<User>(context, listen: false).loadUser();
+
     double defaultFontSize = 14;
     double bodyText1FontSize = 10;
     if (Platform.isIOS) {
