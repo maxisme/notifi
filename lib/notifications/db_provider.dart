@@ -1,52 +1,41 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class DBProvider {
-  DBProvider(this.dbPath, {this.templateDB: false});
+  DBProvider(this.dbPath, {this.fillWithNotifications: false});
 
   final String _table = 'notifications';
   final String dbPath;
   Database _db;
-  bool templateDB;
+  bool fillWithNotifications;
 
   Future<Database> initDB() async {
     if (_db != null) {
       return _db;
     }
 
-    String path;
-    if (templateDB) {
-      // write template db asset to file in app
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final ByteData data = await rootBundle.load('template.db');
-      final List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-
-      path = join(directory.path, 'local.db');
-      await File(path).writeAsBytes(bytes);
+    Directory dir;
+    if (isTest) {
+      dir = Directory('/');
+    } else if (Platform.isAndroid || Platform.isLinux) {
+      dir = await getApplicationSupportDirectory();
     } else {
-      Directory dir;
-      if (isTest) {
-        dir = Directory('/');
-      } else if (Platform.isAndroid || Platform.isLinux) {
-        dir = await getApplicationSupportDirectory();
-      } else {
-        dir = await getLibraryDirectory();
-      }
-      dir = Directory(join(dir.path, 'notifi/'));
-      dir.create(recursive: true);
-      path = join(dir.path, dbPath);
+      dir = await getLibraryDirectory();
     }
+    dir = Directory(join(dir.path, 'notifi/'));
+    dir.create(recursive: true);
+
+    String path = join(dir.path, dbPath);
     L.i('DB path: $path');
 
-    return _db = await openDatabase(path, onCreate: (Database db, int version) {
+    _db = await openDatabase(path, onCreate: (Database db, int version) {
       return db.execute('''
         CREATE TABLE IF NOT EXISTS $_table (
           _id integer primary key autoincrement, 
@@ -60,15 +49,19 @@ class DBProvider {
         );
         ''');
     }, version: 1);
+    if (fillWithNotifications) {
+      await _insertDummyNotifications();
+    }
+    return _db;
   }
 
   Future<int> store(NotificationUI notification) async {
     final Database db = await initDB();
     return db.rawInsert('''
         INSERT INTO $_table 
-          (UUID, title, time, message, image, link)
+          (UUID, title, time, message, image, link, read)
         VALUES 
-          (?, ?, ?, ?, ?, ?)
+          (?, ?, ?, ?, ?, ?, ?)
         ''', <dynamic>[
       notification.uuid,
       notification.title,
@@ -76,6 +69,7 @@ class DBProvider {
       notification.message,
       notification.image,
       notification.link,
+      notification.read ? 1 : 0,
     ]);
   }
 
@@ -128,5 +122,78 @@ class DBProvider {
       ));
     }
     return notifications;
+  }
+
+  Future<void> _insertDummyNotifications() async {
+    DateTime now = DateTime.now().toUtc();
+
+    await store(NotificationUI(
+      id: 1,
+      uuid: Uuid().v4(),
+      title: 'Backup Finished',
+      message: 'Took 512 seconds',
+      time: now.subtract(Duration(days: 5)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 2,
+      uuid: Uuid().v4(),
+      title: 'Daily Logo Inspiration',
+      message: 'notifi Logo',
+      image: 'https://notifi.it/images/logo.png',
+      time: now.subtract(Duration(days: 1)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 3,
+      uuid: Uuid().v4(),
+      title: 'Quote from Edward Snowden',
+      message:
+          // ignore: lines_longer_than_80_chars
+          'Arguing that you don\'t care about the right to privacy because you have nothing to hide is no different than saying you don\'t care about free speech because you have nothing to say.',
+      time: now.subtract(Duration(days: 2)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 4,
+      uuid: Uuid().v4(),
+      title: 'RTX back in stock',
+      message: '£719.99',
+      link: 'https://www.currys.co.uk/',
+      time: now.subtract(Duration(minutes: 50)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 5,
+      uuid: Uuid().v4(),
+      title: 'Server Login',
+      message: 'IP: 35.177.218.15 (London)',
+      read: true,
+      time: now.subtract(Duration(minutes: 10)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 6,
+      uuid: Uuid().v4(),
+      title: 'BTC @ £50,000',
+      time: now.subtract(Duration(minutes: 2)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 7,
+      uuid: Uuid().v4(),
+      title: 'Sensor Alert!',
+      message: 'Activity By The Front 🚪',
+      time: now.subtract(Duration(minutes: 1)).toString(),
+    ));
+
+    await store(NotificationUI(
+      id: 8,
+      uuid: Uuid().v4(),
+      title: 'Juventus 3 Inter 0',
+      message: 'MOTM: Chiesa',
+      read: true,
+      time: now.subtract(Duration(milliseconds: 10)).toString(),
+    ));
   }
 }

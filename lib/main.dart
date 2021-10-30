@@ -57,7 +57,8 @@ Future<void> mainImpl({bool integration: false}) async {
     L.i(status.toString());
   }
 
-  final DBProvider db = DBProvider('notifications.db', templateDB: integration);
+  final DBProvider db =
+      DBProvider('notifications.db', fillWithNotifications: integration);
   final List<NotificationUI> notifications = await db.getAll();
 
   FlutterLocalNotificationsPlugin pushNotifications = null;
