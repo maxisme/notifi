@@ -4,6 +4,7 @@ import 'package:desktop_window/desktop_window.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_icon_badge/flutter_app_icon_badge.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:notifi/notifications/db_provider.dart';
 import 'package:notifi/notifications/notification.dart';
@@ -20,6 +21,7 @@ import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() => mainImpl();
 
@@ -72,30 +74,31 @@ Future<void> mainImpl({bool integration: false}) async {
   } catch (_) {
     canBadge = false;
   }
-
-  runApp(MultiProvider(
-    providers: <SingleChildWidget>[
-      ChangeNotifierProvider<TableNotifier>(
-          create: (BuildContext context) => TableNotifier()),
-      ChangeNotifierProxyProvider<TableNotifier, Notifications>(
-        create: (BuildContext context) => Notifications(notifications, db,
-            Provider.of<TableNotifier>(context, listen: false),
-            canBadge: canBadge),
-        update: (BuildContext context, TableNotifier tableNotifier,
-                Notifications user) =>
-            user..setTableNotifier(tableNotifier),
-      ),
-      ChangeNotifierProxyProvider<Notifications, User>(
-        create: (BuildContext context) => User(
-            Provider.of<Notifications>(context, listen: false),
-            pushNotifications),
-        update:
-            (BuildContext context, Notifications notifications, User user) =>
-                user..setNotifications(notifications),
-      ),
-    ],
-    child: const MyApp(),
-  ));
+  await SentryFlutter.init(
+      (SentryFlutterOptions options) => options.dsn = dotenv.env['SENTRY_DSN'],
+      appRunner: () => runApp(MultiProvider(
+            providers: <SingleChildWidget>[
+              ChangeNotifierProvider<TableNotifier>(
+                  create: (BuildContext context) => TableNotifier()),
+              ChangeNotifierProxyProvider<TableNotifier, Notifications>(
+                create: (BuildContext context) => Notifications(notifications,
+                    db, Provider.of<TableNotifier>(context, listen: false),
+                    canBadge: canBadge),
+                update: (BuildContext context, TableNotifier tableNotifier,
+                        Notifications user) =>
+                    user..setTableNotifier(tableNotifier),
+              ),
+              ChangeNotifierProxyProvider<Notifications, User>(
+                create: (BuildContext context) => User(
+                    Provider.of<Notifications>(context, listen: false),
+                    pushNotifications),
+                update: (BuildContext context, Notifications notifications,
+                        User user) =>
+                    user..setNotifications(notifications),
+              ),
+            ],
+            child: const MyApp(),
+          )));
 }
 
 class MyApp extends StatefulWidget {

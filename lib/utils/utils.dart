@@ -66,8 +66,15 @@ Future<bool> loadDotEnv() async {
     return true;
   } else {
     await dotenv.load();
-    return dotenv.isEveryDefined(
-        <String>['HOST', 'WS_HOST', 'KEY_STORE', 'TLS', 'SERVER_KEY', 'DEV']);
+    return dotenv.isEveryDefined(<String>[
+      'HOST',
+      'WS_HOST',
+      'KEY_STORE',
+      'TLS',
+      'SERVER_KEY',
+      'DEV',
+      'SENTRY_DSN'
+    ]);
   }
 }
 
