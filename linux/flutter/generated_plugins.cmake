@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_window
   flutter_app_icon_badge
+  sentry_flutter
   url_launcher_linux
 )
 
