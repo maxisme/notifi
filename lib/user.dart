@@ -124,20 +124,23 @@ class User with ChangeNotifier {
         headers: headers, pingInterval: const Duration(seconds: 3));
 
     setErr(hasErr: false);
+    bool _hasError = true;
     _ws.stream.listen((dynamic streamData) async {
+      _hasError = false;
       final List<String> receivedMsgUUIDs = await _handleMessage(streamData);
       if (receivedMsgUUIDs != null && _ws != null) {
+        // confirm received UUIDs with server
         _ws.sink.add(jsonEncode(receivedMsgUUIDs));
       }
       // ignore: always_specify_types
     }, onError: (e) async {
-      setErr(hasErr: true);
+      _hasError = true;
       L.w('Problem with WS: $e');
-      await initWSS(shouldDelay: true);
     }, onDone: () async {
       L.i('WS connection closed. ${_user.credentials}');
-      setErr(hasErr: true);
-    }, cancelOnError: true);
+      setErr(hasErr: _hasError);
+      await initWSS(shouldDelay: _hasError);
+    }, cancelOnError: false);
   }
 
   Future<void> closeWS({bool shouldDelay}) async {
@@ -145,7 +148,7 @@ class User with ChangeNotifier {
       L.i('Closing already open WS...');
       _ws.sink.close(status.normalClosure, 'new code!');
       _ws = null;
-      await Future<dynamic>.delayed(Duration(seconds: shouldDelay ? 5 : 1));
+      await Future<dynamic>.delayed(Duration(seconds: shouldDelay ? 10 : 2));
     }
   }
 
@@ -251,7 +254,7 @@ class User with ChangeNotifier {
     // wait for 1 second to make sure hasErr hasn't changed.
     // To prevent from stuttering.
     _tmpErr = hasErr;
-    Future<dynamic>.delayed(const Duration(seconds: 1), () {
+    Future<dynamic>.delayed(const Duration(seconds: 2), () {
       if (_tmpErr == hasErr) {
         if (_tmpErr) {
           MenuBarIcon.setErr();
