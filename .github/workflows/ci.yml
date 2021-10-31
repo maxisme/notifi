@@ -348,7 +348,8 @@ jobs:
             echo "${{ secrets.B64_ENV }}" | base64 --decode > .env
           fi
 
-          sed -i 's/0.1.0/${{ needs.version.outputs.version }}/g' snap/snapcraft.yaml
+          sed -i 's/0.0.1/${{ needs.version.outputs.version }}/g' snap/snapcraft.yaml
+          sed -i 's/version: 0.0.1/version: ${{ needs.version.outputs.version }}/g' pubspec.yaml
 
           snapcraft --use-lxd
 
