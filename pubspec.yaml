@@ -23,6 +23,7 @@ environment:
 dependencies:
   app_settings: ^4.1.0
   cached_network_image: ^3.1.0
+  desktop_window: ^0.4.0
   dio: ^4.0.0
   firebase_core: ^1.8.0
   firebase_messaging: ^10.0.9
@@ -40,9 +41,9 @@ dependencies:
   intl: ^0.17.0
   json_serializable: ^6.0.1
   launch_at_login: ^0.0.3
-  package_info_plus: ^1.0.4
   launch_review: ^3.0.1
   package_info: ^2.0.0
+  package_info_plus: ^1.0.4
   path_provider: ^2.0.2
   provider: ^6.0.0
   pull_to_refresh: ^2.0.0
@@ -55,15 +56,14 @@ dependencies:
   url_launcher: ^6.0.9
   uuid: ^3.0.4
   web_socket_channel: ^2.1.0
-  desktop_window: ^0.4.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_driver:
     sdk: flutter
-  test: ^1.16.8
   flutter_native_splash: ^1.2.1
+  flutter_test:
+    sdk: flutter
+  test: ^1.16.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
