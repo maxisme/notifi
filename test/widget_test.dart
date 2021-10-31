@@ -11,6 +11,7 @@ import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
+import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:sqflite/sqflite.dart';
@@ -279,6 +280,8 @@ Future<void> pumpWidgetWithNotification(
   if (notification != null) {
     notifications.add(notification);
   }
+
+  await loadDotEnv();
 
   await tester.pumpWidget(MultiProvider(
     providers: <SingleChildWidget>[
