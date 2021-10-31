@@ -81,7 +81,6 @@ flutter:
     - images/sad.png
     - .env
     - pubspec.yaml
-    - template.db
     - snap/gui/notifi.desktop
 
   fonts:
