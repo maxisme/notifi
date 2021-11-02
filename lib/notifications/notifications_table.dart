@@ -54,12 +54,11 @@ class NotificationTableState extends State<NotificationTable>
                 Consumer<User>(
                     builder: (BuildContext context, User user, Widget child) {
                   final String credentials = user.getCredentials();
-                  String howToLink = 'https://notifi.it#how-to';
+                  String howToLink = '$httpEndpoint#how-to';
                   Color howToColour = Theme.of(context).colorScheme.primary;
                   Widget credentialsWidget;
                   if (credentials != null) {
-                    howToLink =
-                        'https://notifi.it?c=$credentials&e=$httpEndpoint/api#how-to';
+                    howToLink = 'https://$httpEndpoint?c=$credentials#how-to';
                     howToColour = Theme.of(context).colorScheme.secondary;
                     credentialsWidget = InkWell(
                         child: Text(credentials,
