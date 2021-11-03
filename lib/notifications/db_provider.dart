@@ -150,7 +150,7 @@ class DBProvider {
       title: 'Quote from Edward Snowden',
       message:
           // ignore: lines_longer_than_80_chars
-          'Arguing that you don\'t care about the right to privacy because you have nothing to hide is no different than saying you don\'t care about free speech because you have nothing to say.',
+          'Nothing to hide argument: "Arguing that you don\'t care about the right to privacy because you have nothing to hide is no different than saying you don\'t care about free speech because you have nothing to say." - Edward Snowden.',
       time: now.subtract(Duration(days: 2)).toString(),
     ));
 
