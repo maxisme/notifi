@@ -80,7 +80,9 @@ for filename in "${IOS_SS_DIR}"*_framed.png; do
   mv "$filename" "${SS_DIR}ios/framed/$device/${num}"
 done
 
-# run macos screenshot setup
+#########
+# MacOS #
+#########
 (cd ../ && flutter drive --target=test_driver/app.dart -d "macos")
 mv ${SS_DIR}*.png "${SS_DIR}macos/"
 (cd "${SS_DIR}macos/" && bash generate.sh)
