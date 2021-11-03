@@ -111,9 +111,16 @@ class _MyAppState extends State<MyApp> {
 
     double defaultFontSize = 14;
     double bodyText1FontSize = 10;
-    if (Platform.isIOS) {
+    double subtitle1FontSize = 10;
+    if (Platform.isIOS || Platform.isAndroid) {
       defaultFontSize = 17;
       bodyText1FontSize = 14;
+      subtitle1FontSize = 14;
+      if (isTablet()) {
+        defaultFontSize = 30;
+        bodyText1FontSize = 25;
+        subtitle1FontSize = 20;
+      }
     }
 
     return MaterialApp(
@@ -149,9 +156,9 @@ class _MyAppState extends State<MyApp> {
                     fontFamily: 'Inconsolata',
                     fontSize: defaultFontSize,
                     fontWeight: FontWeight.w600),
-                subtitle1: const TextStyle(
+                subtitle1: TextStyle(
                     color: MyColour.grey,
-                    fontSize: 10,
+                    fontSize: subtitle1FontSize,
                     fontFamily: 'Inconsolata'),
                 bodyText1: TextStyle(
                     inherit: false,
@@ -161,8 +168,8 @@ class _MyAppState extends State<MyApp> {
                     fontSize: bodyText1FontSize,
                     letterSpacing: 0.2,
                     height: 1.2),
-                bodyText2: const TextStyle(
-                    fontSize: 15,
+                bodyText2: TextStyle(
+                    fontSize: defaultFontSize,
                     color: MyColour.black,
                     fontWeight: FontWeight.w500,
                     inherit: false,

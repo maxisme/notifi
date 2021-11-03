@@ -216,3 +216,9 @@ Future<bool> linuxDoesAutoLogin() async {
   // ignore: avoid_slow_async_io
   return path.exists();
 }
+
+bool isTablet() {
+  MediaQueryData data =
+      MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+  return data.size.shortestSide > 600;
+}
