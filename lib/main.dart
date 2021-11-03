@@ -162,7 +162,7 @@ class _MyAppState extends State<MyApp> {
                     letterSpacing: 0.2,
                     height: 1.2),
                 bodyText2: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 16,
                     color: MyColour.black,
                     fontWeight: FontWeight.w500,
                     inherit: false,
