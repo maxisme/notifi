@@ -58,7 +58,7 @@ class NotificationTableState extends State<NotificationTable>
                   Color howToColour = Theme.of(context).colorScheme.primary;
                   Widget credentialsWidget;
                   if (credentials != null) {
-                    howToLink = 'https://$httpEndpoint?c=$credentials#how-to';
+                    howToLink = '$httpEndpoint?c=$credentials#how-to';
                     howToColour = Theme.of(context).colorScheme.secondary;
                     credentialsWidget = InkWell(
                         child: Text(credentials,

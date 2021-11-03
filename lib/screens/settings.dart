@@ -109,7 +109,7 @@ class SettingsScreenState extends State<SettingsScreen> {
               SettingOption(
                   'How Do I Receive Notifications?', Akaricons.question,
                   onTapCallback: () async {
-                await openUrl('https://$httpEndpoint?c=$credentials#how-to');
+                await openUrl('$httpEndpoint?c=$credentials#how-to');
               }),
               credentialsSettingWidget
             ]);
@@ -312,11 +312,11 @@ class SettingOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Container iconWidget = Container(
-        padding: const EdgeInsets.only(right: 10),
-        child: Icon(icon, size: 20, color: MyColour.black));
+        padding: const EdgeInsets.only(right: 15),
+        child: Icon(icon, size: 23, color: MyColour.black));
 
     double verticalPadding = 0;
-    if (Platform.isLinux || Platform.isMacOS) verticalPadding = 10;
+    if (Platform.isLinux || Platform.isMacOS) verticalPadding = 13;
     Widget setting;
     if (switchCallback == null) {
       setting = Container(
@@ -340,7 +340,7 @@ class SettingOption extends StatelessWidget {
                       )
                     ]),
                     Icon(Akaricons.chevronRight,
-                        size: 15, color: MyColour.black)
+                        size: 20, color: MyColour.black)
                   ])));
     } else {
       switchValue ??= false;
