@@ -111,9 +111,13 @@ class _MyAppState extends State<MyApp> {
 
     double defaultFontSize = 14;
     double bodyText1FontSize = 10;
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isAndroid) {
       defaultFontSize = 17;
       bodyText1FontSize = 14;
+      if (isTablet()) {
+        defaultFontSize = 20;
+        bodyText1FontSize = 17;
+      }
     }
 
     return MaterialApp(
@@ -161,8 +165,8 @@ class _MyAppState extends State<MyApp> {
                     fontSize: bodyText1FontSize,
                     letterSpacing: 0.2,
                     height: 1.2),
-                bodyText2: const TextStyle(
-                    fontSize: 15,
+                bodyText2: TextStyle(
+                    fontSize: defaultFontSize,
                     color: MyColour.black,
                     fontWeight: FontWeight.w500,
                     inherit: false,

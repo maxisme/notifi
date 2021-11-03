@@ -24,9 +24,6 @@ IOS_SS_DIR="../ios/fastlane/screenshots/en-GB/"
 IOS_DEVICES=("iPad Pro (12.9-inch) (4th generation)" "iPhone 12 Pro Max" "iPhone 8 Plus")
 IOS_DEVICE_PATHS=("IPAD_PRO_129,ipadPro129-3rd-gen" "IPHONE_65" "IPHONE_55")
 
-# print simulator IOS_DEVICES
-xcrun simctl list
-
 for i in "${!IOS_DEVICES[@]}"; do
   device="${IOS_DEVICES[$i]}"
   device_path="${IOS_DEVICE_PATHS[$i]}"
