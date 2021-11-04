@@ -19,4 +19,6 @@ elif [[ $device == *"linux"* ]]; then
     flutter config --enable-linux-desktop
 fi
 
+flutter doctor
+
 flutter drive --target=test_driver/app.dart -d "$device"
