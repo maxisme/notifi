@@ -9,7 +9,10 @@ jobs:
     strategy:
       matrix:
         branch: ["master", "develop"]
-        device: ["iPhone 12 Pro Max", "macos"]
+        device: [
+            "iPhone 12 Pro Max",
+            #"macos"
+        ]
     steps:
       - uses: actions/checkout@v2
         with:
