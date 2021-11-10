@@ -47,6 +47,11 @@ Future<void> mainImpl({bool integration: false}) async {
         'set-pin-window', <String, bool>{'transient': !shouldPinWindow(sp)});
     await invokeMacMethod(
         'set-sparkle-url', <String, String>{'url': versionEndpoint});
+    if (integration) {
+      Future<void>.delayed(const Duration(seconds: 2), () async {
+        await invokeMacMethod('open_window');
+      });
+    }
   } else if (Platform.isLinux) {
     // see my_application.cc for window size
     await DesktopWindow.setMinWindowSize(Size(425, 720));
