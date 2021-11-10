@@ -68,3 +68,4 @@ pubspec.lock
 /ios/build/
 /screenshots/*.png
 *.snap
+Podfile.lock
