@@ -27,7 +27,7 @@ jobs:
         run: ./test_driver/test.sh "${{ matrix.device }}" "${{ matrix.branch }}" "${{ secrets.B64_ENV }}" "${{ secrets.B64_DEV_ENV }}"
 
   test-android:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       matrix:
         branch: ["master", "develop"]
