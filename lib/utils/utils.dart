@@ -150,8 +150,8 @@ bool shouldPinWindow(SharedPreferences sp) {
   }
 }
 
-void copyText(String text, BuildContext context) {
-  Clipboard.setData(ClipboardData(text: text));
+void copyText(String text, BuildContext context) async {
+  await Clipboard.setData(ClipboardData(text: text));
   Toast.show('📋 $text', context, gravity: Toast.BOTTOM);
 }
 
