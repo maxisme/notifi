@@ -68,11 +68,11 @@ class NotificationTableState extends State<NotificationTable>
                                 fontWeight: FontWeight.w800,
                                 fontSize: 17),
                             textAlign: TextAlign.center),
-                        onTap: () {
+                        onTap: () async {
                           if (Platform.isIOS) {
-                            Share.share(credentials);
+                            await Share.share('$credentials ');
                           } else {
-                            copyText(credentials, context);
+                            await copyText(credentials, context);
                           }
                         });
                   } else {
@@ -154,8 +154,8 @@ class NotificationTableState extends State<NotificationTable>
         color: MyColour.transparent,
         foregroundColor: MyColour.darkGrey,
         icon: Akaricons.copy,
-        onTap: () {
-          copyText(notification.title, context);
+        onTap: () async {
+          await copyText(notification.title, context);
         },
       ),
       IconSlideAction(
@@ -164,7 +164,7 @@ class NotificationTableState extends State<NotificationTable>
         foregroundColor: MyColour.darkGrey,
         icon: Akaricons.copy,
         onTap: () async {
-          copyText(notification.message, context);
+          await copyText(notification.message, context);
         },
       ),
     ];

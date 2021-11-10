@@ -94,14 +94,16 @@ class SettingsScreenState extends State<SettingsScreen> {
               builder: (BuildContext context, User user, Widget child) {
             final String credentials = user.getCredentials();
 
-            SettingOption credentialsSettingWidget = SettingOption(
-                'Copy Credentials', Akaricons.clipboard, onTapCallback: () {
-              copyText(credentials, context);
+            SettingOption credentialsSettingWidget =
+                SettingOption('Copy Credentials', Akaricons.clipboard,
+                    onTapCallback: () async {
+              await copyText(credentials, context);
             });
             if (Platform.isIOS || Platform.isAndroid) {
-              credentialsSettingWidget = SettingOption(
-                  'Share Credentials', Akaricons.share, onTapCallback: () {
-                Share.share(credentials);
+              credentialsSettingWidget =
+                  SettingOption('Share Credentials', Akaricons.share,
+                      onTapCallback: () async {
+                await Share.share('$credentials ');
               });
             }
 
