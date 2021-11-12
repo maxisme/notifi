@@ -98,7 +98,7 @@ jobs:
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
           changelog="${changelog//$'\r'/'%0D'}"
-          changelog="New features for notifi: $changelog"
+          changelog="New features for notifi:\n$changelog"
           echo "::set-output name=CHANGELOG::$changelog"
 
   #########
