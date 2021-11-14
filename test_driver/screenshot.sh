@@ -3,8 +3,6 @@
 cd "$(dirname "$0")"
 SS_DIR="../screenshots/"
 
-#ls -n /Applications/ | grep Xcode
-
 ###########
 # android #
 ###########
