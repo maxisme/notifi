@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:notifi/utils/pallete.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -223,4 +224,46 @@ Future<bool> authentication(String msg) async {
   }
   LocalAuthentication localAuth = LocalAuthentication();
   return localAuth.authenticate(localizedReason: msg);
+}
+
+TextTheme getTextTheme() {
+  double defaultFontSize = 14;
+  double bodyText1FontSize = 12;
+  double subtitle1FontSize = 10;
+  if (Platform.isIOS || Platform.isAndroid) {
+    defaultFontSize = 17;
+    bodyText1FontSize = 14;
+    subtitle1FontSize = 12;
+    if (isTablet()) {
+      defaultFontSize = 30;
+      bodyText1FontSize = 25;
+      subtitle1FontSize = 18;
+    }
+  }
+  return TextTheme(
+      headline1: TextStyle(
+          inherit: false,
+          textBaseline: TextBaseline.alphabetic,
+          fontFamily: 'Inconsolata',
+          fontSize: defaultFontSize,
+          fontWeight: FontWeight.w600),
+      subtitle1: TextStyle(
+          color: MyColour.grey,
+          fontSize: subtitle1FontSize,
+          fontFamily: 'Inconsolata'),
+      bodyText1: TextStyle(
+          inherit: false,
+          textBaseline: TextBaseline.alphabetic,
+          fontFamily: 'Inconsolata',
+          color: MyColour.darkGrey,
+          fontSize: bodyText1FontSize,
+          letterSpacing: 0.2,
+          height: 1.2),
+      bodyText2: TextStyle(
+          fontSize: defaultFontSize,
+          color: MyColour.black,
+          fontWeight: FontWeight.w500,
+          inherit: false,
+          textBaseline: TextBaseline.alphabetic,
+          fontFamily: 'Inconsolata'));
 }

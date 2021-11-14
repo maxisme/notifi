@@ -114,20 +114,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).loadUser();
 
-    double defaultFontSize = 14;
-    double bodyText1FontSize = 10;
-    double subtitle1FontSize = 10;
-    if (Platform.isIOS || Platform.isAndroid) {
-      defaultFontSize = 17;
-      bodyText1FontSize = 14;
-      subtitle1FontSize = 14;
-      if (isTablet()) {
-        defaultFontSize = 30;
-        bodyText1FontSize = 25;
-        subtitle1FontSize = 20;
-      }
-    }
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -154,32 +140,7 @@ class _MyAppState extends State<MyApp> {
               thickness: MaterialStateProperty.all(4.0),
               showTrackOnHover: false,
             ),
-            textTheme: TextTheme(
-                headline1: TextStyle(
-                    inherit: false,
-                    textBaseline: TextBaseline.alphabetic,
-                    fontFamily: 'Inconsolata',
-                    fontSize: defaultFontSize,
-                    fontWeight: FontWeight.w600),
-                subtitle1: TextStyle(
-                    color: MyColour.grey,
-                    fontSize: subtitle1FontSize,
-                    fontFamily: 'Inconsolata'),
-                bodyText1: TextStyle(
-                    inherit: false,
-                    textBaseline: TextBaseline.alphabetic,
-                    fontFamily: 'Inconsolata',
-                    color: MyColour.darkGrey,
-                    fontSize: bodyText1FontSize,
-                    letterSpacing: 0.2,
-                    height: 1.2),
-                bodyText2: TextStyle(
-                    fontSize: defaultFontSize,
-                    color: MyColour.black,
-                    fontWeight: FontWeight.w500,
-                    inherit: false,
-                    textBaseline: TextBaseline.alphabetic,
-                    fontFamily: 'Inconsolata')),
+            textTheme: getTextTheme(),
             buttonTheme: const ButtonThemeData(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent),
