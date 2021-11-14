@@ -138,19 +138,17 @@ class DBProvider {
     await store(NotificationUI(
       id: 2,
       uuid: Uuid().v4(),
-      title: 'Daily Logo Inspiration',
-      message: 'notifi Logo',
-      image: 'https://notifi.it/images/logo.png',
+      title: 'Sensor Alert!',
+      message: 'Activity By The Front 🚪',
       time: now.subtract(Duration(days: 1)).toString(),
     ));
 
     await store(NotificationUI(
       id: 3,
       uuid: Uuid().v4(),
-      title: 'Quote from Edward Snowden',
-      message:
-          // ignore: lines_longer_than_80_chars
-          'Nothing to hide argument: "Arguing that you don\'t care about the right to privacy because you have nothing to hide is no different than saying you don\'t care about free speech because you have nothing to say." - Edward Snowden.',
+      title: 'Server Login',
+      message: 'IP: 35.177.218.15 (London)',
+      read: true,
       time: now.subtract(Duration(days: 2)).toString(),
     ));
 
@@ -166,9 +164,10 @@ class DBProvider {
     await store(NotificationUI(
       id: 5,
       uuid: Uuid().v4(),
-      title: 'Server Login',
-      message: 'IP: 35.177.218.15 (London)',
-      read: true,
+      title: 'Quote from Edward Snowden',
+      message:
+          // ignore: lines_longer_than_80_chars
+          'Nothing to hide argument: "Arguing that you don\'t care about the right to privacy because you have nothing to hide is no different than saying you don\'t care about free speech because you have nothing to say." - Edward Snowden.',
       time: now.subtract(Duration(minutes: 10)).toString(),
     ));
 
@@ -182,8 +181,9 @@ class DBProvider {
     await store(NotificationUI(
       id: 7,
       uuid: Uuid().v4(),
-      title: 'Sensor Alert!',
-      message: 'Activity By The Front 🚪',
+      title: 'Daily Logo Inspiration',
+      message: 'notifi Logo',
+      image: 'https://notifi.it/images/logo.png',
       time: now.subtract(Duration(minutes: 1)).toString(),
     ));
 
