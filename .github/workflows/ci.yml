@@ -100,6 +100,7 @@ jobs:
           changelog="${changelog//$'\r'/'%0D'}"
           changelog="Some new features for notifi including: %0A$changelog"
           echo "::set-output name=CHANGELOG::$changelog"
+          echo $changelog
 
   #########
   # macos #

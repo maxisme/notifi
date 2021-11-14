@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -214,4 +215,12 @@ bool isTablet() {
   MediaQueryData data =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window);
   return data.size.shortestSide > 600;
+}
+
+Future<bool> authentication(String msg) async {
+  if (Globals.isIntegration || !(Platform.isAndroid || Platform.isIOS)) {
+    return true;
+  }
+  LocalAuthentication localAuth = LocalAuthentication();
+  return localAuth.authenticate(localizedReason: msg);
 }
