@@ -211,7 +211,7 @@ class NotificationUIState extends State<NotificationUI>
               onTap: () async {
                 await openUrl(widget.image);
                 Provider.of<Notifications>(context, listen: false)
-                    .toggleRead(widget.index);
+                    .markRead(widget.index, isRead: true);
               },
               child: Container(
                 padding: const EdgeInsets.only(right: 10.0, top: 3.0),

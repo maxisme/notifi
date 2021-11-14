@@ -17,6 +17,18 @@ import 'package:provider/single_child_widget.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+final String lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+    'Nullam in bibendum est. Duis lacinia, nulla a vulputate cursus, '
+    'lectus dui dictum eros, vitae fermentum diam ex vel felis. '
+    'Suspendisse augue magna, euismod ac consequat quis, laoreet ut ante. '
+    'Quisque at ligula in risus '
+    'Nullam in bibendum est. Duis lacinia, nulla a vulputate cursus, '
+    'lectus dui dictum eros, vitae fermentum diam ex vel felis. '
+    'Suspendisse augue magna, euismod ac consequat quis, laoreet ut ante. '
+    'Quisque at ligula in risus ';
+final double width = 1200;
+final TextTheme textTheme = getTextTheme();
+
 void main() {
   const String time = '2006-01-02 15:04:05';
   // original 2400.0, 1800.0
@@ -81,8 +93,32 @@ void main() {
     const List<String> links = <String>['', 'https://max.me.uk/'];
     const List<String> images = <String>['', 'https://max.me.uk/someimage.jpg'];
 
-    final String longTtl = titles[1];
-    final String longMsg = messages[2];
+    String longTtl, longMsg;
+    int cnt = 0;
+
+    // got from printing _messageKey.currentContext.size.width
+    double width = 666.33;
+
+    // ignore: literal_only_boolean_expressions
+    while (true) {
+      cnt += 1;
+      String str = lorem.substring(0, cnt);
+      if (hasTextOverflow(str, textTheme.headline1, maxWidth: width)) {
+        longTtl = str;
+        break;
+      }
+    }
+
+    // ignore: literal_only_boolean_expressions
+    while (true) {
+      cnt += 1;
+      String str = lorem.substring(0, cnt);
+      if (hasTextOverflow(str, textTheme.bodyText1,
+          maxWidth: width, maxLines: 3)) {
+        longMsg = str;
+        break;
+      }
+    }
 
     group('Test Notification Combinations', () {
       for (int a = 0; a < titles.length; a++) {
