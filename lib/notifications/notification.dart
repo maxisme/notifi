@@ -233,6 +233,12 @@ class NotificationUIState extends State<NotificationUI>
 
       const double padding = 10.0;
 
+      double timePaddingBottom = 2;
+      double timePaddingTop = 2;
+      if (Platform.isIOS || Platform.isAndroid) {
+        timePaddingBottom = 1;
+        timePaddingTop = 4;
+      }
       final Container slideNotification = Container(
           color: Colors.transparent,
           padding: const EdgeInsets.only(
@@ -327,8 +333,9 @@ class NotificationUIState extends State<NotificationUI>
 
                                 // TIME
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 2.0, bottom: 2.0),
+                                  padding: EdgeInsets.only(
+                                      top: timePaddingTop,
+                                      bottom: timePaddingBottom),
                                   child: Row(children: <Widget>[
                                     ValueListenableBuilder<String>(
                                         valueListenable: _timeStr,
@@ -397,6 +404,7 @@ class NotificationUIState extends State<NotificationUI>
   void _canExpandHandler(BuildContext context) {
     bool canExpand = false;
 
+    // prevent check if can expand when window is scaling up
     if (Platform.isMacOS && _columnKey.currentContext.size.width <= 123) return;
 
     if (_columnKey.currentContext != null &&

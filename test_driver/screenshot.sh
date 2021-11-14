@@ -15,9 +15,9 @@ mv ${SS_DIR}*.png "${SS_DIR}android/"
 # put device frames round screenshots
 (cd "${SS_DIR}android/" && bash generate.sh)
 
-########
-## iOS #
-########
+#######
+# iOS #
+#######
 IOS_SS_DIR="../ios/fastlane/screenshots/en-GB/"
 IOS_DEVICES=("iPad Pro (12.9-inch) (4th generation)" "iPhone 12 Pro Max" "iPhone 8 Plus")
 IOS_DEVICE_PATHS=("IPAD_PRO_129,ipadPro129-3rd-gen" "IPHONE_65" "IPHONE_55")
