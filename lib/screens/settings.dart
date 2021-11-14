@@ -123,15 +123,19 @@ class SettingsScreenState extends State<SettingsScreen> {
                 'Replace Credentials?',
                 'Are you sure? You will never be able to use your '
                     'current credentials again!', onOkPressed: () async {
-              final bool gotUser =
-                  await Provider.of<User>(context, listen: false).setNewUser();
-              Navigator.pop(context);
-              if (!gotUser) {
-                Toast.show(
-                    'Problem fetching new credentials. '
-                    'Please try again later...',
-                    context,
-                    gravity: Toast.CENTER);
+              if (await authentication(
+                  'Please authenticate to replace credentials')) {
+                final bool gotUser =
+                    await Provider.of<User>(context, listen: false)
+                        .setNewUser();
+                Navigator.pop(context);
+                if (!gotUser) {
+                  Toast.show(
+                      'Problem fetching new credentials. '
+                      'Please try again later...',
+                      context,
+                      gravity: Toast.CENTER);
+                }
               }
             });
           }),
