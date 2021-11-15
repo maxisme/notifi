@@ -267,3 +267,10 @@ TextTheme getTextTheme() {
           textBaseline: TextBaseline.alphabetic,
           fontFamily: 'Inconsolata'));
 }
+
+String getOperatingSystemName() {
+  if (Globals.isIntegration) {
+    return '${Platform.operatingSystem}-integration';
+  }
+  return Platform.operatingSystem;
+}

@@ -111,9 +111,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     Provider.of<User>(context, listen: false).loadUser();
+  }
 
+  @override
+  void deactivate() async {
+    await Provider.of<User>(context, listen: false).closeWS();
+    super.deactivate();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
