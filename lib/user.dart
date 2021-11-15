@@ -112,7 +112,7 @@ class User with ChangeNotifier {
       'Credentials': _user.credentials,
       'Key': _user.credentialKey,
       'Version': package.version,
-      'OS': Platform.operatingSystem,
+      'OS': getOperatingSystemName(),
     };
 
     if (shouldUseFirebase) {
