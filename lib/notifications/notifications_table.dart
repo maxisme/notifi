@@ -31,7 +31,7 @@ class NotificationTableState extends State<NotificationTable>
     return Consumer<TableNotifier>(builder:
         (BuildContext context, TableNotifier reloadTable, Widget child) {
       final Notifications notifications =
-          Provider.of<Notifications>(context, listen: false);
+          Provider.of<Notifications>(context, listen: true);
       if (notifications.notifications.isNotEmpty) {
         return AnimatedList(
             padding: const EdgeInsets.only(bottom: 10),
@@ -134,17 +134,23 @@ class NotificationTableState extends State<NotificationTable>
 
   Widget _buildNotification(
       BuildContext context, int index, Animation<double> animation) {
-    final NotificationUI notification =
-        Provider.of<Notifications>(context, listen: false).get(index);
+    NotificationUI notification;
+    try {
+      notification =
+          Provider.of<Notifications>(context, listen: false).get(index);
+    } catch (e) {
+      L.e(e);
+      return SizedBox();
+    }
     notification.index = index;
     notification.toggleExpand = toggleExpand;
 
     final Animation<Offset> _offsetAnimation = Tween<Offset>(
-      begin: const Offset(-1, 0.0),
+      begin: const Offset(0.0, -1.0),
       end: const Offset(0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: animation,
-      curve: Curves.fastLinearToSlowEaseIn,
+      curve: Curves.bounceOut,
     ));
 
     // slide actions
@@ -212,7 +218,7 @@ class NotificationTableState extends State<NotificationTable>
       child: AnimatedSize(
           // to animate expand
           duration: const Duration(milliseconds: 250),
-          curve: Curves.fastOutSlowIn,
+          curve: Curves.easeIn,
           child: Slidable(
               key: Key(notification.id.toString()),
               movementDuration: const Duration(milliseconds: 250),

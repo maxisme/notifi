@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart' as i;
 
 const MethodChannel platform = MethodChannel('max.me.uk/notifications');
 const String refKey = 'ref';
@@ -273,4 +274,8 @@ String getOperatingSystemName() {
     return '${Platform.operatingSystem}-integration';
   }
   return Platform.operatingSystem;
+}
+
+DateTime stringToTime(String time) {
+  return i.DateFormat('yyyy-MM-dd HH:mm:ss').parse(time, true).toLocal();
 }

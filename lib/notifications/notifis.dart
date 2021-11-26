@@ -82,16 +82,9 @@ class Notifications extends ChangeNotifier {
     notifications.insert(0, notification);
     if (notifications.length == 1) {
       tableNotifier.notify();
-    } else {
-      scrollToTop();
-
-      // animate in notification
-      if (tableKey.currentState != null) {
-        tableKey.currentState
-            .insertItem(0, duration: const Duration(seconds: 1));
-      }
     }
-    setUnreadCnt();
+    notifications.sort((NotificationUI b, NotificationUI a) =>
+        a.dttmTime.compareTo(b.dttmTime));
 
     return id;
   }

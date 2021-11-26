@@ -31,6 +31,7 @@ class NotificationUI extends StatefulWidget {
       this.read,
       this.canExpand})
       : super(key: Key('notification')) {
+    dttmTime = i.DateFormat('yyyy-MM-dd HH:mm:ss').parse(time, true).toLocal();
     message = message ?? '';
     image = image ?? '';
     link = link ?? '';
@@ -52,6 +53,7 @@ class NotificationUI extends StatefulWidget {
   bool canExpand;
   bool isExpanded = false;
   int index;
+  DateTime dttmTime;
   void Function(BuildContext context, int id) toggleExpand;
   String shrinkTitle;
   String shrinkMessage;
@@ -435,9 +437,8 @@ class NotificationUIState extends State<NotificationUI>
   }
 
   void _setTime() {
-    final DateTime dttm =
-        i.DateFormat('yyyy-MM-dd HH:mm:ss').parse(widget.time, true).toLocal();
-    final String friendlyDttm = i.DateFormat('MMM d, y HH:mm:ss').format(dttm);
-    _timeStr.value = '$friendlyDttm - ${timeago.format(dttm)}';
+    final String friendlyDttm =
+        i.DateFormat('MMM d, y HH:mm:ss').format(widget.dttmTime);
+    _timeStr.value = '$friendlyDttm - ${timeago.format(widget.dttmTime)}';
   }
 }
