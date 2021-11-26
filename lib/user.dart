@@ -127,10 +127,15 @@ class User with ChangeNotifier {
     bool _hasError = true;
     _ws.stream.listen((dynamic streamData) async {
       _hasError = false;
-      final List<String> receivedMsgUUIDs = await _handleMessage(streamData);
-      if (receivedMsgUUIDs != null && _ws != null) {
-        // confirm received UUIDs with server
-        _ws.sink.add(jsonEncode(receivedMsgUUIDs));
+      final List<String> notificationUUIDs = await _handleMessage(streamData);
+      if (notificationUUIDs != null && _ws != null) {
+        // confirm received UUIDs with server in chunks
+        int chunkSize = 20;
+        int numUUIDs = notificationUUIDs.length;
+        for (int i = 0; i < numUUIDs; i += chunkSize) {
+          int end = (i + chunkSize < numUUIDs) ? i + chunkSize : numUUIDs;
+          _ws.sink.add(jsonEncode(notificationUUIDs.sublist(i, end)));
+        }
       }
       // ignore: always_specify_types
     }, onError: (e) async {
@@ -207,7 +212,8 @@ class User with ChangeNotifier {
 
     // parse notifications from websocket message
     final List<String> msgUUIDs = <String>[];
-    bool hasNotification = false;
+    NotificationUI lastNotification;
+    int lastID;
     for (int i = 0; i < notifications.length; i++) {
       Map<String, dynamic> jsonMessage;
       try {
@@ -225,18 +231,34 @@ class User with ChangeNotifier {
         // store notification
         final int id = await _notifications.add(notification);
 
-        if (id != -1) {
-          // send push notification
-          if (!Platform.isAndroid && _pushNotifications != null) {
-            sendLocalNotification(_pushNotifications, id, notification);
-          }
-          hasNotification = true;
-        }
+        lastNotification = notification;
+        lastID = id;
+
         msgUUIDs.add(notification.uuid);
       }
     }
 
-    if (hasNotification) {
+    if (lastID != -1) {
+      // send push notification
+      if (!Platform.isAndroid && _pushNotifications != null) {
+        sendLocalNotification(_pushNotifications, lastID, lastNotification);
+      }
+
+      _notifications.scrollToTop();
+
+      // animate in notification
+      if (_notifications.tableKey.currentState != null) {
+        for (int i = 0; i < msgUUIDs.length; i++) {
+          if (i == msgUUIDs.length - 1) {
+            _notifications.tableKey.currentState
+                .insertItem(0, duration: const Duration(seconds: 1));
+          } else {
+            _notifications.tableKey.currentState.insertItem(0);
+          }
+        }
+      }
+      _notifications.setUnreadCnt();
+
       // animate menu bar icon
       invokeMacMethod('animate');
     }
@@ -290,7 +312,7 @@ class UserStruct {
   Future<bool> store() async {
     if (Platform.isLinux) {
       Directory dir = await getApplicationSupportDirectory();
-      File file = File(join(dir.path, _key));
+      File file = File(join(dir.path, '${_key}.txt'));
       file.writeAsString(_toJson());
       return true;
     }
@@ -309,7 +331,7 @@ class UserStruct {
 
     if (Platform.isLinux) {
       Directory dir = await getApplicationSupportDirectory();
-      File file = File(join(dir.path, _key));
+      File file = File(join(dir.path, '${_key}.txt'));
       try {
         userJsonString = await file.readAsString();
       } catch (_) {
