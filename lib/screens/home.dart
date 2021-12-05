@@ -5,16 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
-import 'package:notifi/screens/utils/loading_gif.dart';
 import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
 import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeScreen extends StatelessWidget {
-  final RefreshController _refreshController = RefreshController();
-
   @override
   Widget build(BuildContext context) {
     Provider.of<User>(context, listen: false).setSnackContext(context);
@@ -28,21 +24,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () async {
               Navigator.pushNamed(context, '/settings');
             }),
-        body: SmartRefresher(
-            header: CustomHeader(
-              builder: (_, RefreshStatus mode) {
-                if (mode != RefreshStatus.idle) {
-                  return LoadingGif();
-                }
-                return SizedBox();
-              },
-            ),
-            controller: _refreshController,
-            onRefresh: () async {
-              _refreshController.refreshCompleted();
-              await Provider.of<User>(context, listen: false).initWSS();
-            },
-            child: const NotificationTable()),
+        body: const NotificationTable(),
         bottomNavigationBar: BottomAppBar(
           elevation: 0,
           // ignore: prefer_const_literals_to_create_immutables
