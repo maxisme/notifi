@@ -102,13 +102,13 @@ void main() {
         await Future<Duration>.delayed(Duration(milliseconds: 600));
       }
 
-      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
+      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 2));
 
       // wait for notification to appear
-      SerializableFinder notification = find.text('1');
+      SerializableFinder notification = find.text('5');
       await driver.waitFor(notification);
       await driver.scrollIntoView(notification);
-      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 5));
+      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 2));
     });
   });
 }
