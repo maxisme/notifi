@@ -99,6 +99,7 @@ void main() {
     // got from printing _messageKey.currentContext.size.width
     double width = 666.33;
 
+    // get long title
     // ignore: literal_only_boolean_expressions
     while (true) {
       cnt += 1;
@@ -109,6 +110,7 @@ void main() {
       }
     }
 
+    // get long message
     // ignore: literal_only_boolean_expressions
     while (true) {
       cnt += 1;
