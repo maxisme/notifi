@@ -35,7 +35,6 @@ class NotificationTableState extends State<NotificationTable>
       if (notifications.notifications.isNotEmpty) {
         return AnimatedList(
             padding: const EdgeInsets.only(bottom: 10),
-            shrinkWrap: true,
             key: notifications.tableKey,
             controller: notifications.tableController,
             itemBuilder: _buildNotification,
