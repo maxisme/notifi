@@ -17,11 +17,6 @@ class _AnimatedCntState extends State<AnimatedCnt>
   AnimationController _controller;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     if (_controller != null) _controller.dispose();
     super.dispose();

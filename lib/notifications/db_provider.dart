@@ -84,6 +84,7 @@ class DBProvider {
   }
 
   Future<int> markRead(int id, {bool isRead}) async {
+    if (isTest) return -1;
     int read = 0;
     if (isRead) read = 1;
     final Database db = await initDB();
