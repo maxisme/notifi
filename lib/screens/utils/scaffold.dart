@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/animated_cnt.dart';
