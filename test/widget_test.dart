@@ -184,7 +184,7 @@ void main() {
       );
       await pumpWidgetWithNotification(tester, n);
       await tester.pump();
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(n.isExpanded, false);
       expect(n.isRead, false);
@@ -192,7 +192,7 @@ void main() {
 
       // expand
       await tester.tap(find.byKey(Key('toggle-expand')));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(n.isExpanded, true);
       expect(n.isRead, true);
