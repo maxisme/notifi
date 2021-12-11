@@ -99,16 +99,9 @@ void main() {
             'https://$host/api?credentials=$creds&title=${i}&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
         // ignore: avoid_print
         print(req.statusCode);
-        await Future<Duration>.delayed(Duration(milliseconds: 600));
+        await Future<Duration>.delayed(Duration(seconds: 1));
+        await driver.waitFor(find.text('$i'));
       }
-
-      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 2));
-
-      // wait for notification to appear
-      SerializableFinder notification = find.text('5');
-      await driver.waitFor(notification);
-      await driver.scrollIntoView(notification);
-      await driver.waitUntilNoTransientCallbacks(timeout: Duration(seconds: 2));
     });
   });
 }
