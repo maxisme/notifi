@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 
 void main() {
-  group('Screen Shot', () {
+  group('Integration Tests', () {
     FlutterDriver driver;
 
     // Connect to the Flutter driver before running any tests.
@@ -32,6 +32,7 @@ void main() {
     test('Screenshot no notifications', () async {
       SerializableFinder deleteAll = find.byValueKey('delete-all');
       SerializableFinder ok = find.byValueKey('ok');
+
       // ss no notifications
       await driver.tap(deleteAll);
       await driver.waitFor(ok);
@@ -81,9 +82,6 @@ void main() {
       SerializableFinder credentials = find.byValueKey('credentials');
       String creds = await driver.getText(credentials);
 
-      // ignore: avoid_print
-      print(creds);
-
       // get host from .env
       String host;
       String file = await File('.env').readAsString();
@@ -99,8 +97,7 @@ void main() {
             'https://$host/api?credentials=$creds&title=${i}&message=Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&link=https://notifi.it&image=https://notifi.it/images/logo.png'));
         // ignore: avoid_print
         print(req.statusCode);
-        await Future<Duration>.delayed(Duration(seconds: 1));
-        await driver.waitFor(find.text('$i'));
+        await driver.waitFor(find.text('$i'), timeout: Duration(seconds: 2));
       }
     });
   });
