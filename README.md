@@ -50,7 +50,6 @@ http://itunes.apple.com/lookup?bundleId=it.notifi.notifi
 
 ```bash
 ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
-chmod +x $(pwd)/.git/hooks/pre-commit
 ```
 
 ## linux setup

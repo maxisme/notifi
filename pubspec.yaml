@@ -12,8 +12,8 @@ dependencies:
   cached_network_image: ^3.1.0
   desktop_window: ^0.4.0
   dio: ^4.0.0
-  firebase_core: ^1.8.0
-  firebase_messaging: ^10.0.9
+  firebase_core: ^1.12.0
+  firebase_messaging: ^11.2.6
   flutter:
     sdk: flutter
   flutter_app_icon_badge: ^2.0.0
