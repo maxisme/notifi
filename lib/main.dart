@@ -25,6 +25,7 @@ Future<void> main() => mainImpl();
 
 Future<void> mainImpl({bool integration: false}) async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final SharedPreferences sp = await SharedPreferences.getInstance();
   Globals.isIntegration = integration;
 
@@ -77,6 +78,7 @@ Future<void> mainImpl({bool integration: false}) async {
   } catch (_) {
     canBadge = false;
   }
+
   runApp(MultiProvider(
     providers: <SingleChildWidget>[
       ChangeNotifierProvider<TableNotifier>(

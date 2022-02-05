@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/animated_cnt.dart';
@@ -13,8 +15,8 @@ class MyScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double paddingTop = 0;
-    if (MediaQuery.of(context).padding.top > 0) {
+    double paddingTop = MediaQuery.of(context).padding.top;
+    if (MediaQuery.of(context).padding.top > 0 && Platform.isIOS) {
       paddingTop = MediaQuery.of(context).padding.top - 20;
     }
     double paddingBottom = 0;
