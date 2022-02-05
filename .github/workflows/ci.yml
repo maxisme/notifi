@@ -130,7 +130,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: "Codesign"
+      - name: "Build & Codesign"
         run: |
           flutter config --enable-macos-desktop
           flutter pub get
@@ -155,10 +155,10 @@ jobs:
           /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app
 
           # codesign sparkle auto update
-          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app
 
           # codesign binaries
-          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle
+          /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Sparkle
           /usr/bin/codesign -vvv --force --deep --options runtime --strict -s Z28DW76Y3W build/macos/Build/Products/Release/notifi.app/Contents/MacOS/notifi
 
       - name: "Create & Notarize .dmg"

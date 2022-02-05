@@ -44,7 +44,7 @@ jobs:
       - name: Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
           arch: x86_64
           profile: Nexus 6P
           script: ./test_driver/test.sh "${{ matrix.device }}" "${{ matrix.branch }}" "${{ secrets.B64_ENV }}" "${{ secrets.B64_DEV_ENV }}"
