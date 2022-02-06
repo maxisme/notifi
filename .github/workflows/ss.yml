@@ -44,7 +44,7 @@ jobs:
         id: extract_branch
 
       - name: Delete branch
-        run: git push origin --delete "automated-screenshots-${{ steps.extract_branch.outputs.branch }}"
+        run: git push origin --delete "automated-screenshots-${{ steps.extract_branch.outputs.branch }}" || true
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
