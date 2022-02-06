@@ -13,14 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Delete branch
-        run: git push --delete "automated-screenshots-${{ steps.extract_branch.outputs.branch }}"
-
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
@@ -45,6 +37,14 @@ jobs:
             brew install imagemagick
 
             bash test_driver/screenshot.sh
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Delete branch
+        run: git push origin --delete "automated-screenshots-${{ steps.extract_branch.outputs.branch }}"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
