@@ -22,4 +22,9 @@ fi
 flutter clean
 flutter doctor
 flutter devices
-flutter drive --target=test_driver/app.dart -d "$device"
+
+# retry test once if failed
+for attempt in 1 2; do
+  echo "Test attempt $attempt"
+  flutter drive --target=test_driver/app.dart -d "$device" && break
+done
