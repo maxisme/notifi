@@ -1,5 +1,6 @@
 import 'dart:io' show File, Platform;
 
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/gestures.dart';
@@ -10,7 +11,6 @@ import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:notifi/utils/version.dart';
@@ -66,7 +66,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   SystemNavigator.pop();
                 },
                 child: Icon(
-                  Akaricons.signOut,
+                  AkarIcons.sign_out,
                   color: MyColour.black,
                   size: 25,
                 ),
@@ -75,15 +75,15 @@ class SettingsScreenState extends State<SettingsScreen> {
           ));
     }
 
-    IconData otherPlatformsIcon = Akaricons.laptop_device;
+    IconData otherPlatformsIcon = AkarIcons.laptop_device;
     if (Platform.isLinux || Platform.isMacOS) {
-      otherPlatformsIcon = Akaricons.mobile_device;
+      otherPlatformsIcon = AkarIcons.mobile_device;
     }
 
     return MyScaffold(
         leading: IconButton(
             key: Key('back-button'),
-            icon: const Icon(Akaricons.chevronLeft),
+            icon: const Icon(AkarIcons.chevron_left),
             onPressed: () {
               Navigator.pop(context);
             }),
@@ -93,13 +93,13 @@ class SettingsScreenState extends State<SettingsScreen> {
             final String credentials = user.getCredentials();
 
             SettingOption credentialsSettingWidget =
-                SettingOption('Copy Credentials', Akaricons.clipboard,
+                SettingOption('Copy Credentials', AkarIcons.clipboard,
                     onTapCallback: () async {
               await copyText(credentials, context);
             });
             if (Platform.isIOS || Platform.isAndroid) {
               credentialsSettingWidget =
-                  SettingOption('Share Credentials', Akaricons.share,
+                  SettingOption('Share Credentials', AkarIcons.share_box,
                       onTapCallback: () async {
                 await Share.share('$credentials ');
               });
@@ -107,14 +107,14 @@ class SettingsScreenState extends State<SettingsScreen> {
 
             return Column(children: <Widget>[
               SettingOption(
-                  'How Do I Receive Notifications?', Akaricons.question,
+                  'How Do I Receive Notifications?', AkarIcons.question,
                   onTapCallback: () async {
                 await openUrl('$httpEndpoint?c=$credentials#how-to');
               }),
               credentialsSettingWidget
             ]);
           }),
-          SettingOption('Create New Credentials', Akaricons.arrowClockwise,
+          SettingOption('Create New Credentials', AkarIcons.arrow_clockwise,
               key: Key('new-credentials'), onTapCallback: () {
             showAlert(
                 context,
@@ -138,14 +138,14 @@ class SettingsScreenState extends State<SettingsScreen> {
             });
           }),
           if (Platform.isIOS)
-            SettingOption('iOS App Settings...', Akaricons.gear,
+            SettingOption('iOS App Settings...', AkarIcons.gear,
                 onTapCallback: AppSettings.openNotificationSettings),
-          SettingOption('About...', Akaricons.info,
+          SettingOption('About...', AkarIcons.info,
               onTapCallback: () => openUrl('https://notifi.it')),
           SettingOption('Other Platforms...', otherPlatformsIcon,
               onTapCallback: () => openUrl('$httpEndpoint#downloads')),
           if (Platform.isAndroid || Platform.isIOS)
-            SettingOption('Review app...', Akaricons.star,
+            SettingOption('Review app...', AkarIcons.star,
                 onTapCallback: () => LaunchReview.launch(
                       androidAppId: 'it.notifi.notifi',
                       iOSAppId: '1563961135',
@@ -162,7 +162,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     }
                     return SettingOption(
                       'Open notifi at Login',
-                      Akaricons.person,
+                      AkarIcons.person,
                       switchValue: f.data,
                       switchCallback: (_) async {
                         final bool enabled = await LaunchAtLogin.isEnabled;
@@ -188,7 +188,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     }
                     return SettingOption(
                       'Open notifi at Login',
-                      Akaricons.person,
+                      AkarIcons.person,
                       switchValue: f.data,
                       switchCallback: (_) async {
                         File desktopPath =
@@ -218,7 +218,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   final SharedPreferences sp = f.data as SharedPreferences;
                   return SettingOption(
                     'Pin window',
-                    Akaricons.pin,
+                    AkarIcons.pin,
                     switchValue: shouldPinWindow(sp),
                     switchCallback: (bool shouldPin) async {
                       final bool success = await invokeMacMethod(
@@ -283,7 +283,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                         invokeMacMethod('update');
                                       },
                                       child: Icon(
-                                        Akaricons.cloudDownload,
+                                        AkarIcons.cloud_download,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .secondary,
@@ -343,7 +343,7 @@ class SettingOption extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodyText2),
                       )
                     ]),
-                    Icon(Akaricons.chevronRight,
+                    Icon(AkarIcons.chevron_right,
                         size: 20, color: MyColour.black)
                   ])));
     } else {

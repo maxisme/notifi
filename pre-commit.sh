@@ -1,4 +1,5 @@
 #!/bin/bash
+# ln -s $(pwd)/pre-commit.sh $(pwd)/.git/hooks/pre-commit
 
 flutter channel stable
 flutter upgrade

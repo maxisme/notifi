@@ -1,6 +1,6 @@
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,7 @@ Future<void> showAlert(BuildContext context, String title, String description,
           Container(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Icon(
-              Akaricons.triangleAlert,
+              AkarIcons.triangle_alert,
               color: Theme.of(context).colorScheme.secondary,
               size: 40,
             ),
@@ -71,7 +71,7 @@ void showAlertSnackBar(BuildContext context, String message) {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   const Icon(
-                    Akaricons.triangleAlert,
+                    AkarIcons.triangle_alert,
                     color: MyColour.white,
                     size: 13,
                   ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -7,12 +8,10 @@ import 'package:notifi/notifications/notification.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/loading_gif.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:toast/toast.dart';
 
 class NotificationTable extends StatefulWidget {
   const NotificationTable({Key key}) : super(key: key);
@@ -150,62 +149,53 @@ class NotificationTableState extends State<NotificationTable>
     ));
 
     // slide actions
-    List<Widget> actions = <Widget>[
-      IconSlideAction(
-        caption: 'Title',
-        color: MyColour.transparent,
+    List<SlidableAction> actions = <SlidableAction>[
+      SlidableAction(
+        label: 'Title',
+        backgroundColor: MyColour.transparent,
         foregroundColor: MyColour.darkGrey,
-        icon: Akaricons.copy,
-        onTap: () async {
+        icon: AkarIcons.copy,
+        onPressed: (_) async {
           await copyText(notification.title, context);
         },
       ),
-      IconSlideAction(
-        caption: 'Message',
-        color: MyColour.transparent,
+      SlidableAction(
+        label: 'Message',
+        backgroundColor: MyColour.transparent,
         foregroundColor: MyColour.darkGrey,
-        icon: Akaricons.copy,
-        onTap: () async {
+        icon: AkarIcons.copy,
+        onPressed: (_) async {
           await copyText(notification.message, context);
         },
       ),
     ];
 
     if (Platform.isIOS || Platform.isAndroid) {
-      actions = <Widget>[
-        IconSlideAction(
-          caption: 'Read',
-          color: MyColour.transparent,
-          foregroundColor: MyColour.grey,
-          icon: Akaricons.check,
-          onTap: () {
-            Provider.of<Notifications>(context, listen: false)
-                .toggleRead(index);
-          },
-        ),
+      actions = <SlidableAction>[
+        SlidableAction(
+            backgroundColor: MyColour.transparent,
+            foregroundColor: MyColour.grey,
+            icon: AkarIcons.check,
+            label: 'Read',
+            onPressed: (_) {
+              Provider.of<Notifications>(context, listen: false)
+                  .toggleRead(index);
+            }),
       ];
 
       if (notification.link != '') {
-        actions.add(IconSlideAction(
-          caption: 'Link',
-          color: MyColour.transparent,
-          foregroundColor: MyColour.grey,
-          iconWidget: InkWell(
-              onTap: () async {
-                await openUrl(notification.link);
-                setState(() {
-                  Provider.of<Notifications>(context, listen: false)
-                      .markRead(notification.index, isRead: true);
-                });
-              },
-              onLongPress: () {
-                Toast.show(notification.link, context, gravity: Toast.CENTER);
-              },
-              child: Icon(
-                Akaricons.link,
-                color: MyColour.grey,
-              )),
-        ));
+        actions.add(SlidableAction(
+            backgroundColor: MyColour.transparent,
+            foregroundColor: MyColour.grey,
+            icon: AkarIcons.link_chain,
+            label: 'Link',
+            onPressed: (_) async {
+              await openUrl(notification.link);
+              setState(() {
+                Provider.of<Notifications>(context, listen: false)
+                    .markRead(notification.index, isRead: true);
+              });
+            }));
       }
     }
 
@@ -217,21 +207,22 @@ class NotificationTableState extends State<NotificationTable>
           curve: Curves.easeIn,
           child: Slidable(
               key: Key(notification.id.toString()),
-              movementDuration: const Duration(milliseconds: 250),
-              actionPane: const SlidableDrawerActionPane(),
-              actionExtentRatio: 0.15,
-              actions: actions,
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  color: MyColour.transparent,
-                  foregroundColor: MyColour.grey,
-                  icon: Akaricons.cross,
-                  onTap: () {
-                    Provider.of<Notifications>(context, listen: false)
-                        .delete(index);
-                  },
-                ),
-              ],
+              startActionPane:
+                  ActionPane(motion: ScrollMotion(), children: actions),
+              endActionPane: ActionPane(
+                motion: ScrollMotion(),
+                children: <SlidableAction>[
+                  SlidableAction(
+                    backgroundColor: MyColour.transparent,
+                    foregroundColor: MyColour.grey,
+                    icon: AkarIcons.cross,
+                    onPressed: (_) {
+                      Provider.of<Notifications>(context, listen: false)
+                          .delete(index);
+                    },
+                  ),
+                ],
+              ),
               child: notification)),
     );
   }

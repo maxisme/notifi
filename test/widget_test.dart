@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,7 +11,6 @@ import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/home.dart';
 import 'package:notifi/screens/settings.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -63,7 +63,7 @@ void main() {
       await pumpWidgetWithNotification(tester, null);
 
       // open settings
-      await tester.tap(find.byIcon(Akaricons.gear));
+      await tester.tap(find.byIcon(AkarIcons.gear));
       await tester.pump();
       // not sure why I have to do twice
       await tester.pump(const Duration(seconds: 1));
@@ -104,7 +104,8 @@ void main() {
     while (true) {
       cnt += 1;
       String str = lorem.substring(0, cnt);
-      if (hasTextOverflow(str, textTheme.headline1, maxWidth: width)) {
+      if (hasTextOverflow(str, textTheme.headline1, maxWidth: width - 15)) {
+        // 15 == iconsize
         longTtl = str;
         break;
       }
@@ -166,7 +167,7 @@ void main() {
       expect(find.text('1'), findsOneWidget);
 
       // mark read
-      await tester.tap(find.byIcon(Akaricons.check));
+      await tester.tap(find.byIcon(AkarIcons.check));
       await tester.pump();
 
       expect(n.isRead, true);
@@ -227,7 +228,7 @@ void main() {
           await pumpWidgetWithNotification(tester, notification);
           await tester.pump();
 
-          expect(find.byIcon(Akaricons.enlarge), findsOneWidget);
+          expect(find.byIcon(AkarIcons.enlarge), findsOneWidget);
         });
       });
     });
@@ -258,7 +259,7 @@ void main() {
           await pumpWidgetWithNotification(tester, notification);
           await tester.pump();
 
-          expect(find.byIcon(Akaricons.enlarge), findsNothing);
+          expect(find.byIcon(AkarIcons.enlarge), findsNothing);
         });
       });
     });
