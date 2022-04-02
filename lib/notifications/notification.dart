@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart' as i;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:notifi/notifications/notifis.dart';
-import 'package:notifi/utils/icons.dart';
 import 'package:notifi/utils/pallete.dart';
 import 'package:notifi/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +93,8 @@ class NotificationUIState extends State<NotificationUI>
   final GlobalKey _messageKey = GlobalKey();
   final ValueNotifier<String> _timeStr = ValueNotifier<String>('');
   Timer timer;
-  SlideActionType mouseSliderAction;
+
+  double iconSize = 15.0;
 
   @override
   void setState(Function fn) {
@@ -120,7 +119,6 @@ class NotificationUIState extends State<NotificationUI>
 
   @override
   void dispose() {
-    mouseSliderAction = null;
     timer?.cancel();
     super.dispose();
   }
@@ -129,7 +127,6 @@ class NotificationUIState extends State<NotificationUI>
   Widget build(BuildContext context) {
     return Consumer<Notifications>(builder:
         (BuildContext context, Notifications reloadTable, Widget child) {
-      const double iconSize = 15.0;
       String title = widget.title;
       String message = widget.message;
       int messageMaxLines = 3;
@@ -195,8 +192,8 @@ class NotificationUIState extends State<NotificationUI>
             },
             child: Container(
                 padding: const EdgeInsets.only(top: 7.0),
-                child: const Icon(
-                  Akaricons.link,
+                child: Icon(
+                  AkarIcons.link_chain,
                   size: iconSize,
                   color: MyColour.grey,
                 )));
@@ -239,6 +236,8 @@ class NotificationUIState extends State<NotificationUI>
         timePaddingBottom = 1;
         timePaddingTop = 4;
       }
+
+      // NOTIFICATION
       final Container slideNotification = Container(
           color: Colors.transparent,
           padding: const EdgeInsets.only(
@@ -273,8 +272,8 @@ class NotificationUIState extends State<NotificationUI>
                                       child: Container(
                                           padding:
                                               const EdgeInsets.only(top: 2.0),
-                                          child: const Icon(
-                                            Akaricons.check,
+                                          child: Icon(
+                                            AkarIcons.check,
                                             size: iconSize,
                                             color: MyColour.grey,
                                           ))),
@@ -292,8 +291,8 @@ class NotificationUIState extends State<NotificationUI>
                                                 const EdgeInsets.only(top: 7.0),
                                             child: Icon(
                                               widget.isExpanded
-                                                  ? Akaricons.reduce
-                                                  : Akaricons.enlarge,
+                                                  ? AkarIcons.reduce
+                                                  : AkarIcons.enlarge,
                                               size: iconSize,
                                               color: MyColour.grey,
                                             )))
@@ -311,25 +310,51 @@ class NotificationUIState extends State<NotificationUI>
                               key: _columnKey,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                // TITLE
-                                SelectableText(title, key: _titleKey,
-                                    onTap: () {
-                                  setState(() {
-                                    if (!widget.isExpanded) {
-                                      widget.toggleExpand(
-                                          context, widget.index);
-                                    }
-                                  });
-                                },
-                                    scrollPhysics:
-                                        const NeverScrollableScrollPhysics(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1
-                                        .copyWith(color: titleColour),
-                                    textAlign: TextAlign.left,
-                                    minLines: 1,
-                                    maxLines: titleMaxLines),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    // TITLE
+                                    Expanded(
+                                      child: SelectableText(title,
+                                          key: _titleKey, onTap: () {
+                                        setState(() {
+                                          if (!widget.isExpanded) {
+                                            widget.toggleExpand(
+                                                context, widget.index);
+                                          }
+                                        });
+                                      },
+                                          scrollPhysics:
+                                              // ignore: lines_longer_than_80_chars
+                                              const NeverScrollableScrollPhysics(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1
+                                              .copyWith(color: titleColour),
+                                          textAlign: TextAlign.left,
+                                          minLines: 1,
+                                          maxLines: titleMaxLines),
+                                    ),
+                                    if (Platform.isMacOS || Platform.isLinux)
+                                      Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 2.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                Provider.of<Notifications>(
+                                                        context,
+                                                        listen: false)
+                                                    .delete(widget.index);
+                                              });
+                                            },
+                                            child:
+                                                Icon(AkarIcons.cross, size: 10),
+                                          )),
+                                  ],
+                                ),
 
                                 // TIME
                                 Padding(
@@ -356,40 +381,6 @@ class NotificationUIState extends State<NotificationUI>
                               ]),
                         ))
                       ]))));
-
-      if (Platform.isMacOS || Platform.isLinux) {
-        final SlidableState slider = Slidable.of(context);
-        return LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-          final double paddingArea = constraints.maxWidth - padding - 5;
-          return MouseRegion(
-              onHover: (PointerHoverEvent event) {
-                SlideActionType actionType;
-                if (event.position.dx > paddingArea) {
-                  mouseSliderAction = actionType = SlideActionType.secondary;
-                } else if (event.position.dx <= padding + 5) {
-                  mouseSliderAction = actionType = SlideActionType.primary;
-                } else {
-                  Slidable.of(context).close();
-                  mouseSliderAction = null;
-                }
-
-                // Add delay to make sure mouse is in area for a set amount of
-                // time
-                Future<dynamic>.delayed(const Duration(milliseconds: 100), () {
-                  if (mouseSliderAction != null &&
-                      mouseSliderAction == actionType &&
-                      slider != null) {
-                    slider.open(actionType: actionType);
-                  }
-                });
-              },
-              onExit: (_) {
-                mouseSliderAction = null;
-              },
-              child: slideNotification);
-        });
-      }
       return GestureDetector(
           onLongPress: () {
             setState(() {
@@ -407,13 +398,17 @@ class NotificationUIState extends State<NotificationUI>
     // prevent check if can expand when window is scaling up
     if (Platform.isMacOS && _columnKey.currentContext.size.width <= 123) return;
 
+    double maxWidth = _columnKey.currentContext.size.width;
+    // account for icon
+    if (Platform.isMacOS || Platform.isLinux) maxWidth -= iconSize;
+
     if (_columnKey.currentContext != null &&
         hasTextOverflow(widget.title, Theme.of(context).textTheme.headline1,
-            maxWidth: _columnKey.currentContext.size.width)) {
+            maxWidth: maxWidth)) {
       canExpand = true;
       widget.shrinkTitle = getEclipsedText(
           widget.title, Theme.of(context).textTheme.headline1,
-          maxWidth: _columnKey.currentContext.size.width);
+          maxWidth: maxWidth);
     } else {
       widget.shrinkTitle = widget.title;
     }

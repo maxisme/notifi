@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:notifi/notifications/notifications_table.dart';
 import 'package:notifi/notifications/notifis.dart';
 import 'package:notifi/screens/utils/alert.dart';
 import 'package:notifi/screens/utils/scaffold.dart';
 import 'package:notifi/user.dart';
-import 'package:notifi/utils/icons.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
     }
     return MyScaffold(
         leading: IconButton(
-            icon: const Icon(Akaricons.gear, key: Key('cog')),
+            icon: const Icon(AkarIcons.gear, key: Key('cog')),
             onPressed: () async {
               Navigator.pushNamed(context, '/settings');
             }),
@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                               Positioned(
                                 top: doubleCheckOffset,
                                 child: Icon(
-                                  Akaricons.doubleCheck,
+                                  AkarIcons.double_check,
                                   size: 47,
                                   color: Theme.of(context).primaryColor,
                                 ),
@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.pop(context);
                           });
                         },
-                        child: Icon(Akaricons.trash,
+                        child: Icon(AkarIcons.trash_can,
                             key: Key('delete-all'),
                             color: Theme.of(context).colorScheme.secondary,
                             size: 30)),

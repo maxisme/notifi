@@ -5,7 +5,8 @@
 ## App | [Website](https://github.com/maxisme/notifi.it) | [Backend](https://github.com/maxisme/notifi-backend)
 
 [![style: lint](https://img.shields.io/badge/lint-flutter-4BC0F5)](https://pub.dev/packages/lint)
-[![CI](https://github.com/maxisme/notifi/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/maxisme/notifi/actions/workflows/ci.yml)
+[![Master](https://github.com/maxisme/notifi/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/maxisme/notifi/actions/workflows/ci.yml)
+[![Integration Tests](https://github.com/maxisme/notifi/actions/workflows/it.yml/badge.svg)](https://github.com/maxisme/notifi/actions/workflows/it.yml)
 
 # Run locally
 
