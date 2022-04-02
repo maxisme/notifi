@@ -350,8 +350,8 @@ class NotificationUIState extends State<NotificationUI>
                                                     .delete(widget.index);
                                               });
                                             },
-                                            child: Icon(AkarIcons.cross,
-                                                size: iconSize),
+                                            child:
+                                                Icon(AkarIcons.cross, size: 10),
                                           )),
                                   ],
                                 ),

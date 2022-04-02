@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.pop(context);
                           });
                         },
-                        child: Icon(AkarIcons.trash_bin,
+                        child: Icon(AkarIcons.trash_can,
                             key: Key('delete-all'),
                             color: Theme.of(context).colorScheme.secondary,
                             size: 30)),

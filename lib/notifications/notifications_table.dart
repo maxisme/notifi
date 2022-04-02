@@ -210,6 +210,7 @@ class NotificationTableState extends State<NotificationTable>
               startActionPane:
                   ActionPane(motion: ScrollMotion(), children: actions),
               endActionPane: ActionPane(
+                extentRatio: 0.25,
                 motion: ScrollMotion(),
                 children: <SlidableAction>[
                   SlidableAction(
