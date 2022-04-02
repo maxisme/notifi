@@ -1,7 +1,7 @@
 name: Integration Tests
 on:
   schedule:
-    - cron:  '35 * * * *'
+    - cron:  '35 */2 * * *'
 
 jobs:
   test-apple:
