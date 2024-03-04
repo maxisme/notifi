@@ -10,7 +10,7 @@
 
 # Run locally
 
-## create an .env with the example content
+## Create an .env with the example content
 ```
 SERVER_KEY=Hu2J7b7xA8MndeNS
 KEY_STORE=notifi-local
@@ -19,7 +19,7 @@ TLS=false
 HOST=127.0.0.1:9081
 ```
 
-## run the backend
+## Run the backend
  - [Install docker](https://docs.docker.com/get-docker/)
  - use a matching `SERVER_KEY`
 ```
