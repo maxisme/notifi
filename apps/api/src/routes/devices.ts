@@ -1,7 +1,7 @@
 import { registerDeviceBody, updateDeviceSettingsBody } from '@notifi/contract';
 import { Hono } from 'hono';
 import { fromB64 } from '../lib/bytes.js';
-import { encryptField, encryptPadded, tokenHmacHex } from '../lib/fieldcrypto.js';
+import { encryptField, tokenHmacHex } from '../lib/fieldcrypto.js';
 import { errBody, t } from '../lib/respond.js';
 import { now } from '../lib/time.js';
 import { signatureAuth } from '../middleware.js';
@@ -49,8 +49,6 @@ devices.post('/devices', async (c) => {
   const apnsEnc = parsed.apns_token
     ? await encryptField(c.env, parsed.apns_token)
     : '';
-  const platformEnc = await encryptPadded(c.env, parsed.platform);
-  const versionEnc = await encryptPadded(c.env, parsed.app_version);
 
   const retireOthers = c.env.DB.prepare(
     `UPDATE devices SET apns_token = '', apns_token_hmac = 'retired:' || id
@@ -74,8 +72,8 @@ devices.post('/devices', async (c) => {
     parsed.encryption_public_key,
     apnsEnc,
     tokenHmac,
-    platformEnc,
-    versionEnc,
+    parsed.platform,
+    parsed.app_version,
     nowS,
     nowS,
   );

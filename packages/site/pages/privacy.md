@@ -28,7 +28,7 @@ The server identifies a device only by its public key. Nothing in the system lin
 
 - Two public keys: one for verifying requests, one for encrypting notifications to you.
 - Your Apple push token, encrypted with a key held by the server, so notifications can be delivered. Alongside it, a keyed one-way hash of the same token, stored unencrypted: it lets the server recognise that a new registration comes from a device it already knows, so the old row can be retired instead of receiving duplicates. It identifies the physical device across identity resets, and this is the only thing it is used for.
-- The platform (`ios` or `macos`) and app version, encrypted with the same key.
+- The platform (`ios` or `macos`) and the app version, stored in plain text.
 - When the device first registered, when it was last seen, how far it has collected, and a lifetime count of notifications sent to it.
 - A rolling one-hour send counter, used for rate limiting, and the strict-send setting if you have turned it on.
 
