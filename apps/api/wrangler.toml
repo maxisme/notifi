@@ -82,6 +82,14 @@ crons = ["0 4 * * *"]
 enabled = true
 head_sampling_rate = 1
 
+# One data point per accepted send: the device and key, whether the APNs push
+# succeeded, and the payload size. messages is a delivery queue that empties
+# on collect, so it cannot answer "how many were sent yesterday"; this can, for
+# three months, which is what the daily summary and the dashboard chart need.
+[[analytics_engine_datasets]]
+binding = "SEND_EVENTS"
+dataset = "notifi_sends"
+
 [[unsafe.bindings]]
 name = "SEND_IP_LIMIT"
 type = "ratelimit"

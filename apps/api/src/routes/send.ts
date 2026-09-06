@@ -286,6 +286,12 @@ send.on(['GET', 'POST'], '/send', async (c) => {
     nowS,
     String(messageId),
   );
+  c.env.SEND_EVENTS.writeDataPoint({
+    indexes: [String(row.device_id)],
+    blobs: [String(row.key_id), pushed ? 'pushed' : 'failed', critical ? 'critical' : 'normal'],
+    doubles: [payloadBytes(payload)],
+  });
+
   const wake = (async () => {
     try {
       const id = c.env.DEVICE_SOCKET.idFromName(String(row.device_id));
