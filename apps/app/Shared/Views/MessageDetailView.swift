@@ -205,13 +205,13 @@ struct MessageDetailView: View {
         guard let key = model.sync?.keys.first(where: { $0.id == id }) else {
             return Copy.Message.keyFallbackName("\(id)")
         }
-        return key.isDefault ? nil : key.name
+        return model.isDeviceKey(key) ? nil : key.name
     }
 
     private func key(for message: Message) -> CachedKey? {
         guard let id = message.keyID else { return nil }
         guard let key = model.sync?.keys.first(where: { $0.id == id }) else { return nil }
-        return key.isDefault ? nil : key
+        return model.isDeviceKey(key) ? nil : key
     }
 
     @ViewBuilder

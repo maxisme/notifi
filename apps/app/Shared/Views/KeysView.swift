@@ -11,7 +11,7 @@ struct KeysView: View {
     private var activeKeys: [CachedKey] { keys.filter { !$0.isRevoked } }
     private var revokedKeys: [CachedKey] { keys.revokedUnderUnusedNames }
     private var orderedActiveKeys: [CachedKey] {
-        activeKeys.filter(\.isDefault) + activeKeys.filter { !$0.isDefault }
+        activeKeys.filter { model.isDeviceKey($0) } + activeKeys.filter { !model.isDeviceKey($0) }
     }
 
     private var criticalKeys: [CachedKey] { activeKeys.filter(\.isCritical) }
@@ -47,12 +47,12 @@ struct KeysView: View {
                 } else {
                     ForEach(orderedActiveKeys) { key in
                         NavigationLink(value: key) {
-                            KeyRow(key: key, isFixture: key.isDefault)
+                            KeyRow(key: key, isFixture: model.isDeviceKey(key))
                         }
                         .buttonStyle(.geistRow)
                         .geistGutter()
                         .background {
-                            if key.isDefault {
+                            if model.isDeviceKey(key) {
                                 StaticField(level: .raised, fillsScreen: false)
                             }
                         }

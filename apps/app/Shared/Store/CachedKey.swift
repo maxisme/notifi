@@ -14,7 +14,7 @@ struct CachedKey: Codable, Identifiable, Hashable, Sendable {
 
     var isCritical: Bool { isCriticalFlag == true }
 
-    var isDefault: Bool { name.lowercased() == "device" }
+    var hasDeviceName: Bool { CachedKey.isDeviceName(name) }
 
     var maskedValue: String { Copy.Keys.maskedValue(prefix) }
 
@@ -25,7 +25,23 @@ struct CachedKey: Codable, Identifiable, Hashable, Sendable {
     }
 }
 
+extension CachedKey {
+    static let deviceName = "device"
+    static let legacyDeviceName = "default"
+
+    static func isDeviceName(_ name: String) -> Bool {
+        let lowered = name.lowercased()
+        return lowered == deviceName || lowered == legacyDeviceName
+    }
+}
+
 extension Array where Element == CachedKey {
+    var deviceKey: CachedKey? {
+        let active = filter { !$0.isRevoked }
+        return active.first { $0.name.lowercased() == CachedKey.deviceName }
+            ?? active.first { $0.name.lowercased() == CachedKey.legacyDeviceName }
+    }
+
     var mergedByName: [CachedKey] {
         var seen = Set<String>()
         return (filter { !$0.isRevoked } + filter(\.isRevoked))

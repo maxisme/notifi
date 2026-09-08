@@ -210,6 +210,10 @@ extension DeviceIdentity {
         try? storePrivately(service: IdentityConstants.defaultKeyService, data: Data(value.utf8))
     }
 
+    static func hasDefaultKey() throws -> Bool {
+        try loadFromAnyGroup(service: IdentityConstants.defaultKeyService) != nil
+    }
+
     static func loadDefaultKey() -> String? {
         guard let data = (try? loadFromAnyGroup(service: IdentityConstants.defaultKeyService)) ?? nil else {
             return nil

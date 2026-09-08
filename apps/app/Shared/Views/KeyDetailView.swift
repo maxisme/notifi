@@ -109,9 +109,9 @@ struct KeyDetailView: View {
                 .font(.inco(.subheadline, weight: .regular))
                 .foregroundStyle(Theme.muted)
                 .textSelection(.enabled)
-                .padding(.top, key.isDefault ? 8 : 14)
+                .padding(.top, model.isDeviceKey(key) ? 8 : 14)
 
-            if key.isDefault, let full = model.defaultKeyValue {
+            if model.isDeviceKey(key), let full = model.defaultKeyValue {
                 HStack(spacing: 9) {
                     OutlineButton(title: copied ? Copy.Common.copied : Copy.KeyDetail.copyKey) {
                         Clipboard.copySensitive(full)
@@ -174,7 +174,7 @@ struct KeyDetailView: View {
                 Text(Copy.KeyDetail.revokedNotice)
                     .geistConsequence()
                     .padding(.top, 20)
-            } else if key.isDefault {
+            } else if model.isDeviceKey(key) {
                 SectionLabel(text: Copy.KeyDetail.sectionDanger)
                 OutlineButton(title: isRegenerating ? Copy.KeyDetail.regenerating : Copy.KeyDetail.regenerate,
                               role: .destructive) {
@@ -202,7 +202,7 @@ struct KeyDetailView: View {
     }
 
     private func examplesURL(for key: CachedKey) -> URL {
-        if key.isDefault, let full = model.defaultKeyValue {
+        if model.isDeviceKey(key), let full = model.defaultKeyValue {
             return URL(string: "https://notifi.it/?key=\(full)#api")!
         }
         return URL(string: "https://notifi.it/#api")!

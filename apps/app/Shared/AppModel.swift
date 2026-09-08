@@ -264,17 +264,28 @@ final class AppModel {
     func ensureDefaultKey() async {
         guard let api, let sync else { return }
         guard !sync.keysRefreshFailed else { return }
-        if sync.keys.contains(where: { $0.isDefault && !$0.isRevoked }) {
-            return
+
+        let existing = sync.keys.deviceKey
+        if existing != nil {
+            guard let holdsSecret = try? DeviceIdentity.hasDefaultKey() else { return }
+            if holdsSecret { return }
         }
+
         do {
-            let created = try await api.createKey(name: "device")
+            if let existing {
+                try await api.revokeKey(id: existing.id)
+            }
+            let created = try await api.createKey(name: CachedKey.deviceName)
             DeviceIdentity.storeDefaultKey(created.key)
             await sync.refreshKeys()
         } catch {
             log.error("default key creation failed: \(String(describing: error), privacy: .private)")
         }
     }
+
+    var deviceKey: CachedKey? { sync?.keys.deviceKey }
+
+    func isDeviceKey(_ key: CachedKey) -> Bool { deviceKey?.id == key.id }
 
     var defaultKeyValue: String? { DeviceIdentity.loadDefaultKey() }
 
@@ -297,8 +308,8 @@ final class AppModel {
 
     func regenerateDefaultKey() async throws {
         guard let api, let sync else { throw NotifiError.identityMissing }
-        let superseded = sync.keys.filter { $0.isDefault && !$0.isRevoked }
-        let created = try await api.createKey(name: "device")
+        let superseded = sync.keys.filter { $0.hasDeviceName && !$0.isRevoked }
+        let created = try await api.createKey(name: CachedKey.deviceName)
         DeviceIdentity.storeDefaultKey(created.key)
         for key in superseded {
             do {
