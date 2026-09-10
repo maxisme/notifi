@@ -14,6 +14,7 @@ export interface Env {
   DEVICE_SOCKET: DurableObjectNamespace<DeviceSocket>;
   APNS_TOKEN: DurableObjectNamespace<ApnsToken>;
   SEND_IP_LIMIT: RateLimitBinding;
+  SEND_EVENTS: AnalyticsEngineDataset;
   APNS_HOST: string;
   APNS_TOPIC: string;
   APNS_TEAM_ID: string;

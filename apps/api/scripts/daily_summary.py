@@ -16,6 +16,7 @@ D1_QUERY = (
     "https://api.cloudflare.com/client/v4/accounts/{account}/d1/database/{database}/query"
 )
 CF_GRAPHQL = "https://api.cloudflare.com/client/v4/graphql"
+AE_SQL = "https://api.cloudflare.com/client/v4/accounts/{account}/analytics_engine/sql"
 FIRST_INSTALL = {"1", "1F"}
 WEEK = 604800
 SESSION = requests.Session()
@@ -81,6 +82,22 @@ def query_production_d1(sql):
     if not body["success"]:
         raise SystemExit(f"D1 query failed: {body['errors']}")
     return body["result"][0]["results"][0]
+
+
+def query_send_events(sql):
+    # Sends are counted from Analytics Engine, not from the messages table: a
+    # collected notification is deleted from messages, so that table only ever
+    # holds what is still waiting. Rows may be sampled at volume, so counts are
+    # SUM(_sample_interval) rather than COUNT().
+    res = SESSION.post(
+        AE_SQL.format(account=os.environ["CLOUDFLARE_ACCOUNT_ID"]),
+        headers={"Authorization": f"Bearer {os.environ['CLOUDFLARE_API_TOKEN']}"},
+        data=sql,
+        timeout=30,
+    )
+    res.raise_for_status()
+    rows = res.json()["data"]
+    return rows[0] if rows else {}
 
 
 def senders(count):
@@ -184,19 +201,29 @@ def compose_notification():
     downloads_week = sum(n for n, _ in reports[:7] if n is not None)
     downloads_prior = sum(n for n, _ in reports[7:] if n is not None)
 
-    day = query_production_d1(
-        "SELECT COUNT(*) AS sends, COUNT(DISTINCT device_id) AS senders"
-        " FROM messages WHERE created_at >= unixepoch()-86400"
-    )
-    week = query_production_d1(
-        "SELECT COUNT(*) AS sends, COUNT(DISTINCT device_id) AS senders"
-        " FROM messages WHERE created_at >= unixepoch()-604800"
-    )
-    prior = query_production_d1(
-        "SELECT COUNT(*) AS sends FROM messages"
-        " WHERE created_at >= unixepoch()-1209600 AND created_at < unixepoch()-604800"
-    )
-    history = query_production_d1("SELECT MIN(created_at) AS oldest FROM messages")
+    def sends_since(days, until_days=0):
+        row = query_send_events(
+            "SELECT SUM(_sample_interval) AS sends,"
+            " COUNT(DISTINCT index1) AS senders,"
+            " SUM(IF(blob2 = 'failed', _sample_interval, 0)) AS failed"
+            f" FROM notifi_sends WHERE timestamp >= NOW() - INTERVAL '{days}' DAY"
+            + (f" AND timestamp < NOW() - INTERVAL '{until_days}' DAY" if until_days else "")
+        )
+        return {
+            "sends": int(row.get("sends") or 0),
+            "senders": int(row.get("senders") or 0),
+            "failed": int(row.get("failed") or 0),
+        }
+
+    day = sends_since(1)
+    week = sends_since(7)
+    prior = sends_since(14, 7)
+    oldest = query_send_events("SELECT MIN(timestamp) AS oldest FROM notifi_sends").get("oldest")
+    history = {
+        "oldest": int(datetime.fromisoformat(oldest).replace(tzinfo=timezone.utc).timestamp())
+        if oldest
+        else None
+    }
     devices = query_production_d1(
         "SELECT COUNT(*) AS total,"
         " SUM(CASE WHEN created_at >= unixepoch()-86400 THEN 1 ELSE 0 END) AS day,"
@@ -241,7 +268,8 @@ def compose_notification():
         f"**{day['sends']}** send{'' if day['sends'] == 1 else 's'} yesterday.",
         "",
         "**Yesterday**",
-        f"- Sends **{day['sends']}** from {senders(day['senders'])}",
+        f"- Sends **{day['sends']}** from {senders(day['senders'])}"
+        + (f" · **{day['failed']}** failed to push" if day["failed"] else ""),
         downloads_line,
         f"- Devices **+{devices['day']}**",
         f"- Site **{humans_yday}** measured humans · {site_yday_u} IPs · {site_yday_v} loads",

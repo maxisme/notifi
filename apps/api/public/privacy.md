@@ -2,7 +2,7 @@
 
 > This describes what notifi stores, how long it keeps it, what the server can and cannot read, and what the person sending you a notification can learn about you.
 
-_Last updated 29 August 2026_
+_Last updated 6 September 2026_
 
 ## Who runs notifi
 
@@ -59,6 +59,7 @@ Because the sender and the recipient both talk to the same server, that server i
 - **Uncollected notifications** are kept, encrypted, until your device collects them, for at most 90 days. A daily job removes anything older.
 - **Devices** are kept as long as they are registered. When Apple’s push service reports that the app has been removed from a device, the next send to it deletes the registration and everything under it — keys and uncollected notifications included. A device that is never sent to again can keep its row until a deletion request removes it; email [hello@notifi.it](mailto:hello@notifi.it) with the device’s public key.
 - **Send keys** are kept while the device exists, including revoked ones, so that a revoked key cannot be reused.
+- **A record of each send** — which device and key it went to, whether the push to Apple succeeded, and the size of the notification in bytes — is kept for three months in Cloudflare’s analytics store, to count sends and to notice failed deliveries. It holds no content and no IP address.
 
 notifi is a relay, not a mailbox. Once your device has a notification, the server copy is gone and the only copy is the one on your device.
 
