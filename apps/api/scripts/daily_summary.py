@@ -17,7 +17,8 @@ D1_QUERY = (
 )
 CF_GRAPHQL = "https://api.cloudflare.com/client/v4/graphql"
 AE_SQL = "https://api.cloudflare.com/client/v4/accounts/{account}/analytics_engine/sql"
-FIRST_INSTALL = {"1", "1F"}
+IOS_FIRST_INSTALL = {"1", "1F", "1T"}
+MAC_FIRST_INSTALL = {"F1"}
 WEEK = 604800
 SESSION = requests.Session()
 SESSION.headers["User-Agent"] = "notifi-daily-summary"
@@ -57,14 +58,23 @@ def first_installs_on(token, day):
     res.raise_for_status()
 
     tsv = gzip.decompress(res.content).decode()
-    total, countries = 0, Counter()
+    platforms, countries = Counter(), Counter()
     for row in csv.DictReader(io.StringIO(tsv), delimiter="\t"):
-        if row["Product Type Identifier"] not in FIRST_INSTALL:
+        kind = row["Product Type Identifier"]
+        if kind in IOS_FIRST_INSTALL:
+            platform = "ios"
+        elif kind in MAC_FIRST_INSTALL:
+            platform = "mac"
+        else:
             continue
         units = int(row["Units"])
-        total += units
+        platforms[platform] += units
         countries[row["Country Code"]] += units
-    return total, countries
+    return platforms, countries
+
+
+def split(platforms):
+    return f"iOS {platforms['ios']} · Mac {platforms['mac']}"
 
 
 def query_production_d1(sql):
@@ -198,8 +208,9 @@ def compose_notification():
     ]
 
     downloads_latest, countries = reports[0]
-    downloads_week = sum(n for n, _ in reports[:7] if n is not None)
-    downloads_prior = sum(n for n, _ in reports[7:] if n is not None)
+    week_platforms = sum((p for p, _ in reports[:7] if p is not None), Counter())
+    downloads_week = sum(week_platforms.values())
+    downloads_prior = sum(sum(p.values()) for p, _ in reports[7:] if p is not None)
 
     def sends_since(days, until_days=0):
         row = query_send_events(
@@ -258,10 +269,13 @@ def compose_notification():
         downloads_line = f"- Downloads ({weekday}) **unreported** — Apple has not published it"
         downloads_title = "downloads unreported"
     else:
-        plural = "" if downloads_latest == 1 else "s"
-        downloads_headline = f"**{downloads_latest}** download{plural} on {weekday}"
-        downloads_line = f"- Downloads ({weekday}) **{downloads_latest}**"
-        downloads_title = f"{downloads_latest} download{plural}"
+        total = sum(downloads_latest.values())
+        plural = "" if total == 1 else "s"
+        downloads_headline = (
+            f"**{total}** download{plural} on {weekday} ({split(downloads_latest)})"
+        )
+        downloads_line = f"- Downloads ({weekday}) **{total}** · {split(downloads_latest)}"
+        downloads_title = f"{total} download{plural}"
 
     lines = [
         f"{downloads_headline} and "
@@ -276,7 +290,7 @@ def compose_notification():
         "",
         "**This week**",
         sends_week,
-        f"- Downloads **{downloads_week}**"
+        f"- Downloads **{downloads_week}** · {split(week_platforms)}"
         f" ({week_on_week(downloads_week, downloads_prior)} vs prior 7d)",
         f"- Site **{humans_wk}** measured humans ({week_on_week(humans_wk, humans_prior)} vs prior 7d)"
         f" · {site_wk_u} IPs · {site_wk_v} loads",

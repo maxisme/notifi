@@ -2,8 +2,9 @@ name: daily-summary
 
 # Sales reports need a Sales-access App Store Connect key: the key the reviews
 # workflow uses is Admin, and a key's access cannot be widened after it is
-# created. Downloads count first installs only (product types 1 and 1F) —
-# updates (7/7F) dwarf them on a release day and are not growth.
+# created. Downloads count first installs only, split by store: iOS is product
+# types 1, 1F and 1T, the Mac App Store is F1. Updates (7/7F/7T/F7) dwarf them
+# on a release day and are not growth.
 on:
   schedule:
     - cron: "0 8 * * *"
