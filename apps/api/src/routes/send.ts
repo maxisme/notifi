@@ -4,6 +4,7 @@ import {
   OCCURRED_AT_MAX_SKEW_MS,
   sendParams,
   TITLE_MAX,
+  UNCOLLECTED_MAX,
 } from '@notifi/contract';
 import { copyFor, fmt, SOURCE_LANGUAGE, type Strings } from '@notifi/copy';
 import { Hono } from 'hono';
@@ -29,6 +30,8 @@ interface KeyDeviceRow {
   revoked_at: number | null;
   is_critical: number;
   device_id: number;
+  seq_counter: number;
+  acked_id: number;
   apns_token: string;
   encryption_public_key: string;
   strict_send: number;
@@ -118,7 +121,8 @@ send.on(['GET', 'POST'], '/send', async (c) => {
   const secretHash = await hashKey(input.key);
   const row = await c.env.DB.prepare(
     `SELECT k.id AS key_id, k.revoked_at AS revoked_at, k.is_critical AS is_critical,
-            d.id AS device_id, d.apns_token AS apns_token,
+            d.id AS device_id, d.seq_counter AS seq_counter, d.acked_id AS acked_id,
+            d.apns_token AS apns_token,
             d.encryption_public_key AS encryption_public_key,
             d.strict_send AS strict_send
      FROM keys k JOIN devices d ON d.id = k.device_id
@@ -129,6 +133,10 @@ send.on(['GET', 'POST'], '/send', async (c) => {
 
   if (!row || row.revoked_at !== null) {
     return c.json(errBody('unknown_key', t(c).api.unknownKey), 401);
+  }
+
+  if (row.seq_counter - row.acked_id >= UNCOLLECTED_MAX) {
+    return c.json(errBody('uncollected_limit', t(c).api.uncollectedLimit), 429);
   }
 
   const w = windowStart(nowS);

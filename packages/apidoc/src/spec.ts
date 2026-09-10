@@ -1,5 +1,5 @@
 import type { PublicErrorCode } from '@notifi/contract';
-import { IMAGE_URL_MAX, LINK_URL_MAX, MESSAGE_MAX, TITLE_MAX } from '@notifi/contract';
+import { IMAGE_URL_MAX, LINK_URL_MAX, MESSAGE_MAX, TITLE_MAX, UNCOLLECTED_MAX } from '@notifi/contract';
 import type { Lang } from './shikify.js';
 
 export { IMAGE_URL_MAX, LINK_URL_MAX, MESSAGE_MAX, TITLE_MAX };
@@ -175,6 +175,14 @@ export const errors: ErrorRow[] = [
     summary: 'Over the hourly device limit or the per-minute IP limit.',
     detail: 'Carries a Retry-After header with the seconds until the window resets.',
   },
+  {
+    code: 'uncollected_limit',
+    status: 429,
+    reason: 'Too Many Requests',
+    message: 'Not sent. This device has too many uncollected notifications. New ones are accepted once it collects.',
+    summary: `The device has ${UNCOLLECTED_MAX} uncollected notifications.`,
+    detail: 'No Retry-After: the limit clears when the device next collects, not with time. Open the app on the device.',
+  },
   { code: 'not_found', status: 404, reason: 'Not Found', message: 'No such path.', summary: 'No such path.', detail: '' },
   {
     code: 'internal_error',
@@ -190,10 +198,11 @@ export const limits: string[] = [
   `${SENDS_PER_HOUR} notifications an hour per device, shared across every key on it.`,
   `${KEYS_PER_DEVICE} active send keys per device, one of which is the app’s own device key.`,
   `${REQUESTS_PER_MINUTE} requests a minute per IP address, across every endpoint.`,
+  `${UNCOLLECTED_MAX} uncollected notifications per device. Once that many sit waiting, sends are refused until the device collects them.`,
   'Revoking a key in the app takes effect on the next send. Reinstalling the app, or moving to a new device, makes a new identity and every old key stops working; there is no migration.',
 ];
 
-export const OPERATION_ERRORS = ['invalid_request', 'unknown_key', 'invalid_content', 'rate_limited'];
+export const OPERATION_ERRORS = ['invalid_request', 'unknown_key', 'invalid_content', 'rate_limited', 'uncollected_limit'];
 
 export const INTEGRATION_SURFACE =
   'There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer token is the whole integration surface. Anything claiming otherwise is not notifi.';

@@ -6,6 +6,7 @@ export const errorCode = z.enum([
   'unknown_device',
   'unknown_key',
   'rate_limited',
+  'uncollected_limit',
   'invalid_request',
   'invalid_content',
   'not_found',
@@ -27,6 +28,8 @@ export const apiError = z.object({
   }),
 });
 export type ApiError = z.infer<typeof apiError>;
+
+export const UNCOLLECTED_MAX = 500;
 
 export const OCCURRED_AT_MIN_MS = 946_684_800_000;
 export const OCCURRED_AT_MAX_SKEW_MS = 24 * 60 * 60 * 1000;

@@ -360,6 +360,7 @@
                 "enum": [
                   "unknown_key",
                   "rate_limited",
+                  "uncollected_limit",
                   "invalid_request",
                   "invalid_content",
                   "not_found",
@@ -403,7 +404,7 @@
         }
       },
       "UnexpectedError": {
-        "description": "Any other failure, in the same error shape: not_found or internal_error.",
+        "description": "Any other failure, in the same error shape: uncollected_limit or not_found or internal_error.",
         "content": {
           "application/json": {
             "schema": {
