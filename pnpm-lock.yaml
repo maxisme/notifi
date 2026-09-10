@@ -26,8 +26,8 @@ importers:
         specifier: ^10.70.0
         version: 10.70.0(@cloudflare/workers-types@5.20260829.1)(wrangler@4.127.1(@cloudflare/workers-types@5.20260829.1))
       hono:
-        specifier: ^4.12.34
-        version: 4.12.34
+        specifier: ^4.13.5
+        version: 4.13.5
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^5.20260828.1
@@ -756,8 +756,8 @@ packages:
   hast-util-whitespace@3.0.0:
     resolution: {integrity: sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==}
 
-  hono@4.12.34:
-    resolution: {integrity: sha512-GqXJqY/xJkJmuloTrnV1ZEXG3fqte+VjkUqoRNZXcrUidiUOP4fMSIHHY4tsqZBK++kVyWmt/AAfSUuy57/eSA==}
+  hono@4.13.5:
+    resolution: {integrity: sha512-O6+/eCYRkzzzy0rPWwKLiGBR1nFuUPZynnwjxN1MBA62NNqbT0wQEzQyK2gSO5yDIDB336sXQleAhOHrzlYyKw==}
     engines: {node: '>=16.9.0'}
 
   html-void-elements@3.0.0:
@@ -1541,7 +1541,7 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.5
 
-  hono@4.12.34: {}
+  hono@4.13.5: {}
 
   html-void-elements@3.0.0: {}
 

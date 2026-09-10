@@ -14,7 +14,7 @@
     "@notifi/contract": "workspace:*",
     "@notifi/copy": "workspace:*",
     "@sentry/cloudflare": "^10.70.0",
-    "hono": "^4.12.34"
+    "hono": "^4.13.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260828.1",
