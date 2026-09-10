@@ -11,6 +11,8 @@ export const copy = {
 
     rateLimitedIP: 'Too many requests from this IP.',
     rateLimitedAccount: 'Rate limit exceeded. Too many notifications this hour.',
+    uncollectedLimit:
+      'Not sent. This device has too many uncollected notifications. New ones are accepted once it collects.',
 
     badSignature: 'Invalid request signature.',
     staleTimestamp: 'Request timestamp is outside the allowed window.',
