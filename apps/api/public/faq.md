@@ -85,7 +85,7 @@ iPhone and iPad on iOS 17 or later, and Mac on macOS 14 or later, where it lives
 
 ### Where do I get the Mac app?
 
-From this site, as a notarized DMG. It is not on the App Store, and it updates itself.
+From this site, as a notarized DMG that updates itself, or from the [Mac App Store](https://apps.apple.com/app/id1563961135?platform=mac). Both are the same app.
 
 ### Can I send to more than one device?
 
