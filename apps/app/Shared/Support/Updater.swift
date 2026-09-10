@@ -2,26 +2,39 @@
 import Sparkle
 import SwiftUI
 
+private final class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
+    func updater(
+        _ updater: SPUUpdater,
+        willInstallUpdateOnQuit item: SUAppcastItem,
+        immediateInstallationBlock: @escaping () -> Void
+    ) -> Bool {
+        immediateInstallationBlock()
+        return true
+    }
+}
+
 @MainActor
 @Observable
 final class Updater {
     static let shared = Updater()
 
     private let controller: SPUStandardUpdaterController
+    private let delegate = UpdaterDelegate()
     private(set) var canCheck = false
 
     private(set) var automaticallyInstalls = false
 
     private init() {
         controller = SPUStandardUpdaterController(
-            startingUpdater: true,
-            updaterDelegate: nil,
+            startingUpdater: false,
+            updaterDelegate: delegate,
             userDriverDelegate: nil
         )
         controller.updater.automaticallyChecksForUpdates = true
         if UserDefaults.standard.object(forKey: "SUAutomaticallyUpdate") == nil {
             controller.updater.automaticallyDownloadsUpdates = true
         }
+        controller.startUpdater()
         automaticallyInstalls = controller.updater.automaticallyDownloadsUpdates
         observation = controller.updater.observe(\.canCheckForUpdates, options: [.initial, .new]) { [weak self] updater, _ in
             Task { @MainActor in self?.canCheck = updater.canCheckForUpdates }
