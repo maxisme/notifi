@@ -3,11 +3,11 @@ import SwiftData
 
 @Model
 final class SyncState {
-    var bookmark: Int
+    var hasSynced: Bool = false
     var failureFirstSeen: [String: Double]
 
-    init(bookmark: Int = 0, failureFirstSeen: [String: Double] = [:]) {
-        self.bookmark = bookmark
+    init(hasSynced: Bool = false, failureFirstSeen: [String: Double] = [:]) {
+        self.hasSynced = hasSynced
         self.failureFirstSeen = failureFirstSeen
     }
 }

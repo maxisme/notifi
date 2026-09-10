@@ -132,7 +132,7 @@ export const updateDeviceSettingsBody = z.strictObject({
 export type UpdateDeviceSettingsBody = z.infer<typeof updateDeviceSettingsBody>;
 
 export const historyQuery = z.object({
-  since: z.coerce.number().int().nonnegative().optional(),
+  ack: z.coerce.number().int().nonnegative().optional(),
   limit: z.coerce.number().int().min(1).max(200).optional(),
 });
 export type HistoryQuery = z.infer<typeof historyQuery>;

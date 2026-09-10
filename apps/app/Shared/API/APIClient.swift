@@ -63,9 +63,9 @@ final class APIClient {
         }
     }
 
-    func history(since: Int, limit: Int) async throws -> HistoryResponse {
+    func history(ack: Int, limit: Int) async throws -> HistoryResponse {
         let items = [
-            URLQueryItem(name: "since", value: String(since)),
+            URLQueryItem(name: "ack", value: String(ack)),
             URLQueryItem(name: "limit", value: String(limit)),
         ]
         return try await performSigned {
