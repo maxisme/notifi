@@ -29,7 +29,8 @@ best-effort.
 
 1. Install the app: [iPhone and iPad](https://apps.apple.com/app/id1563961135)
    (iOS 17 or later) or [Mac](https://notifi.it/download/mac) (macOS 14 or
-   later, also `brew install --cask notifi-it/tap/notifi`).
+   later; also on the [Mac App Store](https://apps.apple.com/app/id1563961135?platform=mac)
+   and as `brew install --cask notifi-it/tap/notifi`).
 2. Allow notifications when the app asks.
 3. Open the Keys tab, pick `Device`, press **Copy key**. It starts with `nk_`.
 4. Send something:

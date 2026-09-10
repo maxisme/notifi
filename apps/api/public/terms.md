@@ -40,7 +40,7 @@ These terms are governed by the law of England and Wales. If you are a consumer,
 
 ## The apps
 
-The iPhone app is distributed through the App Store, where Apple’s own terms also apply. The Mac app is distributed from this site and updates itself. The source code for the apps and the service is public at [github.com/notifi-it/notifi](https://github.com/notifi-it/notifi), under the licence stated there.
+The iPhone app is distributed through the App Store, where Apple’s own terms also apply. The Mac app is distributed from this site, where it updates itself, and through the Mac App Store, where Apple’s terms apply as well. The source code for the apps and the service is public at [github.com/notifi-it/notifi](https://github.com/notifi-it/notifi), under the licence stated there.
 
 ## Changes and contact
 
