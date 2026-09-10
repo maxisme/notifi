@@ -34,10 +34,6 @@ export async function decryptField(env: Env, stored: string): Promise<string> {
   return new TextDecoder().decode(pt);
 }
 
-export async function encryptPadded(env: Env, plaintext: string): Promise<string> {
-  return encryptField(env, plaintext.padEnd(16, ' ').slice(0, 16));
-}
-
 let cachedHmacKey: CryptoKey | null = null;
 
 async function hmacKey(env: Env): Promise<CryptoKey> {

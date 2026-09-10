@@ -272,7 +272,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
     <ul>
       <li>Two public keys: one for verifying requests, one for encrypting notifications to you.</li>
       <li>Your Apple push token, encrypted with a key held by the server, so notifications can be delivered. Alongside it, a keyed one-way hash of the same token, stored unencrypted: it lets the server recognise that a new registration comes from a device it already knows, so the old row can be retired instead of receiving duplicates. It identifies the physical device across identity resets, and this is the only thing it is used for.</li>
-      <li>The platform (<code>ios</code> or <code>macos</code>) and app version, encrypted with the same key.</li>
+      <li>The platform (<code>ios</code> or <code>macos</code>) and the app version, stored in plain text.</li>
       <li>When the device first registered, when it was last seen, how far it has collected, and a lifetime count of notifications sent to it.</li>
       <li>A rolling one-hour send counter, used for rate limiting, and the strict-send setting if you have turned it on.</li>
     </ul>
