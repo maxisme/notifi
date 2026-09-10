@@ -48,28 +48,24 @@ final class SyncEngine {
         return fresh
     }
 
-    private var bookmark: Int {
-        get { state.bookmark }
-        set { state.bookmark = newValue }
-    }
-
     func sync() async {
         guard !isSyncing else { return }
         isSyncing = true
         defer { isSyncing = false }
 
         var newMessages = 0
-        let firstSync = bookmark == 0
+        let firstSync = !state.hasSynced
         var arrivals: [Arrival] = []
         do {
+            var ack = 0
             var pagesFetched = 0
             pages: while pagesFetched < Self.maxPagesPerSync {
                 pagesFetched += 1
-                let page = try await api.history(since: bookmark, limit: Self.pageSize)
+                let page = try await api.history(ack: ack, limit: Self.pageSize)
                 if page.messages.isEmpty { break }
 
                 let insertedBefore = newMessages
-                var ackable = bookmark
+                var ackable = ack
                 var blocked = false
                 for row in page.messages {
                     switch ingest(row) {
@@ -87,15 +83,16 @@ final class SyncEngine {
                 }
 
                 let arrived = newMessages > insertedBefore
-                let advanced = ackable > bookmark
-                if advanced { bookmark = ackable }
                 try withAnimation(arrived && !Theme.reduceMotion ? Theme.reveal : nil) {
                     try context.save()
                 }
 
-                guard advanced else { break pages }
-                if blocked { break pages }
-                if page.messages.count < Self.pageSize { break }
+                guard ackable > ack else { break pages }
+                ack = ackable
+            }
+            if !state.hasSynced {
+                state.hasSynced = true
+                try context.save()
             }
         } catch {
             log.error("sync failed: \(String(describing: error), privacy: .private)")

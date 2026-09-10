@@ -18,30 +18,30 @@ history.get('/history', async (c) => {
   if (!parsed.success) {
     return c.json(errBody('invalid_request', t(c).api.invalidHistoryQuery), 400);
   }
-  const since = parsed.data.since ?? 0;
+  const ack = parsed.data.ack ?? 0;
   const limit = parsed.data.limit ?? 50;
+
+  if (ack > 0 && ack <= device.seq_counter) {
+    await c.env.DB.batch([
+      c.env.DB.prepare(
+        'UPDATE devices SET acked_id = MAX(acked_id, ?), last_seen_at = ? WHERE id = ?',
+      ).bind(ack, nowS, device.id),
+      c.env.DB.prepare('DELETE FROM messages WHERE device_id = ? AND device_seq <= ?').bind(
+        device.id,
+        ack,
+      ),
+    ]);
+  }
 
   const rows = await c.env.DB.prepare(
     `SELECT device_seq AS id, content_sealed, key_id, created_at, occurred_at
-     FROM messages WHERE device_id = ? AND device_seq > ? ORDER BY device_seq ASC LIMIT ?`,
+     FROM messages WHERE device_id = ? ORDER BY device_seq ASC LIMIT ?`,
   )
-    .bind(device.id, since, limit)
+    .bind(device.id, limit)
     .all<HistoryMessage>();
 
   const results = rows.results;
   const latest = results.length > 0 ? results[results.length - 1]!.id : null;
-
-  if (since > device.acked_id) {
-    await c.env.DB.batch([
-      c.env.DB.prepare(
-        'UPDATE devices SET acked_id = MAX(acked_id, ?), last_seen_at = ? WHERE id = ?',
-      ).bind(since, nowS, device.id),
-      c.env.DB.prepare('DELETE FROM messages WHERE device_id = ? AND device_seq <= ?').bind(
-        device.id,
-        since,
-      ),
-    ]);
-  }
 
   return c.json({ messages: results, latest_id: latest });
 });
