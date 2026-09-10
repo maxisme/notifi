@@ -3,9 +3,9 @@
 Same type as appstore-frames.py, turned landscape: Recursive Mono title,
 Karla description, the same soft ground ramp.
 Three frames mirror the iOS set -- inbox, message, keys -- and each hangs the
-popover from the landing page's own menu bar (.mac-bar: Apple
+popover from a menu bar drawn at the size the capturing Mac's own is: Apple
 mark, then bell, Wi-Fi, battery and clock, the glyphs read out of index.html
-and the bell out of bell-body.svg and bell-clapper.svg), with the bell over
+and the bell out of bell-body.svg and bell-clapper.svg, with the bell over
 the popover's arrow. Output is 2560x1600, one of the sizes App Store Connect
 accepts for macOS, written to fastlane/screenshots-macos/<locale>/.
 
@@ -49,12 +49,28 @@ TITLE_SIZE, DESC_SIZE = 108, 54
 POPOVER_CENTER_X = 1910
 POPOVER_H = 1320
 SCALE = POPOVER_H / 1452
-# The bar is the landing page's .mac-bar, whose sizes are container-query
-# units of the desk the popover hangs in (the popover is 94% of that desk).
-# One cqw here is one percent of that desk, so the bar and every glyph on it
-# keep the site's proportions against the popover.
-CQW = (972 * SCALE / 0.94) / 100
-BAR_H = round(5.83 * CQW)
+# The bar is drawn at the size a real one is. The captures are 2x, so one
+# point of the Mac they came from is two of their pixels and PT of the frame's;
+# every measurement below is that Mac's own bar, read off a screencapture of it
+# in points. The bar the site's .mac-bar inherited from the launch film is a
+# stylised one -- its glyphs are half again too big for its height, which on a
+# frame beside the real popover reads as a bar with no air in it.
+PT = 2 * SCALE
+BAR_H = round(33 * PT)
+# The inset the Apple mark keeps from the left edge and the clock from the
+# right, and the air between one status item's ink and the next -- the clock
+# stands further off than the icons do.
+BAR_PAD = round(20 * PT)
+BAR_GAP = round(20 * PT)
+CLOCK_GAP = round(24 * PT)
+# Each glyph is rasterised to a width, and the widths here are the ones whose
+# ink comes out the size the real bar's does: Apple 12x15, bell 14.5x16,
+# Wi-Fi 17x12, battery 25.5x12, all in points.
+APPLE_W = round(19.7 * PT)
+BELL_W = round(16 * PT)
+WIFI_W = round(17 * PT)
+BATT_W = round(26.6 * PT)
+CLOCK_SIZE = round(13 * PT)
 SITE = f"{REPO}/apps/api/public"
 SYSTEM_FONT = "/System/Library/Fonts/SFNS.ttf"
 
@@ -180,7 +196,7 @@ def site_svg(cls):
 def bell(out_dir):
     """The site's .bell: bell-body.svg and bell-clapper.svg stacked, both
     cropped by the same box by generate-marks.sh."""
-    size = round(3.7 * CQW)
+    size = BELL_W
     icon = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     for part in ("bell-body", "bell-clapper"):
         layer = rasterize(open(f"{SITE}/{part}.svg").read(), size, FG_RGB, out_dir, part)
@@ -241,9 +257,9 @@ def bar_time():
 
 
 def menu_bar(canvas, desk, out_dir):
-    """The site's .mac-bar across the top of the popover: frosted white over
-    the ground, the Apple mark at the
-    left, and .mac-status right-aligned -- bell, Wi-Fi, battery, clock.
+    """The bar across the top of the popover: frosted white over the ground,
+    the Apple mark at the left, and the status items right-aligned -- bell,
+    Wi-Fi, battery, clock.
     Returns the bell's centre x, which the popover's arrow then meets."""
     x0, y0, x1, _ = desk
     width = x1 - x0
@@ -251,33 +267,31 @@ def menu_bar(canvas, desk, out_dir):
     canvas.alpha_composite(bar, (x0, y0))
     d = ImageDraw.Draw(canvas)
 
-    pad = round(2.9 * CQW)
-    apple = rasterize(site_svg("mac-apple"), round(5.06 * CQW), FG_RGB, out_dir, "apple")
+    apple = rasterize(site_svg("mac-apple"), APPLE_W, FG_RGB, out_dir, "apple")
     apple.putalpha(apple.getchannel("A").point(lambda v: v * 85 // 100))
-    canvas.alpha_composite(apple, (x0 + pad, y0 + (BAR_H - apple.height) // 2))
+    canvas.alpha_composite(apple, (x0 + BAR_PAD, y0 + (BAR_H - apple.height) // 2))
 
-    gap = round(2.85 * CQW)
     icon = bell(out_dir)
-    wifi = rasterize(site_svg("mac-wifi"), round(4.6 * CQW), FG_RGB, out_dir, "wifi")
-    batt = rasterize(site_svg("mac-batt"), round(6.44 * CQW), FG_RGB, out_dir, "batt")
-    clock = ImageFont.truetype(SYSTEM_FONT, round(3.13 * CQW))
+    wifi = rasterize(site_svg("mac-wifi"), WIFI_W, FG_RGB, out_dir, "wifi")
+    batt = rasterize(site_svg("mac-batt"), BATT_W, FG_RGB, out_dir, "batt")
+    clock = ImageFont.truetype(SYSTEM_FONT, CLOCK_SIZE)
     try:
         clock.set_variation_by_name("Medium")
     except OSError:
         pass
     text = bar_time()
     tb = d.textbbox((0, 0), text, font=clock)
-    cluster = (icon.width + gap + wifi.width + gap + batt.width + gap
-               + (tb[2] - tb[0]))
+    cluster = (icon.width + BAR_GAP + wifi.width + BAR_GAP + batt.width
+               + CLOCK_GAP + (tb[2] - tb[0]))
 
-    x = x1 - pad - cluster
+    x = x1 - BAR_PAD - cluster
     bell_x = x + icon.width / 2
     canvas.alpha_composite(icon, (x, y0 + (BAR_H - icon.height) // 2))
-    x += icon.width + gap
+    x += icon.width + BAR_GAP
     canvas.alpha_composite(wifi, (x, y0 + (BAR_H - wifi.height) // 2))
-    x += wifi.width + gap
+    x += wifi.width + BAR_GAP
     canvas.alpha_composite(batt, (x, y0 + (BAR_H - batt.height) // 2))
-    x += batt.width + gap
+    x += batt.width + CLOCK_GAP
     d.text((x, y0 + (BAR_H - (tb[3] - tb[1])) // 2 - tb[1]), text, font=clock, fill=FG)
     return bell_x
 
