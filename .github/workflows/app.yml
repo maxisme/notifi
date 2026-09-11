@@ -229,12 +229,17 @@ jobs:
           CODE_SIGN_STYLE: Manual
           MAC_CODE_SIGN_IDENTITY: Apple Distribution
         run: |
+          # CURRENT_PROJECT_VERSION is CFBundleVersion. Left at project.yml's
+          # "1", every Mac pkg carries the same build number and App Store
+          # Connect refuses the second one for a version. The timestamp is the
+          # same scheme the Fastfile's build_number uses for iOS and the DMG.
           xcodebuild archive \
             -scheme notifi-macOS-AppStore \
             -destination 'generic/platform=macOS' \
             -archivePath "$RUNNER_TEMP/notifi-macOS-AppStore.xcarchive" \
             DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-            MARKETING_VERSION="$MARKETING_VERSION"
+            MARKETING_VERSION="$MARKETING_VERSION" \
+            CURRENT_PROJECT_VERSION="$(date -u +%Y%m%d%H%M)"
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/notifi-macOS-AppStore.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/ExportOptions-mas.plist" \
