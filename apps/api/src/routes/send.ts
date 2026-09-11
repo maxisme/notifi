@@ -33,6 +33,7 @@ interface KeyDeviceRow {
   seq_counter: number;
   acked_id: number;
   apns_token: string;
+  apns_token_hmac: string;
   encryption_public_key: string;
   strict_send: number;
 }
@@ -122,7 +123,7 @@ send.on(['GET', 'POST'], '/send', async (c) => {
   const row = await c.env.DB.prepare(
     `SELECT k.id AS key_id, k.revoked_at AS revoked_at, k.is_critical AS is_critical,
             d.id AS device_id, d.seq_counter AS seq_counter, d.acked_id AS acked_id,
-            d.apns_token AS apns_token,
+            d.apns_token AS apns_token, d.apns_token_hmac AS apns_token_hmac,
             d.encryption_public_key AS encryption_public_key,
             d.strict_send AS strict_send
      FROM keys k JOIN devices d ON d.id = k.device_id
@@ -286,9 +287,17 @@ send.on(['GET', 'POST'], '/send', async (c) => {
     nowS,
     String(messageId),
   );
+  const outcome =
+    row.apns_token !== ''
+      ? pushed
+        ? 'pushed'
+        : 'failed'
+      : row.apns_token_hmac.startsWith('retired:')
+        ? 'retired'
+        : 'no-permission';
   c.env.SEND_EVENTS.writeDataPoint({
     indexes: [String(row.device_id)],
-    blobs: [String(row.key_id), pushed ? 'pushed' : 'failed', critical ? 'critical' : 'normal'],
+    blobs: [String(row.key_id), outcome, critical ? 'critical' : 'normal'],
     doubles: [payloadBytes(payload)],
   });
 
