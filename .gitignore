@@ -30,3 +30,6 @@ apps/app/fastlane/test_output/
 apps/app/fastlane/README.md
 apps/app/vendor/bundle/
 apps/app/.bundle/
+
+# Python
+__pycache__/
