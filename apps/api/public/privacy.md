@@ -1,6 +1,6 @@
 # Privacy policy
 
-> This describes what notifi stores, how long it keeps it, what the server can and cannot read, and what the person sending you a notification can learn about you.
+> What notifi stores, for how long, and what our server can read.
 
 _Last updated 6 September 2026_
 
@@ -28,7 +28,7 @@ The server identifies a device only by its public key. Nothing in the system lin
 
 - A SHA-256 hash of the key. The key itself is never stored, so it cannot be recovered or shown again.
 - The name and visible prefix you gave it, encrypted so only your device can read them.
-- How many notifications it has sent, when it was created, when it was last used, whether it is revoked, whether it may send critical notifications, and a rolling one-hour send counter.
+- How many notifications it has sent, when it was created, when it was last used, whether it is revoked, whether it may send urgent notifications, and a rolling one-hour send counter.
 
 ### Your notifications
 
@@ -61,7 +61,7 @@ Because the sender and the recipient both talk to the same server, that server i
 - **Send keys** are kept while the device exists, including revoked ones, so that a revoked key cannot be reused.
 - **A record of each send and each collection** — for a send, which device and key it went to, whether the push to Apple succeeded, and the size of the notification in bytes; for a collection, which device and how many notifications it took — is kept for three months in Cloudflare’s analytics store, to count sends and collections and to notice failed deliveries. It holds no content and no IP address.
 
-notifi is a relay, not a mailbox. Once your device has a notification, the server copy is gone and the only copy is the one on your device.
+A relay, not a mailbox. Once your device has a notification, the server copy is gone.
 
 ## Server logs
 
@@ -77,7 +77,7 @@ When the server hits an error it cannot handle, a report of that error is sent t
 
 A notification can carry a link to an image, and the host serving it is chosen by whoever sent the notification, not by notifi. Loading such an image means your device makes a request to that host, which reveals your IP address, your rough location, and the exact moment the notification reached you. A sender can use this to tell whether and when you received something.
 
-Because of this, the app does not load images automatically. It shows a placeholder and loads the image only when you tap it. If you would rather images appear on their own, there is a switch in **Settings › Privacy**. Turning it on applies to notifications as well, which means images will be fetched on arrival, before you have opened anything.
+So the app does not load images automatically. It shows a placeholder until you tap. To load them on arrival, turn on **Load images automatically** in Settings.
 
 ## On your device
 
@@ -114,9 +114,9 @@ notifi is not directed at children. It has no accounts and no profiles; the clos
 
 ## Changes and contact
 
-This policy may change to reflect changes in the law, in Apple’s requirements, or in what the service does. When it changes, the date at the top changes with it, the previous versions remain in the public git history of the project, and a material change is announced on this site before it takes effect.
+This policy may change with the law, Apple’s requirements or the service. The date at the top changes with it, old versions stay in the git history, and material changes are announced here first.
 
-Questions about privacy, or a request to delete data held about a device, can be raised at [hello@notifi.it](mailto:hello@notifi.it) or [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
+Any questions please contact [hello@notifi.it](mailto:hello@notifi.it) or open an issue at [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
 
 ---
 

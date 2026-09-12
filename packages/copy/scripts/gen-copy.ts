@@ -3,12 +3,13 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { LANGUAGE_CODES, SOURCE_LANGUAGE, type LanguageCode } from '../src/languages.js';
 import { copyFor } from '../src/index.js';
-import { copy } from '../src/strings.js';
+import { copy, socials } from '../src/strings.js';
 import { translations } from '../src/translations/index.js';
 import { isPlural, type Leaf, type Plural, type Tree } from '../src/types.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, '..', '..', '..', 'apps', 'app');
+const socialsRoot = join(here, '..', '..', '..', 'docs', 'socials');
 const catalogPath = join(appRoot, 'Shared', 'Resources', 'Localizable.xcstrings');
 const swiftPath = join(appRoot, 'Shared', 'Support', 'Copy.swift');
 const captionsPath = join(appRoot, 'fastlane', 'screenshot-copy.json');
@@ -212,12 +213,12 @@ function renderSwift(): string {
   return [...header, 'enum Copy {', ...body, '}', ''].join('\n');
 }
 
-const STORE_LOCALES: Record<LanguageCode, string> = {
-  en: 'en-GB',
-  es: 'es-ES',
-  de: 'de-DE',
-  fr: 'fr-FR',
-  it: 'it',
+const STORE_LOCALES: Record<LanguageCode, string[]> = {
+  en: ['en-GB', 'en-US'],
+  es: ['es-ES'],
+  de: ['de-DE'],
+  fr: ['fr-FR'],
+  it: ['it'],
 };
 
 const STORE_SHARED: Record<string, string> = {
@@ -235,12 +236,32 @@ const STORE_LIMITS: Record<string, number> = {
   'release_notes.txt': 4000,
 };
 
+function socialOutputs(): Array<{ path: string; contents: string; label: string }> {
+  const sentence = `${socials.claims.join('. ')}.\n`;
+  const files: Record<string, string> = {
+    'instagram.txt': `${socials.claims.join('\n')}\n`,
+    'twitter.txt': sentence,
+    'facebook-short.txt': sentence,
+    'one-liner.txt': sentence,
+    'facebook-about.txt': `${socials.facebookAbout}\n`,
+  };
+  const limits: Record<string, number> = { 'twitter.txt': 160, 'instagram.txt': 150, 'facebook-short.txt': 255 };
+  for (const [file, limit] of Object.entries(limits)) {
+    const length = (files[file] ?? '').trimEnd().length;
+    if (length > limit) fail(`docs/socials/${file} is ${length} characters, over the platform limit of ${limit}.`);
+  }
+  return Object.entries(files).map(([file, contents]) => ({
+    path: join(socialsRoot, file),
+    contents,
+    label: `docs/socials/${file}`,
+  }));
+}
+
 function storeOutputs(): Array<{ path: string; contents: string; label: string }> {
   const out: Array<{ path: string; contents: string; label: string }> = [];
   const captions: Record<string, Record<string, string>> = {};
 
-  for (const code of LANGUAGE_CODES) {
-    const locale = STORE_LOCALES[code];
+  for (const code of LANGUAGE_CODES) for (const locale of STORE_LOCALES[code]) {
     const s = copyFor(code).store;
     const empty = copyFor(code).empty;
     const dir = join(appRoot, 'fastlane', 'metadata', locale);
@@ -296,6 +317,7 @@ const outputs: Array<{ path: string; contents: string; label: string }> = [
   { path: catalogPath, contents: renderCatalog(entries), label: 'Localizable.xcstrings' },
   { path: swiftPath, contents: renderSwift(), label: 'Copy.swift' },
   ...storeOutputs(),
+  ...socialOutputs(),
 ];
 
 if (process.argv.includes('--check')) {

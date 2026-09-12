@@ -79,7 +79,7 @@ struct InboxView: View {
             #endif
 
             if isOffline {
-                InlineError(message: Copy.Inbox.offline, followsAction: false)
+                InlineError(message: Copy.ClientErrors.transport, followsAction: false)
                     #if os(macOS)
                     .padding(.top, 14)
                     #endif

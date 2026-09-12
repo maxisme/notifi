@@ -118,7 +118,7 @@ quick test and rotate the key afterwards.
 | `link` | URL, up to 2,048 characters. A link to a website or internal app. |
 | `image` | URL of an image shown with the notification, up to 2,048 characters. Fetched by the receiving device, never by the server. |
 | `occurred_at` | Unix milliseconds. Changes the timestamp shown in the app; defaults to when the server receives the request. |
-| `is_critical` | Breaks through Focus. The key must also be marked Critical in the app, or an ordinary notification is delivered and the response carries a `warnings` array. |
+| `is_critical` | Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered. |
 
 `202` with `{"ok":true}` on success. Every error nests the code one level down,
 so read `error.code` and not `code`:
@@ -182,7 +182,7 @@ Put the key in the repository's secrets, then:
 
 One key per script, so a leak costs one script rather than all of them. Each key
 delivers only to the device that made it, so which key a script holds decides
-where its notifications land; give a script two keys to reach a phone and a Mac.
+where its notifications go; give a script two keys to reach a phone and a Mac.
 Revoking is done in the app and takes effect on the next send.
 
 Reinstalling the app, or moving to a new device, makes a new identity and every
@@ -205,9 +205,7 @@ old key stops working. There is no migration.
   `https://notifi.it/docs.md`, `https://notifi.it/faq.md`. Responses carry
   `Vary: Accept`.
 - [Sitemap](https://notifi.it/sitemap.xml) and [robots.txt](https://notifi.it/robots.txt).
-- There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer
-  token is the whole integration surface. Anything claiming otherwise is not
-  notifi.
+- No MCP server, no OAuth. One endpoint and a bearer token is the whole surface.
 
 ## Links
 

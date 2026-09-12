@@ -60,7 +60,7 @@ export const DESCRIPTION = [
 export const AUTH = {
   header: 'Authorization: Bearer nk_yourkey',
   summary:
-    'Authenticate with a bearer token. A key parameter also works, but it is written to edge logs, shell history and any proxy in between. Use it only for a quick test, and rotate the key afterwards.',
+    'Use a bearer token. A key parameter works too, but ends up in server logs. Use it for a quick test only, then rotate the key.',
   bearerDescription:
     'The send key from the app’s Keys tab, as Authorization: Bearer nk_yourkey. Preferred: a header is not written to edge logs or shell history.',
   parameterDescription:
@@ -75,7 +75,7 @@ export const params: Param[] = [
     limit: 'nk_…',
     summary: 'The send key, if it is not sent as a bearer token.',
     detail:
-      'Required unless sent as a bearer token. The key picks the device the notification lands on.',
+      'Required unless sent as a bearer token. The key picks the device that receives the notification.',
     openapi: { pattern: '^nk_' },
     example: 'nk_yourkey',
   },
@@ -137,7 +137,7 @@ export const params: Param[] = [
     required: false,
     summary: 'Breaks through Focus.',
     detail:
-      'The key must also have critical alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array.',
+      'The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered.',
     openapi: {},
   },
 ];
@@ -196,16 +196,16 @@ export const errors: ErrorRow[] = [
 
 export const limits: string[] = [
   `${SENDS_PER_HOUR} notifications an hour per device, shared across every key on it.`,
-  `${KEYS_PER_DEVICE} active send keys per device, one of which is the app’s own device key.`,
-  `${REQUESTS_PER_MINUTE} requests a minute per IP address, across every endpoint.`,
-  `${UNCOLLECTED_MAX} uncollected notifications per device. Once that many sit waiting, sends are refused until the device collects them.`,
-  'Revoking a key in the app takes effect on the next send. Reinstalling the app, or moving to a new device, makes a new identity and every old key stops working; there is no migration.',
+  `${KEYS_PER_DEVICE} active send keys per device, one of which is the device key.`,
+  `${REQUESTS_PER_MINUTE} requests a minute per IP, across every endpoint.`,
+  `${UNCOLLECTED_MAX} uncollected notifications per device. Past that, sends are refused until the device collects.`,
+  'Revoking a key takes effect on the next send. Reinstalling the app, or moving device, makes a new identity and every old key stops working. No migration.',
 ];
 
 export const OPERATION_ERRORS = ['invalid_request', 'unknown_key', 'invalid_content', 'rate_limited', 'uncollected_limit'];
 
 export const INTEGRATION_SURFACE =
-  'There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer token is the whole integration surface. Anything claiming otherwise is not notifi.';
+  'No MCP server, no OAuth. One endpoint and a bearer token is the whole surface.';
 
 export const resources: Resource[] = [
   { path: '/llms.txt', summary: 'The full reference as plain text, written for coding agents.' },

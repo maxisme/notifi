@@ -45,7 +45,6 @@ enum Copy {
     }
     enum Inbox {
         static var title: String { NSLocalizedString("inbox.title", comment: "") }
-        static var offline: String { NSLocalizedString("inbox.offline", comment: "") }
         static func count(_ n: Int) -> String { String.localizedStringWithFormat(NSLocalizedString("inbox.count", comment: ""), n) }
         static func filteredToKey(_ name: String) -> String { String.localizedStringWithFormat(NSLocalizedString("inbox.filteredToKey", comment: ""), name) }
         static var closeSearch: String { NSLocalizedString("inbox.closeSearch", comment: "") }
@@ -92,7 +91,6 @@ enum Copy {
         static var imageSaveDenied: String { NSLocalizedString("message.imageSaveDenied", comment: "") }
         static func keyFallbackName(_ id: String) -> String { String.localizedStringWithFormat(NSLocalizedString("message.keyFallbackName", comment: ""), id) }
         static func sentWithKey(_ name: String) -> String { String.localizedStringWithFormat(NSLocalizedString("message.sentWithKey", comment: ""), name) }
-        static func openKey(_ name: String) -> String { String.localizedStringWithFormat(NSLocalizedString("message.openKey", comment: ""), name) }
         static var viewImageFullScreen: String { NSLocalizedString("message.viewImageFullScreen", comment: "") }
         static var shareLink: String { NSLocalizedString("message.shareLink", comment: "") }
         static var imageFailedToLoad: String { NSLocalizedString("message.imageFailedToLoad", comment: "") }
@@ -110,7 +108,6 @@ enum Copy {
     enum Keys {
         static var title: String { NSLocalizedString("keys.title", comment: "") }
         static var newKey: String { NSLocalizedString("keys.newKey", comment: "") }
-        static var refreshFailed: String { NSLocalizedString("keys.refreshFailed", comment: "") }
         static var sectionActive: String { NSLocalizedString("keys.sectionActive", comment: "") }
         static var sectionRevoked: String { NSLocalizedString("keys.sectionRevoked", comment: "") }
         static var aboutKeys: String { NSLocalizedString("keys.aboutKeys", comment: "") }
@@ -126,8 +123,6 @@ enum Copy {
     }
     enum KeyDetail {
         static var notFound: String { NSLocalizedString("keyDetail.notFound", comment: "") }
-        static var notFoundDetail: String { NSLocalizedString("keyDetail.notFoundDetail", comment: "") }
-        static var criticalOn: String { NSLocalizedString("keyDetail.criticalOn", comment: "") }
         static var criticalTimeSensitive: String { NSLocalizedString("keyDetail.criticalTimeSensitive", comment: "") }
         static var copyKey: String { NSLocalizedString("keyDetail.copyKey", comment: "") }
         static var shareKey: String { NSLocalizedString("keyDetail.shareKey", comment: "") }
@@ -159,11 +154,7 @@ enum Copy {
         static var regenerateConfirm: String { NSLocalizedString("keyDetail.regenerateConfirm", comment: "") }
         static var regenerateMessage: String { NSLocalizedString("keyDetail.regenerateMessage", comment: "") }
         static var regeneratedAnnouncement: String { NSLocalizedString("keyDetail.regeneratedAnnouncement", comment: "") }
-        static var regenerateFailed: String { NSLocalizedString("keyDetail.regenerateFailed", comment: "") }
         static var revokedAnnouncement: String { NSLocalizedString("keyDetail.revokedAnnouncement", comment: "") }
-        static var revokeFailed: String { NSLocalizedString("keyDetail.revokeFailed", comment: "") }
-        static var criticalNotPermitted: String { NSLocalizedString("keyDetail.criticalNotPermitted", comment: "") }
-        static var criticalChangeFailed: String { NSLocalizedString("keyDetail.criticalChangeFailed", comment: "") }
     }
     enum CreateKey {
         static var title: String { NSLocalizedString("createKey.title", comment: "") }
@@ -178,9 +169,6 @@ enum Copy {
         static var creating: String { NSLocalizedString("createKey.creating", comment: "") }
         static var validationEmpty: String { NSLocalizedString("createKey.validationEmpty", comment: "") }
         static var validationTooLong: String { NSLocalizedString("createKey.validationTooLong", comment: "") }
-        static var validationReserved: String { NSLocalizedString("createKey.validationReserved", comment: "") }
-        static var validationTaken: String { NSLocalizedString("createKey.validationTaken", comment: "") }
-        static var createFailed: String { NSLocalizedString("createKey.createFailed", comment: "") }
         static var revealTitle: String { NSLocalizedString("createKey.revealTitle", comment: "") }
         static var revealDetail: String { NSLocalizedString("createKey.revealDetail", comment: "") }
         static var revealLabel: String { NSLocalizedString("createKey.revealLabel", comment: "") }
@@ -213,7 +201,6 @@ enum Copy {
         static var loadImagesDetail: String { NSLocalizedString("settings.loadImagesDetail", comment: "") }
         static var strictSend: String { NSLocalizedString("settings.strictSend", comment: "") }
         static var strictSendDetail: String { NSLocalizedString("settings.strictSendDetail", comment: "") }
-        static var strictSendFailed: String { NSLocalizedString("settings.strictSendFailed", comment: "") }
         static var testTitle: String { NSLocalizedString("settings.testTitle", comment: "") }
         static var testBody: String { NSLocalizedString("settings.testBody", comment: "") }
         static var macApp: String { NSLocalizedString("settings.macApp", comment: "") }
@@ -249,9 +236,7 @@ enum Copy {
         static var sendTest: String { NSLocalizedString("empty.sendTest", comment: "") }
         static var sending: String { NSLocalizedString("empty.sending", comment: "") }
         static var sent: String { NSLocalizedString("empty.sent", comment: "") }
-        static var sendFailed: String { NSLocalizedString("empty.sendFailed", comment: "") }
         static var makingKey: String { NSLocalizedString("empty.makingKey", comment: "") }
-        static var makeKeyFailed: String { NSLocalizedString("empty.makeKeyFailed", comment: "") }
         static func stepLabel(_ n: String, _ title: String) -> String { String.localizedStringWithFormat(NSLocalizedString("empty.stepLabel", comment: ""), n, title) }
         static var stepDone: String { NSLocalizedString("empty.stepDone", comment: "") }
     }

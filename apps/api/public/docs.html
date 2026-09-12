@@ -463,9 +463,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
   <p class="eyebrow">API reference</p>
   <h1>notifi API documentation</h1>
   <p class="lede">
-    One endpoint and seven parameters. Everything on this page is generated
-    from the same file that generates <a href="/openapi.json"><code>/openapi.json</code></a>
-    and the client collections, so the three cannot disagree.
+    One endpoint, seven parameters. This page, <a href="/openapi.json"><code>/openapi.json</code></a>
+    and the client collections are generated from one source, so they cannot disagree.
   </p>
 
   <p class="meta actions screen-only">
@@ -490,8 +489,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
     <h2>Quickstart</h2>
     <p>
       Install notifi on <a href="https://apps.apple.com/app/id1563961135">iPhone or iPad</a>
-      or <a href="/download/mac">on the Mac</a>, allow notifications, open the Keys tab and
-      copy the <code>Device</code> key. It starts with <code>nk_</code>.
+      or <a href="/download/mac">Mac</a>, allow notifications, open Keys and copy the
+      <code>Device</code> key. It starts with <code>nk_</code>.
     </p>
     <pre data-lang="bash">curl -X POST https://notifi.it/send \
   -H &quot;Authorization: Bearer $NOTIFI_KEY&quot; \
@@ -503,7 +502,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
 
   <section id="auth">
     <h2>Authentication</h2>
-    <p>Authenticate with a bearer token. A key parameter also works, but it is written to edge logs, shell history and any proxy in between. Use it only for a quick test, and rotate the key afterwards.</p>
+    <p>Use a bearer token. A key parameter works too, but ends up in server logs. Use it for a quick test only, then rotate the key.</p>
     <div class="tablewrap" tabindex="0" role="group" aria-label="Authentication methods">
       <table>
         <thead><tr><th>Method</th><th>Sent as</th><th>Notes</th></tr></thead>
@@ -526,10 +525,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
   <section id="request">
     <h2>Request</h2>
     <p>
-      <code>POST https://notifi.it/send</code>, JSON, form-encoded or multipart.
-      <code>GET</code> takes the same parameters in the query string and is there for a quick
-      test: a key sent that way lands in edge logs and shell history, so rotate it afterwards.
-      Query parameters win over body fields when both are present.
+      <code>POST https://notifi.it/send</code> as JSON, form-encoded or multipart.
+      <code>GET</code> takes the same parameters in the query string, for quick tests only:
+      rotate the key afterwards. Query parameters win over body fields.
     </p>
     <pre data-lang="http">POST /send HTTP/1.1
 Host: notifi.it
@@ -556,7 +554,7 @@ Accept-Language: en-GB
             <td>string</td>
             <td>conditional</td>
             <td><code>nk_…</code></td>
-            <td>The send key, if it is not sent as a bearer token. Required unless sent as a bearer token. The key picks the device the notification lands on.</td>
+            <td>The send key, if it is not sent as a bearer token. Required unless sent as a bearer token. The key picks the device that receives the notification.</td>
           </tr>
           <tr>
             <td><code>title</code></td>
@@ -598,7 +596,7 @@ Accept-Language: en-GB
             <td>boolean</td>
             <td>optional</td>
             <td>—</td>
-            <td>Breaks through Focus. The key must also have critical alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array.</td>
+            <td>Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered.</td>
           </tr>
         </tbody>
       </table>
@@ -608,9 +606,8 @@ Accept-Language: en-GB
   <section id="response">
     <h2>Response</h2>
     <p>
-      A send answers <code>202</code> when the server has accepted it. Delivery is
-      best-effort, as the <a href="/terms">terms</a> describe. Every
-      status the endpoint can answer with is here:
+      <code>202</code> means accepted. Delivery is best-effort, per the
+      <a href="/terms">terms</a>. Every status the endpoint can answer:
     </p>
     <div class="tabs" role="tablist" aria-label="Responses">
       <button class="tab" role="tab" aria-selected="true" aria-controls="r-p-202" id="r-t-202"><span>202</span></button>
@@ -667,60 +664,53 @@ Content-Type<span class="f">:</span> <span class="s">application/json; charset=u
     </div>
     <p>
       A <code>warnings</code> array is present only when the notification was delivered
-      differently from what was asked: a cropped title or body, or a critical
-      alert delivered as an ordinary notification. The status is still <code>202</code>; the
-      notification was sent, in the altered form each warning describes.
+      differently from what was asked: a cropped title or body. The status is still
+      <code>202</code>; the notification was sent, in the altered form each warning describes.
     </p>
 <pre data-lang="http">HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
 
-{&quot;ok&quot;:true,&quot;warnings&quot;:[&quot;Sent with a shortened title, because it was over 200 characters.&quot;,&quot;Sent as a normal notification, because critical alerts are switched off for this key.&quot;]}</pre>
+{&quot;ok&quot;:true,&quot;warnings&quot;:[&quot;Title shortened to 200 characters.&quot;]}</pre>
 
     <h3>Over-length text is cropped</h3>
     <p>
-      A title over 200 characters or a body over 16000 is delivered cropped,
-      with a warning. The device can refuse instead: <strong>Reject invalid sends</strong>, in
-      the app's Settings, makes a send that would have been cropped answer
-      <code>422 invalid_content</code> and store nothing. It is off by default, so cropping is
-      what a send meets unless the person holding the device turned it on.
+      A title over 200 characters or a body over 16000 is cropped, with a
+      warning. <strong>Reject invalid sends</strong>, in the app's Settings, answers
+      <code>422 invalid_content</code> instead and stores nothing. It is off by default.
     </p>
     <figure>
       <img src="/shots/settings-reject-invalid-sends.png" width="603" height="320" alt="The Settings screen, showing the Reject invalid sends switch turned off.">
-      <figcaption>Settings → Permissions → Reject invalid sends. Off, the default: sends are cropped, not refused.</figcaption>
+      <figcaption>Settings → Permissions → Reject invalid sends. Off by default.</figcaption>
     </figure>
 
-    <h3 id="critical-alerts">Critical alerts are granted per key</h3>
+    <h3 id="urgent-alerts">Urgent alerts are granted per key</h3>
     <p>
-      <code>is_critical=1</code> asks for an alert that breaks through Focus and silent mode,
-      but only if the key it was sent with has <strong>Critical alerts</strong> switched on,
-      on that device, in that key's screen under the Keys tab. Without it the notification is
-      delivered as an ordinary one and the response carries a warning saying so. Only the
-      person holding the device can switch it on.
+      <code>is_critical=1</code> asks for a Time Sensitive notification, which breaks through
+      Focus. It works only if the key has <strong>Urgent alerts</strong> on, in the app.
+      Otherwise the notification is delivered normally.
     </p>
     <figure>
-      <img src="/shots/key-critical-alerts.png" width="603" height="744" alt="A key's screen in the app, showing the Critical alerts switch turned on.">
-      <figcaption>Keys → a key → Settings → Critical alerts. Each key carries its own permission.</figcaption>
+      <img src="/shots/key-urgent-alerts.png" width="603" height="744" alt="A key's screen in the app, showing the Urgent alerts switch turned on.">
+      <figcaption>Keys → a key → Urgent alerts. Per key.</figcaption>
     </figure>
 
     <h3 id="links">A link does not have to be https</h3>
     <p>
-      <code>link</code> accepts any URL scheme, so it can point at a website or deep-link into
-      another app on the device. The app opens only <code>https</code> links until
-      <strong>Open any link</strong> is switched on for the key, in that key's screen under the
-      Keys tab. That switch belongs to the person holding the device, not the sender.
+      <code>link</code> accepts any URL scheme, so it can deep-link into another app. The app
+      opens only <code>https</code> until <strong>Open any link</strong> is switched on for the
+      key. Only the person holding the device can switch it on.
     </p>
     <figure>
       <img src="/shots/key-open-any-link.png" width="603" height="145" alt="A key's screen in the app, showing the Open any link switch.">
-      <figcaption>Keys → a key → Settings → Open any link. Off, only https links open.</figcaption>
+      <figcaption>Keys → a key → Open any link. Off, only https opens.</figcaption>
     </figure>
   </section>
 
   <section id="errors">
     <h2>Errors</h2>
     <p>
-      Every error nests the code one level down. Read <code>error.code</code>, not
-      <code>code</code>. The <code>message</code> is in the language negotiated from
-      <code>Accept-Language</code> and is meant for a human, so match on the code.
+      Every error nests the code one level down: read <code>error.code</code>. The
+      <code>message</code> is translated and meant for a human, so match on the code.
     </p>
     <div class="tablewrap" tabindex="0" role="group" aria-label="Error codes">
       <table>
@@ -770,23 +760,20 @@ Content-Type: application/json; charset=utf-8
     <h2>Rate limits</h2>
     <ul>
       <li>60 notifications an hour per device, shared across every key on it.</li>
-      <li>5 active send keys per device, one of which is the app’s own device key.</li>
-      <li>100 requests a minute per IP address, across every endpoint.</li>
-      <li>500 uncollected notifications per device. Once that many sit waiting, sends are refused until the device collects them.</li>
-      <li>Revoking a key in the app takes effect on the next send. Reinstalling the app, or moving to a new device, makes a new identity and every old key stops working; there is no migration.</li>
+      <li>5 active send keys per device, one of which is the device key.</li>
+      <li>100 requests a minute per IP, across every endpoint.</li>
+      <li>500 uncollected notifications per device. Past that, sends are refused until the device collects.</li>
+      <li>Revoking a key takes effect on the next send. Reinstalling the app, or moving device, makes a new identity and every old key stops working. No migration.</li>
     </ul>
     <p>
-      A <code>429</code> carries <code>Retry-After</code> in seconds. The device limit is
-      60 an hour across all 5 keys; the address limit is
-      100 requests a minute and covers every endpoint.
+      A <code>429</code> carries <code>Retry-After</code> in seconds.
     </p>
   </section>
 
   <section id="clients">
     <h2>Clients and import</h2>
     <p>
-      The collection and the OpenAPI document are generated from the same source
-      as this page. Set <code>NOTIFI_KEY</code> and send.
+      Generated from the same source as this page. Set <code>NOTIFI_KEY</code> and send.
     </p>
     <div class="tabs" role="tablist" aria-label="Clients">
       <button class="tab" role="tab" aria-selected="true" aria-controls="c-p-postman" id="c-t-postman"><svg class="tab-i" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" fill="currentColor"><path d="M13.527.099C6.955-.744.942 3.9.099 10.473c-.843 6.572 3.8 12.584 10.373 13.428 6.573.843 12.587-3.801 13.428-10.374C24.744 6.955 20.101.943 13.527.099zm2.471 7.485a.855.855 0 0 0-.593.25l-4.453 4.453-.307-.307-.643-.643c4.389-4.376 5.18-4.418 5.996-3.753zm-4.863 4.861l4.44-4.44a.62.62 0 1 1 .847.903l-4.699 4.125-.588-.588zm.33.694l-1.1.238a.06.06 0 0 1-.067-.032.06.06 0 0 1 .01-.073l.645-.645.512.512zm-2.803-.459l1.172-1.172.879.878-1.979.426a.074.074 0 0 1-.085-.039.072.072 0 0 1 .013-.093zm-3.646 6.058a.076.076 0 0 1-.069-.083.077.077 0 0 1 .022-.046h.002l.946-.946 1.222 1.222-2.123-.147zm2.425-1.256a.228.228 0 0 0-.117.256l.203.865a.125.125 0 0 1-.211.117h-.003l-.934-.934-.294-.295 3.762-3.758 1.82-.393.874.874c-1.255 1.102-2.971 2.201-5.1 3.268zm5.279-3.428h-.002l-.839-.839 4.699-4.125a.952.952 0 0 0 .119-.127c-.148 1.345-2.029 3.245-3.977 5.091zm3.657-6.46l-.003-.002a1.822 1.822 0 0 1 2.459-2.684l-1.61 1.613a.119.119 0 0 0 0 .169l1.247 1.247a1.817 1.817 0 0 1-2.093-.343zm2.578 0a1.714 1.714 0 0 1-.271.218h-.001l-1.207-1.207 1.533-1.533c.661.72.637 1.832-.054 2.522zM18.855 6.05a.143.143 0 0 0-.053.157.416.416 0 0 1-.053.45.14.14 0 0 0 .023.197.141.141 0 0 0 .084.03.14.14 0 0 0 .106-.05.691.691 0 0 0 .087-.751.138.138 0 0 0-.194-.033z"/></svg><span>Postman</span></button>
@@ -846,19 +833,16 @@ Content-Type: application/json; charset=utf-8
       <li><a href="/docs.md"><code>/docs.md</code></a> — This page as Markdown.</li>
     </ul>
     <p>
-      Every page on this site is also served as Markdown: send
-      <code>Accept: text/markdown</code> on the same URL, or append <code>.md</code>.
-      <a href="https://github.com/notifi-it/notifi">The source</a> covers the app, the API and
-      the cryptography.
+      Every page is also served as Markdown: send <code>Accept: text/markdown</code>, or
+      append <code>.md</code>.
     </p>
-    <p>There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer token is the whole integration surface. Anything claiming otherwise is not notifi.</p>
+    <p>No MCP server, no OAuth. One endpoint and a bearer token is the whole surface.</p>
   </section>
 
   <section id="recipes">
     <h2>Recipes</h2>
     <p>
-      The same request from everywhere it tends to get sent from — 15 of
-      them, the same block the home page carries. Each one wants
+      The same request in 15 languages and tools. Each expects
       <code>NOTIFI_KEY</code> in the environment.
     </p>
     <div class="tabs" role="tablist" aria-label="Examples">

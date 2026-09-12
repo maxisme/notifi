@@ -26,8 +26,6 @@ export const fr: Translation = {
   'api.invalidHistoryQuery': "Requête d’historique invalide.",
   'api.invalidSendParams': "Paramètres d’envoi invalides.",
   'api.occurredAtTooFuture': 'occurred_at est trop loin dans le futur.',
-  'api.criticalNotAllowed':
-    'Envoyée comme notification normale : les alertes critiques sont désactivées pour cette clé.',
   'api.titleCropped': 'Envoyé avec un titre raccourci : il dépassait {max} caractères.',
   'api.messageCropped': 'Envoyé avec une notification raccourcie : elle dépassait {max} caractères.',
   'api.strictContentRejected':
@@ -72,8 +70,6 @@ export const fr: Translation = {
   'age.weeks': '{n}sem.',
   'age.ago': 'il y a {relative}',
   'inbox.title': 'Inbox',
-  'inbox.offline':
-    'Impossible de joindre les serveurs notifi. Vérifiez votre connexion et réessayez.',
   'inbox.count': { one: '1 notification', other: '{n} notifications' },
   'inbox.filteredToKey': 'Filtré sur la clé « {name} ».',
   'inbox.closeSearch': 'Fermer la recherche',
@@ -119,7 +115,6 @@ export const fr: Translation = {
   'message.imageSaveDenied': 'notifi a besoin de l’autorisation d’ajouter à Photos. Activez-la dans Réglages.',
   'message.keyFallbackName': 'Clé {id}',
   'message.sentWithKey': 'Envoyé avec la clé {name}',
-  'message.openKey': 'Envoyé avec la clé {name}. Ouvrir.',
   'message.viewImageFullScreen': "Voir l’image en plein écran",
   'message.shareLink': 'Partager le lien',
   'message.imageFailedToLoad': "Échec du chargement de l’image",
@@ -135,7 +130,6 @@ export const fr: Translation = {
   'message.sourceHeader': 'Source',
   'keys.title': 'Clés',
   'keys.newKey': 'Nouvelle clé',
-  'keys.refreshFailed': "Impossible d’actualiser les clés. Affichage de la dernière liste connue.",
   'keys.sectionActive': 'Actives',
   'keys.sectionRevoked': 'Révoquées',
   'keys.aboutKeys': 'À propos des clés',
@@ -150,15 +144,11 @@ export const fr: Translation = {
   'keys.maskedValue': '{prefix}…',
 
   'keyDetail.notFound': 'Clé introuvable',
-  'keyDetail.notFoundDetail': 'Elle a peut-être été supprimée sur un autre appareil.',
 
-  'keyDetail.criticalOn':
-    'Les envois de cette clé qui le demandent sonneront malgré le mode silencieux et Focus. ' +
-    'Ajoutez is_critical=1 à l’envoi.',
   'keyDetail.criticalTimeSensitive':
     'Les envois de cette clé qui le demandent franchissent Focus et restent sur l’écran ' +
     'verrouillé. Ajoutez is_critical=1 à l’envoi. Ils ne sonneront pas malgré le mode ' +
-    'silencieux. Cela nécessite une habilitation qu’Apple n’a pas encore accordée à notifi.',
+    'silencieux.',
 
   'keyDetail.copyKey': 'Copier la clé',
   'keyDetail.shareKey': 'Partager la clé',
@@ -208,16 +198,8 @@ export const fr: Translation = {
     "avec elle sera rejeté.",
 
   'keyDetail.regeneratedAnnouncement': "Clé régénérée. L’ancienne valeur ne fonctionne plus.",
-  'keyDetail.regenerateFailed':
-    "Impossible de régénérer la clé. Vérifiez votre connexion et réessayez.",
   'keyDetail.revokedAnnouncement': 'Clé révoquée.',
-  'keyDetail.revokeFailed': "Impossible de révoquer la clé. Vérifiez votre connexion et réessayez.",
 
-  'keyDetail.criticalNotPermitted':
-    'Les alertes critiques sont désactivées pour notifi dans les réglages système. Elles ' +
-    'franchiront quand même Focus, mais ne sonneront pas malgré le mode silencieux.',
-  'keyDetail.criticalChangeFailed':
-    "Impossible de modifier les alertes critiques pour cette clé. Vérifiez votre connexion et réessayez.",
 
   'createKey.title': 'Nouvelle clé',
   'createKey.intro':
@@ -233,9 +215,6 @@ export const fr: Translation = {
 
   'createKey.validationEmpty': 'Entrez un nom pour cette clé.',
   'createKey.validationTooLong': 'Utilisez 64 caractères ou moins.',
-  'createKey.validationReserved': 'Choisissez un autre nom. « device » est la clé de votre appareil.',
-  'createKey.validationTaken': "Choisissez un autre nom. Une de vos clés actives porte déjà celui-ci.",
-  'createKey.createFailed': "Impossible de créer la clé. Vérifiez votre connexion et réessayez.",
 
   'createKey.revealTitle': 'Copiez votre clé maintenant',
   'createKey.revealDetail': 'Elle ne sera plus affichée.',
@@ -286,7 +265,6 @@ export const fr: Translation = {
     "422 invalid_content et ne stocke rien.\n\n" +
     "Désactivé, le champ est raccourci et l’envoi est accepté avec un tableau warnings.\n\n" +
     "[Lire la documentation](https://notifi.it/docs#response)",
-  'settings.strictSendFailed': 'Échec de PATCH /devices/settings. Vérifiez votre connexion et réessayez.',
 
   'settings.testTitle': 'Hello from notifi',
   'settings.testBody': 'Votre première notification.',
@@ -330,10 +308,8 @@ export const fr: Translation = {
   'empty.sendTest': 'Envoyer un test',
   'empty.sending': 'Envoi…',
   'empty.sent': 'Envoyée. Elle arrive ici et sur votre écran verrouillé dans un instant.',
-  'empty.sendFailed': "Échec de l’envoi. Vérifiez votre connexion et réessayez.",
 
   'empty.makingKey': 'Création de votre clé…',
-  'empty.makeKeyFailed': "Impossible de créer une clé. Vérifiez votre connexion et réessayez.",
 
   'empty.stepLabel': 'Étape {n}. {title}.',
   'empty.stepDone': ' Terminée.',
@@ -413,6 +389,6 @@ export const fr: Translation = {
   'clientErrors.rateLimited': 'Trop de requêtes à l’instant. Réessayez dans un moment.',
   'clientErrors.server': 'Le serveur rencontre un problème. Réessayez dans un moment.',
   'clientErrors.generic': "La requête n’a pas abouti. Réessayez.",
-  'clientErrors.transport': "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+  'clientErrors.transport': 'Impossible de joindre les serveurs notifi. Vérifiez votre connexion et réessayez.',
   'clientErrors.decoding': 'Le serveur a renvoyé une réponse inattendue. Réessayez dans un moment.',
 };

@@ -357,7 +357,7 @@ struct MessageDetailView: View {
         if let key = key(for: message), let name = keyName(for: message) {
             Button { openKey(key) } label: { label() }
                 .buttonStyle(.geist)
-                .accessibilityLabel(Copy.Message.openKey(name))
+                .accessibilityLabel(Copy.Message.sentWithKey(name))
         } else if let name = keyName(for: message) {
             label()
                 .accessibilityLabel(Copy.Message.sentWithKey(name))

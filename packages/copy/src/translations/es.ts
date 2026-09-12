@@ -26,8 +26,6 @@ export const es: Translation = {
   'api.invalidHistoryQuery': 'Consulta de historial no válida.',
   'api.invalidSendParams': 'Parámetros de envío no válidos.',
   'api.occurredAtTooFuture': 'occurred_at está demasiado lejos en el futuro.',
-  'api.criticalNotAllowed':
-    'Enviado como notificación normal: las alertas críticas están desactivadas para esta clave.',
   'api.titleCropped': 'Enviado con un título acortado: superaba los {max} caracteres.',
   'api.messageCropped': 'Enviado con una notificación acortada: superaba los {max} caracteres.',
   'api.strictContentRejected':
@@ -72,7 +70,6 @@ export const es: Translation = {
   'age.weeks': '{n}sem',
   'age.ago': 'hace {relative}',
   'inbox.title': 'Inbox',
-  'inbox.offline': 'No se puede conectar con los servidores de notifi. Comprueba tu conexión e inténtalo de nuevo.',
   'inbox.count': { one: '1 notificación', other: '{n} notificaciones' },
   'inbox.filteredToKey': 'Filtrado por la clave "{name}".',
   'inbox.closeSearch': 'Cerrar búsqueda',
@@ -118,7 +115,6 @@ export const es: Translation = {
   'message.imageSaveDenied': 'notifi necesita permiso para añadir a Fotos. Actívalo en Ajustes.',
   'message.keyFallbackName': 'Clave {id}',
   'message.sentWithKey': 'Enviado con la clave {name}',
-  'message.openKey': 'Enviado con la clave {name}. Ábrela.',
   'message.viewImageFullScreen': 'Ver imagen a pantalla completa',
   'message.shareLink': 'Compartir enlace',
   'message.imageFailedToLoad': 'No se pudo cargar la imagen',
@@ -134,7 +130,6 @@ export const es: Translation = {
   'message.sourceHeader': 'Origen',
   'keys.title': 'Claves',
   'keys.newKey': 'Nueva clave',
-  'keys.refreshFailed': 'No se pudieron actualizar las claves. Mostrando la última lista conocida.',
   'keys.sectionActive': 'Activas',
   'keys.sectionRevoked': 'Revocadas',
   'keys.aboutKeys': 'Acerca de las claves',
@@ -149,15 +144,10 @@ export const es: Translation = {
   'keys.maskedValue': '{prefix}…',
 
   'keyDetail.notFound': 'Clave no encontrada',
-  'keyDetail.notFoundDetail': 'Puede que se haya eliminado en otro dispositivo.',
 
-  'keyDetail.criticalOn':
-    'Los envíos de esta clave que lo soliciten sonarán incluso con el modo silencio y el modo Enfoque activados. ' +
-    'Añade is_critical=1 al envío.',
   'keyDetail.criticalTimeSensitive':
     'Los envíos de esta clave que lo soliciten atravesarán el modo Enfoque y permanecerán en la pantalla de ' +
-    'bloqueo. Añade is_critical=1 al envío. No sonarán con el modo silencio activado. ' +
-    'Eso requiere una autorización que Apple aún no ha concedido a notifi.',
+    'bloqueo. Añade is_critical=1 al envío. No sonarán con el modo silencio activado. ',
 
   'keyDetail.copyKey': 'Copiar clave',
   'keyDetail.shareKey': 'Compartir clave',
@@ -207,15 +197,8 @@ export const es: Translation = {
     'será rechazado.',
 
   'keyDetail.regeneratedAnnouncement': 'Clave regenerada. El valor anterior ya no funciona.',
-  'keyDetail.regenerateFailed': 'No se pudo regenerar la clave. Comprueba tu conexión e inténtalo de nuevo.',
   'keyDetail.revokedAnnouncement': 'Clave revocada.',
-  'keyDetail.revokeFailed': 'No se pudo revocar la clave. Comprueba tu conexión e inténtalo de nuevo.',
 
-  'keyDetail.criticalNotPermitted':
-    'Las alertas críticas están desactivadas para notifi en los ajustes del sistema. Seguirán ' +
-    'atravesando el modo Enfoque, pero no sonarán con el modo silencio activado.',
-  'keyDetail.criticalChangeFailed':
-    'No se pudieron cambiar las alertas críticas de esta clave. Comprueba tu conexión e inténtalo de nuevo.',
 
   'createKey.title': 'Nueva clave',
   'createKey.intro': 'Un nombre que solo tú ves. Aparece en la lista de claves y en los filtros.',
@@ -230,9 +213,6 @@ export const es: Translation = {
 
   'createKey.validationEmpty': 'Escribe un nombre para esta clave.',
   'createKey.validationTooLong': 'Usa 64 caracteres o menos.',
-  'createKey.validationReserved': 'Elige otro nombre. "device" es la clave propia de tu dispositivo.',
-  'createKey.validationTaken': 'Elige otro nombre. Una de tus claves activas ya tiene este.',
-  'createKey.createFailed': 'No se pudo crear la clave. Comprueba tu conexión e inténtalo de nuevo.',
 
   'createKey.revealTitle': 'Copia tu clave ahora',
   'createKey.revealDetail': 'No se volverá a mostrar.',
@@ -283,7 +263,6 @@ export const es: Translation = {
     'y no guarda nada.\n\n' +
     'Desactivado, el campo se recorta y el envío se acepta con un array warnings.\n\n' +
     '[Leer la documentación](https://notifi.it/docs#response)',
-  'settings.strictSendFailed': 'PATCH /devices/settings falló. Comprueba tu conexión e inténtalo de nuevo.',
 
   'settings.testTitle': 'Hello from notifi',
   'settings.testBody': 'Tu primera notificación.',
@@ -326,10 +305,8 @@ export const es: Translation = {
   'empty.sendTest': 'Enviar una prueba',
   'empty.sending': 'Enviando…',
   'empty.sent': 'Enviado. Llegará aquí y a tu pantalla de bloqueo en un momento.',
-  'empty.sendFailed': 'No se pudo enviar. Comprueba tu conexión e inténtalo de nuevo.',
 
   'empty.makingKey': 'Creando tu clave…',
-  'empty.makeKeyFailed': 'No se pudo crear una clave. Comprueba tu conexión e inténtalo de nuevo.',
 
   'empty.stepLabel': 'Paso {n}. {title}.',
   'empty.stepDone': ' Hecho.',
@@ -363,7 +340,7 @@ export const es: Translation = {
   'clientErrors.rateLimited': 'Demasiadas solicitudes en este momento. Inténtalo de nuevo en un momento.',
   'clientErrors.server': 'El servidor está teniendo problemas. Inténtalo de nuevo en un momento.',
   'clientErrors.generic': 'La solicitud no se pudo completar. Inténtalo de nuevo.',
-  'clientErrors.transport': 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.',
+  'clientErrors.transport': 'No se puede conectar con los servidores de notifi. Comprueba tu conexión e inténtalo de nuevo.',
   'clientErrors.decoding': 'El servidor devolvió algo inesperado. Inténtalo de nuevo en un momento.',
 
   'store.name': 'notifi: Notificaciones push',

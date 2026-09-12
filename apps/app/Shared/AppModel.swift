@@ -100,7 +100,6 @@ final class AppModel {
     var keysPath: [CachedKey] = []
     var selectedTab: AppTab = AppTab.launchOverride ?? .inbox
     var notificationStatus: UNAuthorizationStatus = .notDetermined
-    var criticalAlertStatus: UNNotificationSetting = .notSupported
     var notificationsStayVisible = false
     var remoteImagesEnabled: Bool {
         didSet { RemoteImages.setEnabled(remoteImagesEnabled) }
@@ -302,15 +301,10 @@ final class AppModel {
 
     var defaultKeyValue: String? { DeviceIdentity.loadDefaultKey() }
 
-    @discardableResult
-    func setKeyCritical(id: Int, isCritical: Bool) async throws -> UNNotificationSetting {
+    func setKeyCritical(id: Int, isCritical: Bool) async throws {
         guard let api, let sync else { throw NotifiError.identityMissing }
-        if isCritical, criticalAlertStatus != .enabled {
-            await requestCriticalAlertPermission()
-        }
         try await api.updateKey(id: id, isCritical: isCritical)
         await sync.refreshKeys()
-        return criticalAlertStatus
     }
 
     func setStrictSend(_ enabled: Bool) async throws {
@@ -501,11 +495,10 @@ final class AppModel {
         #if DEBUG
         if SampleData.isEnabled {
             notificationStatus = .authorized
-            criticalAlertStatus = .enabled
             return
         }
         #endif
-        let settings: (UNAuthorizationStatus, UNNotificationSetting, Bool) =
+        let settings: (UNAuthorizationStatus, Bool) =
             await withCheckedContinuation { continuation in
                 UNUserNotificationCenter.current().getNotificationSettings { settings in
                     #if os(macOS)
@@ -514,21 +507,16 @@ final class AppModel {
                     let staysVisible = false
                     #endif
                     continuation.resume(
-                        returning: (settings.authorizationStatus, settings.criticalAlertSetting, staysVisible)
+                        returning: (settings.authorizationStatus, staysVisible)
                     )
                 }
             }
         notificationStatus = settings.0
-        criticalAlertStatus = settings.1
-        notificationsStayVisible = settings.2
+        notificationsStayVisible = settings.1
     }
 
     func requestNotificationPermission() async {
         await requestAuthorization(options: [.alert, .sound, .badge])
-    }
-
-    func requestCriticalAlertPermission() async {
-        await requestAuthorization(options: [.alert, .sound, .badge, .criticalAlert])
     }
 
     private func requestAuthorization(options: UNAuthorizationOptions) async {

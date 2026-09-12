@@ -97,7 +97,7 @@ function errorResponses(): Record<string, unknown> {
               value: {
                 ok: true,
                 warnings: [
-                  'Sent as a normal notification, because critical alerts are switched off for this key.',
+                  'Title shortened to 200 characters.',
                 ],
               },
             },
@@ -234,7 +234,7 @@ export function openapi(): Record<string, unknown> {
             warnings: {
               ...responseProperties.warnings,
               description:
-                'Present only when the notification was delivered differently from what was asked: a cropped title or body, or a critical alert delivered as an ordinary notification.',
+                'Present only when the notification was delivered differently from what was asked: a cropped title or body.',
             },
           },
         },

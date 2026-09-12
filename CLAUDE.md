@@ -10,6 +10,12 @@ typechecks on both sides and fails at runtime.
 
 ## Copy
 
+Less is more. Say it in as few words as possible, then cut again. A detail
+string is one sentence where one will do; a label is one or two words. Drop
+explanations of what the reader can already see, and drop the "Off, …" half
+of a toggle description unless the off state is surprising. Two strings that
+say the same thing are one string with one key.
+
 All user-facing strings live in `packages/copy/src/strings.ts`. Nothing else may
 hold a user-facing literal. `make gen-copy` generates
 `apps/app/Shared/Resources/Localizable.xcstrings` (keyed by dotted path, not
@@ -28,6 +34,10 @@ Generator rules: placeholders are `{name}` (positional, first-appearance order);
 plurals are `plural(one, other)` and a plural leaf may contain **nothing but
 `{n}`** — anything mixing a count with text composes an already-rendered count
 (`inbox.bandLabel` takes `inbox.count`'s output).
+
+The social bios in `docs/socials/*.txt` are generated too, from `socials` in
+`strings.ts`: one list of claims, written as lines for Instagram and as
+sentences everywhere else. The generator fails a bio over its platform limit.
 
 Deliberately not in the app catalog: the `api` namespace (server responses are
 shown as-is), the push fallback title (sent in the source language — the
@@ -84,15 +94,17 @@ product has no addresses.
   exceptions).
 - **send** — the verb, and `/send` the endpoint. Not "dispatch", "push a
   message" or "deliver to an address".
-- **alert** — only inside Apple's feature names (Critical Alerts, Time
-  Sensitive) and the life-safety disclaimer ("emergency alerting system").
-  Anywhere else the word is notification.
+- **alert** — only inside Apple's feature name Time Sensitive, the per-key
+  "Urgent alerts" toggle, and the life-safety disclaimer ("emergency alerting
+  system"). Anywhere else the word is notification.
 - **revoke** — the verb for ending a key, matching the app's "Revoke key"
   button. A key is revoked; a notification is deleted. Never cross the two.
 - **collect** — what a device does to its stored notifications; an
   undelivered one is "uncollected". The privacy policy leans on this pair.
 - **pager** and **relay** — the two sanctioned metaphors, used as-is: "a
   pager for your own systems", "a relay, not a mailbox". Don't coin others.
+- **lands** — never. A notification arrives, is delivered, or is simply on your
+  device. Same for "land".
 - **encrypted** — the copy's word. "Seal" is the code's name (`seal.ts`) and
   stays internal.
 

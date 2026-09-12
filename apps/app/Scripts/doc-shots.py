@@ -19,7 +19,7 @@ OUT = ROOT / "apps/api/public/shots"
 
 FIGURES = [
     ("settings", "settings-reject-invalid-sends.png", (0, 160, 1206, 800)),
-    ("key", "key-critical-alerts.png", (0, 110, 1206, 1599)),
+    ("key", "key-urgent-alerts.png", (0, 110, 1206, 1599)),
     ("key", "key-open-any-link.png", (0, 1160, 1206, 1450)),
 ]
 

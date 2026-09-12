@@ -38,8 +38,6 @@ interface KeyDeviceRow {
   strict_send: number;
 }
 
-const CRITICAL_ENTITLED = false;
-
 function pushPayload(
   id: number,
   sealedB64: string,
@@ -48,12 +46,7 @@ function pushPayload(
   strings: Strings,
 ): object {
   const escalation = escalate
-    ? CRITICAL_ENTITLED
-      ? {
-          sound: { critical: 1, name: 'default', volume: 1 },
-          'interruption-level': 'critical',
-        }
-      : { sound: 'default', 'interruption-level': 'time-sensitive' }
+    ? { sound: 'default', 'interruption-level': 'time-sensitive' }
     : { sound: 'default' };
 
   return {
@@ -187,8 +180,7 @@ send.on(['GET', 'POST'], '/send', async (c) => {
     );
   }
 
-  const asked = input.is_critical === true;
-  const critical = asked && row.is_critical === 1;
+  const critical = input.is_critical === true && row.is_critical === 1;
 
   const warnings: string[] = [];
 
@@ -309,8 +301,6 @@ send.on(['GET', 'POST'], '/send', async (c) => {
     }
   })();
   c.executionCtx.waitUntil(wake);
-
-  if (asked && !critical) warnings.push(t(c).api.criticalNotAllowed);
 
   return c.json(
     warnings.length > 0 ? { ok: true as const, warnings } : { ok: true as const },

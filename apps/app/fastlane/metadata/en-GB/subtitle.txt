@@ -1,1 +1,1 @@
-For scripts and servers
+For scripts, servers and apps
