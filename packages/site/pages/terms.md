@@ -7,7 +7,7 @@ ogDescription: What the service is, what you may do with it, and what it does no
 ---
 # Terms of service
 
-> These are the terms for using notifi — the apps and the `notifi.it` service. Using either means you accept them.
+> The terms for using the notifi apps and service. Using either means you accept them.
 
 _Last updated 29 August 2026_
 
@@ -21,7 +21,7 @@ The service is run by Maximilian Mitchell, based in the United Kingdom. Contact:
 
 - A send key delivers only to the device that created it. You are responsible for where you put your keys and for what the scripts holding them send.
 - If a key leaks, revoke it in the app. Sends made with it before revocation still count as yours.
-- Deleting the app deletes your identity. There is no recovery.
+- Deleting the app deletes your identity. No recovery.
 
 ## Acceptable use
 

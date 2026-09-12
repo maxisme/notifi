@@ -317,7 +317,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
       <li><strong>Send keys</strong> are kept while the device exists, including revoked ones, so that a revoked key cannot be reused.</li>
       <li><strong>A record of each send and each collection</strong> — for a send, which device and key it went to, whether the push to Apple succeeded, and the size of the notification in bytes; for a collection, which device and how many notifications it took — is kept for three months in Cloudflare’s analytics store, to count sends and collections and to notice failed deliveries. It holds no content and no IP address.</li>
     </ul>
-    <p>notifi is a relay, not a mailbox. Once your device has a notification, the server copy is gone and the only copy is the one on your device.</p>
+    <p>A relay, not a mailbox. Once your device has a notification, the server copy is gone.</p>
   </section>
 
   <section>
@@ -333,7 +333,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
   <section>
     <h2>Images in notifications</h2>
     <p>A notification can carry a link to an image, and the host serving it is chosen by whoever sent the notification, not by notifi. Loading such an image means your device makes a request to that host, which reveals your IP address, your rough location, and the exact moment the notification reached you. A sender can use this to tell whether and when you received something.</p>
-    <p>Because of this, the app does not load images automatically. It shows a placeholder and loads the image only when you tap it. If you would rather images appear on their own, there is a switch in <strong>Settings › Privacy</strong>. Turning it on applies to notifications as well, which means images will be fetched on arrival, before you have opened anything.</p>
+    <p>So the app does not load images automatically. It shows a placeholder until you tap. To load them on arrival, turn on <strong>Load images automatically</strong> in Settings.</p>
   </section>
 
   <section>

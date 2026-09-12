@@ -61,7 +61,7 @@ Because the sender and the recipient both talk to the same server, that server i
 - **Send keys** are kept while the device exists, including revoked ones, so that a revoked key cannot be reused.
 - **A record of each send and each collection** — for a send, which device and key it went to, whether the push to Apple succeeded, and the size of the notification in bytes; for a collection, which device and how many notifications it took — is kept for three months in Cloudflare’s analytics store, to count sends and collections and to notice failed deliveries. It holds no content and no IP address.
 
-notifi is a relay, not a mailbox. Once your device has a notification, the server copy is gone and the only copy is the one on your device.
+A relay, not a mailbox. Once your device has a notification, the server copy is gone.
 
 ## Server logs
 
@@ -77,7 +77,7 @@ When the server hits an error it cannot handle, a report of that error is sent t
 
 A notification can carry a link to an image, and the host serving it is chosen by whoever sent the notification, not by notifi. Loading such an image means your device makes a request to that host, which reveals your IP address, your rough location, and the exact moment the notification reached you. A sender can use this to tell whether and when you received something.
 
-Because of this, the app does not load images automatically. It shows a placeholder and loads the image only when you tap it. If you would rather images appear on their own, there is a switch in **Settings › Privacy**. Turning it on applies to notifications as well, which means images will be fetched on arrival, before you have opened anything.
+So the app does not load images automatically. It shows a placeholder until you tap. To load them on arrival, turn on **Load images automatically** in Settings.
 
 ## On your device
 

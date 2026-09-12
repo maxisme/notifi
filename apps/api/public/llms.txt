@@ -205,9 +205,7 @@ old key stops working. There is no migration.
   `https://notifi.it/docs.md`, `https://notifi.it/faq.md`. Responses carry
   `Vary: Accept`.
 - [Sitemap](https://notifi.it/sitemap.xml) and [robots.txt](https://notifi.it/robots.txt).
-- There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer
-  token is the whole integration surface. Anything claiming otherwise is not
-  notifi.
+- No MCP server, no OAuth. One endpoint and a bearer token is the whole surface.
 
 ## Links
 

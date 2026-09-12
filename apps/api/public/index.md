@@ -1,6 +1,6 @@
 # notifi: push notifications to iPhone and Mac from one request
 
-> One HTTP request to notifi.it, and a native push notification lands on your
+> One HTTP request to notifi.it, and a native push notification is on your
 > iPhone, iPad or Mac. No account. Notification content is encrypted
 > with your public key, so neither we nor Apple can read your notifications.
 
@@ -66,7 +66,7 @@ at [notifi.it/openapi.json](https://notifi.it/openapi.json).
 ## Why not just use ...
 
 - Quicker to set up than an **SMTP relay**
-- Your important notifications in one place, without cluttering your **email inbox**
+- Your important notifications in one place, not your **email inbox**
 - Lighter than running **Slack**
 - No bot to register, unlike **Telegram**
 - Richer formatting than **SMS** allows

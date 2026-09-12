@@ -247,7 +247,7 @@ function socialOutputs(): Array<{ path: string; contents: string; label: string 
   };
   const limits: Record<string, number> = { 'twitter.txt': 160, 'instagram.txt': 150, 'facebook-short.txt': 255 };
   for (const [file, limit] of Object.entries(limits)) {
-    const length = files[file].trimEnd().length;
+    const length = (files[file] ?? '').trimEnd().length;
     if (length > limit) fail(`docs/socials/${file} is ${length} characters, over the platform limit of ${limit}.`);
   }
   return Object.entries(files).map(([file, contents]) => ({

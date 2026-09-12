@@ -1,12 +1,12 @@
 # notifi API documentation
 
-> One endpoint and seven parameters. Everything on this page is generated from the same file that generates [`/openapi.json`](https://notifi.it/openapi.json) and the client collections, so the three cannot disagree.
+> One endpoint, seven parameters. This page, [`/openapi.json`](https://notifi.it/openapi.json) and the client collections are generated from one source, so they cannot disagree.
 
 _[Quickstart](https://notifi.it/docs#quickstart) [Authentication](https://notifi.it/docs#auth) [Request](https://notifi.it/docs#request) [Parameters](https://notifi.it/docs#parameters) [Response](https://notifi.it/docs#response) [Errors](https://notifi.it/docs#errors) [Rate limits](https://notifi.it/docs#limits) [Clients and import](https://notifi.it/docs#clients) [For the bots](https://notifi.it/docs#machine) [Recipes](https://notifi.it/docs#recipes)_
 
 ## Quickstart
 
-Install notifi on [iPhone or iPad](https://apps.apple.com/app/id1563961135) or [on the Mac](https://notifi.it/download/mac), allow notifications, open the Keys tab and copy the `Device` key. It starts with `nk_`.
+Install notifi on [iPhone or iPad](https://apps.apple.com/app/id1563961135) or [Mac](https://notifi.it/download/mac), allow notifications, open Keys and copy the `Device` key. It starts with `nk_`.
 
 ```bash
 curl -X POST https://notifi.it/send \
@@ -19,7 +19,7 @@ curl -X POST https://notifi.it/send \
 
 ## Authentication
 
-Authenticate with a bearer token. A key parameter also works, but it is written to edge logs, shell history and any proxy in between. Use it only for a quick test, and rotate the key afterwards.
+Use a bearer token. A key parameter works too, but ends up in server logs. Use it for a quick test only, then rotate the key.
 
 | Method | Sent as | Notes |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ Authenticate with a bearer token. A key parameter also works, but it is written 
 
 ## Request
 
-`POST https://notifi.it/send`, JSON, form-encoded or multipart. `GET` takes the same parameters in the query string and is there for a quick test: a key sent that way ends up in edge logs and shell history, so rotate it afterwards. Query parameters win over body fields when both are present.
+`POST https://notifi.it/send` as JSON, form-encoded or multipart. `GET` takes the same parameters in the query string, for quick tests only: rotate the key afterwards. Query parameters win over body fields.
 
 ```http
 POST /send HTTP/1.1
@@ -56,7 +56,7 @@ Accept-Language: en-GB
 
 ## Response
 
-A send answers `202` when the server has accepted it. Delivery is best-effort, as the [terms](https://notifi.it/terms) describe. Every status the endpoint can answer with is here:
+`202` means accepted. Delivery is best-effort, per the [terms](https://notifi.it/terms). Every status the endpoint can answer:
 
 ### 202
 
@@ -124,31 +124,31 @@ Content-Type: application/json; charset=utf-8
 
 ### Over-length text is cropped
 
-A title over 200 characters or a body over 16000 is delivered cropped, with a warning. The device can refuse instead: **Reject invalid sends**, in the app's Settings, makes a send that would have been cropped answer `422 invalid_content` and store nothing. It is off by default, so cropping is what a send meets unless the person holding the device turned it on.
+A title over 200 characters or a body over 16000 is cropped, with a warning. **Reject invalid sends**, in the app's Settings, answers `422 invalid_content` instead and stores nothing. It is off by default.
 
 ![The Settings screen, showing the Reject invalid sends switch turned off.](/shots/settings-reject-invalid-sends.png)
 
-_Settings → Permissions → Reject invalid sends. Off, the default: sends are cropped, not refused._
+_Settings → Permissions → Reject invalid sends. Off by default._
 
 ### Urgent alerts are granted per key
 
-`is_critical=1` asks for a Time Sensitive notification, which breaks through Focus and stays on the lock screen, but only if the key it was sent with has **Urgent alerts** switched on, on that device, in that key's screen under the Keys tab. Without it the notification is delivered as an ordinary one. Only the person holding the device can switch it on.
+`is_critical=1` asks for a Time Sensitive notification, which breaks through Focus. It works only if the key has **Urgent alerts** on, in the app. Otherwise the notification is delivered normally.
 
 ![A key's screen in the app, showing the Urgent alerts switch turned on.](/shots/key-urgent-alerts.png)
 
-_Keys → a key → Settings → Urgent alerts. Each key carries its own permission._
+_Keys → a key → Urgent alerts. Per key._
 
 ### A link does not have to be https
 
-`link` accepts any URL scheme, so it can point at a website or deep-link into another app on the device. The app opens only `https` links until **Open any link** is switched on for the key, in that key's screen under the Keys tab. That switch belongs to the person holding the device, not the sender.
+`link` accepts any URL scheme, so it can deep-link into another app. The app opens only `https` until **Open any link** is switched on for the key. Only the person holding the device can switch it on.
 
 ![A key's screen in the app, showing the Open any link switch.](/shots/key-open-any-link.png)
 
-_Keys → a key → Settings → Open any link. Off, only https links open._
+_Keys → a key → Open any link. Off, only https opens._
 
 ## Errors
 
-Every error nests the code one level down. Read `error.code`, not `code`. The `message` is in the language negotiated from `Accept-Language` and is meant for a human, so match on the code.
+Every error nests the code one level down: read `error.code`. The `message` is translated and meant for a human, so match on the code.
 
 | Status | `error.code` | Meaning |
 | --- | --- | --- |
@@ -165,14 +165,14 @@ Every error nests the code one level down. Read `error.code`, not `code`. The `m
 - 60 notifications an hour per device, shared across every key on it.
 - 5 active send keys per device, one of which is the device key.
 - 100 requests a minute per IP, across every endpoint.
-- 500 uncollected notifications per device. Once that many sit waiting, sends are refused until the device collects them.
-- Revoking a key in the app takes effect on the next send. Reinstalling the app, or moving to a new device, makes a new identity and every old key stops working; there is no migration.
+- 500 uncollected notifications per device. Past that, sends are refused until the device collects.
+- Revoking a key takes effect on the next send. Reinstalling the app, or moving device, makes a new identity and every old key stops working. No migration.
 
-A `429` carries `Retry-After` in seconds. The device limit is 60 an hour across all 5 keys; the address limit is 100 requests a minute and covers every endpoint.
+A `429` carries `Retry-After` in seconds.
 
 ## Clients and import
 
-The collection and the OpenAPI document are generated from the same source as this page. Set `NOTIFI_KEY` and send.
+Generated from the same source as this page. Set `NOTIFI_KEY` and send.
 
 ### Postman
 
@@ -230,11 +230,11 @@ openapi-generator-cli generate \
 
 Every page is also served as Markdown: send `Accept: text/markdown`, or append `.md`.
 
-There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer token is the whole integration surface. Anything claiming otherwise is not notifi.
+No MCP server, no OAuth. One endpoint and a bearer token is the whole surface.
 
 ## Recipes
 
-The same request from everywhere it tends to get sent from — 15 of them, the same block the home page carries. Each one wants `NOTIFI_KEY` in the environment.
+The same request in 15 languages and tools. Each expects `NOTIFI_KEY` in the environment.
 
 ### curl
 

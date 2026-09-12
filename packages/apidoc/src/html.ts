@@ -208,9 +208,8 @@ export function docsBody(): string {
   <p class="eyebrow">API reference</p>
   <h1>notifi API documentation</h1>
   <p class="lede">
-    One endpoint and seven parameters. Everything on this page is generated
-    from the same file that generates <a href="/openapi.json"><code>/openapi.json</code></a>
-    and the client collections, so the three cannot disagree.
+    One endpoint, seven parameters. This page, <a href="/openapi.json"><code>/openapi.json</code></a>
+    and the client collections are generated from one source, so they cannot disagree.
   </p>
 
   <p class="meta actions screen-only">
@@ -226,8 +225,8 @@ export function docsBody(): string {
     <h2>Quickstart</h2>
     <p>
       Install notifi on <a href="https://apps.apple.com/app/id1563961135">iPhone or iPad</a>
-      or <a href="/download/mac">on the Mac</a>, allow notifications, open the Keys tab and
-      copy the <code>Device</code> key. It starts with <code>nk_</code>.
+      or <a href="/download/mac">Mac</a>, allow notifications, open Keys and copy the
+      <code>Device</code> key. It starts with <code>nk_</code>.
     </p>
     ${pre(QUICKSTART, 'bash')}
   </section>
@@ -257,10 +256,9 @@ export function docsBody(): string {
   <section id="request">
     <h2>Request</h2>
     <p>
-      <code>POST ${ORIGIN}${ENDPOINT}</code>, JSON, form-encoded or multipart.
-      <code>GET</code> takes the same parameters in the query string and is there for a quick
-      test: a key sent that way ends up in edge logs and shell history, so rotate it afterwards.
-      Query parameters win over body fields when both are present.
+      <code>POST ${ORIGIN}${ENDPOINT}</code> as JSON, form-encoded or multipart.
+      <code>GET</code> takes the same parameters in the query string, for quick tests only:
+      rotate the key afterwards. Query parameters win over body fields.
     </p>
     ${pre(RAW_REQUEST, 'http')}
   </section>
@@ -285,9 +283,8 @@ ${parameterRows()}
   <section id="response">
     <h2>Response</h2>
     <p>
-      A send answers <code>202</code> when the server has accepted it. Delivery is
-      best-effort, as the <a href="/terms">terms</a> describe. Every
-      status the endpoint can answer with is here:
+      <code>202</code> means accepted. Delivery is best-effort, per the
+      <a href="/terms">terms</a>. Every status the endpoint can answer:
     </p>
 ${terminalGroup('r-', 'Responses', RESPONSES)}
     <p>
@@ -299,52 +296,46 @@ ${pre(WARNINGS_RESPONSE, 'http')}
 
     <h3>Over-length text is cropped</h3>
     <p>
-      A title over ${TITLE_MAX} characters or a body over ${MESSAGE_MAX} is delivered cropped,
-      with a warning. The device can refuse instead: <strong>Reject invalid sends</strong>, in
-      the app's Settings, makes a send that would have been cropped answer
-      <code>422 invalid_content</code> and store nothing. It is off by default, so cropping is
-      what a send meets unless the person holding the device turned it on.
+      A title over ${TITLE_MAX} characters or a body over ${MESSAGE_MAX} is cropped, with a
+      warning. <strong>Reject invalid sends</strong>, in the app's Settings, answers
+      <code>422 invalid_content</code> instead and stores nothing. It is off by default.
     </p>
 ${figure(
   '/shots/settings-reject-invalid-sends.png',
   'The Settings screen, showing the Reject invalid sends switch turned off.',
-  'Settings → Permissions → Reject invalid sends. Off, the default: sends are cropped, not refused.',
+  'Settings → Permissions → Reject invalid sends. Off by default.',
 )}
 
     <h3 id="urgent-alerts">Urgent alerts are granted per key</h3>
     <p>
       <code>is_critical=1</code> asks for a Time Sensitive notification, which breaks through
-      Focus and stays on the lock screen, but only if the key it was sent with has
-      <strong>Urgent alerts</strong> switched on,
-      on that device, in that key's screen under the Keys tab. Without it the notification is
-      delivered as an ordinary one. Only the person holding the device can switch it on.
+      Focus. It works only if the key has <strong>Urgent alerts</strong> on, in the app.
+      Otherwise the notification is delivered normally.
     </p>
 ${figure(
   '/shots/key-urgent-alerts.png',
   "A key's screen in the app, showing the Urgent alerts switch turned on.",
-  'Keys → a key → Settings → Urgent alerts. Each key carries its own permission.',
+  'Keys → a key → Urgent alerts. Per key.',
 )}
 
     <h3 id="links">A link does not have to be https</h3>
     <p>
-      <code>link</code> accepts any URL scheme, so it can point at a website or deep-link into
-      another app on the device. The app opens only <code>https</code> links until
-      <strong>Open any link</strong> is switched on for the key, in that key's screen under the
-      Keys tab. That switch belongs to the person holding the device, not the sender.
+      <code>link</code> accepts any URL scheme, so it can deep-link into another app. The app
+      opens only <code>https</code> until <strong>Open any link</strong> is switched on for the
+      key. Only the person holding the device can switch it on.
     </p>
 ${figure(
   '/shots/key-open-any-link.png',
   "A key's screen in the app, showing the Open any link switch.",
-  'Keys → a key → Settings → Open any link. Off, only https links open.',
+  'Keys → a key → Open any link. Off, only https opens.',
 )}
   </section>
 
   <section id="errors">
     <h2>Errors</h2>
     <p>
-      Every error nests the code one level down. Read <code>error.code</code>, not
-      <code>code</code>. The <code>message</code> is in the language negotiated from
-      <code>Accept-Language</code> and is meant for a human, so match on the code.
+      Every error nests the code one level down: read <code>error.code</code>. The
+      <code>message</code> is translated and meant for a human, so match on the code.
     </p>
     <div class="tablewrap" tabindex="0" role="group" aria-label="Error codes">
       <table>
@@ -362,17 +353,14 @@ ${errorRows()}
 ${limits.map((l) => `      <li>${escape(l)}</li>`).join('\n')}
     </ul>
     <p>
-      A <code>429</code> carries <code>Retry-After</code> in seconds. The device limit is
-      ${SENDS_PER_HOUR} an hour across all ${KEYS_PER_DEVICE} keys; the address limit is
-      ${REQUESTS_PER_MINUTE} requests a minute and covers every endpoint.
+      A <code>429</code> carries <code>Retry-After</code> in seconds.
     </p>
   </section>
 
   <section id="clients">
     <h2>Clients and import</h2>
     <p>
-      The collection and the OpenAPI document are generated from the same source
-      as this page. Set <code>NOTIFI_KEY</code> and send.
+      Generated from the same source as this page. Set <code>NOTIFI_KEY</code> and send.
     </p>
 ${terminalGroup('c-', 'Clients', CLIENTS)}
   </section>
@@ -394,8 +382,7 @@ ${resources
   <section id="recipes">
     <h2>Recipes</h2>
     <p>
-      The same request from everywhere it tends to get sent from — ${samples.length} of
-      them, the same block the home page carries. Each one wants
+      The same request in ${samples.length} languages and tools. Each expects
       <code>NOTIFI_KEY</code> in the environment.
     </p>
 ${terminalGroup('', 'Examples', samples)}
