@@ -73,8 +73,8 @@ ANCHOR=$(date +%s)
 export ANCHOR
 
 # Full battery and full bars. Without the override the captures carry whatever
-# the simulator's clock said, and the three frames sit side by side on the
-# listing with three different times.
+# the simulator's clock said, and the frames sit side by side on the
+# listing with different times.
 # Text size is named too. The simulator keeps whatever the last session set
 # (one left the phone on medium), and a set captured a step smaller than the
 # committed one differs on every frame while looking right on its own.
@@ -154,7 +154,6 @@ shoot() { # udid outfile extra-env...
 capture_set() { # udid prefix
   shoot "$1" "$2inbox.png"   SIMCTL_CHILD_NOTIFI_START_TAB=inbox SIMCTL_CHILD_NOTIFI_APPEARANCE=dark
   shoot "$1" "$2detail.png"  SIMCTL_CHILD_NOTIFI_START_TAB=inbox SIMCTL_CHILD_NOTIFI_OPEN_SAMPLE_MESSAGE=1 SIMCTL_CHILD_NOTIFI_APPEARANCE=dark
-  shoot "$1" "$2keys.png"    SIMCTL_CHILD_NOTIFI_START_TAB=keys SIMCTL_CHILD_NOTIFI_APPEARANCE=dark
 }
 
 # One pass per App Store locale. The pairing of language code to store locale
@@ -175,10 +174,11 @@ rm -rf apps/app/fastlane/screenshots/en-US
 cp -R apps/app/fastlane/screenshots/en-GB apps/app/fastlane/screenshots/en-US
 
 # The website is English only, so its four shots are captured after the loop
-# rather than reusing the loop's last pass — which is Italian. Settings is on
-# the website but not in the App Store set, so it only exists here.
+# rather than reusing the loop's last pass — which is Italian. Keys and settings
+# are on the website but not in the App Store set, so they only exist here.
 LANG_CODE=en
 capture_set "$PHONE" ""
+shoot "$PHONE" "keys.png" SIMCTL_CHILD_NOTIFI_START_TAB=keys SIMCTL_CHILD_NOTIFI_APPEARANCE=dark
 shoot "$PHONE" "settings.png" SIMCTL_CHILD_NOTIFI_START_TAB=settings \
   SIMCTL_CHILD_NOTIFI_APPEARANCE=light
 

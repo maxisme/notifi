@@ -22,7 +22,6 @@ zero-dependency SwiftUI client for iOS 17+ and macOS 14+.
 <p align="center">
   <img src="apps/app/fastlane/screenshots/en-GB/01_inbox.png" width="30%">
   <img src="apps/app/fastlane/screenshots/en-GB/02_message.png" width="30%">
-  <img src="apps/app/fastlane/screenshots/en-GB/03_keys.png" width="30%">
 </p>
 
 ## Documentation
