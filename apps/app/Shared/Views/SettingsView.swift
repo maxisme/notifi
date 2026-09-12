@@ -79,7 +79,7 @@ struct SettingsView: View {
                     .geistGutter()
 
                     if strictSendFailed {
-                        InlineError(message: Copy.Settings.strictSendFailed)
+                        InlineError(message: Copy.ClientErrors.transport)
                             .padding(.bottom, 12)
                             .geistGutter()
                             .geistBannerTransition()

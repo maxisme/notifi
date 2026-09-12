@@ -117,7 +117,6 @@ export const it: Translation = {
   'message.imageSaveDenied': 'notifi ha bisogno del permesso di aggiungere a Foto. Attivalo in Impostazioni.',
   'message.keyFallbackName': 'Chiave {id}',
   'message.sentWithKey': 'Inviato con la chiave {name}',
-  'message.openKey': 'Inviato con la chiave {name}. Aprila.',
   'message.viewImageFullScreen': 'Visualizza immagine a schermo intero',
   'message.shareLink': 'Condividi link',
   'message.imageFailedToLoad': "Caricamento dell’immagine non riuscito",
@@ -147,7 +146,6 @@ export const it: Translation = {
   'keys.maskedValue': '{prefix}…',
 
   'keyDetail.notFound': 'Chiave non trovata',
-  'keyDetail.notFoundDetail': 'Potrebbe essere stata rimossa su un altro dispositivo.',
 
   'keyDetail.criticalTimeSensitive':
     'Gli invii da questa chiave che lo richiedono superano Focus e restano sulla schermata di blocco. ' +
@@ -201,12 +199,8 @@ export const it: Translation = {
     'verrà rifiutato.',
 
   'keyDetail.regeneratedAnnouncement': 'Chiave rigenerata. Il vecchio valore non funziona più.',
-  'keyDetail.regenerateFailed': 'Impossibile rigenerare la chiave. Controlla la connessione e riprova.',
   'keyDetail.revokedAnnouncement': 'Chiave revocata.',
-  'keyDetail.revokeFailed': 'Impossibile revocare la chiave. Controlla la connessione e riprova.',
 
-  'keyDetail.criticalChangeFailed':
-    'Impossibile modificare gli avvisi critici per questa chiave. Controlla la connessione e riprova.',
 
   'createKey.title': 'Nuova chiave',
   'createKey.intro': 'Un nome che vedi solo tu. Compare nell\'elenco delle chiavi e nei filtri.',
@@ -221,7 +215,6 @@ export const it: Translation = {
 
   'createKey.validationEmpty': 'Inserisci un nome per questa chiave.',
   'createKey.validationTooLong': 'Usa 64 caratteri o meno.',
-  'createKey.createFailed': 'Impossibile creare la chiave. Controlla la connessione e riprova.',
 
   'createKey.revealTitle': 'Copia subito la tua chiave',
   'createKey.revealDetail': 'Non verrà mostrata di nuovo.',
@@ -272,7 +265,6 @@ export const it: Translation = {
     '422 invalid_content e non memorizza nulla.\n\n' +
     'Disattivato, il campo viene abbreviato e l\'invio è accettato con un array warnings.\n\n' +
     '[Leggi la documentazione](https://notifi.it/docs#response)',
-  'settings.strictSendFailed': 'PATCH /devices/settings non riuscito. Controlla la connessione e riprova.',
 
   'settings.testTitle': 'Hello from notifi',
   'settings.testBody': 'La tua prima notifica.',
@@ -315,7 +307,6 @@ export const it: Translation = {
   'empty.sendTest': 'Invia una prova',
   'empty.sending': 'Invio…',
   'empty.sent': 'Inviata. Arriverà qui e sulla schermata di blocco tra un momento.',
-  'empty.sendFailed': 'Impossibile inviare. Controlla la connessione e riprova.',
 
   'empty.makingKey': 'Creazione della chiave…',
 

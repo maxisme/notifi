@@ -1,6 +1,6 @@
 Push notifications for your scripts, servers, apps or anything that can make an HTTP request.
 
-Send notifi.it a title, plus a body, image or link if you want them along with your unique key. The notification lands on your iPhone or Mac.
+Send notifi.it a title, plus a body, image or link if you want them along with your unique key. It’s on your iPhone or Mac.
 
 https://notifi.it/send?title=hello+world
 
@@ -11,4 +11,4 @@ No accounts.
 No sign-up, no sign-in, no device linking. The app mints a send key on first launch. Keys can be renamed, paused and revoked per source.
 
 Urgent alerts.
-Mark a key as urgent and its notifications break through Focus and land on the lock screen.
+Mark a key as urgent and its notifications break through Focus and stay on the lock screen.

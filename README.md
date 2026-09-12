@@ -4,8 +4,7 @@
 
 <p align="center"><b>Push notifications for your scripts, servers and side projects.</b></p>
 
-Create a send key, send a title and body to `notifi.it` in one HTTP
-request, and the notification lands on your iPhone or Mac.
+One HTTP request to `notifi.it` and it’s on your iPhone or Mac.
 
 ```bash
 curl "https://notifi.it/send?key=nk_…&title=hello+world"
@@ -39,8 +38,7 @@ zero-dependency SwiftUI client for iOS 17+ and macOS 14+.
   **[privacy](https://notifi.it/privacy)**
   and **[terms](https://notifi.it/terms)**.
 
-Every page of notifi.it is also served as Markdown: send `Accept: text/markdown`
-to any page URL, or append `.md` to its path.
+Every page is also served as Markdown: send `Accept: text/markdown`, or append `.md`.
 
 ## Quickstart
 

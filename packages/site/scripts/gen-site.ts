@@ -41,7 +41,7 @@ function prose(name: string): Page {
     path,
     title: need('title'),
     description: need('description'),
-    ogTitle: need('ogTitle'),
+    ogTitle: f['ogTitle'] ?? need('title'),
     ogDescription: need('ogDescription'),
   };
   if (f['schemaType']) {

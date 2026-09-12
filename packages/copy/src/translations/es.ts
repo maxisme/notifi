@@ -117,7 +117,6 @@ export const es: Translation = {
   'message.imageSaveDenied': 'notifi necesita permiso para añadir a Fotos. Actívalo en Ajustes.',
   'message.keyFallbackName': 'Clave {id}',
   'message.sentWithKey': 'Enviado con la clave {name}',
-  'message.openKey': 'Enviado con la clave {name}. Ábrela.',
   'message.viewImageFullScreen': 'Ver imagen a pantalla completa',
   'message.shareLink': 'Compartir enlace',
   'message.imageFailedToLoad': 'No se pudo cargar la imagen',
@@ -147,7 +146,6 @@ export const es: Translation = {
   'keys.maskedValue': '{prefix}…',
 
   'keyDetail.notFound': 'Clave no encontrada',
-  'keyDetail.notFoundDetail': 'Puede que se haya eliminado en otro dispositivo.',
 
   'keyDetail.criticalTimeSensitive':
     'Los envíos de esta clave que lo soliciten atravesarán el modo Enfoque y permanecerán en la pantalla de ' +
@@ -201,12 +199,8 @@ export const es: Translation = {
     'será rechazado.',
 
   'keyDetail.regeneratedAnnouncement': 'Clave regenerada. El valor anterior ya no funciona.',
-  'keyDetail.regenerateFailed': 'No se pudo regenerar la clave. Comprueba tu conexión e inténtalo de nuevo.',
   'keyDetail.revokedAnnouncement': 'Clave revocada.',
-  'keyDetail.revokeFailed': 'No se pudo revocar la clave. Comprueba tu conexión e inténtalo de nuevo.',
 
-  'keyDetail.criticalChangeFailed':
-    'No se pudieron cambiar las alertas críticas de esta clave. Comprueba tu conexión e inténtalo de nuevo.',
 
   'createKey.title': 'Nueva clave',
   'createKey.intro': 'Un nombre que solo tú ves. Aparece en la lista de claves y en los filtros.',
@@ -221,7 +215,6 @@ export const es: Translation = {
 
   'createKey.validationEmpty': 'Escribe un nombre para esta clave.',
   'createKey.validationTooLong': 'Usa 64 caracteres o menos.',
-  'createKey.createFailed': 'No se pudo crear la clave. Comprueba tu conexión e inténtalo de nuevo.',
 
   'createKey.revealTitle': 'Copia tu clave ahora',
   'createKey.revealDetail': 'No se volverá a mostrar.',
@@ -272,7 +265,6 @@ export const es: Translation = {
     'y no guarda nada.\n\n' +
     'Desactivado, el campo se recorta y el envío se acepta con un array warnings.\n\n' +
     '[Leer la documentación](https://notifi.it/docs#response)',
-  'settings.strictSendFailed': 'PATCH /devices/settings falló. Comprueba tu conexión e inténtalo de nuevo.',
 
   'settings.testTitle': 'Hello from notifi',
   'settings.testBody': 'Tu primera notificación.',
@@ -315,7 +307,6 @@ export const es: Translation = {
   'empty.sendTest': 'Enviar una prueba',
   'empty.sending': 'Enviando…',
   'empty.sent': 'Enviado. Llegará aquí y a tu pantalla de bloqueo en un momento.',
-  'empty.sendFailed': 'No se pudo enviar. Comprueba tu conexión e inténtalo de nuevo.',
 
   'empty.makingKey': 'Creando tu clave…',
 

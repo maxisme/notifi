@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>notifi: frequently asked questions</title>
-<meta name="description" content="Answers about notifi: what it costs, what the rate limits are, what our server can read, which platforms it runs on, and what happens when you delete the app.">
+<meta name="description" content="What notifi costs, its limits, what our server can read, and what happens when you delete the app.">
 <meta name="theme-color" content="#1C1C1E">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <link rel="alternate" type="text/markdown" href="/faq.md" title="This page as Markdown">
 
 <meta property="og:title" content="notifi: frequently asked questions">
-<meta property="og:description" content="What it costs, what the limits are, what the server can read, and what it does not promise.">
+<meta property="og:description" content="What notifi costs, its limits, what our server can read, and what happens when you delete the app.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://notifi.it/faq">
 <meta property="og:site_name" content="notifi">
@@ -31,7 +31,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="notifi: frequently asked questions">
-<meta name="twitter:description" content="What it costs, what the limits are, what the server can read, and what it does not promise.">
+<meta name="twitter:description" content="What notifi costs, its limits, what our server can read, and what happens when you delete the app.">
 <meta name="twitter:image" content="https://notifi.it/og.png">
 <meta name="twitter:image:alt" content="The notifi bell, sketched in thin hatched strokes with a red dot.">
 
@@ -251,16 +251,16 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
 
   <p class="eyebrow">FAQ</p>
   <h1>Frequently asked questions</h1>
-  <p class="lede">What notifi costs, what the limits are, what the server can and cannot read, and what happens when you delete the app.</p>
+  <p class="lede">What notifi costs, its limits, what our server can read, and what happens when you delete the app.</p>
 
   <section>
     <h2>The basics</h2>
     <h3>What is notifi?</h3>
-    <p>A push-notification relay. You create a send key in the app, send an HTTP request to <code>notifi.it/send</code> with a title and a body, and the notification lands on your iPhone and Mac. There is nothing to install on the sending side and nothing to sign up for.</p>
+    <p>A push-notification relay. One HTTP request to notifi.it and it’s on your iPhone or Mac. Nothing to install on the sending side, nothing to sign up for.</p>
     <h3>What does it cost?</h3>
     <p>Nothing. The service is free and there is no paid tier.</p>
     <h3>Do I need an account?</h3>
-    <p>No. The app generates a keypair on first launch, and that keypair is your identity. There is no email address, no password, and no way to link two devices together.</p>
+    <p>No. The app makes a keypair on first launch. That is your identity. No signup required.</p>
     <h3>How do I send something?</h3>
     <p>One request, <code>GET</code> or <code>POST</code>, JSON or form-encoded:</p>
     <div class="card">
@@ -290,17 +290,17 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
     </ul>
     <p>A push payload has a 4,000-byte ceiling set by Apple, so a long notification is truncated in the banner and delivered in full to the app.</p>
     <h3>Why did my send get a 401?</h3>
-    <p>The key is unknown or revoked. Revocation takes effect on the next send. Reinstalling the app, or moving to a new phone, creates a new identity and the old keys stop working, and there is no migration.</p>
+    <p>The key is unknown or revoked. Reinstalling the app or moving device makes a new identity and every old key stops working.</p>
   </section>
 
   <section>
     <h2>Privacy and encryption</h2>
     <h3>Can you read my notifications?</h3>
-    <p>No. The title, body, link and image URL are encrypted with your device’s public key at the moment they arrive, before anything is written to the database, and only your device holds the key that opens them. A full copy of the database together with every server secret does not reveal the contents of a single notification. The <a href="https://github.com/notifi-it/notifi">source</a> is public.</p>
+    <p>No. Notifications are encrypted with your device’s public key before they are stored, and only your device can open them. See the <a href="/privacy">privacy policy</a>.</p>
     <h3>What can the server see?</h3>
-    <p>The IP addresses of the sender and the device, the time of every send and every collection, the approximate size of a notification, which key sent it and how often, and your device’s push token. Because the sender and the recipient both talk to the same server, that server is in a position to correlate the two. The <a href="/privacy">privacy policy</a> covers this in full.</p>
+    <p>Sender and device IP addresses, your platform and app version, the time of every send and collection, the rough size of each notification, which key sent it and how often, and your push token. See the <a href="/privacy">privacy policy</a>.</p>
     <h3>Is it safe to put the key in the URL?</h3>
-    <p>It is the weaker option. A query string lands in Cloudflare’s edge logs, your shell history and any proxy in between, in the clear, before the encryption happens. Use it only for a quick test, and rotate the key afterwards. Send the key as a <code>Authorization: Bearer</code> header and the body in a <code>POST</code> body where you can.</p>
+    <p>It is the weaker option: a query string ends up in server logs. Ideally use an <code>Authorization: Bearer</code> header and a <code>POST</code> body. See the <a href="/docs">docs</a>.</p>
     <h3>How long are notifications kept?</h3>
     <p>A notification is deleted as soon as your device confirms it has it. One your device never collects stays, encrypted, until it does — there is no time limit. Revoked send keys are kept forever, as hashes, so that a revoked key can never be reused.</p>
     <h3>What happens if I delete the app?</h3>
@@ -316,7 +316,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
     <h3>Where do I get the Mac app?</h3>
     <p>From this site, as a notarized DMG that updates itself, or from the <a href="https://apps.apple.com/app/id1563961135?platform=mac">Mac App Store</a>. Both are the same app.</p>
     <h3>Can I send to more than one device?</h3>
-    <p>Yes, by creating a key on each. A key delivers only to the device that created it, so which key a script holds decides where its notifications land.</p>
+    <p>Yes, by creating a key on each. A key delivers only to the device that created it, so which key a script holds decides where its notifications go.</p>
     <h3>How do I revoke a key?</h3>
     <p>Revoke it in the app. The next send with it is refused. A key is shown once when it is created and is never stored, so it cannot be shown again — if you lose it, make a new one.</p>
   </section>
@@ -340,7 +340,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
 
   <section>
     <h2>Something else</h2>
-    <p>Questions not answered here can be raised at <a href="https://github.com/notifi-it/notifi/issues">github.com/notifi-it/notifi/issues</a>.</p>
+    <p>Any questions please contact <a href="mailto:hello@notifi.it">hello@notifi.it</a> or open an issue at <a href="https://github.com/notifi-it/notifi/issues">github.com/notifi-it/notifi/issues</a>.</p>
   </section>
 
 </main>

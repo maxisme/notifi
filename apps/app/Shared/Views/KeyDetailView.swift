@@ -27,7 +27,7 @@ struct KeyDetailView: View {
                     Text(Copy.KeyDetail.notFound)
                         .font(.inco(.title3, weight: .bold))
                         .foregroundStyle(Theme.fg)
-                    Text(Copy.KeyDetail.notFoundDetail)
+                    Text(Copy.Message.notFoundDetail)
                         .font(Theme.body)
                         .foregroundStyle(Theme.muted)
                 }
@@ -242,7 +242,7 @@ struct KeyDetailView: View {
             Haptics.success()
         } catch {
             errorMessage = (error as? APIError)?.userMessage
-                ?? Copy.KeyDetail.regenerateFailed
+                ?? Copy.ClientErrors.transport
         }
         isRegenerating = false
     }
@@ -254,7 +254,7 @@ struct KeyDetailView: View {
             try await model.setKeyCritical(id: keyID, isCritical: isCritical)
         } catch {
             errorMessage = (error as? APIError)?.userMessage
-                ?? Copy.KeyDetail.criticalChangeFailed
+                ?? Copy.ClientErrors.transport
         }
         isUpdatingCritical = false
     }
@@ -269,7 +269,7 @@ struct KeyDetailView: View {
             AccessibilityNotification.Announcement(Copy.KeyDetail.revokedAnnouncement).post()
             Haptics.success()
         } catch {
-            errorMessage = (error as? APIError)?.userMessage ?? Copy.KeyDetail.revokeFailed
+            errorMessage = (error as? APIError)?.userMessage ?? Copy.ClientErrors.transport
         }
         isRevoking = false
     }

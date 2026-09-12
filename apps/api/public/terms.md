@@ -28,7 +28,7 @@ Keys or devices used in breach of these terms can be blocked without notice. If 
 
 The service is provided as is, without warranty of any kind, and without an uptime or delivery guarantee. Delivery depends on Apple’s push service, your network, and your device’s settings, none of which notifi controls. The service may change, be interrupted, or be discontinued.
 
-> **Do not make notifi the only path for anything where a missed notification causes harm.** It is a pager for your own systems, not a life-safety, medical or emergency alerting system, and it must not be relied on as one. A notification about a safety-relevant event is a fine use; notifi as the only alarm is not.
+> **Do not make notifi the only path for anything where a missed notification causes harm.** It is a pager for your own systems, not a life-safety, medical or emergency alerting system.
 
 ## Liability
 
@@ -44,9 +44,9 @@ The iPhone app is distributed through the App Store, where Apple’s own terms a
 
 ## Changes and contact
 
-These terms may change to reflect changes in the law, in Apple’s requirements, or in what the service does. When they change, the date at the top of this page changes with it, the previous versions remain in the public git history of the project, and a material change is announced on this site before it takes effect. You can stop using the service, and revoke your keys, at any time and at no cost.
+These terms may change with the law, Apple’s requirements or the service. The date at the top changes with it, old versions stay in the git history, and material changes are announced here first. You can stop using the service, and revoke your keys, at any time and at no cost.
 
-Questions about these terms can be raised at [hello@notifi.it](mailto:hello@notifi.it) or [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
+Any questions please contact [hello@notifi.it](mailto:hello@notifi.it) or open an issue at [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
 
 ---
 

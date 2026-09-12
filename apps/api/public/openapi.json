@@ -270,7 +270,7 @@
           "key": {
             "type": "string",
             "pattern": "^nk_",
-            "description": "The send key, if it is not sent as a bearer token. Required unless sent as a bearer token. The key picks the device the notification lands on.",
+            "description": "The send key, if it is not sent as a bearer token. Required unless sent as a bearer token. The key picks the device that receives the notification.",
             "examples": [
               "nk_yourkey"
             ]

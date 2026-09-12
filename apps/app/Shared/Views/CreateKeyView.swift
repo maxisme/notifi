@@ -257,7 +257,7 @@ struct CreateKeyView: View {
             Haptics.success()
             withAnimation(Theme.reveal) { phase = .revealed(response) }
         } catch {
-            errorMessage = (error as? APIError)?.userMessage ?? Copy.CreateKey.createFailed
+            errorMessage = (error as? APIError)?.userMessage ?? Copy.ClientErrors.transport
             phase = .entering
         }
     }

@@ -1,6 +1,6 @@
 # Privacy policy
 
-> This describes what notifi stores, how long it keeps it, what the server can and cannot read, and what the person sending you a notification can learn about you.
+> What notifi stores, for how long, and what our server can read.
 
 _Last updated 6 September 2026_
 
@@ -114,9 +114,9 @@ notifi is not directed at children. It has no accounts and no profiles; the clos
 
 ## Changes and contact
 
-This policy may change to reflect changes in the law, in Apple’s requirements, or in what the service does. When it changes, the date at the top changes with it, the previous versions remain in the public git history of the project, and a material change is announced on this site before it takes effect.
+This policy may change with the law, Apple’s requirements or the service. The date at the top changes with it, old versions stay in the git history, and material changes are announced here first.
 
-Questions about privacy, or a request to delete data held about a device, can be raised at [hello@notifi.it](mailto:hello@notifi.it) or [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
+Any questions please contact [hello@notifi.it](mailto:hello@notifi.it) or open an issue at [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
 
 ---
 

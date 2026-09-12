@@ -164,7 +164,6 @@ export const de: Translation = {
   'message.imageSaveDenied': 'notifi braucht die Berechtigung, zu Fotos hinzuzufügen. Aktiviere sie in den Einstellungen.',
   'message.keyFallbackName': 'Schlüssel {id}',
   'message.sentWithKey': 'Gesendet mit Schlüssel {name}',
-  'message.openKey': 'Gesendet mit Schlüssel {name}. Öffnen.',
   'message.viewImageFullScreen': 'Bild im Vollbild anzeigen',
   'message.shareLink': 'Link teilen',
   'message.imageFailedToLoad': 'Bild konnte nicht geladen werden',
@@ -194,7 +193,6 @@ export const de: Translation = {
   'keys.maskedValue': '{prefix}…',
 
   'keyDetail.notFound': 'Schlüssel nicht gefunden',
-  'keyDetail.notFoundDetail': 'Er wurde möglicherweise auf einem anderen Gerät entfernt.',
 
   'keyDetail.criticalTimeSensitive':
     'Sendungen von diesem Schlüssel, die es anfordern, durchbrechen den Fokus und bleiben auf dem Sperr' +
@@ -248,12 +246,8 @@ export const de: Translation = {
     'wird abgelehnt.',
 
   'keyDetail.regeneratedAnnouncement': 'Schlüssel neu erzeugt. Der alte Wert funktioniert nicht mehr.',
-  'keyDetail.regenerateFailed': 'Schlüssel konnte nicht neu erzeugt werden. Verbindung prüfen und erneut versuchen.',
   'keyDetail.revokedAnnouncement': 'Schlüssel widerrufen.',
-  'keyDetail.revokeFailed': 'Schlüssel konnte nicht widerrufen werden. Verbindung prüfen und erneut versuchen.',
 
-  'keyDetail.criticalChangeFailed':
-    'Kritische Benachrichtigungen für diesen Schlüssel konnten nicht geändert werden. Verbindung prüfen und erneut versuchen.',
 
   'createKey.title': 'Neuer Schlüssel',
   'createKey.intro': 'Ein Name, den nur du siehst. Er erscheint in der Schlüsselliste und in Filtern.',
@@ -268,7 +262,6 @@ export const de: Translation = {
 
   'createKey.validationEmpty': 'Gib einen Namen für diesen Schlüssel ein.',
   'createKey.validationTooLong': 'Verwende höchstens 64 Zeichen.',
-  'createKey.createFailed': 'Schlüssel konnte nicht erstellt werden. Verbindung prüfen und erneut versuchen.',
 
   'createKey.revealTitle': 'Kopiere deinen Schlüssel jetzt',
   'createKey.revealDetail': 'Er wird nicht noch einmal angezeigt.',
@@ -319,7 +312,6 @@ export const de: Translation = {
     'und speichert nichts.\n\n' +
     'Aus, wird das Feld gekürzt und der Send mit einem warnings-Array angenommen.\n\n' +
     '[Zur Dokumentation](https://notifi.it/docs#response)',
-  'settings.strictSendFailed': 'PATCH /devices/settings fehlgeschlagen. Verbindung prüfen und erneut versuchen.',
 
   'settings.testTitle': 'Hello from notifi',
   'settings.testBody': 'Deine erste Benachrichtigung.',
@@ -362,7 +354,6 @@ export const de: Translation = {
   'empty.sendTest': 'Test senden',
   'empty.sending': 'Wird gesendet…',
   'empty.sent': 'Gesendet. Sie kommt gleich hier und auf deinem Sperrbildschirm an.',
-  'empty.sendFailed': 'Senden fehlgeschlagen. Verbindung prüfen und erneut versuchen.',
 
   'empty.makingKey': 'Dein Schlüssel wird erstellt…',
 

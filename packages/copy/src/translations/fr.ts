@@ -117,7 +117,6 @@ export const fr: Translation = {
   'message.imageSaveDenied': 'notifi a besoin de l’autorisation d’ajouter à Photos. Activez-la dans Réglages.',
   'message.keyFallbackName': 'Clé {id}',
   'message.sentWithKey': 'Envoyé avec la clé {name}',
-  'message.openKey': 'Envoyé avec la clé {name}. Ouvrir.',
   'message.viewImageFullScreen': "Voir l’image en plein écran",
   'message.shareLink': 'Partager le lien',
   'message.imageFailedToLoad': "Échec du chargement de l’image",
@@ -147,7 +146,6 @@ export const fr: Translation = {
   'keys.maskedValue': '{prefix}…',
 
   'keyDetail.notFound': 'Clé introuvable',
-  'keyDetail.notFoundDetail': 'Elle a peut-être été supprimée sur un autre appareil.',
 
   'keyDetail.criticalTimeSensitive':
     'Les envois de cette clé qui le demandent franchissent Focus et restent sur l’écran ' +
@@ -202,13 +200,8 @@ export const fr: Translation = {
     "avec elle sera rejeté.",
 
   'keyDetail.regeneratedAnnouncement': "Clé régénérée. L’ancienne valeur ne fonctionne plus.",
-  'keyDetail.regenerateFailed':
-    "Impossible de régénérer la clé. Vérifiez votre connexion et réessayez.",
   'keyDetail.revokedAnnouncement': 'Clé révoquée.',
-  'keyDetail.revokeFailed': "Impossible de révoquer la clé. Vérifiez votre connexion et réessayez.",
 
-  'keyDetail.criticalChangeFailed':
-    "Impossible de modifier les alertes critiques pour cette clé. Vérifiez votre connexion et réessayez.",
 
   'createKey.title': 'Nouvelle clé',
   'createKey.intro':
@@ -224,7 +217,6 @@ export const fr: Translation = {
 
   'createKey.validationEmpty': 'Entrez un nom pour cette clé.',
   'createKey.validationTooLong': 'Utilisez 64 caractères ou moins.',
-  'createKey.createFailed': "Impossible de créer la clé. Vérifiez votre connexion et réessayez.",
 
   'createKey.revealTitle': 'Copiez votre clé maintenant',
   'createKey.revealDetail': 'Elle ne sera plus affichée.',
@@ -275,7 +267,6 @@ export const fr: Translation = {
     "422 invalid_content et ne stocke rien.\n\n" +
     "Désactivé, le champ est raccourci et l’envoi est accepté avec un tableau warnings.\n\n" +
     "[Lire la documentation](https://notifi.it/docs#response)",
-  'settings.strictSendFailed': 'Échec de PATCH /devices/settings. Vérifiez votre connexion et réessayez.',
 
   'settings.testTitle': 'Hello from notifi',
   'settings.testBody': 'Votre première notification.',
@@ -319,7 +310,6 @@ export const fr: Translation = {
   'empty.sendTest': 'Envoyer un test',
   'empty.sending': 'Envoi…',
   'empty.sent': 'Envoyée. Elle arrive ici et sur votre écran verrouillé dans un instant.',
-  'empty.sendFailed': "Échec de l’envoi. Vérifiez votre connexion et réessayez.",
 
   'empty.makingKey': 'Création de votre clé…',
 

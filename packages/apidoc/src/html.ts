@@ -259,7 +259,7 @@ export function docsBody(): string {
     <p>
       <code>POST ${ORIGIN}${ENDPOINT}</code>, JSON, form-encoded or multipart.
       <code>GET</code> takes the same parameters in the query string and is there for a quick
-      test: a key sent that way lands in edge logs and shell history, so rotate it afterwards.
+      test: a key sent that way ends up in edge logs and shell history, so rotate it afterwards.
       Query parameters win over body fields when both are present.
     </p>
     ${pre(RAW_REQUEST, 'http')}
@@ -387,10 +387,8 @@ ${resources
   .join('\n')}
     </ul>
     <p>
-      Every page on this site is also served as Markdown: send
-      <code>Accept: text/markdown</code> on the same URL, or append <code>.md</code>.
-      <a href="https://github.com/notifi-it/notifi">The source</a> covers the app, the API and
-      the cryptography.
+      Every page is also served as Markdown: send <code>Accept: text/markdown</code>, or
+      append <code>.md</code>.
     </p>
     <p>${escape(INTEGRATION_SURFACE)}</p>
   </section>

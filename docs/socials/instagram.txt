@@ -1,4 +1,4 @@
 Push notifications for scripts and servers
-One HTTP request → iPhone or Mac
+One HTTP request straight to your iPhone or Mac
 Free, no signup
-Neither we nor Apple can read your notifications
+Neither we nor Apple can read them

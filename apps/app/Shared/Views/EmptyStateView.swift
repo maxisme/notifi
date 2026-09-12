@@ -26,7 +26,7 @@ struct EmptyStateView: View {
                 sent = true
             } catch {
                 sendError = (error as? APIError)?.userMessage
-                    ?? Copy.Empty.sendFailed
+                    ?? Copy.ClientErrors.transport
             }
             sending = false
         }
@@ -135,7 +135,7 @@ struct EmptyStateView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 } else if keyFailed {
-                    InlineError(message: Copy.CreateKey.createFailed)
+                    InlineError(message: Copy.ClientErrors.transport)
 
                     OutlineButton(title: Copy.Common.tryAgain, fill: true) {
                         Task { await loadKey() }

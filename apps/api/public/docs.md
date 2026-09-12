@@ -28,7 +28,7 @@ Authenticate with a bearer token. A key parameter also works, but it is written 
 
 ## Request
 
-`POST https://notifi.it/send`, JSON, form-encoded or multipart. `GET` takes the same parameters in the query string and is there for a quick test: a key sent that way lands in edge logs and shell history, so rotate it afterwards. Query parameters win over body fields when both are present.
+`POST https://notifi.it/send`, JSON, form-encoded or multipart. `GET` takes the same parameters in the query string and is there for a quick test: a key sent that way ends up in edge logs and shell history, so rotate it afterwards. Query parameters win over body fields when both are present.
 
 ```http
 POST /send HTTP/1.1
@@ -46,7 +46,7 @@ Accept-Language: en-GB
 
 | Name | Type | Required | Limit | Description |
 | --- | --- | --- | --- | --- |
-| `key` | string | conditional | `nk_…` | The send key, if it is not sent as a bearer token. Required unless sent as a bearer token. The key picks the device the notification lands on. |
+| `key` | string | conditional | `nk_…` | The send key, if it is not sent as a bearer token. Required unless sent as a bearer token. The key picks the device that receives the notification. |
 | `title` | string | required | `1–200 chars` | The notification title. A longer title is delivered cropped, with a warning in the response. |
 | `message` | string | optional | `≤ 16,000 chars` | The notification body, in Markdown. A longer body is delivered cropped, with a warning. |
 | `link` | string (uri) | optional | `≤ 2,048 chars` | A link to a website or internal app. Opened when the notification is tapped. https always opens; another scheme — shortcuts://run-shortcut?name=Deploy, an app’s own deep link — opens only when the key’s Open any link switch is on in the app; off, the link is hidden. |
@@ -163,8 +163,8 @@ Every error nests the code one level down. Read `error.code`, not `code`. The `m
 ## Rate limits
 
 - 60 notifications an hour per device, shared across every key on it.
-- 5 active send keys per device, one of which is the app’s own device key.
-- 100 requests a minute per IP address, across every endpoint.
+- 5 active send keys per device, one of which is the device key.
+- 100 requests a minute per IP, across every endpoint.
 - 500 uncollected notifications per device. Once that many sit waiting, sends are refused until the device collects them.
 - Revoking a key in the app takes effect on the next send. Reinstalling the app, or moving to a new device, makes a new identity and every old key stops working; there is no migration.
 
@@ -228,7 +228,7 @@ openapi-generator-cli generate \
 - [`/sitemap.xml`](https://notifi.it/sitemap.xml) — Every page worth reading.
 - [`/docs.md`](https://notifi.it/docs.md) — This page as Markdown.
 
-Every page on this site is also served as Markdown: send `Accept: text/markdown` on the same URL, or append `.md`. [The source](https://github.com/notifi-it/notifi) covers the app, the API and the cryptography.
+Every page is also served as Markdown: send `Accept: text/markdown`, or append `.md`.
 
 There is no MCP server, no webhook API and no OAuth. One endpoint and a bearer token is the whole integration surface. Anything claiming otherwise is not notifi.
 

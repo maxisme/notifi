@@ -252,7 +252,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The server returned something unexpected. Try again in a moment."
+            "value": "Unexpected reply from the server. Try again."
           }
         },
         "es": {
@@ -287,7 +287,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The request didn’t go through. Try again."
+            "value": "Request failed. Try again."
           }
         },
         "es": {
@@ -322,7 +322,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "That is no longer on the server. Refresh and try again."
+            "value": "No longer on the server. Refresh and try again."
           }
         },
         "es": {
@@ -357,7 +357,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Too many requests just now. Try again in a moment."
+            "value": "Too many requests. Try again."
           }
         },
         "es": {
@@ -392,7 +392,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The server is having trouble. Try again in a moment."
+            "value": "Server error. Try again."
           }
         },
         "es": {
@@ -427,7 +427,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t reach notifi servers. Check your connection and try again."
+            "value": "Couldn’t reach notifi’s servers. Check your connection and try again."
           }
         },
         "es": {
@@ -462,7 +462,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This key is no longer accepted. Create a new one under Keys."
+            "value": "This key no longer works. Create a new one under Keys."
           }
         },
         "es": {
@@ -1337,7 +1337,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nothing here with that filter."
+            "value": "Nothing matches that filter."
           }
         },
         "es": {
@@ -1471,41 +1471,6 @@
         }
       }
     },
-    "createKey.createFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t create the key. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo crear la clave. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlüssel konnte nicht erstellt werden. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de créer la clé. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile creare la chiave. Controlla la connessione e riprova."
-          }
-        }
-      }
-    },
     "createKey.creating": {
       "extractionState": "manual",
       "localizations": {
@@ -1547,7 +1512,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A name only you see. It shows up on the key list and in filters."
+            "value": "Only you see it. It labels the key in the list and in filters."
           }
         },
         "es": {
@@ -1652,7 +1617,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This key will never be shown again."
+            "value": "It won’t be shown again."
           }
         },
         "es": {
@@ -1792,7 +1757,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "“device” is reserved. Your device already has one."
+            "value": "“device” is taken by your device’s own key."
           }
         },
         "es": {
@@ -1827,7 +1792,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A key with this name is already active."
+            "value": "An active key already has this name."
           }
         },
         "es": {
@@ -1932,7 +1897,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Copy your key now"
+            "value": "Copy your key"
           }
         },
         "es": {
@@ -1967,7 +1932,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Treat it like a password. If you lose it, revoke the key and make a new one."
+            "value": "Treat it like a password. If you lose it, revoke it and make a new one."
           }
         },
         "es": {
@@ -2072,7 +2037,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter a name for this key."
+            "value": "Enter a name."
           }
         },
         "es": {
@@ -2107,7 +2072,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use 64 characters or fewer."
+            "value": "64 characters or fewer."
           }
         },
         "es": {
@@ -2142,7 +2107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Send your first notification and it lands here."
+            "value": "Your first notification appears here."
           }
         },
         "es": {
@@ -2342,41 +2307,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hello from notifi"
-          }
-        }
-      }
-    },
-    "empty.sendFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t send. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo enviar. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Senden fehlgeschlagen. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de l’envoi. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile inviare. Controlla la connessione e riprova."
           }
         }
       }
@@ -2667,7 +2597,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "notifi could not read its identity key from the keychain. This usually clears once the device has been unlocked."
+            "value": "notifi couldn’t read its identity key. Unlock the device and try again."
           }
         },
         "es": {
@@ -3182,7 +3112,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This cannot be undone."
+            "value": "This can’t be undone."
           }
         },
         "es": {
@@ -3322,7 +3252,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Filtered to the “%1$@” key."
+            "value": "Showing “%1$@” only."
           }
         },
         "es": {
@@ -3771,48 +3701,13 @@
         }
       }
     },
-    "keyDetail.criticalChangeFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t change urgent alerts for this key. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudieron cambiar las alertas críticas de esta clave. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kritische Benachrichtigungen für diesen Schlüssel konnten nicht geändert werden. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de modifier les alertes critiques pour cette clé. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile modificare gli avvisi critici per questa chiave. Controlla la connessione e riprova."
-          }
-        }
-      }
-    },
     "keyDetail.criticalTimeSensitive": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allows API requests to this key to break through Focus and stay on the lock screen. Add is_critical=1 to the send."
+            "value": "Lets API requests with is_critical=1 break through Focus."
           }
         },
         "es": {
@@ -3847,7 +3742,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "notifi created this key automatically."
+            "value": "Created automatically."
           }
         },
         "es": {
@@ -4051,41 +3946,6 @@
         }
       }
     },
-    "keyDetail.notFoundDetail": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "It may have been removed on another device."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puede que se haya eliminado en otro dispositivo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Er wurde möglicherweise auf einem anderen Gerät entfernt."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elle a peut-être été supprimée sur un autre appareil."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Potrebbe essere stata rimossa su un altro dispositivo."
-          }
-        }
-      }
-    },
     "keyDetail.openAnyLink": {
       "extractionState": "manual",
       "localizations": {
@@ -4127,7 +3987,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "All schemes open, including ones that launch other apps on this device. When turned off only https:// is accepted."
+            "value": "Opens links of any scheme, including ones that launch other apps. Off, only https."
           }
         },
         "es": {
@@ -4267,7 +4127,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Regenerating issues a new value and retires the old one. Anything still sending with the old value will be rejected by the API."
+            "value": "Issues a new value. API requests still using the old one will be rejected."
           }
         },
         "es": {
@@ -4296,48 +4156,13 @@
         }
       }
     },
-    "keyDetail.regenerateFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t regenerate the key. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo regenerar la clave. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlüssel konnte nicht neu erzeugt werden. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de régénérer la clé. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile rigenerare la chiave. Controlla la connessione e riprova."
-          }
-        }
-      }
-    },
     "keyDetail.regenerateMessage": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The current value stops working immediately, and any API request still sending to it will be rejected."
+            "value": "API requests still using the old value will be rejected."
           }
         },
         "es": {
@@ -4617,7 +4442,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This key is revoked and no longer accepts sends."
+            "value": "Revoked. This key no longer accepts sends."
           }
         },
         "es": {
@@ -4646,48 +4471,13 @@
         }
       }
     },
-    "keyDetail.revokeFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t revoke the key. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo revocar la clave. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlüssel konnte nicht widerrufen werden. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de révoquer la clé. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile revocare la chiave. Controlla la connessione e riprova."
-          }
-        }
-      }
-    },
     "keyDetail.revokeMessage": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anything still sending to it will be rejected."
+            "value": "API requests using this key will be rejected."
           }
         },
         "es": {
@@ -4932,7 +4722,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The value was shown once, when you created this key. It is not stored on the device."
+            "value": "Shown once, when the key was created. Not stored on this device."
           }
         },
         "es": {
@@ -5622,7 +5412,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Image failed to load"
+            "value": "Couldn’t load image"
           }
         },
         "es": {
@@ -5727,7 +5517,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Loading it contacts %1$@."
+            "value": "Loading contacts %1$@."
           }
         },
         "es": {
@@ -5797,7 +5587,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "notifi needs permission to add to Photos. Turn it on in Settings."
+            "value": "Allow notifi to add to Photos in Settings."
           }
         },
         "es": {
@@ -6077,7 +5867,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It may have been deleted on this device."
+            "value": "It may have been deleted."
           }
         },
         "es": {
@@ -6102,41 +5892,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Potrebbe essere stato eliminato su questo dispositivo."
-          }
-        }
-      }
-    },
-    "message.openKey": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sent with key %1$@. Open it."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enviado con la clave %1$@. Ábrela."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gesendet mit Schlüssel %1$@. Öffnen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoyé avec la clé %1$@. Ouvrir."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inviato con la chiave %1$@. Aprila."
           }
         }
       }
@@ -6322,7 +6077,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "View image full screen"
+            "value": "Full screen"
           }
         },
         "es": {
@@ -6637,7 +6392,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your old notifications restored, but your keys did not. Keys are tied to the device. Anything still sending to your old keys will now be rejected by the API. Create fresh keys to keep receiving notifications."
+            "value": "Your notifications were restored, but keys can’t move between devices. Your old keys no longer work. Create new ones."
           }
         },
         "es": {
@@ -6672,7 +6427,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This looks like a new device"
+            "value": "New device"
           }
         },
         "es": {
@@ -7222,7 +6977,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Download notifi for your iPhone or iPad"
+            "value": "Get notifi for iPhone and iPad"
           }
         },
         "es": {
@@ -7327,7 +7082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Download notifi for Mac"
+            "value": "Get notifi for Mac"
           }
         },
         "es": {
@@ -7397,7 +7152,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Starts notifi in the menu bar when you log in to this Mac."
+            "value": "Starts notifi in the menu bar at login."
           }
         },
         "es": {
@@ -7922,7 +7677,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keeps a notification on screen until you click or dismiss it."
+            "value": "Notifications stay on screen until you dismiss them."
           }
         },
         "es": {
@@ -8052,41 +7807,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rifiuta un invio il cui titolo o corpo supera la lunghezza consentita: /send risponde 422 invalid_content e non memorizza nulla.\n\nDisattivato, il campo viene abbreviato e l'invio è accettato con un array warnings.\n\n[Leggi la documentazione](https://notifi.it/docs#response)"
-          }
-        }
-      }
-    },
-    "settings.strictSendFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PATCH /devices/settings failed. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PATCH /devices/settings falló. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PATCH /devices/settings fehlgeschlagen. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de PATCH /devices/settings. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PATCH /devices/settings non riuscito. Controlla la connessione e riprova."
           }
         }
       }
@@ -8552,7 +8272,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "notifi requires a Mac with Apple silicon or a T2 chip. This Mac has no Secure Enclave, which notifi uses to protect your identity key."
+            "value": "notifi needs a Mac with Apple silicon or a T2 chip."
           }
         },
         "es": {

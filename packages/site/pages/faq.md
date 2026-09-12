@@ -2,19 +2,18 @@
 path: /faq
 eyebrow: FAQ
 title: notifi: frequently asked questions
-description: Answers about notifi: what it costs, what the rate limits are, what our server can read, which platforms it runs on, and what happens when you delete the app.
-ogTitle: notifi: frequently asked questions
-ogDescription: What it costs, what the limits are, what the server can read, and what it does not promise.
+description: What notifi costs, its limits, what our server can read, and what happens when you delete the app.
+ogDescription: What notifi costs, its limits, what our server can read, and what happens when you delete the app.
 ---
 # Frequently asked questions
 
-> What notifi costs, what the limits are, what the server can and cannot read, and what happens when you delete the app.
+> What notifi costs, its limits, what our server can read, and what happens when you delete the app.
 
 ## The basics
 
 ### What is notifi?
 
-A push-notification relay. You create a send key in the app, send an HTTP request to `notifi.it/send` with a title and a body, and the notification lands on your iPhone and Mac. There is nothing to install on the sending side and nothing to sign up for.
+A push-notification relay. One HTTP request to notifi.it and it’s on your iPhone or Mac. Nothing to install on the sending side, nothing to sign up for.
 
 ### What does it cost?
 
@@ -22,7 +21,7 @@ Nothing. The service is free and there is no paid tier.
 
 ### Do I need an account?
 
-No. The app generates a keypair on first launch, and that keypair is your identity. There is no email address, no password, and no way to link two devices together.
+No. The app makes a keypair on first launch. That is your identity. No signup required.
 
 ### How do I send something?
 
@@ -57,21 +56,21 @@ A push payload has a 4,000-byte ceiling set by Apple, so a long notification is 
 
 ### Why did my send get a 401?
 
-The key is unknown or revoked. Revocation takes effect on the next send. Reinstalling the app, or moving to a new phone, creates a new identity and the old keys stop working, and there is no migration.
+The key is unknown or revoked. Reinstalling the app or moving device makes a new identity and every old key stops working.
 
 ## Privacy and encryption
 
 ### Can you read my notifications?
 
-No. The title, body, link and image URL are encrypted with your device’s public key at the moment they arrive, before anything is written to the database, and only your device holds the key that opens them. A full copy of the database together with every server secret does not reveal the contents of a single notification. The [source](https://github.com/notifi-it/notifi) is public.
+No. Notifications are encrypted with your device’s public key before they are stored, and only your device can open them. See the [privacy policy](/privacy).
 
 ### What can the server see?
 
-The IP addresses of the sender and the device, the time of every send and every collection, the approximate size of a notification, which key sent it and how often, and your device’s push token. Because the sender and the recipient both talk to the same server, that server is in a position to correlate the two. The [privacy policy](/privacy) covers this in full.
+Sender and device IP addresses, your platform and app version, the time of every send and collection, the rough size of each notification, which key sent it and how often, and your push token. See the [privacy policy](/privacy).
 
 ### Is it safe to put the key in the URL?
 
-It is the weaker option. A query string lands in Cloudflare’s edge logs, your shell history and any proxy in between, in the clear, before the encryption happens. Use it only for a quick test, and rotate the key afterwards. Send the key as a `Authorization: Bearer` header and the body in a `POST` body where you can.
+It is the weaker option: a query string ends up in server logs. Ideally use an `Authorization: Bearer` header and a `POST` body. See the [docs](/docs).
 
 ### How long are notifications kept?
 
@@ -97,7 +96,7 @@ From this site, as a notarized DMG that updates itself, or from the [Mac App Sto
 
 ### Can I send to more than one device?
 
-Yes, by creating a key on each. A key delivers only to the device that created it, so which key a script holds decides where its notifications land.
+Yes, by creating a key on each. A key delivers only to the device that created it, so which key a script holds decides where its notifications go.
 
 ### How do I revoke a key?
 
@@ -123,4 +122,4 @@ No. Every send goes out over Apple’s push service and a websocket at the same 
 
 ## Something else
 
-Questions not answered here can be raised at [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).
+Any questions please contact [hello@notifi.it](mailto:hello@notifi.it) or open an issue at [github.com/notifi-it/notifi/issues](https://github.com/notifi-it/notifi/issues).

@@ -182,7 +182,7 @@ Put the key in the repository's secrets, then:
 
 One key per script, so a leak costs one script rather than all of them. Each key
 delivers only to the device that made it, so which key a script holds decides
-where its notifications land; give a script two keys to reach a phone and a Mac.
+where its notifications go; give a script two keys to reach a phone and a Mac.
 Revoking is done in the app and takes effect on the next send.
 
 Reinstalling the app, or moving to a new device, makes a new identity and every

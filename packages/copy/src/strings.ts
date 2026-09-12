@@ -33,8 +33,10 @@ export const copy = {
     occurredAtTooFuture: 'occurred_at is too far in the future.',
     criticalNotAllowed:
       'Sent as a normal notification, because urgent alerts are switched off for this key.',
-    titleCropped: 'Sent with a shortened title, because it was over {max} characters.',
-    messageCropped: 'Sent with a shortened notification, because it was over {max} characters.',
+    titleCropped:
+      'Title shortened to {max} characters.',
+    messageCropped:
+      'Body shortened to {max} characters.',
     strictContentRejected:
       'Not sent. This device is set to refuse a notification it cannot deliver as written.',
 
@@ -51,7 +53,7 @@ export const copy = {
     description:
       'Push notifications for your scripts, servers, apps or anything that can make an HTTP request.\n' +
       '\n' +
-      'Send notifi.it a title, plus a body, image or link if you want them along with your unique key. The notification lands on your iPhone or Mac.\n' +
+      'Send notifi.it a title, plus a body, image or link if you want them along with your unique key. It’s on your iPhone or Mac.\n' +
       '\n' +
       'https://notifi.it/send?title=hello+world\n' +
       '\n' +
@@ -62,7 +64,7 @@ export const copy = {
       'No sign-up, no sign-in, no device linking. The app mints a send key on first launch. Keys can be renamed, paused and revoked per source.\n' +
       '\n' +
       'Urgent alerts.\n' +
-      'Mark a key as urgent and its notifications break through Focus and land on the lock screen.\n' +
+      'Mark a key as urgent and its notifications break through Focus and stay on the lock screen.\n' +
       '',
     releaseNotes: 'Bug fixes and performance improvements.\n',
 
@@ -130,7 +132,8 @@ export const copy = {
   inbox: {
     title: 'Inbox',
     count: plural('1 notification', '{n} notifications'),
-    filteredToKey: 'Filtered to the “{name}” key.',
+    filteredToKey:
+      'Showing “{name}” only.',
     closeSearch: 'Close search',
     markAllAsRead: 'Mark all as read',
     filterByKey: 'Filter by key',
@@ -154,7 +157,8 @@ export const copy = {
     linkTo: 'Link to {host}',
     deleteTitle: 'Delete “{title}”?',
     deleteTitleFallback: 'Delete this notification?',
-    deleteMessage: 'This cannot be undone.',
+    deleteMessage:
+      'This can’t be undone.',
   },
 
   reader: {
@@ -171,22 +175,26 @@ export const copy = {
 
   message: {
     notFound: 'Notification not found',
-    notFoundDetail: 'It may have been deleted on this device.',
+    notFoundDetail:
+      'It may have been deleted.',
     downloadImage: 'Download image',
     savingImage: 'Saving…',
     imageSaved: 'Saved to Photos',
     imageSavedToFile: 'Saved',
     imageSaveFailed: 'Couldn’t save the image',
-    imageSaveDenied: 'notifi needs permission to add to Photos. Turn it on in Settings.',
+    imageSaveDenied:
+      'Allow notifi to add to Photos in Settings.',
     keyFallbackName: 'Key {id}',
     sentWithKey: 'Sent with key {name}',
-    openKey: 'Sent with key {name}. Open it.',
-    viewImageFullScreen: 'View image full screen',
+    viewImageFullScreen:
+      'Full screen',
     shareLink: 'Share link',
-    imageFailedToLoad: 'Image failed to load',
+    imageFailedToLoad:
+      'Couldn’t load image',
     imageHidden: 'Image hidden',
     imageHost: 'another host',
-    imageLoadWarning: 'Loading it contacts {host}.',
+    imageLoadWarning:
+      'Loading contacts {host}.',
     loadImage: 'Load image',
     load: 'Load',
     imageBlocked: 'blocked',
@@ -215,20 +223,18 @@ export const copy = {
 
   keyDetail: {
     notFound: 'Key not found',
-    notFoundDetail: 'It may have been removed on another device.',
 
     criticalTimeSensitive:
-      'Allows API requests to this key to break through Focus and stay on the lock screen. ' +
-      'Add is_critical=1 to the send.',
+      'Lets API requests with is_critical=1 break through Focus.',
 
     copyKey: 'Copy key',
     shareKey: 'Share key',
     copyCurl: 'Copy curl',
     examplesLink: 'Docs',
     defaultKeyDetail:
-      'notifi created this key automatically.',
+      'Created automatically.',
     shownOnceDetail:
-      'The value was shown once, when you created this key. It is not stored on the device.',
+      'Shown once, when the key was created. Not stored on this device.',
 
     sectionUsage: 'Usage',
     fieldSent: 'Sent',
@@ -237,17 +243,18 @@ export const copy = {
 
     openAnyLink: 'Open any link',
     openAnyLinkDetail:
-      'All schemes open, including ones that launch other apps on this device. When turned off only https:// is accepted.',
+      'Opens links of any scheme, including ones that launch other apps. Off, only https.',
 
     criticalAlerts: 'Urgent alerts',
 
-    revokedNotice: 'This key is revoked and no longer accepts sends.',
+    revokedNotice:
+      'Revoked. This key no longer accepts sends.',
 
     sectionDanger: 'Danger',
     regenerate: 'Regenerate key',
     regenerating: 'Regenerating…',
     regenerateDetail:
-      'Regenerating issues a new value and retires the old one. Anything still sending with the old value will be rejected by the API.',
+      'Issues a new value. API requests still using the old one will be rejected.',
     revoke: 'Revoke key',
     revoking: 'Revoking…',
     revokeDetail:
@@ -256,49 +263,52 @@ export const copy = {
     revokeTitle: 'Revoke “{name}”?',
     revokeTitleFallback: 'Revoke this key?',
     revokeConfirm: 'Revoke',
-    revokeMessage: 'Anything still sending to it will be rejected.',
+    revokeMessage:
+      'API requests using this key will be rejected.',
 
     regenerateTitle: 'Regenerate “{name}”?',
     regenerateTitleFallback: 'Regenerate this key?',
     regenerateConfirm: 'Regenerate',
     regenerateMessage:
-      'The current value stops working immediately, and any API request still sending to it will be rejected.',
+      'API requests still using the old value will be rejected.',
 
     regeneratedAnnouncement: 'Key regenerated. The old value no longer works.',
-    regenerateFailed: "Couldn’t regenerate the key. Check your connection and try again.",
     revokedAnnouncement: 'Key revoked.',
-    revokeFailed: "Couldn’t revoke the key. Check your connection and try again.",
 
-    criticalChangeFailed:
-      "Couldn’t change urgent alerts for this key. Check your connection and try again.",
   },
 
   createKey: {
     title: 'New key',
-    intro: 'A name only you see. It shows up on the key list and in filters.',
+    intro:
+      'Only you see it. It labels the key in the list and in filters.',
     sectionName: 'Name',
     namePrompt: 'e.g. Grafana alerts',
     nameLabel: 'Key name',
     charCount: '{n}/{max}',
-    nameReserved: '“device” is reserved. Your device already has one.',
-    nameTaken: 'A key with this name is already active.',
+    nameReserved:
+      '“device” is taken by your device’s own key.',
+    nameTaken:
+      'An active key already has this name.',
     create: 'Create key',
     creating: 'Creating…',
 
-    validationEmpty: 'Enter a name for this key.',
-    validationTooLong: 'Use 64 characters or fewer.',
-    createFailed: "Couldn’t create the key. Check your connection and try again.",
+    validationEmpty:
+      'Enter a name.',
+    validationTooLong:
+      '64 characters or fewer.',
 
-    revealTitle: 'Copy your key now',
+    revealTitle:
+      'Copy your key',
     revealDetail: "It won’t be shown again.",
     revealLabel: 'Your new key',
     revealWarning:
-      'Treat it like a password. If you lose it, revoke the key and make a new one.',
+      'Treat it like a password. If you lose it, revoke it and make a new one.',
 
     leaveTitle: "Haven’t copied it?",
     leaveCopyAndClose: 'Copy and close',
     leaveCloseAndRevoke: 'Close and revoke',
-    leaveMessage: 'This key will never be shown again.',
+    leaveMessage:
+      'It won’t be shown again.',
   },
 
   settings: {
@@ -317,7 +327,7 @@ export const copy = {
 
     stayVisible: 'Notifications stay visible',
     stayVisibleDetail:
-      'Keeps a notification on screen until you click or dismiss it.',
+      'Notifications stay on screen until you dismiss them.',
     stayVisibleEnable: 'Enable',
 
     theme: 'Theme',
@@ -337,21 +347,22 @@ export const copy = {
       'When turned off, the field is cropped and the send is accepted with a warnings array.\n' +
       '\n' +
       '[For more information see the docs](https://notifi.it/docs#response)',
-    strictSendFailed: 'PATCH /devices/settings failed. Check your connection and try again.',
 
     testTitle: 'Hello from notifi',
     testBody: 'Your first notification.',
 
-    macApp: 'Download notifi for Mac',
+    macApp:
+      'Get notifi for Mac',
     iosApp:
-      'Download notifi for your iPhone or iPad',
+      'Get notifi for iPhone and iPad',
 
     sectionSupport: 'Support',
     sectionApplication: 'Application',
     sectionAbout: 'About',
     version: 'Version',
     openAtLogin: 'Open at login',
-    openAtLoginDetail: 'Starts notifi in the menu bar when you log in to this Mac.',
+    openAtLoginDetail:
+      'Starts notifi in the menu bar at login.',
     installUpdatesAutomatically: 'Install updates automatically',
     installUpdatesAutomaticallyDetail: 'Download and install new versions without asking. notifi relaunches itself when it updates.',
     checkForUpdates: 'Check for updates',
@@ -371,7 +382,8 @@ export const copy = {
     sampleMessage: 'Your first notification.',
 
     title: 'Nothing yet',
-    detail: 'Send your first notification and it lands here.',
+    detail:
+      'Your first notification appears here.',
 
     stepAllow: 'Allow notifications',
     notificationsOn: 'Notifications are on.',
@@ -382,7 +394,6 @@ export const copy = {
     sending: 'Sending…',
     sent:
       'Sent.',
-    sendFailed: "Couldn’t send. Check your connection and try again.",
 
     makingKey: 'Making your key…',
 
@@ -393,7 +404,8 @@ export const copy = {
   components: {
     clearSearch: 'Clear search',
     noMatches: 'No matches',
-    noMatchesDetail: 'Nothing here with that filter.',
+    noMatchesDetail:
+      'Nothing matches that filter.',
     noMatchesQuery: 'Nothing matching “{query}”.',
     errorLabel: 'Error. {message}',
     backTo: 'Back to {label}',
@@ -403,30 +415,37 @@ export const copy = {
   identity: {
     title: "Can’t unlock notifi",
     detail:
-      'notifi could not read its identity key from the keychain. This usually clears once the device has been unlocked.',
+      'notifi couldn’t read its identity key. Unlock the device and try again.',
   },
 
   unsupported: {
     title: 'Unsupported Mac',
     detail:
-      'notifi requires a Mac with Apple silicon or a T2 chip. This Mac has no Secure Enclave, ' +
-      'which notifi uses to protect your identity key.',
+      'notifi needs a Mac with Apple silicon or a T2 chip.',
   },
 
   restore: {
-    title: 'This looks like a new device',
+    title:
+      'New device',
     detail:
-      'Your old notifications restored, but your keys did not. Keys are tied to the device. Anything still sending to your old keys will now be rejected by the API. Create fresh keys to keep receiving notifications.',
+      'Your notifications were restored, but keys can’t move between devices. Your old keys no longer work. Create new ones.',
   },
 
   clientErrors: {
-    unauthorized: 'This key is no longer accepted. Create a new one under Keys.',
-    notFound: 'That is no longer on the server. Refresh and try again.',
-    rateLimited: 'Too many requests just now. Try again in a moment.',
-    server: 'The server is having trouble. Try again in a moment.',
-    generic: "The request didn’t go through. Try again.",
-    transport: "Couldn’t reach notifi servers. Check your connection and try again.",
-    decoding: 'The server returned something unexpected. Try again in a moment.',
+    unauthorized:
+      'This key no longer works. Create a new one under Keys.',
+    notFound:
+      'No longer on the server. Refresh and try again.',
+    rateLimited:
+      'Too many requests. Try again.',
+    server:
+      'Server error. Try again.',
+    generic:
+      'Request failed. Try again.',
+    transport:
+      'Couldn’t reach notifi’s servers. Check your connection and try again.',
+    decoding:
+      'Unexpected reply from the server. Try again.',
   },
 };
 

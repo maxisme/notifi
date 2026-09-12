@@ -75,7 +75,7 @@ export const params: Param[] = [
     limit: 'nk_…',
     summary: 'The send key, if it is not sent as a bearer token.',
     detail:
-      'Required unless sent as a bearer token. The key picks the device the notification lands on.',
+      'Required unless sent as a bearer token. The key picks the device that receives the notification.',
     openapi: { pattern: '^nk_' },
     example: 'nk_yourkey',
   },
@@ -196,8 +196,8 @@ export const errors: ErrorRow[] = [
 
 export const limits: string[] = [
   `${SENDS_PER_HOUR} notifications an hour per device, shared across every key on it.`,
-  `${KEYS_PER_DEVICE} active send keys per device, one of which is the app’s own device key.`,
-  `${REQUESTS_PER_MINUTE} requests a minute per IP address, across every endpoint.`,
+  `${KEYS_PER_DEVICE} active send keys per device, one of which is the device key.`,
+  `${REQUESTS_PER_MINUTE} requests a minute per IP, across every endpoint.`,
   `${UNCOLLECTED_MAX} uncollected notifications per device. Once that many sit waiting, sends are refused until the device collects them.`,
   'Revoking a key in the app takes effect on the next send. Reinstalling the app, or moving to a new device, makes a new identity and every old key stops working; there is no migration.',
 ];
