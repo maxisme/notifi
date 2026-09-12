@@ -60,7 +60,7 @@ PASSES=[
          '    -d link=https://notifi.it/docs \\',
          '    -d image=https://notifi.it/anaglyph-bell.png'],
   card=('Hello from notifi','Your first notification.'),thumb=ANAGLYPH,cardpos='left:73.5%;top:45.5%;width:22%',sb=PD_SB+PD_LOCK,clip=None),
- dict(title='claude — ~/notifi',head=('Get a push notification to your device','from anything that can make an HTTP request.'),
+ dict(title='claude — ~/notifi',head=('A push notification','from anything that can make an HTTP request.'),
   claude=True,lines=[],
   card=('Claude Finished','No mistakes made.'),cardpos='left:73.5%;top:42.2%;width:15%',sb=PH_SB+PH_LOCK,clip=None),
  dict(title='train.py — -zsh',head=('No signup, just HTTP.','Install the app, copy your key, start sending.'),
