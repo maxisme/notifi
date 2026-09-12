@@ -135,7 +135,7 @@ struct EmptyStateView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 } else if keyFailed {
-                    InlineError(message: Copy.Empty.makeKeyFailed)
+                    InlineError(message: Copy.CreateKey.createFailed)
 
                     OutlineButton(title: Copy.Common.tryAgain, fill: true) {
                         Task { await loadKey() }

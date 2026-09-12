@@ -365,7 +365,6 @@ export const de: Translation = {
   'empty.sendFailed': 'Senden fehlgeschlagen. Verbindung prüfen und erneut versuchen.',
 
   'empty.makingKey': 'Dein Schlüssel wird erstellt…',
-  'empty.makeKeyFailed': 'Schlüssel konnte nicht erstellt werden. Verbindung prüfen und erneut versuchen.',
 
   'empty.stepLabel': 'Schritt {n}. {title}.',
   'empty.stepDone': ' Fertig.',

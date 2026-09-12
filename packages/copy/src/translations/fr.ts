@@ -322,7 +322,6 @@ export const fr: Translation = {
   'empty.sendFailed': "Échec de l’envoi. Vérifiez votre connexion et réessayez.",
 
   'empty.makingKey': 'Création de votre clé…',
-  'empty.makeKeyFailed': "Impossible de créer une clé. Vérifiez votre connexion et réessayez.",
 
   'empty.stepLabel': 'Étape {n}. {title}.',
   'empty.stepDone': ' Terminée.',

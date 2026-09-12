@@ -318,7 +318,6 @@ export const es: Translation = {
   'empty.sendFailed': 'No se pudo enviar. Comprueba tu conexión e inténtalo de nuevo.',
 
   'empty.makingKey': 'Creando tu clave…',
-  'empty.makeKeyFailed': 'No se pudo crear una clave. Comprueba tu conexión e inténtalo de nuevo.',
 
   'empty.stepLabel': 'Paso {n}. {title}.',
   'empty.stepDone': ' Hecho.',

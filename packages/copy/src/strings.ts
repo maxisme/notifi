@@ -385,8 +385,6 @@ export const copy = {
     sendFailed: "Couldn’t send. Check your connection and try again.",
 
     makingKey: 'Making your key…',
-    makeKeyFailed:
-      'Couldn’t create a new key. Check your connection and try again.',
 
     stepLabel: 'Step {n}. {title}.',
     stepDone: ' Done.',

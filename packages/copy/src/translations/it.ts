@@ -318,7 +318,6 @@ export const it: Translation = {
   'empty.sendFailed': 'Impossibile inviare. Controlla la connessione e riprova.',
 
   'empty.makingKey': 'Creazione della chiave…',
-  'empty.makeKeyFailed': 'Impossibile creare una chiave. Controlla la connessione e riprova.',
 
   'empty.stepLabel': 'Passo {n}. {title}.',
   'empty.stepDone': ' Fatto.',

@@ -2206,41 +2206,6 @@
         }
       }
     },
-    "empty.makeKeyFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t create a new key. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo crear una clave. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlüssel konnte nicht erstellt werden. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de créer une clé. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile creare una chiave. Controlla la connessione e riprova."
-          }
-        }
-      }
-    },
     "empty.makingKey": {
       "extractionState": "manual",
       "localizations": {

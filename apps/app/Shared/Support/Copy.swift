@@ -245,7 +245,6 @@ enum Copy {
         static var sent: String { NSLocalizedString("empty.sent", comment: "") }
         static var sendFailed: String { NSLocalizedString("empty.sendFailed", comment: "") }
         static var makingKey: String { NSLocalizedString("empty.makingKey", comment: "") }
-        static var makeKeyFailed: String { NSLocalizedString("empty.makeKeyFailed", comment: "") }
         static func stepLabel(_ n: String, _ title: String) -> String { String.localizedStringWithFormat(NSLocalizedString("empty.stepLabel", comment: ""), n, title) }
         static var stepDone: String { NSLocalizedString("empty.stepDone", comment: "") }
     }
