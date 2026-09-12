@@ -243,13 +243,13 @@ svg("%s/bell-clapper.svg" % web, 32, 32, logo_box, clap("#000"))
 def favicon_ink(colour):
     return "\n".join("    " + p for p in (
         clapper.replace(BRAND, colour).replace("<path", '<path class="ink"', 1),
-        '<circle cx="%s" cy="%s" r="%s" fill="#EDEDED"/>' % (bcx, bcy, br),
+        '<circle cx="%s" cy="%s" r="%s" fill="%s"/>' % (bcx, bcy, br, colour),
         outline.replace(BRAND, colour).replace("<path", '<path class="ink"', 1),
     ))
 
 svg("%s/favicon.svg" % web, 32, 32, logo_box, favicon_ink("#BC2122"),
-    note="\n\n       Brand red with a white badge: at 16px the dot is the only detail\n"
-         "       that has to survive, and it reads as itself only against the bell.")
+    note="\n\n       Flat brand red, badge included: one colour is all that survives\n"
+         "       at 16px, and it matches favicon.ico.")
 
 svg("%s/favicon-flat.svg" % TMP, 32, 32, logo_box, mark(logo_box, "#BC2122", "#BC2122"))
 
