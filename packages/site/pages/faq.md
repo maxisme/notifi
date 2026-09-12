@@ -82,7 +82,7 @@ Your notifications, keys and identity go with it. Nothing is recoverable, and ev
 
 ### Do you track me?
 
-There is no analytics, no crash reporting, no advertising identifier and no tracking SDK in the apps. This website sets no cookies and serves its fonts from this domain; Cloudflare, which hosts it, counts visits with its cookieless Web Analytics, and that is the only analytics anywhere in the product. The [privacy policy](/privacy) has the full picture.
+The apps have no analytics, crash reporting or tracking SDK, and this site sets no cookies. The server reports its own errors to Sentry and counts sends and collections, with no content and no IP address. See the [privacy policy](/privacy).
 
 ## The apps
 
