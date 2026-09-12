@@ -1,8 +1,8 @@
 {
   "en-GB": {
     "inboxTitle": "One request.\nStraight to your pocket.",
-    "inboxTitleIpad": "One request.\nStraight to your devices.",
-    "inboxBody": "Push notifications for your scripts and servers. One HTTP request to notifi.it and it arrives a moment later.",
+    "inboxTitleIpad": "One HTTP request.\nStraight to your devices.",
+    "inboxBody": "Push notifications for your scripts and servers. One HTTP request to notifi.it from anywhere and it arrives on your device a moment later.",
     "messageTitle": "Images, links,\nMarkdown.",
     "messageBody": "A title, a body, an image and a link. Headings, lists, quotes and code blocks are rendered on the device. Encrypted with your public key, so we cannot read your notifications.",
     "keysTitle": "One key\nper source.",

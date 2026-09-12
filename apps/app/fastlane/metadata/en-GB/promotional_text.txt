@@ -1,1 +1,1 @@
-One HTTP request, and the notification is on your iPhone or Mac. Encrypted with your public key, so we can’t read your notifications. No accounts.
+Send an HTTP request, and the notification is on your iPhone or Mac. Encrypted with your public key, so we can’t read your notifications. No accounts.

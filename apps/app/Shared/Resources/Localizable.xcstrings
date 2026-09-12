@@ -2212,7 +2212,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t make a key. Check your connection and try again."
+            "value": "Couldn’t create a new key. Check your connection and try again."
           }
         },
         "es": {
@@ -2492,7 +2492,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sent. It arrives here and on your lock screen in a moment."
+            "value": "Sent."
           }
         },
         "es": {
@@ -3882,7 +3882,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "notifi keeps this one on your device, so you can copy it again whenever you need it, or regenerate it below."
+            "value": "notifi created this key automatically."
           }
         },
         "es": {
@@ -4372,7 +4372,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The current value stops working immediately, and anything still sending with it will be rejected."
+            "value": "The current value stops working immediately, and any API request still sending to it will be rejected."
           }
         },
         "es": {
@@ -4617,7 +4617,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Revoking is permanent. Anything still sending to this key will be rejected."
+            "value": "Revoking is permanent. Any API request still sending to this key will be rejected."
           }
         },
         "es": {
@@ -7257,7 +7257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Download notifi for iOS"
+            "value": "Download notifi for your iPhone or iPad"
           }
         },
         "es": {

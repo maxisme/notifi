@@ -12,7 +12,7 @@ export const copy = {
     rateLimitedIP: 'Too many requests from this IP.',
     rateLimitedAccount: 'Rate limit exceeded. Too many notifications this hour.',
     uncollectedLimit:
-      'Not sent. This device has too many uncollected notifications. New ones are accepted once it collects.',
+      'Not sent. This device has too many uncollected notifications. New ones are accepted once the app has opened them.',
 
     badSignature: 'Invalid request signature.',
     staleTimestamp: 'Request timestamp is outside the allowed window.',
@@ -44,37 +44,34 @@ export const copy = {
     name: 'notifi: Push Notifications',
     subtitle: 'For scripts and servers',
     promotionalText:
-      "One HTTP request, and the notification is on your iPhone or Mac. Encrypted with " +
-      "your public key, so we can’t read your notifications. No accounts.",
+      'Send an HTTP request, and the notification is on your iPhone or Mac. Encrypted with your public key, so we can’t read your notifications. No accounts.',
     keywords:
       'webhook,api,notify,alerts,self,hosted,cron,curl,cli,devops,homelab,ssh,docker,' +
       'terminal,developer',
     description:
-      'Push notifications for your scripts and servers.\n\n' +
-      'Create a send key and send a title and a body to notifi.it in one HTTP request. ' +
-      'The notification lands on your iPhone or Mac. Anything that can make an HTTP request ' +
-      'can send one, e.g. a shell script, a cron job, a CI pipeline.\n\n' +
-      'https://notifi.it/send?title=hello+world\n\n' +
-      'WHAT A NOTIFICATION CARRIES\n' +
-      'A title, a body, an image and a link. The body is Markdown: headings, lists, ' +
-      'quotes, links and code blocks are rendered on the device.\n\n' +
-      'ENCRYPTED\n' +
-      'Your device holds the only private key. Notification content is encrypted with your public ' +
-      'key at ingest, so we cannot read your notifications. Each one is deleted from the server ' +
-      'once your device acknowledges it.\n\n' +
-      'NO ACCOUNTS\n' +
-      'No sign-up, no sign-in, no device linking. The app mints a send key on first launch. ' +
-      'Keys can be renamed, paused and revoked per source.\n\n' +
-      'URGENT ALERTS\n' +
-      'Mark a key as urgent and its notifications break through Focus and land on the lock ' +
-      'screen.\n',
+      'Push notifications for your scripts, servers, apps or anything that can make an HTTP request.\n' +
+      '\n' +
+      'Send notifi.it a title, plus a body, image or link if you want them along with your unique key. The notification lands on your iPhone or Mac.\n' +
+      '\n' +
+      'https://notifi.it/send?title=hello+world\n' +
+      '\n' +
+      'Encrypted.\n' +
+      'Your device holds the only private key. Notification content is encrypted with your public key at ingest, so we cannot read your notifications. Each one is deleted from the server once your device acknowledges it.\n' +
+      '\n' +
+      'No accounts.\n' +
+      'No sign-up, no sign-in, no device linking. The app mints a send key on first launch. Keys can be renamed, paused and revoked per source.\n' +
+      '\n' +
+      'Urgent alerts.\n' +
+      'Mark a key as urgent and its notifications break through Focus and land on the lock screen.\n' +
+      '',
     releaseNotes: 'Bug fixes and performance improvements.\n',
 
     shotInboxTitle: 'One request.\nStraight to your pocket.',
-    shotInboxTitleIpad: 'One request.\nStraight to your devices.',
+    shotInboxTitleIpad:
+      'One HTTP request.\n' +
+      'Straight to your devices.',
     shotInboxBody:
-      'Push notifications for your scripts and servers. One HTTP request to notifi.it and ' +
-      'it arrives a moment later.',
+      'Push notifications for your scripts and servers. One HTTP request to notifi.it from anywhere and it arrives on your device a moment later.',
     shotMessageTitle: 'Images, links,\nMarkdown.',
     shotMessageBody:
       'A title, a body, an image and a link. Headings, lists, quotes and code blocks are ' +
@@ -229,8 +226,7 @@ export const copy = {
     copyCurl: 'Copy curl',
     examplesLink: 'Docs',
     defaultKeyDetail:
-      'notifi keeps this one on your device, so you can copy it again whenever you ' +
-      'need it, or regenerate it below.',
+      'notifi created this key automatically.',
     shownOnceDetail:
       'The value was shown once, when you created this key. It is not stored on the device.',
 
@@ -255,7 +251,7 @@ export const copy = {
     revoke: 'Revoke key',
     revoking: 'Revoking…',
     revokeDetail:
-      'Revoking is permanent. Anything still sending to this key will be rejected.',
+      'Revoking is permanent. Any API request still sending to this key will be rejected.',
 
     revokeTitle: 'Revoke “{name}”?',
     revokeTitleFallback: 'Revoke this key?',
@@ -266,8 +262,7 @@ export const copy = {
     regenerateTitleFallback: 'Regenerate this key?',
     regenerateConfirm: 'Regenerate',
     regenerateMessage:
-      'The current value stops working immediately, and anything still sending with it ' +
-      'will be rejected.',
+      'The current value stops working immediately, and any API request still sending to it will be rejected.',
 
     regeneratedAnnouncement: 'Key regenerated. The old value no longer works.',
     regenerateFailed: "Couldn’t regenerate the key. Check your connection and try again.",
@@ -348,7 +343,8 @@ export const copy = {
     testBody: 'Your first notification.',
 
     macApp: 'Download notifi for Mac',
-    iosApp: 'Download notifi for iOS',
+    iosApp:
+      'Download notifi for your iPhone or iPad',
 
     sectionSupport: 'Support',
     sectionApplication: 'Application',
@@ -384,11 +380,13 @@ export const copy = {
     stepSend: 'Send one',
     sendTest: 'Send a test',
     sending: 'Sending…',
-    sent: 'Sent. It arrives here and on your lock screen in a moment.',
+    sent:
+      'Sent.',
     sendFailed: "Couldn’t send. Check your connection and try again.",
 
     makingKey: 'Making your key…',
-    makeKeyFailed: "Couldn’t make a key. Check your connection and try again.",
+    makeKeyFailed:
+      'Couldn’t create a new key. Check your connection and try again.',
 
     stepLabel: 'Step {n}. {title}.',
     stepDone: ' Done.',
