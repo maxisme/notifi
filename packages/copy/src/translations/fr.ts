@@ -72,8 +72,6 @@ export const fr: Translation = {
   'age.weeks': '{n}sem.',
   'age.ago': 'il y a {relative}',
   'inbox.title': 'Inbox',
-  'inbox.offline':
-    'Impossible de joindre les serveurs notifi. Vérifiez votre connexion et réessayez.',
   'inbox.count': { one: '1 notification', other: '{n} notifications' },
   'inbox.filteredToKey': 'Filtré sur la clé « {name} ».',
   'inbox.closeSearch': 'Fermer la recherche',
@@ -135,7 +133,6 @@ export const fr: Translation = {
   'message.sourceHeader': 'Source',
   'keys.title': 'Clés',
   'keys.newKey': 'Nouvelle clé',
-  'keys.refreshFailed': "Impossible d’actualiser les clés. Affichage de la dernière liste connue.",
   'keys.sectionActive': 'Actives',
   'keys.sectionRevoked': 'Révoquées',
   'keys.aboutKeys': 'À propos des clés',
@@ -152,13 +149,10 @@ export const fr: Translation = {
   'keyDetail.notFound': 'Clé introuvable',
   'keyDetail.notFoundDetail': 'Elle a peut-être été supprimée sur un autre appareil.',
 
-  'keyDetail.criticalOn':
-    'Les envois de cette clé qui le demandent sonneront malgré le mode silencieux et Focus. ' +
-    'Ajoutez is_critical=1 à l’envoi.',
   'keyDetail.criticalTimeSensitive':
     'Les envois de cette clé qui le demandent franchissent Focus et restent sur l’écran ' +
     'verrouillé. Ajoutez is_critical=1 à l’envoi. Ils ne sonneront pas malgré le mode ' +
-    'silencieux. Cela nécessite une habilitation qu’Apple n’a pas encore accordée à notifi.',
+    'silencieux.',
 
   'keyDetail.copyKey': 'Copier la clé',
   'keyDetail.shareKey': 'Partager la clé',
@@ -213,9 +207,6 @@ export const fr: Translation = {
   'keyDetail.revokedAnnouncement': 'Clé révoquée.',
   'keyDetail.revokeFailed': "Impossible de révoquer la clé. Vérifiez votre connexion et réessayez.",
 
-  'keyDetail.criticalNotPermitted':
-    'Les alertes critiques sont désactivées pour notifi dans les réglages système. Elles ' +
-    'franchiront quand même Focus, mais ne sonneront pas malgré le mode silencieux.',
   'keyDetail.criticalChangeFailed':
     "Impossible de modifier les alertes critiques pour cette clé. Vérifiez votre connexion et réessayez.",
 
@@ -233,8 +224,6 @@ export const fr: Translation = {
 
   'createKey.validationEmpty': 'Entrez un nom pour cette clé.',
   'createKey.validationTooLong': 'Utilisez 64 caractères ou moins.',
-  'createKey.validationReserved': 'Choisissez un autre nom. « device » est la clé de votre appareil.',
-  'createKey.validationTaken': "Choisissez un autre nom. Une de vos clés actives porte déjà celui-ci.",
   'createKey.createFailed': "Impossible de créer la clé. Vérifiez votre connexion et réessayez.",
 
   'createKey.revealTitle': 'Copiez votre clé maintenant',
@@ -413,6 +402,6 @@ export const fr: Translation = {
   'clientErrors.rateLimited': 'Trop de requêtes à l’instant. Réessayez dans un moment.',
   'clientErrors.server': 'Le serveur rencontre un problème. Réessayez dans un moment.',
   'clientErrors.generic': "La requête n’a pas abouti. Réessayez.",
-  'clientErrors.transport': "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+  'clientErrors.transport': 'Impossible de joindre les serveurs notifi. Vérifiez votre connexion et réessayez.',
   'clientErrors.decoding': 'Le serveur a renvoyé une réponse inattendue. Réessayez dans un moment.',
 };

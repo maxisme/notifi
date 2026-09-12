@@ -427,31 +427,31 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t reach the server. Check your connection and try again."
+            "value": "Couldn’t reach notifi servers. Check your connection and try again."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo."
+            "value": "No se puede conectar con los servidores de notifi. Comprueba tu conexión e inténtalo de nuevo."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Server nicht erreichbar. Verbindung prüfen und erneut versuchen."
+            "value": "notifi-Server nicht erreichbar. Verbindung prüfen und erneut versuchen."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez."
+            "value": "Impossible de joindre les serveurs notifi. Vérifiez votre connexion et réessayez."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impossibile raggiungere il server. Controlla la connessione e riprova."
+            "value": "Impossibile raggiungere i server notifi. Controlla la connessione e riprova."
           }
         }
       }
@@ -2101,76 +2101,6 @@
         }
       }
     },
-    "createKey.validationReserved": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose another name. “device” is your device’s own key."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elige otro nombre. \"device\" es la clave propia de tu dispositivo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle einen anderen Namen. „device“ ist der Schlüssel deines Geräts."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisissez un autre nom. « device » est la clé de votre appareil."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scegli un altro nome. “device” è la chiave del tuo dispositivo."
-          }
-        }
-      }
-    },
-    "createKey.validationTaken": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose another name. One of your active keys already has this one."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elige otro nombre. Una de tus claves activas ya tiene este."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle einen anderen Namen. Einer deiner aktiven Schlüssel hat diesen bereits."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisissez un autre nom. Une de vos clés actives porte déjà celui-ci."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scegli un altro nome. Una delle tue chiavi attive lo usa già."
-          }
-        }
-      }
-    },
     "createKey.validationTooLong": {
       "extractionState": "manual",
       "localizations": {
@@ -2772,7 +2702,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "notifi could not read its identity key from the keychain. This usually clears once the device has been unlocked. Your notifications and send keys are unaffected."
+            "value": "notifi could not read its identity key from the keychain. This usually clears once the device has been unlocked."
           }
         },
         "es": {
@@ -3252,7 +3182,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Critical"
+            "value": "Urgent"
           }
         },
         "es": {
@@ -3596,41 +3526,6 @@
         }
       }
     },
-    "inbox.offline": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Can’t reach notifi servers. Check your connection and try again."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se puede conectar con los servidores de notifi. Comprueba tu conexión e inténtalo de nuevo."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "notifi-Server nicht erreichbar. Verbindung prüfen und erneut versuchen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de joindre les serveurs notifi. Vérifiez votre connexion et réessayez."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile raggiungere i server notifi. Controlla la connessione e riprova."
-          }
-        }
-      }
-    },
     "inbox.offlineBadge": {
       "extractionState": "manual",
       "localizations": {
@@ -3882,7 +3777,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Critical alerts"
+            "value": "Urgent alerts"
           }
         },
         "es": {
@@ -3917,7 +3812,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t change critical alerts for this key. Check your connection and try again."
+            "value": "Couldn’t change urgent alerts for this key. Check your connection and try again."
           }
         },
         "es": {
@@ -3946,107 +3841,37 @@
         }
       }
     },
-    "keyDetail.criticalNotPermitted": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Critical Alerts are turned off for notifi in system settings. These will still break through Focus, but they will not sound through silent mode."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Las alertas críticas están desactivadas para notifi en los ajustes del sistema. Seguirán atravesando el modo Enfoque, pero no sonarán con el modo silencio activado."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kritische Benachrichtigungen sind für notifi in den Systemeinstellungen deaktiviert. Sie durchbrechen weiterhin den Fokus, ertönen aber nicht im Stummmodus."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les alertes critiques sont désactivées pour notifi dans les réglages système. Elles franchiront quand même Focus, mais ne sonneront pas malgré le mode silencieux."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gli avvisi critici sono disattivati per notifi nelle impostazioni di sistema. Continueranno a superare Focus, ma non suoneranno in modalità silenziosa."
-          }
-        }
-      }
-    },
-    "keyDetail.criticalOn": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sends from this key that ask for it will sound through silent mode and Focus. Add is_critical=1 to the send."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Los envíos de esta clave que lo soliciten sonarán incluso con el modo silencio y el modo Enfoque activados. Añade is_critical=1 al envío."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sendungen von diesem Schlüssel, die es anfordern, ertönen auch im Stumm- und Fokusmodus. is_critical=1 zur Sendung hinzufügen."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les envois de cette clé qui le demandent sonneront malgré le mode silencieux et Focus. Ajoutez is_critical=1 à l’envoi."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gli invii da questa chiave che lo richiedono suoneranno anche in modalità silenziosa e con Focus attivo. Aggiungi is_critical=1 all'invio."
-          }
-        }
-      }
-    },
     "keyDetail.criticalTimeSensitive": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sends from this key that ask for it break through Focus and stay on the lock screen. Add is_critical=1 to the send. They will not sound through silent mode. That needs an entitlement Apple has yet to grant notifi."
+            "value": "Allows API requests to this key to break through Focus and stay on the lock screen. Add is_critical=1 to the send."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Los envíos de esta clave que lo soliciten atravesarán el modo Enfoque y permanecerán en la pantalla de bloqueo. Añade is_critical=1 al envío. No sonarán con el modo silencio activado. Eso requiere una autorización que Apple aún no ha concedido a notifi."
+            "value": "Los envíos de esta clave que lo soliciten atravesarán el modo Enfoque y permanecerán en la pantalla de bloqueo. Añade is_critical=1 al envío. No sonarán con el modo silencio activado. "
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sendungen von diesem Schlüssel, die es anfordern, durchbrechen den Fokus und bleiben auf dem Sperrbildschirm. is_critical=1 zur Sendung hinzufügen. Sie ertönen nicht im Stummmodus. Dafür ist eine Berechtigung nötig, die Apple notifi noch nicht erteilt hat."
+            "value": "Sendungen von diesem Schlüssel, die es anfordern, durchbrechen den Fokus und bleiben auf dem Sperrbildschirm. is_critical=1 zur Sendung hinzufügen. Sie ertönen nicht im Stummmodus. "
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les envois de cette clé qui le demandent franchissent Focus et restent sur l’écran verrouillé. Ajoutez is_critical=1 à l’envoi. Ils ne sonneront pas malgré le mode silencieux. Cela nécessite une habilitation qu’Apple n’a pas encore accordée à notifi."
+            "value": "Les envois de cette clé qui le demandent franchissent Focus et restent sur l’écran verrouillé. Ajoutez is_critical=1 à l’envoi. Ils ne sonneront pas malgré le mode silencieux."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gli invii da questa chiave che lo richiedono superano Focus e restano sulla schermata di blocco. Aggiungi is_critical=1 all'invio. Non suoneranno in modalità silenziosa. Serve un'autorizzazione che Apple non ha ancora concesso a notifi."
+            "value": "Gli invii da questa chiave che lo richiedono superano Focus e restano sulla schermata di blocco. Aggiungi is_critical=1 all'invio. Non suoneranno in modalità silenziosa. "
           }
         }
       }
@@ -4337,7 +4162,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Off, only https links open. On, other schemes open too, including ones that launch other apps on this device."
+            "value": "All schemes open, including ones that launch other apps on this device. When turned off only https:// is accepted."
           }
         },
         "es": {
@@ -4477,7 +4302,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Regenerating issues a new value and retires the old one. Anything still sending with the old value will be rejected."
+            "value": "Regenerating issues a new value and retires the old one. Anything still sending with the old value will be rejected by the API."
           }
         },
         "es": {
@@ -5212,7 +5037,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Critical"
+            "value": "Urgent"
           }
         },
         "es": {
@@ -5381,41 +5206,6 @@
         }
       }
     },
-    "keys.refreshFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t refresh keys. Showing the last known list."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudieron actualizar las claves. Mostrando la última lista conocida."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlüssel konnten nicht aktualisiert werden. Letzte bekannte Liste wird angezeigt."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible d’actualiser les clés. Affichage de la dernière liste connue."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile aggiornare le chiavi. Mostro l’ultimo elenco noto."
-          }
-        }
-      }
-    },
     "keys.rowLabel": {
       "extractionState": "manual",
       "localizations": {
@@ -5457,7 +5247,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": ", Critical Alerts on"
+            "value": ", Urgent alerts on"
           }
         },
         "es": {
@@ -6882,7 +6672,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your old notifications restored from a backup, but your keys did not. Keys are tied to the device they were created on and cannot be moved. Anything still sending to your old keys will now be rejected. Create fresh keys to keep receiving notifications."
+            "value": "Your old notifications restored, but your keys did not. Keys are tied to the device. Anything still sending to your old keys will now be rejected by the API. Create fresh keys to keep receiving notifications."
           }
         },
         "es": {
@@ -7537,7 +7327,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fetches each image the moment its notification arrives.\n\nThe image’s host sees your IP address when that happens.\n\nOff, an image loads only when you tap it."
+            "value": "Loads images automatically."
           }
         },
         "es": {
@@ -8167,7 +7957,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keeps a notification on screen until you click or dismiss it.\n\nOff, it slides away after a few seconds.\n\nEnable opens System Settings, where you pick notifi’s alert style."
+            "value": "Keeps a notification on screen until you click or dismiss it."
           }
         },
         "es": {
@@ -8272,7 +8062,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Refuses a send whose title or body is over length: /send answers 422 invalid_content and stores nothing.\n\nOff, the field is cropped and the send is accepted with a warnings array.\n\n[Read the docs](https://notifi.it/docs#response)"
+            "value": "Refuses an API request whose title or body is over length.\n\nWhen turned off, the field is cropped and the send is accepted with a warnings array.\n\n[For more information see the docs](https://notifi.it/docs#response)"
           }
         },
         "es": {

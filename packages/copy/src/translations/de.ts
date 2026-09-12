@@ -119,7 +119,6 @@ export const de: Translation = {
   'age.weeks': '{n}W',
   'age.ago': 'vor {relative}',
   'inbox.title': 'Inbox',
-  'inbox.offline': 'notifi-Server nicht erreichbar. Verbindung prüfen und erneut versuchen.',
   'inbox.count': { one: '1 Benachrichtigung', other: '{n} Benachrichtigungen' },
   'inbox.filteredToKey': 'Gefiltert nach Schlüssel „{name}“.',
   'inbox.closeSearch': 'Suche schließen',
@@ -181,7 +180,6 @@ export const de: Translation = {
   'message.sourceHeader': 'Quelle',
   'keys.title': 'Schlüssel',
   'keys.newKey': 'Neuer Schlüssel',
-  'keys.refreshFailed': 'Schlüssel konnten nicht aktualisiert werden. Letzte bekannte Liste wird angezeigt.',
   'keys.sectionActive': 'Aktiv',
   'keys.sectionRevoked': 'Widerrufen',
   'keys.aboutKeys': 'Über Schlüssel',
@@ -198,13 +196,9 @@ export const de: Translation = {
   'keyDetail.notFound': 'Schlüssel nicht gefunden',
   'keyDetail.notFoundDetail': 'Er wurde möglicherweise auf einem anderen Gerät entfernt.',
 
-  'keyDetail.criticalOn':
-    'Sendungen von diesem Schlüssel, die es anfordern, ertönen auch im Stumm- und Fokusmodus. ' +
-    'is_critical=1 zur Sendung hinzufügen.',
   'keyDetail.criticalTimeSensitive':
     'Sendungen von diesem Schlüssel, die es anfordern, durchbrechen den Fokus und bleiben auf dem Sperr' +
-    'bildschirm. is_critical=1 zur Sendung hinzufügen. Sie ertönen nicht im Stummmodus. ' +
-    'Dafür ist eine Berechtigung nötig, die Apple notifi noch nicht erteilt hat.',
+    'bildschirm. is_critical=1 zur Sendung hinzufügen. Sie ertönen nicht im Stummmodus. ',
 
   'keyDetail.copyKey': 'Schlüssel kopieren',
   'keyDetail.shareKey': 'Schlüssel teilen',
@@ -258,9 +252,6 @@ export const de: Translation = {
   'keyDetail.revokedAnnouncement': 'Schlüssel widerrufen.',
   'keyDetail.revokeFailed': 'Schlüssel konnte nicht widerrufen werden. Verbindung prüfen und erneut versuchen.',
 
-  'keyDetail.criticalNotPermitted':
-    'Kritische Benachrichtigungen sind für notifi in den Systemeinstellungen deaktiviert. Sie durchbrechen ' +
-    'weiterhin den Fokus, ertönen aber nicht im Stummmodus.',
   'keyDetail.criticalChangeFailed':
     'Kritische Benachrichtigungen für diesen Schlüssel konnten nicht geändert werden. Verbindung prüfen und erneut versuchen.',
 
@@ -277,8 +268,6 @@ export const de: Translation = {
 
   'createKey.validationEmpty': 'Gib einen Namen für diesen Schlüssel ein.',
   'createKey.validationTooLong': 'Verwende höchstens 64 Zeichen.',
-  'createKey.validationReserved': 'Wähle einen anderen Namen. „device“ ist der Schlüssel deines Geräts.',
-  'createKey.validationTaken': 'Wähle einen anderen Namen. Einer deiner aktiven Schlüssel hat diesen bereits.',
   'createKey.createFailed': 'Schlüssel konnte nicht erstellt werden. Verbindung prüfen und erneut versuchen.',
 
   'createKey.revealTitle': 'Kopiere deinen Schlüssel jetzt',
@@ -410,6 +399,6 @@ export const de: Translation = {
   'clientErrors.rateLimited': 'Gerade zu viele Anfragen. In einem Moment erneut versuchen.',
   'clientErrors.server': 'Der Server hat gerade Probleme. In einem Moment erneut versuchen.',
   'clientErrors.generic': 'Die Anfrage kam nicht durch. Erneut versuchen.',
-  'clientErrors.transport': 'Server nicht erreichbar. Verbindung prüfen und erneut versuchen.',
+  'clientErrors.transport': 'notifi-Server nicht erreichbar. Verbindung prüfen und erneut versuchen.',
   'clientErrors.decoding': 'Der Server hat etwas Unerwartetes zurückgegeben. In einem Moment erneut versuchen.',
 };

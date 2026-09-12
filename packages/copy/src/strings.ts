@@ -32,7 +32,7 @@ export const copy = {
     invalidSendParams: 'Invalid send parameters.',
     occurredAtTooFuture: 'occurred_at is too far in the future.',
     criticalNotAllowed:
-      'Sent as a normal notification, because critical alerts are switched off for this key.',
+      'Sent as a normal notification, because urgent alerts are switched off for this key.',
     titleCropped: 'Sent with a shortened title, because it was over {max} characters.',
     messageCropped: 'Sent with a shortened notification, because it was over {max} characters.',
     strictContentRejected:
@@ -132,7 +132,6 @@ export const copy = {
 
   inbox: {
     title: 'Inbox',
-    offline: "Can’t reach notifi servers. Check your connection and try again.",
     count: plural('1 notification', '{n} notifications'),
     filteredToKey: 'Filtered to the “{name}” key.',
     closeSearch: 'Close search',
@@ -152,7 +151,7 @@ export const copy = {
     bandLabel: '{title}, {count}',
 
     unread: 'Unread',
-    critical: 'Critical',
+    critical: 'Urgent',
     hasImage: 'Has an image',
     offlineBadge: 'Offline',
     linkTo: 'Link to {host}',
@@ -203,7 +202,6 @@ export const copy = {
   keys: {
     title: 'Keys',
     newKey: 'New key',
-    refreshFailed: "Couldn’t refresh keys. Showing the last known list.",
     sectionActive: 'Active',
     sectionRevoked: 'Revoked',
     aboutKeys: 'About keys',
@@ -211,10 +209,10 @@ export const copy = {
     rowLastUsed: 'used {ago}',
     docsLink: 'API docs',
     chipDefault: 'Device',
-    chipCritical: 'Critical',
+    chipCritical: 'Urgent',
     rowLabel: 'Key, {name}, ends {suffix}',
     rowLabelRevoked: ', revoked',
-    rowLabelCritical: ', Critical Alerts on',
+    rowLabelCritical: ', Urgent alerts on',
     maskedValue: '{prefix}…',
   },
 
@@ -222,13 +220,9 @@ export const copy = {
     notFound: 'Key not found',
     notFoundDetail: 'It may have been removed on another device.',
 
-    criticalOn:
-      'Sends from this key that ask for it will sound through silent mode and Focus. ' +
-      'Add is_critical=1 to the send.',
     criticalTimeSensitive:
-      'Sends from this key that ask for it break through Focus and stay on the lock ' +
-      'screen. Add is_critical=1 to the send. They will not sound through silent mode. ' +
-      'That needs an entitlement Apple has yet to grant notifi.',
+      'Allows API requests to this key to break through Focus and stay on the lock screen. ' +
+      'Add is_critical=1 to the send.',
 
     copyKey: 'Copy key',
     shareKey: 'Share key',
@@ -247,10 +241,9 @@ export const copy = {
 
     openAnyLink: 'Open any link',
     openAnyLinkDetail:
-      'Off, only https links open. On, other schemes open too, including ones that ' +
-      'launch other apps on this device.',
+      'All schemes open, including ones that launch other apps on this device. When turned off only https:// is accepted.',
 
-    criticalAlerts: 'Critical alerts',
+    criticalAlerts: 'Urgent alerts',
 
     revokedNotice: 'This key is revoked and no longer accepts sends.',
 
@@ -258,8 +251,7 @@ export const copy = {
     regenerate: 'Regenerate key',
     regenerating: 'Regenerating…',
     regenerateDetail:
-      'Regenerating issues a new value and retires the old one. Anything still sending ' +
-      'with the old value will be rejected.',
+      'Regenerating issues a new value and retires the old one. Anything still sending with the old value will be rejected by the API.',
     revoke: 'Revoke key',
     revoking: 'Revoking…',
     revokeDetail:
@@ -282,11 +274,8 @@ export const copy = {
     revokedAnnouncement: 'Key revoked.',
     revokeFailed: "Couldn’t revoke the key. Check your connection and try again.",
 
-    criticalNotPermitted:
-      'Critical Alerts are turned off for notifi in system settings. These will still ' +
-      'break through Focus, but they will not sound through silent mode.',
     criticalChangeFailed:
-      "Couldn’t change critical alerts for this key. Check your connection and try again.",
+      "Couldn’t change urgent alerts for this key. Check your connection and try again.",
   },
 
   createKey: {
@@ -303,8 +292,6 @@ export const copy = {
 
     validationEmpty: 'Enter a name for this key.',
     validationTooLong: 'Use 64 characters or fewer.',
-    validationReserved: "Choose another name. “device” is your device’s own key.",
-    validationTaken: 'Choose another name. One of your active keys already has this one.',
     createFailed: "Couldn’t create the key. Check your connection and try again.",
 
     revealTitle: 'Copy your key now',
@@ -335,9 +322,7 @@ export const copy = {
 
     stayVisible: 'Notifications stay visible',
     stayVisibleDetail:
-      'Keeps a notification on screen until you click or dismiss it.\n\n' +
-      'Off, it slides away after a few seconds.\n\n' +
-      'Enable opens System Settings, where you pick notifi’s alert style.',
+      'Keeps a notification on screen until you click or dismiss it.',
     stayVisibleEnable: 'Enable',
 
     theme: 'Theme',
@@ -348,16 +333,15 @@ export const copy = {
 
     loadImages: 'Load images automatically',
     loadImagesDetail:
-      'Fetches each image the moment its notification arrives.\n\n' +
-      'The image’s host sees your IP address when that happens.\n\n' +
-      'Off, an image loads only when you tap it.',
+      'Loads images automatically.',
 
     strictSend: 'Reject invalid sends',
     strictSendDetail:
-      'Refuses a send whose title or body is over length: /send answers 422 invalid_content ' +
-      'and stores nothing.\n\n' +
-      'Off, the field is cropped and the send is accepted with a warnings array.\n\n' +
-      '[Read the docs](https://notifi.it/docs#response)',
+      'Refuses an API request whose title or body is over length.\n' +
+      '\n' +
+      'When turned off, the field is cropped and the send is accepted with a warnings array.\n' +
+      '\n' +
+      '[For more information see the docs](https://notifi.it/docs#response)',
     strictSendFailed: 'PATCH /devices/settings failed. Check your connection and try again.',
 
     testTitle: 'Hello from notifi',
@@ -423,8 +407,7 @@ export const copy = {
   identity: {
     title: "Can’t unlock notifi",
     detail:
-      'notifi could not read its identity key from the keychain. This usually clears once the ' +
-      'device has been unlocked. Your notifications and send keys are unaffected.',
+      'notifi could not read its identity key from the keychain. This usually clears once the device has been unlocked.',
   },
 
   unsupported: {
@@ -437,9 +420,7 @@ export const copy = {
   restore: {
     title: 'This looks like a new device',
     detail:
-      'Your old notifications restored from a backup, but your keys did not. Keys are tied to the ' +
-      'device they were created on and cannot be moved. Anything still sending to your old keys ' +
-      'will now be rejected. Create fresh keys to keep receiving notifications.',
+      'Your old notifications restored, but your keys did not. Keys are tied to the device. Anything still sending to your old keys will now be rejected by the API. Create fresh keys to keep receiving notifications.',
   },
 
   clientErrors: {
@@ -448,7 +429,7 @@ export const copy = {
     rateLimited: 'Too many requests just now. Try again in a moment.',
     server: 'The server is having trouble. Try again in a moment.',
     generic: "The request didn’t go through. Try again.",
-    transport: "Couldn’t reach the server. Check your connection and try again.",
+    transport: "Couldn’t reach notifi servers. Check your connection and try again.",
     decoding: 'The server returned something unexpected. Try again in a moment.',
   },
 };

@@ -45,7 +45,6 @@ enum Copy {
     }
     enum Inbox {
         static var title: String { NSLocalizedString("inbox.title", comment: "") }
-        static var offline: String { NSLocalizedString("inbox.offline", comment: "") }
         static func count(_ n: Int) -> String { String.localizedStringWithFormat(NSLocalizedString("inbox.count", comment: ""), n) }
         static func filteredToKey(_ name: String) -> String { String.localizedStringWithFormat(NSLocalizedString("inbox.filteredToKey", comment: ""), name) }
         static var closeSearch: String { NSLocalizedString("inbox.closeSearch", comment: "") }
@@ -110,7 +109,6 @@ enum Copy {
     enum Keys {
         static var title: String { NSLocalizedString("keys.title", comment: "") }
         static var newKey: String { NSLocalizedString("keys.newKey", comment: "") }
-        static var refreshFailed: String { NSLocalizedString("keys.refreshFailed", comment: "") }
         static var sectionActive: String { NSLocalizedString("keys.sectionActive", comment: "") }
         static var sectionRevoked: String { NSLocalizedString("keys.sectionRevoked", comment: "") }
         static var aboutKeys: String { NSLocalizedString("keys.aboutKeys", comment: "") }
@@ -127,7 +125,6 @@ enum Copy {
     enum KeyDetail {
         static var notFound: String { NSLocalizedString("keyDetail.notFound", comment: "") }
         static var notFoundDetail: String { NSLocalizedString("keyDetail.notFoundDetail", comment: "") }
-        static var criticalOn: String { NSLocalizedString("keyDetail.criticalOn", comment: "") }
         static var criticalTimeSensitive: String { NSLocalizedString("keyDetail.criticalTimeSensitive", comment: "") }
         static var copyKey: String { NSLocalizedString("keyDetail.copyKey", comment: "") }
         static var shareKey: String { NSLocalizedString("keyDetail.shareKey", comment: "") }
@@ -162,7 +159,6 @@ enum Copy {
         static var regenerateFailed: String { NSLocalizedString("keyDetail.regenerateFailed", comment: "") }
         static var revokedAnnouncement: String { NSLocalizedString("keyDetail.revokedAnnouncement", comment: "") }
         static var revokeFailed: String { NSLocalizedString("keyDetail.revokeFailed", comment: "") }
-        static var criticalNotPermitted: String { NSLocalizedString("keyDetail.criticalNotPermitted", comment: "") }
         static var criticalChangeFailed: String { NSLocalizedString("keyDetail.criticalChangeFailed", comment: "") }
     }
     enum CreateKey {
@@ -178,8 +174,6 @@ enum Copy {
         static var creating: String { NSLocalizedString("createKey.creating", comment: "") }
         static var validationEmpty: String { NSLocalizedString("createKey.validationEmpty", comment: "") }
         static var validationTooLong: String { NSLocalizedString("createKey.validationTooLong", comment: "") }
-        static var validationReserved: String { NSLocalizedString("createKey.validationReserved", comment: "") }
-        static var validationTaken: String { NSLocalizedString("createKey.validationTaken", comment: "") }
         static var createFailed: String { NSLocalizedString("createKey.createFailed", comment: "") }
         static var revealTitle: String { NSLocalizedString("createKey.revealTitle", comment: "") }
         static var revealDetail: String { NSLocalizedString("createKey.revealDetail", comment: "") }

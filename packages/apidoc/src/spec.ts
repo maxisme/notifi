@@ -137,7 +137,7 @@ export const params: Param[] = [
     required: false,
     summary: 'Breaks through Focus.',
     detail:
-      'The key must also have critical alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array.',
+      'The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array.',
     openapi: {},
   },
 ];

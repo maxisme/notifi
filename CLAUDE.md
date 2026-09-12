@@ -84,9 +84,9 @@ product has no addresses.
   exceptions).
 - **send** — the verb, and `/send` the endpoint. Not "dispatch", "push a
   message" or "deliver to an address".
-- **alert** — only inside Apple's feature names (Critical Alerts, Time
-  Sensitive) and the life-safety disclaimer ("emergency alerting system").
-  Anywhere else the word is notification.
+- **alert** — only inside Apple's feature name Time Sensitive, the per-key
+  "Urgent alerts" toggle, and the life-safety disclaimer ("emergency alerting
+  system"). Anywhere else the word is notification.
 - **revoke** — the verb for ending a key, matching the app's "Revoke key"
   button. A key is revoked; a notification is deleted. Never cross the two.
 - **collect** — what a device does to its stored notifications; an

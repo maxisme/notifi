@@ -58,7 +58,7 @@ const QUICKSTART = `curl -X POST ${ORIGIN}${ENDPOINT} \\
 const WARNINGS_RESPONSE = `HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
 
-{"ok":true,"warnings":["Sent with a shortened title, because it was over ${TITLE_MAX} characters.","Sent as a normal notification, because critical alerts are switched off for this key."]}`;
+{"ok":true,"warnings":["Sent with a shortened title, because it was over ${TITLE_MAX} characters.","Sent as a normal notification, because urgent alerts are switched off for this key."]}`;
 
 const RAW_REQUEST = `POST /send HTTP/1.1
 Host: notifi.it
@@ -292,8 +292,8 @@ ${parameterRows()}
 ${terminalGroup('r-', 'Responses', RESPONSES)}
     <p>
       A <code>warnings</code> array is present only when the notification was delivered
-      differently from what was asked: a cropped title or body, or a critical
-      alert delivered as an ordinary notification. The status is still <code>202</code>; the
+      differently from what was asked: a cropped title or body, or an urgent
+      notification delivered as an ordinary one. The status is still <code>202</code>; the
       notification was sent, in the altered form each warning describes.
     </p>
 ${pre(WARNINGS_RESPONSE, 'http')}
@@ -312,18 +312,19 @@ ${figure(
   'Settings → Permissions → Reject invalid sends. Off, the default: sends are cropped, not refused.',
 )}
 
-    <h3 id="critical-alerts">Critical alerts are granted per key</h3>
+    <h3 id="urgent-alerts">Urgent alerts are granted per key</h3>
     <p>
-      <code>is_critical=1</code> asks for an alert that breaks through Focus and silent mode,
-      but only if the key it was sent with has <strong>Critical alerts</strong> switched on,
+      <code>is_critical=1</code> asks for a Time Sensitive notification, which breaks through
+      Focus and stays on the lock screen, but only if the key it was sent with has
+      <strong>Urgent alerts</strong> switched on,
       on that device, in that key's screen under the Keys tab. Without it the notification is
       delivered as an ordinary one and the response carries a warning saying so. Only the
       person holding the device can switch it on.
     </p>
 ${figure(
-  '/shots/key-critical-alerts.png',
-  "A key's screen in the app, showing the Critical alerts switch turned on.",
-  'Keys → a key → Settings → Critical alerts. Each key carries its own permission.',
+  '/shots/key-urgent-alerts.png',
+  "A key's screen in the app, showing the Urgent alerts switch turned on.",
+  'Keys → a key → Settings → Urgent alerts. Each key carries its own permission.',
 )}
 
     <h3 id="links">A link does not have to be https</h3>

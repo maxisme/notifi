@@ -109,9 +109,9 @@ Revoke it in the app. The next send with it is refused. A key is shown once when
 
 A key marked urgent, sent with `is_critical=1`, is delivered as a Time Sensitive notification: it breaks through Focus and stays on the lock screen. It does **not** sound through the silent switch. Both halves are required — a send that asks for urgency with a key that does not have it is delivered as an ordinary notification rather than refused.
 
-### Will it ever ring through silent mode?
+### Will it ring through silent mode?
 
-That needs Apple’s Critical Alerts entitlement, which has been requested and not yet granted. If it is granted, the same toggle reaches the higher level with nothing else to change.
+No. Time Sensitive is the highest level notifi delivers at: it breaks through Focus and stays on the lock screen, and it respects the silent switch.
 
 ## Reliability
 

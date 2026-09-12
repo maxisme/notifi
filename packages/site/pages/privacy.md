@@ -36,7 +36,7 @@ The server identifies a device only by its public key. Nothing in the system lin
 
 - A SHA-256 hash of the key. The key itself is never stored, so it cannot be recovered or shown again.
 - The name and visible prefix you gave it, encrypted so only your device can read them.
-- How many notifications it has sent, when it was created, when it was last used, whether it is revoked, whether it may send critical notifications, and a rolling one-hour send counter.
+- How many notifications it has sent, when it was created, when it was last used, whether it is revoked, whether it may send urgent notifications, and a rolling one-hour send counter.
 
 ### Your notifications
 

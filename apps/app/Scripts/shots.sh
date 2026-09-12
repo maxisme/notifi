@@ -10,7 +10,7 @@ TABS=${TABS:-inbox keys settings message key}
 # body, image, link, key chip — so the detail page is shot with something in
 # every part of it rather than a bare title.
 MESSAGE_INDEX=${MESSAGE_INDEX:-0}
-# Which seeded key the "key" shot opens. 2 is the one with critical alerts on,
+# Which seeded key the "key" shot opens. 2 is the one with urgent alerts on,
 # so the toggle is shot in the state the docs point at.
 KEY_INDEX=${KEY_INDEX:-2}
 OUT=${OUT:-/tmp/notifi-shots}

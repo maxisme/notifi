@@ -223,8 +223,8 @@ struct CreateKeyView: View {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty { return Copy.CreateKey.validationEmpty }
         if trimmed.count > 64 { return Copy.CreateKey.validationTooLong }
-        if isReserved { return Copy.CreateKey.validationReserved }
-        if isNameTaken { return Copy.CreateKey.validationTaken }
+        if isReserved { return Copy.CreateKey.nameReserved }
+        if isNameTaken { return Copy.CreateKey.nameTaken }
         return nil
     }
 

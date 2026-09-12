@@ -38,8 +38,6 @@ interface KeyDeviceRow {
   strict_send: number;
 }
 
-const CRITICAL_ENTITLED = false;
-
 function pushPayload(
   id: number,
   sealedB64: string,
@@ -48,12 +46,7 @@ function pushPayload(
   strings: Strings,
 ): object {
   const escalation = escalate
-    ? CRITICAL_ENTITLED
-      ? {
-          sound: { critical: 1, name: 'default', volume: 1 },
-          'interruption-level': 'critical',
-        }
-      : { sound: 'default', 'interruption-level': 'time-sensitive' }
+    ? { sound: 'default', 'interruption-level': 'time-sensitive' }
     : { sound: 'default' };
 
   return {

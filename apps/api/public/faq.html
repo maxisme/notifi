@@ -325,8 +325,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 56px}
     <h2>Urgent alerts</h2>
     <h3>What does the urgent toggle do?</h3>
     <p>A key marked urgent, sent with <code>is_critical=1</code>, is delivered as a Time Sensitive notification: it breaks through Focus and stays on the lock screen. It does <strong>not</strong> sound through the silent switch. Both halves are required — a send that asks for urgency with a key that does not have it is delivered as an ordinary notification rather than refused.</p>
-    <h3>Will it ever ring through silent mode?</h3>
-    <p>That needs Apple’s Critical Alerts entitlement, which has been requested and not yet granted. If it is granted, the same toggle reaches the higher level with nothing else to change.</p>
+    <h3>Will it ring through silent mode?</h3>
+    <p>No. Time Sensitive is the highest level notifi delivers at: it breaks through Focus and stays on the lock screen, and it respects the silent switch.</p>
   </section>
 
   <section>

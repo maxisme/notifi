@@ -18,15 +18,6 @@ struct KeyDetailView: View {
 
     private var key: CachedKey? { model.sync?.keys.first { $0.id == keyID } }
 
-    private var criticalDetail: String {
-        switch model.criticalAlertStatus {
-        case .enabled:
-            return Copy.KeyDetail.criticalOn
-        default:
-            return Copy.KeyDetail.criticalTimeSensitive
-        }
-    }
-
     var body: some View {
         ScrollView {
             if let key {
@@ -156,7 +147,7 @@ struct KeyDetailView: View {
             if !key.isRevoked {
                 ToggleRow(
                     title: Copy.KeyDetail.criticalAlerts,
-                    detail: criticalDetail,
+                    detail: Copy.KeyDetail.criticalTimeSensitive,
                     isOn: Binding(
                         get: { key.isCritical },
                         set: { on in Task { await setCritical(on) } }
@@ -260,10 +251,7 @@ struct KeyDetailView: View {
         isUpdatingCritical = true
         errorMessage = nil
         do {
-            let granted = try await model.setKeyCritical(id: keyID, isCritical: isCritical)
-            if isCritical, granted == .disabled {
-                errorMessage = Copy.KeyDetail.criticalNotPermitted
-            }
+            try await model.setKeyCritical(id: keyID, isCritical: isCritical)
         } catch {
             errorMessage = (error as? APIError)?.userMessage
                 ?? Copy.KeyDetail.criticalChangeFailed

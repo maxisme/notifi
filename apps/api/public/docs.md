@@ -52,7 +52,7 @@ Accept-Language: en-GB
 | `link` | string (uri) | optional | `≤ 2,048 chars` | A link to a website or internal app. Opened when the notification is tapped. https always opens; another scheme — shortcuts://run-shortcut?name=Deploy, an app’s own deep link — opens only when the key’s Open any link switch is on in the app; off, the link is hidden. |
 | `image` | string (uri) | optional | `≤ 2,048 chars` | URL of an image shown with the notification. Fetched by the receiving device, never by the server; by default the app loads it only when tapped. |
 | `occurred_at` | integer | optional | `unix ms` | When the event actually happened, as unix milliseconds. For a queued or retried send. Only changes the timestamp shown in the app; defaults to the time the server accepted the request. |
-| `is_critical` | boolean | optional | — | Breaks through Focus. The key must also have critical alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array. |
+| `is_critical` | boolean | optional | — | Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array. |
 
 ## Response
 
@@ -113,13 +113,13 @@ Content-Type: application/json; charset=utf-8
 {"error":{"code":"uncollected_limit","message":"Not sent. This device has too many uncollected notifications. New ones are accepted once it collects."}}
 ```
 
-A `warnings` array is present only when the notification was delivered differently from what was asked: a cropped title or body, or a critical alert delivered as an ordinary notification. The status is still `202`; the notification was sent, in the altered form each warning describes.
+A `warnings` array is present only when the notification was delivered differently from what was asked: a cropped title or body, or an urgent notification delivered as an ordinary one. The status is still `202`; the notification was sent, in the altered form each warning describes.
 
 ```http
 HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
 
-{"ok":true,"warnings":["Sent with a shortened title, because it was over 200 characters.","Sent as a normal notification, because critical alerts are switched off for this key."]}
+{"ok":true,"warnings":["Sent with a shortened title, because it was over 200 characters.","Sent as a normal notification, because urgent alerts are switched off for this key."]}
 ```
 
 ### Over-length text is cropped
@@ -130,13 +130,13 @@ A title over 200 characters or a body over 16000 is delivered cropped, with a wa
 
 _Settings → Permissions → Reject invalid sends. Off, the default: sends are cropped, not refused._
 
-### Critical alerts are granted per key
+### Urgent alerts are granted per key
 
-`is_critical=1` asks for an alert that breaks through Focus and silent mode, but only if the key it was sent with has **Critical alerts** switched on, on that device, in that key's screen under the Keys tab. Without it the notification is delivered as an ordinary one and the response carries a warning saying so. Only the person holding the device can switch it on.
+`is_critical=1` asks for a Time Sensitive notification, which breaks through Focus and stays on the lock screen, but only if the key it was sent with has **Urgent alerts** switched on, on that device, in that key's screen under the Keys tab. Without it the notification is delivered as an ordinary one and the response carries a warning saying so. Only the person holding the device can switch it on.
 
-![A key's screen in the app, showing the Critical alerts switch turned on.](/shots/key-critical-alerts.png)
+![A key's screen in the app, showing the Urgent alerts switch turned on.](/shots/key-urgent-alerts.png)
 
-_Keys → a key → Settings → Critical alerts. Each key carries its own permission._
+_Keys → a key → Settings → Urgent alerts. Each key carries its own permission._
 
 ### A link does not have to be https
 

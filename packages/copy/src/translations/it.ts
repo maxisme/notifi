@@ -72,7 +72,6 @@ export const it: Translation = {
   'age.weeks': '{n}sett',
   'age.ago': '{relative} fa',
   'inbox.title': 'Inbox',
-  'inbox.offline': 'Impossibile raggiungere i server notifi. Controlla la connessione e riprova.',
   'inbox.count': { one: '1 notifica', other: '{n} notifiche' },
   'inbox.filteredToKey': 'Filtrato sulla chiave “{name}”.',
   'inbox.closeSearch': 'Chiudi ricerca',
@@ -134,7 +133,6 @@ export const it: Translation = {
   'message.sourceHeader': 'Origine',
   'keys.title': 'Chiavi',
   'keys.newKey': 'Nuova chiave',
-  'keys.refreshFailed': "Impossibile aggiornare le chiavi. Mostro l’ultimo elenco noto.",
   'keys.sectionActive': 'Attive',
   'keys.sectionRevoked': 'Revocate',
   'keys.aboutKeys': 'Informazioni sulle chiavi',
@@ -151,13 +149,9 @@ export const it: Translation = {
   'keyDetail.notFound': 'Chiave non trovata',
   'keyDetail.notFoundDetail': 'Potrebbe essere stata rimossa su un altro dispositivo.',
 
-  'keyDetail.criticalOn':
-    'Gli invii da questa chiave che lo richiedono suoneranno anche in modalità silenziosa e con Focus attivo. ' +
-    'Aggiungi is_critical=1 all\'invio.',
   'keyDetail.criticalTimeSensitive':
     'Gli invii da questa chiave che lo richiedono superano Focus e restano sulla schermata di blocco. ' +
-    'Aggiungi is_critical=1 all\'invio. Non suoneranno in modalità silenziosa. ' +
-    'Serve un\'autorizzazione che Apple non ha ancora concesso a notifi.',
+    'Aggiungi is_critical=1 all\'invio. Non suoneranno in modalità silenziosa. ',
 
   'keyDetail.copyKey': 'Copia chiave',
   'keyDetail.shareKey': 'Condividi chiave',
@@ -211,9 +205,6 @@ export const it: Translation = {
   'keyDetail.revokedAnnouncement': 'Chiave revocata.',
   'keyDetail.revokeFailed': 'Impossibile revocare la chiave. Controlla la connessione e riprova.',
 
-  'keyDetail.criticalNotPermitted':
-    'Gli avvisi critici sono disattivati per notifi nelle impostazioni di sistema. Continueranno a ' +
-    'superare Focus, ma non suoneranno in modalità silenziosa.',
   'keyDetail.criticalChangeFailed':
     'Impossibile modificare gli avvisi critici per questa chiave. Controlla la connessione e riprova.',
 
@@ -230,8 +221,6 @@ export const it: Translation = {
 
   'createKey.validationEmpty': 'Inserisci un nome per questa chiave.',
   'createKey.validationTooLong': 'Usa 64 caratteri o meno.',
-  'createKey.validationReserved': 'Scegli un altro nome. “device” è la chiave del tuo dispositivo.',
-  'createKey.validationTaken': 'Scegli un altro nome. Una delle tue chiavi attive lo usa già.',
   'createKey.createFailed': 'Impossibile creare la chiave. Controlla la connessione e riprova.',
 
   'createKey.revealTitle': 'Copia subito la tua chiave',
@@ -363,7 +352,7 @@ export const it: Translation = {
   'clientErrors.rateLimited': 'Troppe richieste in questo momento. Riprova tra un momento.',
   'clientErrors.server': 'Il server sta avendo problemi. Riprova tra un momento.',
   'clientErrors.generic': 'La richiesta non è andata a buon fine. Riprova.',
-  'clientErrors.transport': 'Impossibile raggiungere il server. Controlla la connessione e riprova.',
+  'clientErrors.transport': 'Impossibile raggiungere i server notifi. Controlla la connessione e riprova.',
   'clientErrors.decoding': 'Il server ha restituito qualcosa di inatteso. Riprova tra un momento.',
 
   'store.name': 'notifi: notifiche push',
