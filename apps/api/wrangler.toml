@@ -90,6 +90,13 @@ head_sampling_rate = 1
 binding = "SEND_EVENTS"
 dataset = "notifi_sends"
 
+# One data point per collection that removed something: the device and how
+# many notifications it took. Counted from the rows the DELETE removed, not
+# from acked_id, which a stale client cursor could once inflate.
+[[analytics_engine_datasets]]
+binding = "COLLECT_EVENTS"
+dataset = "notifi_collects"
+
 [[unsafe.bindings]]
 name = "SEND_IP_LIMIT"
 type = "ratelimit"

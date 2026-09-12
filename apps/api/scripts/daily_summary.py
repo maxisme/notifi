@@ -226,9 +226,22 @@ def compose_notification():
             "failed": int(row.get("failed") or 0),
         }
 
+    def collected_since(days):
+        row = query_send_events(
+            "SELECT SUM(_sample_interval * double1) AS collected,"
+            " COUNT(DISTINCT index1) AS collectors"
+            f" FROM notifi_collects WHERE timestamp >= NOW() - INTERVAL '{days}' DAY"
+        )
+        return {
+            "collected": int(row.get("collected") or 0),
+            "collectors": int(row.get("collectors") or 0),
+        }
+
     day = sends_since(1)
     week = sends_since(7)
     prior = sends_since(14, 7)
+    day_collected = collected_since(1)
+    week_collected = collected_since(7)
     oldest = query_send_events("SELECT MIN(timestamp) AS oldest FROM notifi_sends").get("oldest")
     history = {
         "oldest": int(datetime.fromisoformat(oldest).replace(tzinfo=timezone.utc).timestamp())
@@ -284,12 +297,14 @@ def compose_notification():
         "**Yesterday**",
         f"- Sends **{day['sends']}** from {senders(day['senders'])}"
         + (f" · **{day['failed']}** failed to push" if day["failed"] else ""),
+        f"- Collected **{day_collected['collected']}** by {senders(day_collected['collectors'])}",
         downloads_line,
         f"- Devices **+{devices['day']}**",
         f"- Site **{humans_yday}** measured humans · {site_yday_u} IPs · {site_yday_v} loads",
         "",
         "**This week**",
         sends_week,
+        f"- Collected **{week_collected['collected']}** by {senders(week_collected['collectors'])}",
         f"- Downloads **{downloads_week}** · {split(week_platforms)}"
         f" ({week_on_week(downloads_week, downloads_prior)} vs prior 7d)",
         f"- Site **{humans_wk}** measured humans ({week_on_week(humans_wk, humans_prior)} vs prior 7d)"

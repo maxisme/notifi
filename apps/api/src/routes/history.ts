@@ -22,7 +22,7 @@ history.get('/history', async (c) => {
   const limit = parsed.data.limit ?? 50;
 
   if (ack > 0 && ack <= device.seq_counter) {
-    await c.env.DB.batch([
+    const [, deleted] = await c.env.DB.batch([
       c.env.DB.prepare(
         'UPDATE devices SET acked_id = MAX(acked_id, ?), last_seen_at = ? WHERE id = ?',
       ).bind(ack, nowS, device.id),
@@ -31,6 +31,13 @@ history.get('/history', async (c) => {
         ack,
       ),
     ]);
+    const collected = deleted?.meta.changes ?? 0;
+    if (collected > 0) {
+      c.env.COLLECT_EVENTS.writeDataPoint({
+        indexes: [String(device.id)],
+        doubles: [collected],
+      });
+    }
   }
 
   const rows = await c.env.DB.prepare(

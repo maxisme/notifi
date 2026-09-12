@@ -15,6 +15,7 @@ export interface Env {
   APNS_TOKEN: DurableObjectNamespace<ApnsToken>;
   SEND_IP_LIMIT: RateLimitBinding;
   SEND_EVENTS: AnalyticsEngineDataset;
+  COLLECT_EVENTS: AnalyticsEngineDataset;
   APNS_HOST: string;
   APNS_TOPIC: string;
   APNS_TEAM_ID: string;
