@@ -60,6 +60,8 @@ enum Theme {
 
     static let gutter: CGFloat = 20
 
+    static let readerMeasure: CGFloat = 640
+
     #if os(macOS)
     static let chromeRule: CGFloat = 3
     static let chromeRuleColor = fg
@@ -316,6 +318,45 @@ extension View {
 
 extension EnvironmentValues {
     @Entry var grainEnabled = true
+    @Entry var isReaderWindow = false
+    @Entry var contentMeasure: CGFloat? = nil
+}
+
+struct GeistMeasure: ViewModifier {
+    @Environment(\.contentMeasure) private var measure
+
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: measure ?? .infinity)
+            .frame(maxWidth: .infinity)
+    }
+}
+
+#if os(macOS)
+struct GeistBottomPlate: ViewModifier {
+    @Environment(\.isReaderWindow) private var isReader
+
+    func body(content: Content) -> some View {
+        content.contentMargins(.bottom, isReader ? Theme.gutter : Theme.bottomPlate, for: .scrollContent)
+    }
+}
+#endif
+
+extension View {
+    func geistMeasure() -> some View { modifier(GeistMeasure()) }
+
+    #if os(macOS)
+    func geistBottomPlate() -> some View { modifier(GeistBottomPlate()) }
+    #endif
+
+    func geistSurface(_ model: AppModel) -> some View {
+        tint(Theme.brand)
+            .font(.inco(.body))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(StaticField())
+            .environment(\.grainEnabled, model.grainEnabled)
+            .preferredColorScheme(model.appearance.colorScheme)
+    }
 }
 
 struct GrainGlyph: ViewModifier {

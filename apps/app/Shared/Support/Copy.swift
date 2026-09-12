@@ -71,6 +71,11 @@ enum Copy {
         static var deleteTitleFallback: String { NSLocalizedString("inbox.deleteTitleFallback", comment: "") }
         static var deleteMessage: String { NSLocalizedString("inbox.deleteMessage", comment: "") }
     }
+    enum Reader {
+        static var openInWindow: String { NSLocalizedString("reader.openInWindow", comment: "") }
+        static var selectPrompt: String { NSLocalizedString("reader.selectPrompt", comment: "") }
+        static func deleteSelectedTitle(_ count: String) -> String { String.localizedStringWithFormat(NSLocalizedString("reader.deleteSelectedTitle", comment: ""), count) }
+    }
     enum Search {
         static var prompt: String { NSLocalizedString("search.prompt", comment: "") }
         static func matches(_ n: Int) -> String { String.localizedStringWithFormat(NSLocalizedString("search.matches", comment: ""), n) }

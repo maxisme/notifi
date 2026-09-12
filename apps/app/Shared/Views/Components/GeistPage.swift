@@ -23,6 +23,7 @@ struct GeistPage<Header: View, Content: View>: View {
             header()
                 .geistPageHeader()
                 .geistGutter()
+                .geistMeasure()
                 .background(StaticField())
 
             scrollingContent
@@ -41,11 +42,12 @@ struct GeistPage<Header: View, Content: View>: View {
         case .page:
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) { content() }
+                    .geistMeasure()
             }
             .scrollContentBackground(.hidden)
             .contentMargins(.top, Theme.contentTop, for: .scrollContent)
             #if os(macOS)
-            .contentMargins(.bottom, Theme.bottomPlate, for: .scrollContent)
+            .geistBottomPlate()
             #endif
             .geistTopFade()
         }

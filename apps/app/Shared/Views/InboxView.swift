@@ -19,6 +19,8 @@ struct InboxView: View {
     @FocusState private var searchFocused: Bool
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
+    #else
+    @Environment(\.isReaderWindow) private var isReader
     #endif
 
     private var keys: [CachedKey] { model.sync?.keys ?? [] }
@@ -115,6 +117,16 @@ struct InboxView: View {
     }
 
     #if os(macOS)
+    private var openWindowButton: some View {
+        IconButton(systemImage: "arrow.up.left.and.arrow.down.right",
+                   label: Copy.Reader.openInWindow,
+                   glass: true) {
+            macMenuBar.showReader()
+        }
+    }
+
+    private var searchShown: Bool { !messages.isEmpty && showingSearch }
+
     private var searchToggle: some View {
         IconButton(systemImage: showingSearch ? "xmark" : "magnifyingglass",
                    label: showingSearch ? Copy.Inbox.closeSearch : Copy.Common.search,
@@ -138,7 +150,7 @@ struct InboxView: View {
 
     private var hasHeaderControls: Bool {
         #if os(macOS)
-        !messages.isEmpty && showingSearch
+        searchShown
         #else
         false
         #endif
@@ -149,15 +161,18 @@ struct InboxView: View {
             FeedHeader(title: activeKeyName ?? Copy.Inbox.title,
                        filterKeyID: $filterKeyID) {
                 #if os(macOS)
+                if isReader { ReaderSwitch() }
                 if !messages.isEmpty { searchToggle }
+                if !isReader { openWindowButton }
                 #endif
             }
             .padding(.bottom, hasHeaderControls ? 14 : 0)
 
             #if os(macOS)
-            if !messages.isEmpty, showingSearch {
+            if searchShown {
                 SearchField(text: $searchText, focused: $searchFocused)
                     .onExitCommand { closeSearch() }
+                    .padding(.bottom, 10)
             }
             #endif
         }

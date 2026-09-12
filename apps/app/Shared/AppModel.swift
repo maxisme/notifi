@@ -45,6 +45,14 @@ enum AppRoute: Hashable {
     case settings
 }
 
+#if os(macOS)
+enum ReaderPane: Hashable {
+    case inbox
+    case keys
+    case settings
+}
+#endif
+
 enum AppTab: Hashable {
     case inbox
     case keys
@@ -106,6 +114,22 @@ final class AppModel {
     }
     private(set) var keysAllowingAnyLink: Set<Int>
     var presentingCreateKey = false
+    #if os(macOS)
+    var readerSelection: Int?
+    var readerSelected: Set<Int> = []
+    var readerCursor: Int?
+    var readerConfirmingDelete = false
+    var readerPane: ReaderPane = .inbox
+    var readerKeysPath: [CachedKey] = []
+    var readerPresentingCreateKey = false
+
+    func readerSelect(_ serverID: Int) {
+        readerPane = .inbox
+        readerSelection = serverID
+        readerCursor = serverID
+        readerSelected = [serverID]
+    }
+    #endif
 
     private(set) var identity: DeviceIdentity?
     private(set) var api: APIClient?
@@ -421,9 +445,38 @@ final class AppModel {
             path.append(serverID)
             sync?.reconcileNotifications()
             #if os(macOS)
+            readerSelect(serverID)
             NotificationCenter.default.post(name: .notifiOpenPanel, object: nil)
             #endif
         }
+    }
+
+    func markRead(serverIDs: Set<Int>) {
+        guard let context else { return }
+        let ids = Array(serverIDs)
+        let descriptor = FetchDescriptor<Message>(predicate: #Predicate { ids.contains($0.serverID) })
+        guard let messages = try? context.fetch(descriptor) else { return }
+        for message in messages where !message.isRead { message.isRead = true }
+        do {
+            try context.save()
+        } catch {
+            log.error("mark read failed: \(String(describing: error), privacy: .private)")
+        }
+        sync?.reconcileNotifications()
+    }
+
+    func delete(serverIDs: Set<Int>) {
+        guard let context else { return }
+        let ids = Array(serverIDs)
+        let descriptor = FetchDescriptor<Message>(predicate: #Predicate { ids.contains($0.serverID) })
+        guard let messages = try? context.fetch(descriptor) else { return }
+        for message in messages { context.delete(message) }
+        do {
+            try context.save()
+        } catch {
+            log.error("delete failed: \(String(describing: error), privacy: .private)")
+        }
+        sync?.reconcileNotifications()
     }
 
     func markRead(serverID: Int) {

@@ -161,6 +161,12 @@ export const copy = {
     deleteMessage: 'This cannot be undone.',
   },
 
+  reader: {
+    openInWindow: 'Open in window',
+    selectPrompt: 'Select a notification',
+    deleteSelectedTitle: 'Delete {count}?',
+  },
+
   search: {
     prompt: 'Search inbox',
     matches: plural('1 match', '{n} matches'),

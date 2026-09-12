@@ -6,6 +6,9 @@ struct FeedHeader<Trailing: View, Accessory: View>: View {
     @Environment(AppModel.self) private var model
     @Environment(\.modelContext) private var context
     @Query(sort: \Message.createdAt, order: .reverse) private var messages: [Message]
+    #if os(macOS)
+    @Environment(\.isReaderWindow) private var isReader
+    #endif
 
     var title: String = Copy.Inbox.title
     var subtitle: Text? = nil
@@ -70,10 +73,16 @@ struct FeedHeader<Trailing: View, Accessory: View>: View {
 
             #if os(macOS)
             Divider()
+            if !isReader {
+                Button(Copy.Reader.openInWindow) { macMenuBar.showReader() }
+                    .keyboardShortcut("o", modifiers: [.command, .shift])
+            }
             Button(Copy.Inbox.refresh) { Task { await model.refresh() } }
                 .keyboardShortcut("r", modifiers: .command)
-            Button(Copy.Common.quit) { NSApplication.shared.terminate(nil) }
-                .keyboardShortcut("q", modifiers: .command)
+            if !isReader {
+                Button(Copy.Common.quit) { NSApplication.shared.terminate(nil) }
+                    .keyboardShortcut("q", modifiers: .command)
+            }
             #endif
 
             #if DEBUG

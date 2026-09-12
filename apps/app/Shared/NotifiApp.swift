@@ -96,12 +96,7 @@ struct RootContentView: View {
                 InboxRootView()
             }
         }
-        .tint(Theme.brand)
-        .font(.inco(.body))
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(StaticField())
-        .environment(\.grainEnabled, model.grainEnabled)
-        .preferredColorScheme(model.appearance.colorScheme)
+        .geistSurface(model)
         #if os(macOS)
         .overlay {
             if model.presentingCreateKey {

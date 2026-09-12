@@ -18,6 +18,8 @@ struct MessageDetailView: View {
     @Environment(\.dismiss) private var dismiss
     #if os(iOS)
     @Environment(\.requestReview) private var requestReview
+    #else
+    @Environment(\.isReaderWindow) private var isReader
     #endif
     @Query private var messages: [Message]
     private let log = Logger(subsystem: "it.notifi.app", category: "store")
@@ -97,6 +99,7 @@ struct MessageDetailView: View {
             if let message {
                 content(for: message)
                     .geistGutter()
+                    .geistMeasure()
             } else {
                 VStack(spacing: 10) {
                     Text(Copy.Message.notFound)
@@ -113,7 +116,7 @@ struct MessageDetailView: View {
         .scrollContentBackground(.hidden)
         .contentMargins(.top, Theme.contentTop, for: .scrollContent)
         #if os(macOS)
-        .contentMargins(.bottom, Theme.bottomPlate, for: .scrollContent)
+        .geistBottomPlate()
         #endif
         .geistTopFade()
     }
@@ -123,12 +126,12 @@ struct MessageDetailView: View {
         context.delete(message)
         try? context.save()
         model.sync?.reconcileNotifications()
-        if !model.path.isEmpty { model.path.removeLast() } else { dismiss() }
+        goBack()
     }
 
     private var backBar: some View {
         HStack(spacing: 7) {
-            backButton
+            if !isReaderSurface { backButton }
 
             Spacer(minLength: 8)
 
@@ -152,7 +155,7 @@ struct MessageDetailView: View {
                     }
 
                     IconButton(systemName: "trash", label: Copy.Common.delete) {
-                        confirmingDelete = true
+                        requestDelete()
                     }
 
                     MenuButton(systemName: "ellipsis", label: Copy.Common.moreActions) {
@@ -166,8 +169,43 @@ struct MessageDetailView: View {
         .background(StaticField())
     }
 
+    private var isReaderSurface: Bool {
+        #if os(macOS)
+        isReader
+        #else
+        false
+        #endif
+    }
+
+    private func requestDelete() {
+        #if os(macOS)
+        if isReader, model.readerSelected.count > 1 {
+            model.readerConfirmingDelete = true
+            return
+        }
+        #endif
+        confirmingDelete = true
+    }
+
     private func goBack() {
+        #if os(macOS)
+        if isReader {
+            model.readerSelection = nil
+            return
+        }
+        #endif
         if !model.path.isEmpty { model.path.removeLast() } else { dismiss() }
+    }
+
+    private func openKey(_ key: CachedKey) {
+        #if os(macOS)
+        if isReader {
+            model.readerKeysPath = [key]
+            model.readerPane = .keys
+            return
+        }
+        #endif
+        model.path.append(key)
     }
 
     private var backButton: some View {
@@ -317,7 +355,7 @@ struct MessageDetailView: View {
     private func tappableKey<Label: View>(_ message: Message,
                                           @ViewBuilder label: () -> Label) -> some View {
         if let key = key(for: message), let name = keyName(for: message) {
-            Button { model.path.append(key) } label: { label() }
+            Button { openKey(key) } label: { label() }
                 .buttonStyle(.geist)
                 .accessibilityLabel(Copy.Message.openKey(name))
         } else if let name = keyName(for: message) {

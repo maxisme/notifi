@@ -6,6 +6,9 @@ struct KeysView: View {
     @State private var showingCreate = false
     #endif
     @State private var hasLoaded = false
+    #if os(macOS)
+    @Environment(\.isReaderWindow) private var isReader
+    #endif
 
     private var keys: [CachedKey] { model.sync?.keys ?? [] }
     private var activeKeys: [CachedKey] { keys.filter { !$0.isRevoked } }
@@ -31,7 +34,11 @@ struct KeysView: View {
                     #if os(iOS)
                     showingCreate = true
                     #else
-                    model.presentingCreateKey = true
+                    if isReader {
+                        model.readerPresentingCreateKey = true
+                    } else {
+                        model.presentingCreateKey = true
+                    }
                     #endif
                 }
             }

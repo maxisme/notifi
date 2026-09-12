@@ -10,6 +10,7 @@ final class MenuBarController: NSObject {
     private var animator: BellAnimator?
     private var model: AppModel?
     private var container: ModelContainer?
+    private let reader = ReaderWindowController()
 
     private let panelSize = NSSize(width: 460, height: 700)
 
@@ -30,6 +31,7 @@ final class MenuBarController: NSObject {
     func configure(model: AppModel, container: ModelContainer) {
         self.model = model
         self.container = container
+        reader.configure(model: model, container: container)
 
         popover.behavior = ProcessInfo.processInfo.environment["NOTIFI_STICKY"] == nil
             ? .transient
@@ -52,6 +54,7 @@ final class MenuBarController: NSObject {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         item.button?.target = self
         item.button?.action = #selector(togglePanel(_:))
+        item.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         statusItem = item
 
         NotificationCenter.default.addObserver(
@@ -72,6 +75,26 @@ final class MenuBarController: NSObject {
         )
 
         render(angle: 0)
+
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["NOTIFI_OPEN_READER"] == "1" {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in self?.showReader() }
+        }
+        #endif
+    }
+
+    func showReader() {
+        if popover.isShown { popover.performClose(nil) }
+        reader.show()
+    }
+
+    func closeReaderForQuitShortcut() -> Bool {
+        guard reader.isKey, let event = NSApp.currentEvent, event.type == .keyDown,
+              event.modifierFlags.contains(.command),
+              event.charactersIgnoringModifiers?.lowercased() == "q"
+        else { return false }
+        reader.close()
+        return true
     }
 
     private var hasUnread: Bool { model?.hasUnread ?? false }
@@ -111,11 +134,24 @@ final class MenuBarController: NSObject {
     }
 
     @objc private func openPanel() {
+        if reader.isVisible {
+            reader.show()
+            return
+        }
         guard !popover.isShown, let button = statusItem?.button else { return }
         present(from: button)
     }
 
     @objc private func togglePanel(_ sender: Any?) {
+        if let event = NSApp.currentEvent,
+           event.type == .rightMouseUp || event.modifierFlags.contains(.option) {
+            showReader()
+            return
+        }
+        if reader.isOnScreen {
+            if !reader.isInFront { reader.show() }
+            return
+        }
         if popover.isShown {
             popover.performClose(sender)
             return
