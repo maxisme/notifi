@@ -58,7 +58,7 @@ const QUICKSTART = `curl -X POST ${ORIGIN}${ENDPOINT} \\
 const WARNINGS_RESPONSE = `HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
 
-{"ok":true,"warnings":["Sent with a shortened title, because it was over ${TITLE_MAX} characters.","Sent as a normal notification, because urgent alerts are switched off for this key."]}`;
+{"ok":true,"warnings":["Title shortened to ${TITLE_MAX} characters."]}`;
 
 const RAW_REQUEST = `POST /send HTTP/1.1
 Host: notifi.it
@@ -292,9 +292,8 @@ ${parameterRows()}
 ${terminalGroup('r-', 'Responses', RESPONSES)}
     <p>
       A <code>warnings</code> array is present only when the notification was delivered
-      differently from what was asked: a cropped title or body, or an urgent
-      notification delivered as an ordinary one. The status is still <code>202</code>; the
-      notification was sent, in the altered form each warning describes.
+      differently from what was asked: a cropped title or body. The status is still
+      <code>202</code>; the notification was sent, in the altered form each warning describes.
     </p>
 ${pre(WARNINGS_RESPONSE, 'http')}
 
@@ -318,8 +317,7 @@ ${figure(
       Focus and stays on the lock screen, but only if the key it was sent with has
       <strong>Urgent alerts</strong> switched on,
       on that device, in that key's screen under the Keys tab. Without it the notification is
-      delivered as an ordinary one and the response carries a warning saying so. Only the
-      person holding the device can switch it on.
+      delivered as an ordinary one. Only the person holding the device can switch it on.
     </p>
 ${figure(
   '/shots/key-urgent-alerts.png',

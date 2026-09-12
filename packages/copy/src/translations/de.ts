@@ -26,8 +26,6 @@ export const de: Translation = {
   'api.invalidHistoryQuery': 'Ungültige Verlaufsabfrage.',
   'api.invalidSendParams': 'Ungültige Sendeparameter.',
   'api.occurredAtTooFuture': 'occurred_at liegt zu weit in der Zukunft.',
-  'api.criticalNotAllowed':
-    'Als normale Benachrichtigung gesendet: Kritische Benachrichtigungen sind für diesen Schlüssel deaktiviert.',
   'api.titleCropped': 'Mit gekürztem Titel gesendet: Er war länger als {max} Zeichen.',
   'api.messageCropped': 'Mit gekürzter Benachrichtigung gesendet: Sie war länger als {max} Zeichen.',
   'api.strictContentRejected':

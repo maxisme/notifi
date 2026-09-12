@@ -1,14 +1,14 @@
-Push notifications for your scripts, servers, apps or anything that can make an HTTP request.
+Push notifications from anything that can make an HTTP request.
 
-Send notifi.it a title, plus a body, image or link if you want them along with your unique key. It’s on your iPhone or Mac.
+Send notifi.it a title, and optionally a body, image or link, and it appears on your iPhone, iPad or Mac immediately.
 
 https://notifi.it/send?title=hello+world
 
 Encrypted.
-Your device holds the only private key. Notification content is encrypted with your public key at ingest, so we cannot read your notifications. Each one is deleted from the server once your device acknowledges it.
+Your device holds the only private key. Notifications are encrypted with your public key, so we cannot read them, and deleted from the server once your device has them.
 
 No accounts.
-No sign-up, no sign-in, no device linking. The app mints a send key on first launch. Keys can be renamed, paused and revoked per source.
+The app makes a send key on first launch. Keys can be renamed and revoked per source.
 
 Urgent alerts.
-Mark a key as urgent and its notifications break through Focus and stay on the lock screen.
+Mark a key as urgent and its notifications break through Focus.

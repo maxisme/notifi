@@ -12,7 +12,7 @@ export const copy = {
     rateLimitedIP: 'Too many requests from this IP.',
     rateLimitedAccount: 'Rate limit exceeded. Too many notifications this hour.',
     uncollectedLimit:
-      'Not sent. This device has too many uncollected notifications. New ones are accepted once the app has opened them.',
+      'Not sent. Too many uncollected notifications. Open the app to collect them.',
 
     badSignature: 'Invalid request signature.',
     staleTimestamp: 'Request timestamp is outside the allowed window.',
@@ -31,8 +31,6 @@ export const copy = {
     invalidHistoryQuery: 'Invalid history query.',
     invalidSendParams: 'Invalid send parameters.',
     occurredAtTooFuture: 'occurred_at is too far in the future.',
-    criticalNotAllowed:
-      'Sent as a normal notification, because urgent alerts are switched off for this key.',
     titleCropped:
       'Title shortened to {max} characters.',
     messageCropped:
@@ -46,25 +44,25 @@ export const copy = {
     name: 'notifi: Push Notifications',
     subtitle: 'For scripts and servers',
     promotionalText:
-      'Send an HTTP request, and the notification is on your iPhone or Mac. Encrypted with your public key, so we can’t read your notifications. No accounts.',
+      'One HTTP request and it’s on your iPhone or Mac. Encrypted with your public key, so we can’t read it. No accounts.',
     keywords:
       'webhook,api,notify,alerts,self,hosted,cron,curl,cli,devops,homelab,ssh,docker,' +
       'terminal,developer',
     description:
-      'Push notifications for your scripts, servers, apps or anything that can make an HTTP request.\n' +
+      'Push notifications from anything that can make an HTTP request.\n' +
       '\n' +
-      'Send notifi.it a title, plus a body, image or link if you want them along with your unique key. It’s on your iPhone or Mac.\n' +
+      'Send notifi.it a title, and optionally a body, image or link, and it appears on your iPhone, iPad or Mac immediately.\n' +
       '\n' +
       'https://notifi.it/send?title=hello+world\n' +
       '\n' +
       'Encrypted.\n' +
-      'Your device holds the only private key. Notification content is encrypted with your public key at ingest, so we cannot read your notifications. Each one is deleted from the server once your device acknowledges it.\n' +
+      'Your device holds the only private key. Notifications are encrypted with your public key, so we cannot read them, and deleted from the server once your device has them.\n' +
       '\n' +
       'No accounts.\n' +
-      'No sign-up, no sign-in, no device linking. The app mints a send key on first launch. Keys can be renamed, paused and revoked per source.\n' +
+      'The app makes a send key on first launch. Keys can be renamed and revoked per source.\n' +
       '\n' +
       'Urgent alerts.\n' +
-      'Mark a key as urgent and its notifications break through Focus and stay on the lock screen.\n' +
+      'Mark a key as urgent and its notifications break through Focus.\n' +
       '',
     releaseNotes: 'Bug fixes and performance improvements.\n',
 
@@ -73,14 +71,13 @@ export const copy = {
       'One HTTP request.\n' +
       'Straight to your devices.',
     shotInboxBody:
-      'Push notifications for your scripts and servers. One HTTP request to notifi.it from anywhere and it arrives on your device a moment later.',
+      'One HTTP request to notifi.it from anywhere. It’s on your device a moment later.',
     shotMessageTitle: 'Images, links,\nMarkdown.',
     shotMessageBody:
-      'A title, a body, an image and a link. Headings, lists, quotes and code blocks are ' +
-      'rendered on the device. Encrypted with your public key, so we cannot read your notifications.',
+      'Title, body, image, link. The body is Markdown, rendered on your device.',
     shotKeysTitle: 'One key\nper source.',
     shotKeysBody:
-      'Give the deploy bot one key and the doorbell another. Revoke one and the rest keep working.',
+      'One key for the deploy bot, another for the doorbell. Revoke one, the rest keep working.',
   },
 
   push: {

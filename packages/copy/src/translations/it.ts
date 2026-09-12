@@ -26,8 +26,6 @@ export const it: Translation = {
   'api.invalidHistoryQuery': 'Query della cronologia non valida.',
   'api.invalidSendParams': 'Parametri di invio non validi.',
   'api.occurredAtTooFuture': 'occurred_at è troppo lontano nel futuro.',
-  'api.criticalNotAllowed':
-    'Inviata come notifica normale: gli avvisi critici sono disattivati per questa chiave.',
   'api.titleCropped': 'Inviata con un titolo abbreviato: superava {max} caratteri.',
   'api.messageCropped': 'Inviata con una notifica abbreviata: superava {max} caratteri.',
   'api.strictContentRejected':

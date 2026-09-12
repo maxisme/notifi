@@ -26,8 +26,6 @@ export const fr: Translation = {
   'api.invalidHistoryQuery': "Requête d’historique invalide.",
   'api.invalidSendParams': "Paramètres d’envoi invalides.",
   'api.occurredAtTooFuture': 'occurred_at est trop loin dans le futur.',
-  'api.criticalNotAllowed':
-    'Envoyée comme notification normale : les alertes critiques sont désactivées pour cette clé.',
   'api.titleCropped': 'Envoyé avec un titre raccourci : il dépassait {max} caractères.',
   'api.messageCropped': 'Envoyé avec une notification raccourcie : elle dépassait {max} caractères.',
   'api.strictContentRejected':

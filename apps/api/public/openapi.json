@@ -318,7 +318,7 @@
           },
           "is_critical": {
             "type": "boolean",
-            "description": "Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array."
+            "description": "Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered."
           }
         },
         "additionalProperties": false
@@ -338,7 +338,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Present only when the notification was delivered differently from what was asked: a cropped title or body, or an urgent notification delivered as an ordinary one."
+            "description": "Present only when the notification was delivered differently from what was asked: a cropped title or body."
           }
         }
       },
@@ -395,7 +395,7 @@
                 "value": {
                   "ok": true,
                   "warnings": [
-                    "Sent as a normal notification, because urgent alerts are switched off for this key."
+                    "Title shortened to 200 characters."
                   ]
                 }
               }

@@ -598,7 +598,7 @@ Accept-Language: en-GB
             <td>boolean</td>
             <td>optional</td>
             <td>—</td>
-            <td>Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered and the response carries a warnings array.</td>
+            <td>Breaks through Focus. The key must also have urgent alerts switched on in the app, or an ordinary notification is delivered.</td>
           </tr>
         </tbody>
       </table>
@@ -667,14 +667,13 @@ Content-Type<span class="f">:</span> <span class="s">application/json; charset=u
     </div>
     <p>
       A <code>warnings</code> array is present only when the notification was delivered
-      differently from what was asked: a cropped title or body, or an urgent
-      notification delivered as an ordinary one. The status is still <code>202</code>; the
-      notification was sent, in the altered form each warning describes.
+      differently from what was asked: a cropped title or body. The status is still
+      <code>202</code>; the notification was sent, in the altered form each warning describes.
     </p>
 <pre data-lang="http">HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
 
-{&quot;ok&quot;:true,&quot;warnings&quot;:[&quot;Sent with a shortened title, because it was over 200 characters.&quot;,&quot;Sent as a normal notification, because urgent alerts are switched off for this key.&quot;]}</pre>
+{&quot;ok&quot;:true,&quot;warnings&quot;:[&quot;Title shortened to 200 characters.&quot;]}</pre>
 
     <h3>Over-length text is cropped</h3>
     <p>
@@ -695,8 +694,7 @@ Content-Type: application/json; charset=utf-8
       Focus and stays on the lock screen, but only if the key it was sent with has
       <strong>Urgent alerts</strong> switched on,
       on that device, in that key's screen under the Keys tab. Without it the notification is
-      delivered as an ordinary one and the response carries a warning saying so. Only the
-      person holding the device can switch it on.
+      delivered as an ordinary one. Only the person holding the device can switch it on.
     </p>
     <figure>
       <img src="/shots/key-urgent-alerts.png" width="603" height="744" alt="A key's screen in the app, showing the Urgent alerts switch turned on.">
