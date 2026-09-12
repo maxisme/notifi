@@ -2,7 +2,7 @@
 path: /faq
 eyebrow: FAQ
 title: notifi: frequently asked questions
-description: Answers about notifi: what it costs, what the rate limits are, what the server can read, which platforms it runs on, and what happens when you delete the app.
+description: Answers about notifi: what it costs, what the rate limits are, what our server can read, which platforms it runs on, and what happens when you delete the app.
 ogTitle: notifi: frequently asked questions
 ogDescription: What it costs, what the limits are, what the server can read, and what it does not promise.
 ---
