@@ -12,10 +12,7 @@ skill is the procedure for pushing the current truth back out.
 
 | Asset | File |
 |---|---|
-| One-liner (short description everywhere) | `docs/socials/one-liner.txt` |
-| Twitter/X bio | `docs/socials/twitter.txt` |
-| Instagram bio | `docs/socials/instagram.txt` |
-| Facebook short + about | `docs/socials/facebook-short.txt`, `facebook-about.txt` |
+| Every bio (one-liner, X, Instagram, Facebook short + about) | `socials` in `packages/copy/src/strings.ts`; `make gen-copy` writes `docs/socials/*.txt`, never edit those by hand |
 | Avatar / profile picture | `docs/socials/images/profile.png` |
 | X banner | `docs/socials/images/x-banner.png` |
 | Facebook cover | `docs/socials/images/facebook-cover.png` |

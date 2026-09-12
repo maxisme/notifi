@@ -10,6 +10,17 @@
     "bannerTitle": "Hello from notifi",
     "bannerBody": "Your first notification."
   },
+  "en-US": {
+    "inboxTitle": "One request.\nStraight to your pocket.",
+    "inboxTitleIpad": "One HTTP request.\nStraight to your devices.",
+    "inboxBody": "One HTTP request to notifi.it from anywhere. It’s on your device a moment later.",
+    "messageTitle": "Images, links,\nMarkdown.",
+    "messageBody": "Title, body, image, link. The body is Markdown, rendered on your device.",
+    "keysTitle": "One key\nper source.",
+    "keysBody": "One key for the deploy bot, another for the doorbell. Revoke one, the rest keep working.",
+    "bannerTitle": "Hello from notifi",
+    "bannerBody": "Your first notification."
+  },
   "es-ES": {
     "inboxTitle": "Una solicitud.\nDirecto a tu bolsillo.",
     "inboxTitleIpad": "Una solicitud.\nDirecto a tus dispositivos.",

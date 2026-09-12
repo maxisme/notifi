@@ -2,7 +2,7 @@
   <img src="apps/api/public/anaglyph-bell.png" alt="notifi" width="140">
 </p>
 
-<p align="center"><b>Push notifications for your scripts, servers and side projects.</b></p>
+<p align="center"><b>Push notifications for scripts, servers, apps and devices.</b></p>
 
 One HTTP request to `notifi.it` and it’s on your iPhone or Mac.
 

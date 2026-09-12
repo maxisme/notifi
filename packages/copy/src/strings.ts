@@ -4,6 +4,22 @@ function plural(one: string, other: string): Plural {
   return { one, other };
 }
 
+export const tagline = 'Push notifications for scripts, servers, apps and devices';
+
+export const socials = {
+  claims: [
+    tagline,
+    'One HTTP request to your iPhone or Mac',
+    'Free, no signup',
+    'Neither we nor Apple can read them',
+  ],
+  facebookAbout:
+    'Push notifications to your iPhone or Mac from anything that can make an HTTP request. ' +
+    'Encrypted with your public key, so neither we nor Apple can read them, and deleted from ' +
+    'the server once delivered. No account. Free and open source, on the App Store for iOS 17+ ' +
+    'and macOS 14+.',
+};
+
 export const copy = {
   api: {
     notFound: 'Not found.',
@@ -42,7 +58,7 @@ export const copy = {
 
   store: {
     name: 'notifi: Push Notifications',
-    subtitle: 'For scripts and servers',
+    subtitle: 'For scripts, servers and apps',
     promotionalText:
       'One HTTP request and it’s on your iPhone or Mac. Encrypted with your public key, so we can’t read it. No accounts.',
     keywords:

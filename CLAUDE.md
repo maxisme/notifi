@@ -35,6 +35,10 @@ plurals are `plural(one, other)` and a plural leaf may contain **nothing but
 `{n}`** — anything mixing a count with text composes an already-rendered count
 (`inbox.bandLabel` takes `inbox.count`'s output).
 
+The social bios in `docs/socials/*.txt` are generated too, from `socials` in
+`strings.ts`: one list of claims, written as lines for Instagram and as
+sentences everywhere else. The generator fails a bio over its platform limit.
+
 Deliberately not in the app catalog: the `api` namespace (server responses are
 shown as-is), the push fallback title (sent in the source language — the
 sender's `Accept-Language` says nothing about the recipient), and the website

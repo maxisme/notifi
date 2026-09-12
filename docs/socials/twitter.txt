@@ -1,1 +1,1 @@
-Push notifications for scripts and servers. One HTTP request straight to your iPhone or Mac. Free, no signup. Neither we nor Apple can read them.
+Push notifications for scripts, servers, apps and devices. One HTTP request to your iPhone or Mac. Free, no signup. Neither we nor Apple can read them.

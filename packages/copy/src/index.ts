@@ -1,9 +1,9 @@
 import { LANGUAGE_CODES, negotiate, SOURCE_LANGUAGE, type LanguageCode } from './languages.js';
-import { copy, type Strings } from './strings.js';
+import { copy, socials, tagline, type Strings } from './strings.js';
 import { translations } from './translations/index.js';
 import { isPlural, type Leaf, type Tree } from './types.js';
 
-export { copy, LANGUAGE_CODES, negotiate, SOURCE_LANGUAGE };
+export { copy, LANGUAGE_CODES, negotiate, socials, SOURCE_LANGUAGE, tagline };
 export type { LanguageCode, Strings };
 export type { Leaf, Plural, Translation, Tree } from './types.js';
 
