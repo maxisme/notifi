@@ -77,7 +77,7 @@ SANS = dehinted("Karla")
 
 GUTTER = 96
 TOP = 220
-# Fixed, not text-relative: the three frames sit side by side on the listing,
+# Fixed, not text-relative: the frames sit side by side on the listing,
 # and a device that starts at a different height on each reads as a mistake.
 # The whole device is on the page now, so its height and the gap below it are
 # what fix it in place — a bleed only had to name where it started.
@@ -237,7 +237,7 @@ def frame(shot_name, title, desc, out_name, with_banner=False):
         y += round(DESC_SIZE * 1.48)
 
     # A caption that runs into the device is the one failure this layout can
-    # produce silently: the device sits at a fixed height so the three frames
+    # produce silently: the device sits at a fixed height so the frames
     # line up, and a longer translation just keeps going.
     ceiling = DEVICE_TOP + (BANNER_BLOCK - BANNER_GAP if with_banner else 0)
     if y > ceiling - 40:
@@ -293,7 +293,6 @@ def frame(shot_name, title, desc, out_name, with_banner=False):
 INBOX_TITLE = CAPTIONS["inboxTitleIpad"] if os.environ.get("IPAD") else CAPTIONS["inboxTitle"]
 frame("inbox.png", INBOX_TITLE, CAPTIONS["inboxBody"], "01_inbox.png", True)
 frame("detail.png", CAPTIONS["messageTitle"], CAPTIONS["messageBody"], "02_message.png")
-frame("keys.png", CAPTIONS["keysTitle"], CAPTIONS["keysBody"], "03_keys.png")
 
 for tmp in (MONO, SANS):
     os.remove(tmp)
