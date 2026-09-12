@@ -10,6 +10,12 @@ typechecks on both sides and fails at runtime.
 
 ## Copy
 
+Less is more. Say it in as few words as possible, then cut again. A detail
+string is one sentence where one will do; a label is one or two words. Drop
+explanations of what the reader can already see, and drop the "Off, …" half
+of a toggle description unless the off state is surprising. Two strings that
+say the same thing are one string with one key.
+
 All user-facing strings live in `packages/copy/src/strings.ts`. Nothing else may
 hold a user-facing literal. `make gen-copy` generates
 `apps/app/Shared/Resources/Localizable.xcstrings` (keyed by dotted path, not
