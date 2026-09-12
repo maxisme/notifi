@@ -101,6 +101,10 @@ export const fr: Translation = {
   'inbox.deleteTitleFallback': 'Supprimer cette notification ?',
   'inbox.deleteMessage': 'Cette action est irréversible.',
 
+  'reader.openInWindow': 'Ouvrir dans une fenêtre',
+  'reader.selectPrompt': 'Sélectionnez une notification',
+  'reader.deleteSelectedTitle': 'Supprimer {count} ?',
+
   'search.prompt': 'Rechercher dans Inbox',
   'search.matches': { one: '1 résultat', other: '{n} résultats' },
   'search.recent': 'Récents',

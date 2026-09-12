@@ -13,6 +13,10 @@ struct MessageFeed<Empty: View>: View {
 
     @State private var now = Date()
     @State private var pendingDelete: Message?
+    #if os(macOS)
+    @Environment(\.isReaderWindow) private var isReader
+    @FocusState private var feedFocused: Bool
+    #endif
 
     private var clock: AnyPublisher<Date, Never> {
         Timer.publish(every: 30, tolerance: 5, on: .main, in: .common)
@@ -45,10 +49,97 @@ struct MessageFeed<Empty: View>: View {
     @ViewBuilder
     private var feed: some View {
         #if os(macOS)
-        ScrollView { LazyVStack(spacing: 0) { rows } }
+        ScrollViewReader { proxy in
+            ScrollView { LazyVStack(spacing: 0) { rows } }
+                .focusable(isReader)
+                .focusEffectDisabled()
+                .focused($feedFocused)
+                .onKeyPress(keys: [.downArrow]) { press in
+                    step(1, extending: press.modifiers.contains(.shift), proxy: proxy)
+                }
+                .onKeyPress(keys: [.upArrow]) { press in
+                    step(-1, extending: press.modifiers.contains(.shift), proxy: proxy)
+                }
+                .onKeyPress(keys: [.delete, KeyEquivalent("\u{8}")]) { press in
+                    press.modifiers.contains(.command) ? requestDelete() : .ignored
+                }
+        }
         #else
         List { rows }
         #endif
+    }
+
+    #if os(macOS)
+    private func step(_ delta: Int, extending: Bool, proxy: ScrollViewProxy) -> KeyPress.Result {
+        guard isReader, !messages.isEmpty else { return .ignored }
+        let from = extending ? model.readerCursor : model.readerSelection
+        let current = messages.firstIndex { $0.serverID == from }
+        let next = current.map { min(max($0 + delta, 0), messages.count - 1) } ?? 0
+        let target = messages[next].serverID
+        if extending, let anchor = model.readerSelection {
+            model.readerPane = .inbox
+            model.readerCursor = target
+            model.readerSelected = range(from: anchor, to: target)
+        } else {
+            model.readerSelect(target)
+        }
+        withAnimation(Theme.state) { proxy.scrollTo(target) }
+        return .handled
+    }
+
+    private func range(from anchor: Int, to cursor: Int) -> Set<Int> {
+        guard let a = messages.firstIndex(where: { $0.serverID == anchor }),
+              let b = messages.firstIndex(where: { $0.serverID == cursor }) else { return [cursor] }
+        return Set(messages[min(a, b)...max(a, b)].map(\.serverID))
+    }
+
+    private func requestDelete() -> KeyPress.Result {
+        guard isReader, model.readerPane == .inbox else { return .ignored }
+        if model.readerSelected.count > 1 {
+            model.readerConfirmingDelete = true
+        } else if let message = messages.first(where: { $0.serverID == model.readerSelection }) {
+            pendingDelete = message
+        } else {
+            return .ignored
+        }
+        return .handled
+    }
+
+    private func isSelected(_ message: Message) -> Bool {
+        isReader && model.readerPane == .inbox && model.readerSelected.contains(message.serverID)
+    }
+
+    private func isInBatch(_ message: Message) -> Bool {
+        isSelected(message) && model.readerSelected.count > 1
+    }
+    #endif
+
+    private func open(_ message: Message) {
+        #if os(macOS)
+        if isReader {
+            let flags = NSEvent.modifierFlags
+            let id = message.serverID
+            if flags.contains(.shift), let anchor = model.readerSelection {
+                model.readerPane = .inbox
+                model.readerCursor = id
+                model.readerSelected = range(from: anchor, to: id)
+            } else if flags.contains(.command), model.readerPane == .inbox {
+                var selected = model.readerSelected
+                if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
+                if selected.isEmpty { selected = [id] }
+                model.readerSelected = selected
+                model.readerCursor = id
+                if !selected.contains(model.readerSelection ?? -1) || selected.count == 1 {
+                    model.readerSelection = selected.count == 1 ? selected.first : id
+                }
+            } else {
+                model.readerSelect(id)
+            }
+            feedFocused = true
+            return
+        }
+        #endif
+        model.path.append(message.serverID)
     }
 
     var body: some View {
@@ -57,7 +148,7 @@ struct MessageFeed<Empty: View>: View {
         .environment(\.defaultMinListRowHeight, 0)
         .scrollContentBackground(.hidden)
         #if os(macOS)
-        .contentMargins(.bottom, Theme.bottomPlate, for: .scrollContent)
+        .geistBottomPlate()
         #endif
         .contentMargins(.top, Theme.listContentTop, for: .scrollContent)
         .geistTopFade()
@@ -89,13 +180,25 @@ struct MessageFeed<Empty: View>: View {
     @ViewBuilder
     private func row(for message: Message, showsRule: Bool) -> some View {
         Button {
-            model.path.append(message.serverID)
+            open(message)
         } label: {
             MessageRow(message: message, now: now,
                        showsRule: showsRule,
                        openLink: openAction(for: message))
                 .contentShape(Rectangle())
         }
+        #if os(macOS)
+        .background {
+            if isSelected(message) { StaticField(level: .raised, fillsScreen: false) }
+        }
+        .overlay(alignment: .leading) {
+            if isSelected(message) {
+                Rectangle().fill(Theme.brand).frame(width: Theme.chromeRule)
+                    .accessibilityHidden(true)
+            }
+        }
+        .id(message.serverID)
+        #endif
         .buttonStyle(.geistRow)
         .plainRow()
         #if os(iOS)
@@ -163,7 +266,15 @@ struct MessageFeed<Empty: View>: View {
             #endif
         }
         Divider()
+        #if os(macOS)
+        if isInBatch(message) {
+            Button(Copy.Common.delete, role: .destructive) { model.readerConfirmingDelete = true }
+        } else {
+            Button(Copy.Common.delete, role: .destructive) { pendingDelete = message }
+        }
+        #else
         Button(Copy.Common.delete, role: .destructive) { pendingDelete = message }
+        #endif
     }
 
     private func toggleRead(_ message: Message) {

@@ -44,6 +44,7 @@ struct CreateKeyView: View {
             }
             .geistGutter()
             .padding(.bottom, 40)
+            .geistMeasure()
         }
         .background(Theme.bg)
         .scrollContentBackground(.hidden)

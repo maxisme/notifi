@@ -182,12 +182,26 @@ struct IconButton: View {
     }
 }
 
+#if os(macOS)
+private struct GlassHover: ViewModifier {
+    let shape: AnyShape
+    @State private var hovering = false
+
+    func body(content: Content) -> some View {
+        content
+            .background(shape.fill(Theme.chip.opacity(hovering ? 1 : 0.6)))
+            .animation(Theme.press, value: hovering)
+            .onHover { hovering = $0 }
+    }
+}
+#endif
+
 extension View {
     @ViewBuilder
     func glassBackground(enabled: Bool = true, in shape: some Shape = Circle()) -> some View {
         if enabled {
             #if os(macOS)
-            background(shape.fill(Theme.chip.opacity(0.6)))
+            modifier(GlassHover(shape: AnyShape(shape)))
             #else
             if #available(iOS 26.0, *) {
                 glassEffect(.regular, in: shape)

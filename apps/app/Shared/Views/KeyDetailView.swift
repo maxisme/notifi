@@ -30,7 +30,7 @@ struct KeyDetailView: View {
     var body: some View {
         ScrollView {
             if let key {
-                content(for: key).geistGutter()
+                content(for: key).geistGutter().geistMeasure()
             } else {
                 VStack(spacing: 10) {
                     Text(Copy.KeyDetail.notFound)
